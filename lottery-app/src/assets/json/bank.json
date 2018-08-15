@@ -1,0 +1,29 @@
+{
+  "bank": [
+    {"name": "招商银行", "code": "zs"},
+    {"name": "中国工商银行", "code": "zggs"},
+    {"name": "中国建设银行", "code": "zgjs"},
+    {"name": "浦发银行", "code": "pf"},
+    {"name": "中国农业银行", "code": "zgny"},
+    {"name": "中国民生银行", "code": "zgms"},
+    {"name": "平安银行", "code": "pa"},
+    {"name": "兴业银行", "code": "xy"},
+    {"name": "交通银行", "code": "jt"},
+    {"name": "中信银行", "code": "zx"},
+    {"name": "中国光大银行", "code": "zggd"},
+    {"name": "华夏银行", "code": "hx"},
+    {"name": "中国银行", "code": "zg"},
+    {"name": "广发银行", "code": "gf"},
+    {"name": "邮政储蓄银行", "code": "yzcx"},
+    {"name": "其他银行", "code": "qt"},
+    {"name": "农村合作信用社", "code": "nchzxys"},
+    {"name": "上海银行", "code": "sh"},
+    {"name": "北京银行", "code": "bj"},
+    {"name": "南京银行", "code": "nj"},
+    {"name": "宁波银行", "code": "nb"},
+    {"name": "上海农商银行", "code": "shns"},
+    {"name": "华润银行", "code": "hr"},
+    {"name": "江苏银行", "code": "js"},
+    {"name": "广东南粤银行", "code": "gdyn"}
+  ]
+}

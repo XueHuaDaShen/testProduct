@@ -1,0 +1,25 @@
+// 头部后退的小三角
+@mixin backSanjiao ($w, $h, $c, $s, $deg) {
+  // 如果箭头向右，deg=45;
+  position:absolute;
+  width:$w;
+  height:$h;
+  /*border-top: 2px solid  rgba(179, 193, 198, 1);
+  border-right: 2px solid  rgba(179, 193, 198, 1);*/
+  border-top: $s solid  $c;
+  border-right: $s solid  $c;
+  transform:rotate($deg);
+  -ms-transform:rotate($deg); 	/* IE 9 */
+  -moz-transform:rotate($deg); 	/* Firefox */
+  -webkit-transform:rotate($deg); /* Safari 和 Chrome */
+  -o-transform:rotate($deg);
+}
+
+// 背景渐变
+@mixin bgJianbian($begin,$end){
+	background: -moz-linear-gradient(top, $begin 0%, $end 100%);
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,$begin), color-stop(100%,$end));
+  background: -webkit-linear-gradient(top, $begin 0%,$end 100%);
+  background: -o-linear-gradient(top, $begin 0%,$end 100%);
+  background: -ms-linear-gradient(top, $begin 0%,$end 100%);
+}
