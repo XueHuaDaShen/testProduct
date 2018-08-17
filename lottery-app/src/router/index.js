@@ -9,6 +9,10 @@ const wrap = r => require.ensure([], () => r(require('@/components/wrap')), 'chu
 // 首页
 const home = r => require.ensure([], () => r(require('@/components/home')), 'chunkname3')
 
+const activityList = r => require.ensure([], () => r(require('@/components/homeFiles/activityList')), 'chunkname3-1')
+const activityDetail = r => require.ensure([], () => r(require('@/components/homeFiles/activityDetail')), 'chunkname3-2')
+const noticeDetail = r => require.ensure([], () => r(require('@/components/homeFiles/noticeDetail')), 'chunkname3-3')
+
 // 游戏中心
 const youxizhongxin = r => require.ensure([], () => r(require('@/components/youxizhongxin')), 'chunkname4')
 const yxzxsy = r => require.ensure([], () => r(require('@/components/youxizhongxinFiles/index')), 'chunkname4')
@@ -105,6 +109,24 @@ export default new Router({
           name: 'home',
           meta: {index: 1},
           component: home
+        },
+        {
+          path: 'activityList',
+          name: 'activityList',
+          meta: {index: 2},
+          component: activityList
+        },
+        {
+          path: 'activityDetail',
+          name: 'activityDetail',
+          meta: {index: 3},
+          component: activityDetail
+        },
+        {
+          path: 'noticeDetail',
+          name: 'noticeDetail',
+          meta: {index: 4},
+          component: noticeDetail
         },
         {
           path: '/youxizhongxin',

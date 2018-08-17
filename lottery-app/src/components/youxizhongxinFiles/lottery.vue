@@ -14,7 +14,7 @@
         <em>{{item.name}}</em>
       </div>
       <nav class="playList">
-        <router-link v-for="(v, vi) in item.children" :key="vi.toString()" :to="{ name: item.code==='lhc'?'lhc':'betsView', query:{id: v._id, code: item.code==='qt'?v.code:item.code} }">{{v.name}}</router-link>
+        <router-link v-for="(v, vi) in item.children" :key="vi.toString()" :to="{ name: item.code==='lhc'?'lhc':'betsView', query:{id: v._id, name: v.name, code: item.code==='qt'?v.code:item.code} }">{{v.name}}</router-link>
       </nav>
     </div>
   </div>

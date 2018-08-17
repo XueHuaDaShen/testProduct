@@ -65,6 +65,16 @@ ul,ol,li{
   height:100%;
 }
 
+.display-none-input{
+  position: absolute;
+  left:0;
+  top:0;
+  z-index:-5;
+  width:1px;
+  height:1px;
+  opacity: 0;
+}
+
 .alert-tip-text{
   position: fixed;
   right:0;

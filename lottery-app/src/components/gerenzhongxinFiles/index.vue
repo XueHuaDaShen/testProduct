@@ -1,7 +1,7 @@
 <template>
   <div class="grzxsy-wrap">
     <div class="user-info">
-      <span class="user-avatar"></span>
+      <span class="user-avatar"><img src="@/assets/img/avatar.png"></span>
       <span class="user-name">{{username}}</span>
     </div>
     <div class="split-bar"></div>
@@ -32,7 +32,7 @@ export default {
   data() {
     return {
       msg: '个人中心首页',
-      username: 'Moud_ 必赢娱乐',
+      username: '',
       showItemList: '',
       // 个人中心页面中 所显示的 列表数据
       dataList: [
@@ -85,6 +85,7 @@ export default {
     }
   },
   created() {
+    this.username = localStorage.getItem('loginname');
     this.$store.dispatch('setFooterStatus', true);
     this.$store.dispatch('setBackStatus', false);
     this.$store.dispatch('setPlayModeStatus', false);
@@ -173,8 +174,8 @@ export default {
       height:1.5rem;
       border-radius:50%;
       overflow:hidden;
-      background: #292932;
-      border: .02rem solid #c7c7c7;
+      // background: #292932;
+      // border: .02rem solid #c7c7c7;
     }
     .user-name{
       height:.45rem;

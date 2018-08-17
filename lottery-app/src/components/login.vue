@@ -1,12 +1,14 @@
 <template>
   <div class="login-wrap">
+    <input type="text" class="display-none-input">
+    <input type="password" class="display-none-input">
     <div class="logo-wrap"><span class="logo"></span></div>
     <p class="login-title">会员登录</p>
     <div class="login-data">
       <!-- <form action=""> -->
         <div class="user-wrap username">
           <span class="user-icon"><img src="@/assets/img/user.png"></span>
-          <input type="text" placeholder="请输入用户名" v-model="loginName">
+          <input type="text" placeholder="请输入用户名" v-model="loginName" @blur="handleInputedLoginname">
         </div>
         <div class="user-wrap password">
           <span class="lock-icon"><img src="@/assets/img/lock.png"></span>
@@ -14,7 +16,7 @@
         </div>
         <div class="habit">
           <label for="" class="rem-label">
-            <input type="checkbox" class="remember">
+            <input type="checkbox" class="remember" :checked="isMomery" v-model="isMomery">
             <em class="copy_checkbox"></em>
             <span>记住密码</span>
           </label>
@@ -38,17 +40,86 @@ export default {
   name: 'login',
   data() {
     return {
+      enabled_jiami_ceshi: true,
+
       isLoading: false,
       loginName: '',
       loginPwd: '',
       tip: '', // 登录文字提示
+      isMomeryed: false,
+      isMomery: true,
+      momery_username: '',
+      momery_pwd: '',
     }
   },
-  created() {},
+  created() {
+    // console.log(CryptoJS.MD5('123abc').toString())
+    let user = localStorage.getItem('momery_username');
+    if(this.enabled_jiami_ceshi){
+      if(user){
+        this.momery_username = user;
+        let pwd = localStorage.getItem(user) || CryptoJS.MD5('').toString();
+        if(pwd !== CryptoJS.MD5('').toString()){
+          // console.log(1)
+          this.momery_pwd = pwd;
+          this.isMomeryed = true;
+        }else{
+          this.momery_pwd = '';
+          this.isMomeryed = false;
+        }
+      }else{
+        this.momery_username = '';
+      }
+    }else{
+      if(user){
+        this.momery_username = user;
+        let pwd = localStorage.getItem(user);
+        if(pwd){
+          this.momery_pwd = pwd;
+        }else{
+          this.momery_pwd = '';
+        }
+      }else{
+        this.momery_username = '';
+      }
+    }
+    this.loginName = this.momery_username;
+    this.loginPwd = this.momery_pwd;
+  },
   mounted() {},
-  watch: {},
+  watch: {
+    loginPwd(n, o) {
+      if(this.loginPwd !== localStorage.getItem(this.loginName)){
+        this.isMomeryed = false;
+        // console.log(2)
+      }
+    }
+  },
   computed: {},
   methods: {
+    handleInputedLoginname() {
+      if(this.enabled_jiami_ceshi){
+        let pwd = localStorage.getItem(this.loginName) || CryptoJS.MD5('').toString();
+        if(pwd !== CryptoJS.MD5('').toString()){
+          // console.log(1)
+          this.momery_pwd = pwd;
+          this.isMomeryed = true;
+        }else{
+          this.momery_pwd = '';
+          this.isMomeryed = false;
+        }
+        this.loginPwd = this.momery_pwd;
+      }else{
+        let pwd = localStorage.getItem(this.loginName);
+        if(pwd){
+          // console.log(1)
+          this.momery_pwd = pwd;
+        }else{
+          this.momery_pwd = '';
+        }
+        this.loginPwd = this.momery_pwd;
+      }
+    },
     loginFn() {
       const vm = this;
       if (this.loginName === '') {
@@ -74,7 +145,12 @@ export default {
           (success) => {
             if (success.returncode == '200') {
               let random = success.data.random;
-              let new_password = CryptoJS.HmacMD5(CryptoJS.MD5(vm.loginPwd).toString(), random).toString();
+              let new_password = '';
+              if(vm.isMomeryed && vm.enabled_jiami_ceshi){
+                new_password = CryptoJS.HmacMD5(vm.loginPwd, random).toString()
+              }else{
+                new_password = CryptoJS.HmacMD5(CryptoJS.MD5(vm.loginPwd).toString(), random).toString()
+              }
               var data = { loginname: vm.loginName, password: new_password }
               request.login(
                 'post',
@@ -105,10 +181,27 @@ export default {
                       localStorage.setItem('loginname', vm.loginName);
                       localStorage.setItem('refund', success.data.refund);
                       localStorage.setItem('blance', success.data.cash);
+
+                      // 是否记住密码
+                      if(vm.isMomery){
+                        localStorage.setItem('momery_username', vm.loginName);
+                        if(vm.enabled_jiami_ceshi){
+                          if(vm.isMomeryed){
+                            localStorage.setItem(vm.loginName, vm.loginPwd);
+                          }else{
+                            localStorage.setItem(vm.loginName, CryptoJS.MD5(vm.loginPwd).toString());
+                          }
+                        }else{
+                          localStorage.setItem(vm.loginName, vm.loginPwd);
+                        }
+                      }else{
+                        localStorage.setItem('momery_username', vm.loginName);
+                        localStorage.removeItem(vm.loginName);
+                      }
                     }catch(e){
                       alert('登录---'+e)
                     }
-                    alert('登陆成功');
+                    alert('登陆成功,本地测试');
                     // vm.getToken(success.data.token, vm.loginName);
                   } else if (code == '306') {
                     vm.tip = '您的账号被禁止登陆，请联系管理员';

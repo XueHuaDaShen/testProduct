@@ -6,7 +6,7 @@
       <span class="title-icon" v-if="getTitleText === '首页'"><img src="@/assets/img/header-logo.png"></span>
       <div class="select-bets-mode-btn" v-if="getPlayMode" @click="handleShowPlayModeDialog">
         <span>{{getPlayName[0]?getPlayName[0].join(''):''}}</span>
-        <em></em>
+        <em class="slide-down-em-white"></em>
       </div>
       <span class="clean" v-if="getCleanBtn" @click="cleanShoppingCart">清空</span>
       <div class="header-kfzx" v-if="getTitleText === '个人中心'" @click="kfzxFn">

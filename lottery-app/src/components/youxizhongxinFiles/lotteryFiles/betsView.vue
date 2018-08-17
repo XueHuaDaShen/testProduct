@@ -903,20 +903,21 @@ export default {
     this.gameCode = query.code;
     this.gameid = query.id;
     this.showModle = false;
+    let name = query.name;
 
-    if (this.gameCode === 'ssc') {
-      txt = '时时彩'
-    } else if (this.gameCode === 'syxw') {
-      txt = '十一选五'
-    } else if (this.gameCode === 'pks') {
-      txt = 'PK10'
-    } else if (this.gameCode === 'ks') {
-      txt = '快三'
-    } else if (this.gameCode === 'sd' || this.gameCode === 'plw') {
-      txt = '其他'
-    }
+    // if (this.gameCode === 'ssc') {
+    //   txt = '时时彩'
+    // } else if (this.gameCode === 'syxw') {
+    //   txt = '十一选五'
+    // } else if (this.gameCode === 'pks') {
+    //   txt = 'PK10'
+    // } else if (this.gameCode === 'ks') {
+    //   txt = '快三'
+    // } else if (this.gameCode === 'sd' || this.gameCode === 'plw') {
+    //   txt = '其他'
+    // }
 
-    this.$store.dispatch('setTitle', txt);
+    this.$store.dispatch('setTitle', name);
     this.$store.dispatch('setFooterStatus', false);
     this.$store.dispatch('setBackStatus', true);
     this.$store.dispatch('setPlayModeStatus', true);

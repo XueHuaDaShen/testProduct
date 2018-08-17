@@ -1,5 +1,5 @@
 <template>
-  <div class="betsView-wrap" style="overflow-y:inherit;padding-bottom:0" @click="showMoneyType=false">
+  <div class="betsView-wrap" style="overflow-y:inherit;padding-bottom:0">
     <div class="top">
       <p class="lastIssue">第 <span class="issue-num">{{lastIssue}}</span> 期</p>
       <div class="lottery-wrap">
@@ -388,11 +388,12 @@ export default {
     // console.log(query)
     this.gameCode = query.code;
     this.gameid = query.id;
+    let name = query.name;
     
     this.refund = Number(localStorage.getItem('refund'));
     this.defaultRefund = this.refund/this.maxRefund;
 
-    this.$store.dispatch('setTitle', '六合彩');
+    this.$store.dispatch('setTitle', name);
     this.$store.dispatch('setFooterStatus', false);
     this.$store.dispatch('setBackStatus', true);
     this.$store.dispatch('setPlayModeStatus', true);
@@ -413,7 +414,7 @@ export default {
   watch: {
     getBetsData (n, o) {
       // console.log(n, o)
-      // console.log(this.getBetsData)
+      console.log(this.getBetsData)
       this.betsNumber = [];
       this.confirmBetsData = [];
       this.multiple = 1;
@@ -425,6 +426,18 @@ export default {
         if(n.title === '八不中'){this.buzhonglength = 8};
         if(n.title === '九不中'){this.buzhonglength = 9};
         if(n.title === '十不中'){this.buzhonglength = 10};
+      }
+      if(n.title === '半波'){
+        this.bbNumbersArr();
+      }
+      if(n.title.indexOf('肖') > -1){
+        this.animalNumberArr();
+      }
+      if(n.title === '尾数'){
+        this.wsNumbersArr();
+      }
+      if(n.title === '总分'){
+        this.zfNumberArr();
       }
     }
   },
@@ -845,10 +858,6 @@ export default {
         if(this.getBetsData.title === '九不中'){this.buzhonglength = 9};
         if(this.getBetsData.title === '十不中'){this.buzhonglength = 10};
       }
-      this.bbNumbersArr();
-      this.animalNumberArr();
-      this.wsNumbersArr();
-      this.zfNumberArr();
       // this.$store.dispatch('setShowLotteryComponents', true)
       // this.showLotteryComponents = true;
     },

@@ -1,17 +1,42 @@
 <template>
   <div class="shouye-wrap public-wrap">
-    <div class="tip">
-      <span class="laba"></span>
-      <em>【温馨提示】更安全的设置密码</em>
+    <div class="tip" id="a_swiper" style="position:relative;z-index:88;overflow:hidden;">
+      <ul class="swiper-wrapper scroll-content">
+        <router-link tag='li' class="swiper-slide" v-for="(item,index) in noticeList" :key="index" :to="{name:'noticeDetail',query:{id:item._id}}">
+          <span class="laba"></span>
+          <em>{{item.title}}</em>
+        </router-link>
+      </ul>
     </div>
-    <div class="banner-wrap" v-loading.fullscreen.lock="loading" element-loading-text="拼命加载中" element-loading-spinner="el-icon-loading" element-loading-background="rgba(0, 0, 0, 0.8)">
+    <div class="banner-wrap" style="z-index:99;position:relative" v-loading.fullscreen.lock="loading" element-loading-text="拼命加载中" element-loading-spinner="el-icon-loading" element-loading-background="rgba(0, 0, 0, 0.8)">
       <div class="swiper-content" v-if="bannerlist.length>0">
         <div class="swiper-container">
           <div class="swiper-wrapper">
             <div class="swiper-slide b1" v-for="(item, index) in bannerlist" :key="index">
-              <a target="_blank" :href="item.url">
+              <!-- <a target="_blank" :href="item.url">
+                <img :src="item.activity_photo" />
+              </a> -->
+              <!-- 窗口 -->
+              <a v-if="item.act===1" :href="item.url" :title="item.title">
                 <img :src="item.activity_photo" />
               </a>
+              <!-- 新窗口 -->
+              <a target="_blank" v-if="item.act===2" :href="item.url" :title="item.title">
+                <img :src="item.activity_photo" />
+              </a>
+              <!-- 游戏 -->
+              <router-link v-if="item.act===3" :title="item.title" :to="{name:item.gamecode,query:{id:item.game,p_code:item.gamecode,s_code:item.gamecode}}">
+                <img :src="item.activity_photo" />
+              </router-link>
+              <!-- 活动 -->
+              <router-link v-if="item.act===4" :to="{name:'activityDetail',query:{id:item.activity}}" :title="item.title">
+                <img :src="item.activity_photo" />
+              </router-link>
+              <!-- 公告 -->
+              <!-- :style="{backgroundImage: 'url(' + item.activity_photo + ')'} "  -->
+              <router-link v-if="item.act===5" :to="{name:'noticeDetail',query:{id:item.notice}}" :title="item.title">
+                <img :src="item.activity_photo" />
+              </router-link>
             </div>
             <!-- <div class="swiper-slide b2">
             </div>
@@ -29,7 +54,7 @@
       <p class="more" @click="toMore('lottery')">更多<i class="right-sanjiao"></i></p>
     </div>
     <ul class="caipiaoList">
-      <router-link v-for="(lottery, li) in lotteryList" :key="li" :to="{ name: lottery.gamecode.split('.')[0]==='lhc'?'lhc':'betsView', query:{id: lottery.gameid, code: lottery.gamecode.split('.')[0]==='qt'?lottery.gamecode.split('.')[1]:lottery.gamecode.split('.')[0]} }">
+      <router-link v-for="(lottery, li) in lotteryList" :key="li" :to="{ name: lottery.gamecode.split('.')[0]==='lhc'?'lhc':'betsView', query:{id: lottery.gameid, name: lottery.gamename, code: lottery.gamecode.split('.')[0]==='qt'?lottery.gamecode.split('.')[1]:lottery.gamecode.split('.')[0]} }">
         <li>
           <span><img :src="'../static/img/'+lottery.gamecode.split('.')[0]+'_icon.png'"></span>
           <em>{{lottery.gamename}}</em>
@@ -74,11 +99,11 @@
     <div class="nav-bar">
       <span></span>
       <em>最新活动</em>
-      <p class="more">更多<i class="right-sanjiao"></i></p>
+      <p class="more" @click="toMore('activityList')">更多<i class="right-sanjiao"></i></p>
     </div>
     <p class="no-result" style="padding:.3rem;text-align:center;" v-if="noResult">暂无活动</p>
     <ul class="huodongList" v-if="!noResult">
-      <li v-for="(activity, index) in huodongList" :key="index">
+      <li v-for="(activity, index) in huodongList" :key="index" @click="toActivityDetail(activity._id)">
         <a>
           <img :src="activity.activity_photo" class="a1" :alt="activity.title">
         </a>
@@ -89,7 +114,7 @@
 
 <script>
 import request from '@/axios/axios.js'
-import 'swiper/dist/css/swiper.css';
+import '@/../node_modules/swiper/dist/css/swiper.css';
 import Swiper from 'swiper';
 export default {
   name: 'home',
@@ -102,6 +127,7 @@ export default {
       lotteryList: [], // 彩票列表
       noResult: false, // 是否有活动
       huodongList: [], // 活动列表
+      noticeList: [], // 公告列表
     }
   },
   beforeCreate() {
@@ -124,6 +150,7 @@ export default {
     this.getBanner();
     this.getLotteryList();
     this.getActivities();
+    this.getNotice();
   },
   beforeDestroy() {},
   destroyed() {},
@@ -193,6 +220,46 @@ export default {
         },
       });
     },
+    // 获取公告
+    getNotice() {
+      const vm = this;
+      let url = "/notice/list";
+      request.http(
+        "get",
+        url, { pagenum: 1, pagesize: 1000 },
+        success => {
+          if (success.returncode && success.returncode == 200) {
+            if (success.data.total != 0) {
+              try{
+                let data = success.data.data;
+                vm.noticeList = data;
+                vm.$nextTick(() => {
+                  let ele_height = document.getElementById('a_swiper').offsetHeight;
+                  // console.log(ele_height)
+                  new Swiper('#a_swiper', {
+                    direction: 'vertical',
+                    loop: true,
+                    speed: 1000,
+                    onlyExternal: true,
+                    loopAdditionalSlides: 20,
+                    height: ele_height,
+                    autoplay: true,
+                    allowTouchMove: false,
+                  });
+                })
+              }catch(e){
+                alert('活动列表---'+e)
+              }
+            } else {
+              vm.huodongList = [];
+            }
+          }
+        },
+        error => {
+          vm.huodongList = [];
+        }
+      );
+    },
     // 获取彩票列表
     getLotteryList() {
       const vm = this;
@@ -243,12 +310,21 @@ export default {
         }
       );
     },
+    toActivityDetail(id) {
+      this.$router.push({
+        name: 'activityDetail',
+        query: {
+          id: id
+        }
+      })
+    },
     // 更多
     toMore(name) {
       this.$router.push({
         name: name
       })
-    }
+    },
+
   },
 }
 </script>
@@ -283,10 +359,18 @@ export default {
     height:100%;
   }
   .tip{
-    padding:.2rem 0 .3rem .2rem;
-    font-size:.3rem;
-    display:-webkit-box;
-    -webkit-box-align:center;
+    ul{
+      width:100%;
+      height:.84rem;
+      li{
+        width:100%;
+        height:.84rem;
+        padding:.2rem .2rem .3rem .2rem;
+        font-size:.3rem;
+        display:-webkit-box;
+        -webkit-box-align:center;
+      }
+    }
     .laba{
       display:block;
       width:.34rem;
@@ -297,7 +381,11 @@ export default {
     }
     em{
       display:block;
+      width:5rem;
       margin-left:.1rem;
+      overflow: hidden;
+      text-overflow:ellipse;
+      white-space: nowrap;
     }
   }
   .banner-wrap{
@@ -307,13 +395,13 @@ export default {
       height:100%;
     }
     .b1{
-      background:red;
+      // background:red;
     }
     .b2{
-      background:green;
+      // background:green;
     }
     .b3{
-      background:blue;
+      // background:blue;
     }
     .swiper-slide {
       height:100%;
@@ -400,10 +488,12 @@ export default {
     // flex-wrap:wrap;
     overflow-x:auto;
     padding-left:.3rem;
+    position: relative;
+      // height:2.1rem;
     li{
       width:2.4rem;
       height:2.1rem;
-      margin-bottom:.3rem;
+      // margin-bottom:.3rem;
       position: relative;
       .li-bj{
         width:2.1rem;
@@ -436,6 +526,7 @@ export default {
         bottom:0;
         opacity:.9;
         z-index:2;
+        border-radius:0 0 .08rem .08rem;
       }
     }
     li.agdz-li>div{

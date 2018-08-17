@@ -50,7 +50,7 @@
             <td>{{moment(item.recharge_at).format('YYYY-MM-DD HH:mm:ss')}}</td>
             <td>{{item.amount||0}}</td>
             <td>{{setTypeText(item.type, 'typeList', 'val')}}</td>
-            <td>{{item.channel||''}}</td>
+            <td>{{setTransferType(item)}}</td>
             <td>{{setTypeText(item.status, 'statusList', 'val')}}</td>
           </tr>
         </tbody>
@@ -125,6 +125,18 @@ export default {
         }
       }
       return text
+    },
+    // 设置转账类型
+    setTransferType(item) {
+      let text;
+      if(item.type == 1){
+        text = '主账户/'+item.channel;
+      }else if(item.type == 2){
+        text = item.channel+'/主账户';
+      }else{
+        text = '';
+      }
+      return text;
     },
     // 获取开始时间
     getstart_time(param) {
