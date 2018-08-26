@@ -1,0 +1,46 @@
+.public-header{
+  .hedaer{
+    width:100%;
+    background:#545454;
+    .container{
+      height: 40px;
+    }
+    span{
+      cursor: pointer;
+    }
+    .moble-client{
+      margin-left:35px;
+    }
+    .header-right{
+      float:right;
+      height:100%;
+      display:-webkit-box;
+      -webkit-box-align:center;
+      span{
+        margin-left:35px;
+      }
+      .user{
+        margin-left:64px;
+        position: relative;
+      }
+      .user-icon{
+        width:13px;
+        position: absolute;
+        left:-26px;
+      }
+    }
+  }
+  .nav{
+    width:100%;
+    background: #1B1B1B;
+    .container{
+      height:80px;
+    }
+  }
+  .container{
+    width:1024px;
+    margin:0 auto;
+    color:#FFFFFF;
+    font-size:12px;
+  }
+}

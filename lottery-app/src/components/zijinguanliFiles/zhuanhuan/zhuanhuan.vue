@@ -5,7 +5,11 @@
       <table v-if="showProfile">
         <thead>
           <tr>
-            <td colspan="2">账户总余额：<em class="color-red">{{ (Number(profile.cash) + Number(profile.cash_ky)).toFixed(2) || 0 }}元</em></td>
+            <td colspan="2">
+              账户总余额：<em class="color-red">{{ (Number(profile.cash) + Number(profile.cash_ky)).toFixed(2) || 0 }}元</em>
+              <img src="@/assets/img/refresh.png" class="refresh-icon" @click="refreshCash">
+              <button class="reback-btn" :disabled="isClick" @click="rebackMoney">一键回收</button>
+            </td>
           </tr>
         </thead>
         <tbody>
@@ -17,7 +21,7 @@
             <td class="td-title">KY 游戏</td>
             <td>{{Number(profile.cash_ky).toFixed(2) || 0}}元</td>
           </tr>
-          <tr>
+          <!-- <tr>
             <td class="td-title">AG 游戏</td>
             <td>0元</td>
           </tr>
@@ -28,7 +32,7 @@
           <tr>
             <td class="td-title">沙巴体育</td>
             <td>0元</td>
-          </tr>
+          </tr> -->
         </tbody>
       </table>
     </div>
@@ -71,7 +75,7 @@
         <input type="password" v-model="zijinPwd" placeholder="密码为6-16位字母或数字">
       </li>
     </ul>
-    <button class="submit-btn" @click="confirmWithDraw">确认转账</button>
+    <button class="submit-btn" :class="isClick2?'disabled-btn':''" :disabled="isClick2" @click="confirmWithDraw">确认转账</button>
     <div class="alert-tip-text" v-if="tipText">{{tipText}}</div>
   </div>
 </template>
@@ -86,6 +90,9 @@ export default {
   },
   data() {
     return {
+
+      isClick: false,
+      isClick2: false,
 
       zhuanhuanArr1: [
         {title: '主账户', val: 'main'}
@@ -136,8 +143,10 @@ export default {
     // 获取用户资金
     refreshCash() {
       let vm = this;
+      vm.$store.dispatch('setLoading', true);
       request.http('get', '/user/profile', {},
         (success) => {
+          vm.$store.dispatch('setLoading', false);
           if (success.returncode == 200) {
             let profile = success.data;
             vm.profile = profile;
@@ -145,6 +154,34 @@ export default {
           }
         },
         (error) => {
+          vm.$store.dispatch('setLoading', false);
+          console.log('获取用户资金失败', error)
+        }
+      )
+    },
+    // 一键回收
+    rebackMoney() {
+      const vm = this;
+      vm.isClick = true;
+      vm.$store.dispatch('setLoading', true);
+      request.http('post', '/user/oneKey/exchange', {},
+        (success) => {
+          vm.$store.dispatch('setLoading', false);
+          let code = success.returncode;
+          vm.isClick = false;
+          if (code == 200) {
+            vm.refreshCash();
+            vm.tipText = '转账成功'
+            setTimeout(() => {
+              vm.tipText = '';
+            }, vm.tipTimeOut*1000);
+          } else if(code == 101 || code == 103 || code == 106) {
+            request.loginAgain(vm)
+          }
+        },
+        (error) => {
+          vm.isClick = false;
+          vm.$store.dispatch('setLoading', false);
           console.log('获取用户资金失败', error)
         }
       )
@@ -256,6 +293,7 @@ export default {
         channelIn: vm.zhuanhuanType,
         money: vm.jiezhang
       };
+      this.isClick2 = true;
       request.http(
         'post',
         '/user/exchange',
@@ -322,7 +360,7 @@ export default {
   }
   .blance-table{
     width:6.9rem;
-    height:6.1rem;
+    // height:6.1rem;
     background: #292932;
     border-radius: .08rem;
     border: .02rem solid #303040;
@@ -332,6 +370,22 @@ export default {
     table{
       width:100%;
       border-collapse: collapse;
+      .refresh-icon{
+        width:.38rem;
+        height:.32rem;
+        margin-left:.2rem;
+        margin-bottom:-.05rem;
+        display:inline-block;
+      }
+      .reback-btn{
+        display:inline-block;
+        margin-left:.2rem;
+        text-decoration: underline;
+        border:none;
+        outline:none;
+        background:none;
+        font-weight:bold;
+      }
       thead{
         border-bottom: .02rem solid #303040;
         td{

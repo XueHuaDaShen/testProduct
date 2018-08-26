@@ -171,7 +171,7 @@
             “游戏记录”
           </router-link>
         </p>
-        <router-link :to="{name:'lotteryDetail',query:{id:betsId}}">
+        <router-link :to="{name:'betsDetail',query:{id:betsId}}">
           <button class="confirm-to-bets">注单详情</button>
         </router-link>
       </div>
@@ -874,23 +874,28 @@ export default {
     
     // 倍数聚焦
     handleFocusMultiple() {
-      const vm = this;
-      document.onkeyup = function() {
-        vm.multiple = vm.multiple.toString().replace(/\D/g,function(){return ''})
-        if(Number(vm.multiple) === 0){
-          vm.multiple = 1;
-        }else if (vm.multiple >= vm.maxMultiple) {
-          vm.multiple = vm.maxMultiple
-        }
-        // console.log(vm.multiple)
-      }
+      // const vm = this;
+      // document.onkeyup = function() {
+      //   vm.multiple = vm.multiple.toString().replace(/\D/g,function(){return ''})
+      //   if(Number(vm.multiple) === 0){
+      //     vm.multiple = 1;
+      //   }else if (vm.multiple >= vm.maxMultiple) {
+      //     vm.multiple = vm.maxMultiple
+      //   }
+      //   // console.log(vm.multiple)
+      // }
     },
     // 倍数失焦
     handleBlurMultiple() {
-      document.onkeyup = null;
-      if (this.multiple >= this.maxMultiple) {
-        this.multiple = this.maxMultiple
+      // document.onkeyup = null;
+      const vm = this;
+      vm.multiple = vm.multiple.toString().replace(/\D/g,function(){return ''})
+      if(Number(vm.multiple) === 0){
+        vm.multiple = 1;
       }
+      // if (this.multiple >= this.maxMultiple) {
+      //   this.multiple = this.maxMultiple
+      // }
     },
     // 加减倍数
     handleReduceMultiple() {
@@ -1017,6 +1022,7 @@ export default {
     toBetsFn(val) {
       const vm = this;
       let voteList = this.voteList;
+      // console.log(voteList)
       // return false;
       request.http(
         'post',

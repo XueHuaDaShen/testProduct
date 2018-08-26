@@ -165,7 +165,7 @@ export default {
     let valueLen, isDouble;
     this.andArr = [];
     // 0-9 十个数字
-    for(let i=0; i<10; i++){
+    for(let i=1; i<=10; i++){
       this.balls.push(i.toString())
     }
     // 投注号码 数组集合
@@ -200,7 +200,9 @@ export default {
     }
     // console.log(this.betsArr)
   },
-  mounted() {},
+  mounted() {
+    this.$emit('sendBetsNumber', {data: [], betsNumber: []})
+  },
   beforeDestroy() {},
   destroyed() {},
   computed: {},
@@ -305,12 +307,12 @@ export default {
     setBetsNumber() {
       this.betsNumber = '';
       let symCode = '-';
-
+      // console.log(this.betsData)
       const vm = this;
-      if (this.betsData.type.indexOf('and') > -1) {
-        symCode = '-'
+      if (this.betsData.type === 'pks-tiger-end') {
+        symCode = ','
       } else {
-        symCode = '';
+        symCode = '-';
       }
       if (this.betsData.type === 'text') {
         // let numArr = [];

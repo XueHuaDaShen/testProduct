@@ -204,6 +204,9 @@ a{
   display:-webkit-box;
   -webkit-box-orient:vertical;
   position: relative;
+  button.disabled-btn{
+    background: #666;
+  }
   .slide-down-em-white{
     background:url('/static/img/down-white-sanjiao.png') no-repeat;
     background-size:100% 100%;

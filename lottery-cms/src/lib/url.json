@@ -1,0 +1,350 @@
+{
+  "menu": [{
+      "title": "资金管理",
+      "color": "#FF9291",
+      "data": [{
+          "title": "帐变记录",
+          "url": "/home/accountChangeManager/accountChange",
+          "data": [{
+            "title": "帐变记录",
+            "url": "accountChange"
+          }]
+        },
+        {
+          "title": "人工存提",
+          "url": "/home/rgctManager/rgtc",
+          "data": [{
+            "title": "人工提出",
+            "url": "rgtc"
+          }, {
+            "title": "人工存入",
+            "url": "rgcr"
+          }]
+        },
+        {
+          "title": "入款管理",
+          "url": "/home/incomeManager/rechargeLog",
+          "data": [{
+              "title": "入款记录",
+              "url": "rechargeLog"
+            },
+            {
+              "title": "银行卡管理",
+              "url": "paymentBank"
+            },
+            {
+              "title": "扫码管理",
+              "url": "paymentWx"
+            },
+            {
+              "title": "第三方渠道",
+              "url": "thirdpartyManager"
+            }, {
+              "title": "提现记录",
+              "url": "withdrawLog"
+            }
+          ]
+        },
+        {
+          "title": "出款管理",
+          "url": "/home/outcomeManager/outcomeLog",
+          "data": [{
+            "title": "出款记录",
+            "url": "outcomeLog"
+          }]
+        },
+        {
+          "title": "出入款设置",
+          "url": "/home/outInSet/limitCashSet",
+          "data": [{
+              "title": "限额设置",
+              "url": "limitCashSet"
+            },
+            {
+              "title": "打码量设置",
+              "url": "dmlSet"
+            }
+          ]
+        },
+        {
+          "title": "风控管理",
+          "url": "/home/riskManager/userLog",
+          "data": [{
+              "title": "用户日志",
+              "url": "userLog"
+            },
+            {
+              "title": "打码量核查",
+              "url": "ipManager"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "用户管理",
+      "color": "#51E6C2",
+      "data": [{
+          "title": "会员管理",
+          "url": "/home/accountManager/userList",
+          "data": [{
+              "title": "用户列表",
+              "url": "userList"
+            },
+            {
+              "title": "层级设置",
+              "url": "group"
+            }
+          ]
+        },
+        {
+          "title": "代理管理",
+          "url": "/home/aggentManager/contractManage",
+          "data": [{
+              "title": "契约管理",
+              "url": "contractManage"
+            },
+            {
+              "title": "契约设置",
+              "url": "contractSet"
+            }
+          ]
+        },
+        {
+          "title": "银行卡管理",
+          "url": "/home/bankManager/bankList",
+          "data": [{
+            "title": "银行卡列表",
+            "url": "bankList"
+          }]
+        }
+      ]
+    },
+    {
+      "title": "游戏管理",
+      "color": "#FBB91B",
+      "data": [{
+          "title": "游戏记录",
+          "url": "/home/gameManager/betsLog",
+          "data": [{
+              "title": "彩票投注",
+              "url": "betsLog"
+            },
+            {
+              "title": "彩票追号",
+              "url": "chaseLog"
+            },
+            {
+              "title": "棋牌游戏",
+              "url": "thirdpart"
+            }
+          ]
+        },
+        {
+          "title": "彩票管理",
+          "url": "/home/lotteryConfig/lottery",
+          "data": [{
+              "title": "开奖管理",
+              "url": "lottery"
+            },
+            {
+              "title": "彩种管理",
+              "url": "lotteryType"
+            },
+            {
+              "title": "玩法管理",
+              "url": "playType"
+            }
+          ]
+        },
+        {
+          "title": "第三方游戏",
+          "url": "/home/thirdpartGame/paramSet",
+          "data": [{
+            "title": "参数配置",
+            "url": "paramSet"
+          }]
+        },
+        {
+          "title": "钱包管理",
+          "url": "/home/walletManager/exchange",
+          "data": [{
+              "title": "转账记录",
+              "url": "exchange"
+            },
+            {
+              "title": "用户余额",
+              "url": "userBlance"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "平台管理",
+      "color": "#E15454",
+      "data": [{
+          "title": "活动管理",
+          "url": "/home/activityManager/activityList",
+          "data": [{
+            "title": "活动列表",
+            "url": "activityList"
+          }, {
+            "title": "活动明细",
+            "url": "activityDetail"
+          }]
+        },
+        {
+          "title": "广告管理",
+          "url": "/home/activityManager/banner",
+          "data": [{
+            "title": "首页轮播",
+            "url": "banner"
+          }, {
+            "title": "活动推广",
+            "url": "activityPromotion"
+          }]
+        },
+        {
+          "title": "公告管理",
+          "url": "/home/activityManager/notice",
+          "data": [{
+            "title": "会员公告",
+            "url": "notice"
+          }]
+        },
+        {
+          "title": "链接管理",
+          "url": "/home/activityManager/linkManager",
+          "data": [{
+            "title": "链接管理",
+            "url": "linkManager"
+          }]
+        }
+      ]
+    },
+    {
+      "title": "统计报表",
+      "color": "#5BD4FF",
+      "data": [{
+          "title": "平台报表",
+          "url": "/home/colligateTable/platformColligate",
+          "data": [{
+            "title": "综合报表",
+            "url": "platformColligate"
+          }]
+        },
+        {
+          "title": "用户报表",
+          "url": "/home/colligateTable/userColligate",
+          "data": [{
+              "title": "会员报表",
+              "url": "userColligate"
+            },
+            {
+              "title": "代理报表",
+              "url": "teamColligate"
+            }
+          ]
+        },
+        {
+          "title": "活动报表",
+          "url": "/home/salaryTable/gameRebate",
+          "data": [{
+              "title": "游戏返点",
+              "url": "gameRebate"
+            }, {
+              "title": "工资报表",
+              "url": "daySalary"
+            },
+            {
+              "title": "分红报表",
+              "url": "monthProfit"
+            }
+          ]
+        },
+        {
+          "title": "游戏报表",
+          "url": "/home/colligateTable/lotteryColligate",
+          "data": [{
+            "title": "彩票报表",
+            "url": "lotteryColligate"
+          }]
+        }
+      ]
+    },
+    {
+      "title": "后台管理",
+      "color": "#E98DF3",
+      "data": [{
+          "title": "后台用户",
+          "url": "/home/adminManager/admin",
+          "data": [{
+              "title": "用户列表",
+              "url": "admin"
+            },
+            {
+              "title": "群组列表",
+              "url": "role"
+            }
+          ]
+        },
+        {
+          "title": "后台记录",
+          "url": "/home/adminManager/loginLog",
+          "data": [{
+              "title": "登录记录",
+              "url": "loginLog"
+            },
+            {
+              "title": "操作记录",
+              "url": "operationLog"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "系统配置",
+      "color": "#8EB4FF",
+      "data": [{
+        "title": "常规设置",
+        "url": "/home/menuManager/menu",
+        "data": [{
+          "title": "设置项",
+          "url": "menu"
+        }]
+      }]
+    }
+  ],
+  "urlarr": [
+    [
+      ["userList"],
+      ["ipManage", "userLog"],
+      ["addAgent", "contractManage", "contractSet"]
+    ],
+    [
+      ["betsLog", "chaseLog"],
+      ["lottery", "lotteryType", "playType"]
+    ],
+    [
+      ["recharge", "rechargeLog"],
+      ["withdrawLog", "withdrawSet"],
+      ["transfer"],
+      ["paymentWx", "paymentAli", "paymentBank"]
+    ],
+    [
+      ["activityLog"]
+    ],
+    [
+      ["tradeLog"],
+      ["menu"],
+      ["role"],
+      ["admin"]
+    ],
+    [
+      ["daySalary", "monthProfit"],
+      ["userColligate", "teamColligate", "platformColligate", "lotteryColligate"]
+    ]
+  ]
+}

@@ -40,7 +40,7 @@
           <input type="number" v-model="yhk_bankNum">
         </li>
       </ul>
-      <button class="submit-btn" @click="yhk_rechargeFn">立即充值</button>
+      <button class="submit-btn" :class="(bankCardList.length===0||isClick)?'disabled-btn':''" :disabled="(bankCardList.length===0||isClick)" @click="yhk_rechargeFn">立即充值</button>
     </div>
     <div v-if="rechargeKindCode === 'wykj'">
       <h2 class="bankCard-title-wrap"><em></em><p>充值银行</p></h2>
@@ -66,12 +66,12 @@
           <i class="unit">元</i>
         </li>
       </ul>
-      <button class="submit-btn" @click="wy_rechargeFn">立即充值</button>
+      <button class="submit-btn" :class="(bankCardList.length===0||isClick)?'disabled-btn':''" :disabled="(bankCardList.length===0||isClick)" @click="wy_rechargeFn">立即充值</button>
     </div>
     <div v-if="rechargeKindCode === 'ylzz'">
       <h2 class="bankCard-title-wrap"><em></em><p>充值方式</p></h2>
       <ol class="recharge-kind-list">
-        <li><i class="recharge-icon yl-icon"><img src="/static/img/yl.png"></i><span class="recharge-kind-text">银联快捷</span></li>
+        <li><i class="recharge-icon yl-icon"><img src="/static/img/yl.png"></i><span class="recharge-kind-text">{{bankCardList.length>0?bankCardList[0].name:''}}</span></li>
       </ol>
       <div class="recharge-kind"></div>
       <h2 class="bankCard-title-wrap"><em></em><p>充值金额</p></h2>
@@ -82,7 +82,7 @@
           <i class="unit">元</i>
         </li>
       </ul>
-      <button class="submit-btn" @click="yl_rechargeFn">立即充值</button>
+      <button class="submit-btn" :class="(bankCardList.length===0||isClick)?'disabled-btn':''" :disabled="(bankCardList.length===0||isClick)" @click="yl_rechargeFn">立即充值</button>
     </div>
     
     <div class="dialog-recharge-submit" v-if="rechargeSuccess">
@@ -109,6 +109,8 @@ export default {
   },
   data() {
     return {
+      isClick: false,
+
       bankList: [],
       showBank: false,
       bankCardList: [],
@@ -192,6 +194,7 @@ export default {
       this.bankid = item._id;
       this.yhk_receiver = item.system +'-'+ item.bank;
       this.yhk_receiver_no = item.account_no;
+      this.yhk_account = item._id;
     },
     // 获取充值数据
     getRechargeData() {
@@ -206,7 +209,6 @@ export default {
           // console.log(success)
           if(success.returncode === 200){
             vm.bankCardList = success.data[0].account;
-            vm.yhk_account = vm.bankCardList._id;
             // vm.tableData = success.data.data
             // vm.formatData(success.data)
             // vm.showSelect = true;
@@ -260,6 +262,7 @@ export default {
           account: vm.yhk_account
         }
         // console.log(param)
+        this.isClick = true;
         request.http(
           'post',
           '/user/trade/recharge',
@@ -301,6 +304,7 @@ export default {
           cash_apply: vm.wy_toCash
         }
         // console.log(param)
+        this.isClick = true;
         request.http(
           'post',
           '/jeepay/recharge',
@@ -337,6 +341,7 @@ export default {
           cash_apply: vm.rechargeCash
         }
         // console.log(param)
+        this.isClick = true;
         request.http(
           'post',
           '/jeepay/recharge',
@@ -565,6 +570,7 @@ export default {
     height:100%;
     left:0;
     top:0;
+    z-index:999;
     .dialog-bj{
       position: absolute;
       left:0;

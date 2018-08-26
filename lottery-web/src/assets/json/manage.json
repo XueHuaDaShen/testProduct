@@ -1,0 +1,126 @@
+[
+{
+  "type": 1,
+  "title": "投注记录",
+  "iconClass": "icon_1",
+  "desc": [
+  {
+    "key": 1,
+    "value": "彩票记录",
+    "component": "lotteryRecord"
+  },
+  {
+    "key": 2,
+    "value": "追号记录",
+    "component": "trackRecord"
+  },
+  {
+    "key": 3,
+    "value": "棋牌游戏",
+    "component": "chessRecord"
+  }]
+},
+{
+  "type": 2,
+  "title": "资金明细",
+  "iconClass": "icon_2",
+  "desc": [
+  {
+    "key": 1,
+    "value": "帐变记录",
+    "component": "transactions"
+  },
+  {
+    "key": 2,
+    "value": "充值申请",
+    "component": "netbank"
+  },
+  {
+    "key": 3,
+    "value": "提现申请",
+    "component": "mywithdraw"
+  },
+  {
+    "key": 4,
+    "value": "转账记录",
+    "component": "mytransfer"
+  },
+  {
+    "key": 5,
+    "value": "打码记录",
+    "component": "codeManagement"
+  },
+  {
+    "key": 6,
+    "value": "额度兑换记录",
+    "component": "transformManagement"
+  }]
+},
+{
+  "type": 3,
+  "title": "代理中心",
+  "iconClass": "icon_3",
+  "desc": [
+  {
+    "key": 1,
+    "value": "团队充提",
+    "component": "teamTopUp"
+  },
+  {
+    "key": 2,
+    "value": "团队盈亏",
+    "component": "teamProfitLottery"
+  },
+  {
+    "key": 4,
+    "value": "团队管理",
+    "component": "teamManagement"
+  },
+  {
+    "key": 5,
+    "value": "链接开户",
+    "component": "linkCreate"
+  }]
+},
+{
+  "type": 4,
+  "title": "账户管理",
+  "iconClass": "icon_4",
+  "desc": [
+  {
+    "key": 1,
+    "value": "密码管理",
+    "component": "password"
+  },
+  {
+    "key": 2,
+    "value": "安全管理",
+    "component": "userSecurityQuestions"
+  },
+  {
+    "key": 3,
+    "value": "银行卡管理",
+    "component": "bank"
+  },
+  {
+    "key": 4,
+    "value": "我的奖金",
+    "component": "reward"
+  }]
+},
+{
+  "type": 5,
+  "title": "消息中心",
+  "iconClass": "icon_5",
+  "desc": [
+  {
+    "key": 1,
+    "value": "平台公告",
+    "component": "notice"
+  },
+  {
+    "key": 2,
+    "value": "站内信",
+    "component": "mail"
+  }]
+}]

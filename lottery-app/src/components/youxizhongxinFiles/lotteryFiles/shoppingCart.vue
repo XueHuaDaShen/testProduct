@@ -124,6 +124,7 @@ export default {
     this.$store.dispatch('setTitle', '购彩篮');
     this.blance = Number(localStorage.getItem('blance'));
     this.refundArr = this.$store.state.refundArr;
+    // console.log(this.refundArr)
     this.gameCode = this.$route.query.gameCode;
     this.getAllBets();
   },
@@ -139,8 +140,8 @@ export default {
     }
   },
   watch: {
-    $getIssue(o, n) {
-      // console.log(o,n)
+    '$getIssue' (o, n) {
+      console.log(o,n)
       // this.$store.dispatch('setShoppingCartData', [])
       this.issueChange = true;
       const vm = this;
@@ -387,7 +388,7 @@ export default {
         this.orderDetail = 'betsDetail';
         let arr = [];
         let issue_no = this.$store.state.issue; // 开始期数
-        let refund = '1950-0%'; // 返点
+        let refund = this.refundArr[this.rfIndex]; // 返点
         // console.log(this.getShoppingCart)
         // console.log('投注')
         this.getShoppingCart.filter(v => {
@@ -409,6 +410,7 @@ export default {
         let param = {
           voteList: arr
         }
+        // console.log(param)
         request.http(
           'post',
           '/lottery/issue/vote',

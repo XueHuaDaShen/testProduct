@@ -1,0 +1,27 @@
+[
+{
+  "s_t": "常见问题",
+  "s_id": "cjwt",
+  "isShow": false,
+  "s_t2": [{ "name": "充值类", "path": "ctl" }, { "name": "游戏类", "path": "yxl" }, { "name": "安全类", "path": "aql" }]
+}, {
+  "s_t": "账号管理",
+  "s_id": "zhgl",
+  "isShow": false,
+  "s_t2": [{ "name": "密码", "path": "mm" }, { "name": "个人资料", "path": "grzl" }]
+}, {
+  "s_t": "如何购彩",
+  "s_id": "rhgc",
+  "isShow": false,
+  "s_t2": [{ "name": "如何购彩", "path": "rhgc" }]
+}, {
+  "s_t": "如何兑奖",
+  "s_id": "rhdj",
+  "isShow": false,
+  "s_t2": [{ "name": "如何兑奖", "path": "rhdj" }]
+}, {
+  "s_t": "彩票玩法",
+  "s_id": "cpwf",
+  "isShow": false,
+  "s_t2": [{ "name": "时时彩", "path": "ssc" }, { "name": "11选5", "path": "syxw" }, { "name": "快3", "path": "ks" }, { "name": "福彩3D", "path": "fcsd" }, { "name": "PK10", "path": "pks" }, { "name": "六合彩", "path": "lhc" }, { "name": "体彩P3/P5", "path": "tc" }]
+}]

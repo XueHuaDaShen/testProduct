@@ -71,6 +71,7 @@ export default {
   },
 
   logout (vm) {
+    localStorage.setItem('islogout', true)
     localStorage.removeItem('phone-token')
     localStorage.removeItem('refund')
     localStorage.removeItem('loginname')

@@ -125,7 +125,9 @@ export default {
     }
     // console.log(this.betsArr)
   },
-  mounted() {},
+  mounted() {
+    this.$emit('sendBetsNumber', {data: [], betsNumber: []})
+  },
   beforeDestroy() {},
   destroyed() {},
   computed: {},

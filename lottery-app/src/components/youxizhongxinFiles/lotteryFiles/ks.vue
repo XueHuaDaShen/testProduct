@@ -133,6 +133,7 @@ export default {
     this.setThreeNoSame()
     this.setTwoNoSame()
     this.betsData.data = [];
+    this.$emit('sendBetsNumber', {data: [], betsNumber: []})
     if(this.type === 'andValue'){
       this.andValuePrize(this.betsData.data);
     }

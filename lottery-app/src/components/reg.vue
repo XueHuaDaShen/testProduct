@@ -7,7 +7,7 @@
       <!-- <form action=""> -->
         <div class="user-wrap username">
           <span class="user-icon"><img src="@/assets/img/user.png"></span>
-          <input type="text" placeholder="6-16位字符，可使用字母或数字" v-model="loginName">
+          <input type="text" placeholder="6-16位字符，可使用字母或数字" v-model.trim="loginName">
         </div>
         <div class="user-wrap password">
           <span class="lock-icon"><img src="@/assets/img/lock.png"></span>
@@ -96,20 +96,22 @@ export default {
                 vm.tip = '';
               }, 2000)
             } else if (code == '200') {
-              localStorage.setItem('A-TOKEN', success.data.token);
-              localStorage.setItem('refund', success.data.refund || 0);
-              localStorage.setItem('blance', success.data.cash || 0);
+              localStorage.setItem('islogout', false);
+              localStorage.setItem('phone-token', success.data.token);
+              localStorage.setItem('refund', success.data.refund);
+              localStorage.setItem('blance', success.data.cash);
               vm.$store.dispatch('setBlance', success.data.cash || 0);
               localStorage.setItem('bodyBG', 'default');
               vm.$store.dispatch('setbodyBG', 'default');
               localStorage.setItem('loginname', vm.loginName);
               vm.$router.push({ name: 'home' })
+            } else {
+              vm.$message({
+                showClose: true,
+                message: success.returncode,
+                type: "error"
+              });
             }
-            self.$message({
-              showClose: true,
-              message: success.returncode,
-              type: "error"
-            });
           },
           (error) => {
             vm.error();

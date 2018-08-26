@@ -29,7 +29,7 @@
         <input type="password" autocomplete="off" v-model="zijinPwd">
       </li>
     </ul>
-    <button class="submit-btn" @click="confirmWithDraw">确认转账</button>
+    <button class="submit-btn" :class="isClick?'disabled-btn':''" :disabled="isClick" @click="confirmWithDraw">确认转账</button>
     <div class="alert-tip-text" v-if="tipText">{{tipText}}</div>
   </div>
 </template>
@@ -41,6 +41,7 @@ export default {
   components: {},
   data() {
     return {
+      isClick: false,
       questionArr: [], // 所有问题
       question: '', // 需要回答的问题
       questionid: '', // 问题id
@@ -238,6 +239,7 @@ export default {
         transfer_loginname: vm.toName,
         transfer_cash: vm.toCash
       };
+      this.isClick = true;
       request.http(
         'post',
         '/user/trade/transfer',

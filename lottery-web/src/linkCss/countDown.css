@@ -1,0 +1,224 @@
+@charset "utf-8";
+/*body{
+    background:#38384a;
+}*/
+em{
+    font-style: normal;
+    font-weight: normal;
+}
+.btn {font-family: sans-serif;}
+
+/* S header */
+.gheader{height:150px;}
+.logo-lottery{float:left;margin:20px 0 0 0;}
+/*= S deadline */
+.deadline{
+    float:left;
+    /* padding:10px; */
+    /* margin:26px 0 0 10px; */
+    /* background-color:rgba(0,0,0,.2); */
+    display:inline;
+    /* box-shadow: 2px 2px 2px rgba(33, 33, 33, 0.2) inset; */
+    border-radius: 5px;
+}
+.deadline-text{-webkit-font-smoothing: antialiased;display:inline-block;*display:inline;*zoom:1;vertical-align:middle;font-family:microsoft yahei;font-weight:700;color:#FFF;}
+.deadline-text strong{color:#F9F2B9;}
+.deadline-number{
+    display:inline-block;
+    *display:inline;
+    *zoom:1;
+    /* margin-left:10px; */
+    line-height:46px;
+    vertical-align:middle;
+    font-size:36px;
+}
+.deadline-number em,.deadline-number span{float:left;width: 7px;height: 5px;}
+.deadline-number em{
+    text-align:center;
+    position:relative;
+    width:29px;
+    height:46px;
+    margin-right:5px;
+    border-width:1px;
+    border-style:solid;
+    background-image:-webkit-linear-gradient(top,rgba(0,0,0,0),rgba(0,0,0,.1));
+    background-image:-moz-linear-gradient(top,rgba(0,0,0,0),rgba(0,0,0,.1));
+    background-image:-o-linear-gradient(top,rgba(0,0,0,0),rgba(0,0,0,.1));
+    background-image:linear-gradient(top,rgba(0,0,0,0),rgba(0,0,0,.1));
+    background-color:#4a4c60;
+    border-radius:3px;
+    box-shadow:0 0 3px rgba(0,0,0,.7);
+    border:0;
+    color: #E2E2E2;
+}
+.deadline-number span.space {
+    text-indent: -10000px;
+}
+/**
+-webkit-perspective: 800px;
+-moz-perspective: 800px;
+perspective: 800px;
+**/
+.deadline-number .deadline-num {
+    line-height:46px;font-family:microsoft yahei;font-size:36px;font-weight:100;color:#E2E2E2;
+    position:absolute;left:0;top:0;width:29px;height:51px;overflow:hidden;text-indent: 10px;
+    box-shadow: 1px 1px 1px #292B3E;
+    text-shadow: 1px 1px 1px #353535;
+}
+.deadline-number .deadline-num-t {
+    height:23px;top:10px;top:0;z-index:50;
+    background-image: linear-gradient(-180deg, #444658 0%, #26283A 100%);
+    background-color:#4a4c60;
+    border-top-left-radius:3px;
+    border-top-right-radius:3px;
+    border:0;
+
+    -webkit-transform: rotateX(0deg);
+    -moz-transform: rotateX(0deg);
+    transform: rotateX(0deg);
+    -webkit-transform-origin: left bottom 0;
+    -moz-transform-origin: left bottom 0;
+    transform-origin: left bottom 0;
+}
+.deadline-number .deadline-num-b {height:23px;top:10px;top:23px;
+    background-image:-webkit-linear-gradient(top,rgba(0,0,0,0),rgba(0,0,0,.1));
+    background-image:-moz-linear-gradient(top,rgba(0,0,0,0),rgba(0,0,0,.1));
+    background-image:-o-linear-gradient(top,rgba(0,0,0,0),rgba(0,0,0,.1));
+    background-image:linear-gradient(top,rgba(0,0,0,0),rgba(0,0,0,.1));
+    background-color:#4a4c60;
+    border-bottom-left-radius:3px;
+    border-bottom-right-radius:3px;
+    border:0;
+}
+.deadline-number .deadline-num .inner {position:absolute;height:100%;width:100%;left: -5px;}
+.deadline-number .deadline-num-b .inner {top:-23px;}
+
+.deadline-number .deadline-num-next-t {height:23px;overflow:hidden;
+    background-image: linear-gradient(-180deg, #444658 0%, #26283A 100%);
+    background-color:#4a4c60;
+    border-top-left-radius:3px;
+    border-top-right-radius:3px;
+    border:0;
+}
+.deadline-number .deadline-num-next-t .inner {background:none;}
+
+.deadline-number .deadline-num-next-b {height:23px;overflow:hidden;top:23px;z-index:50;
+    background-image:-webkit-linear-gradient(top,rgba(0,0,0,0),rgba(0,0,0,.1));
+    background-image:-moz-linear-gradient(top,rgba(0,0,0,0),rgba(0,0,0,.1));
+    background-image:-o-linear-gradient(top,rgba(0,0,0,0),rgba(0,0,0,.1));
+    background-image:linear-gradient(top,rgba(0,0,0,0),rgba(0,0,0,.1));
+    background-color:#4a4c60;
+    border-bottom-left-radius:3px;
+    border-bottom-right-radius:3px;
+    border:0;
+
+    -webkit-transform: rotateX(-90deg);
+    -moz-transform: rotateX(-90deg);
+    transform: rotateX(-90deg);
+    -webkit-transform-origin: left top 0;
+    -moz-transform-origin: left top 0;
+    transform-origin: left top 0;
+}
+.deadline-number .deadline-num-next-b .inner {background:none;top:-23px;}
+
+.deadline-number-mask{position:absolute;top:1px;left:1px;width:28px;height:23px;
+    /*border-bottom:2px solid #2A2C3A;*/
+    border-radius:3px 3px 0 0;z-index:60;
+    filter:progid:DXImageTransform.Microsoft.gradient(enabled='true',startColorstr='#26000000', endColorstr='#26000000');
+}
+:root .deadline-number-mask{
+    filter:none;	 /*处理IE9浏览器中的滤镜效果*/
+    background-color:rgba(0,0,0,0);
+}
+
+.deadline-number .min-left-anim .deadline-num-t {
+    -webkit-transform: rotateX(90deg);
+    -moz-transform: rotateX(90deg);
+    transform: rotateX(90deg);
+    -webkit-transition-duration: .3s;
+    -moz-transition-duration: .3s;
+    transition-duration: .3s;
+    -webkit-transition-delay: 0s;
+    -moz-transition-delay: 0s;
+    transition-delay: 0s;
+
+    animation: deadlineBg .3s;
+    -moz-animation: deadlineBg .3s;
+    -webkit-animation: deadlineBg .3s;
+    -o-animation: deadlineBg .3s;
+}
+.deadline-number .min-left-anim .deadline-num-next-b {
+    -webkit-transform: rotateX(0deg);
+    -moz-transform: rotateX(0deg);
+    transform: rotateX(0deg);
+    -webkit-transition-duration: .3s;
+    -moz-transition-duration: .3s;
+    transition-duration: .3s;
+    -webkit-transition-delay: .3s;
+    -moz-transition-delay: .3s;
+    transition-delay: .3s;
+
+    animation: deadlineBgB .3s;
+    -moz-animation: deadlineBgB .3s;
+    -webkit-animation: deadlineBgB .3s;
+    -o-animation: deadlineBgB .3s;
+}
+
+@keyframes deadlineBg
+{
+    from {background: #707288;}
+    to {background: #000;}
+}
+
+@-moz-keyframes deadlineBg
+{
+    from {background: #707288;}
+    to {background: #000;}
+}
+
+@-webkit-keyframes deadlineBg
+{
+    from {background: #707288;}
+    to {background: #000;}
+}
+
+@-o-keyframes deadlineBg
+{
+    from {background: #707288;}
+    to {background: #000;}
+}
+
+
+@keyframes deadlineBgB
+{
+    from {background: #999;}
+    to {background: #EFEFEF;}
+}
+
+@-moz-keyframes deadlineBgB
+{
+    from {background: #999;}
+    to {background: #EFEFEF;}
+}
+
+@-webkit-keyframes deadlineBgB
+{
+    from {background: #999;}
+    to {background: #EFEFEF;}
+}
+
+@-o-keyframes deadlineBgB
+{
+    from {background: #999;}
+    to {background: #EFEFEF;}
+}
+.lottery{float:right;margin-top:27px;color:#FFF;}
+.lottery-text{
+    display:inline-block;*display:inline;*zoom:1;
+    vertical-align:middle;
+    padding:3px 8px;
+    font-family:microsoft yahei;
+    background-color:rgba(0,0,0,.05);
+    box-shadow: 2px 2px 2px rgba(33, 33, 33, 0.2) inset;
+    border-radius: 2px;
+}

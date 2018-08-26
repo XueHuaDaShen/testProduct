@@ -54,6 +54,14 @@ export default {
   },
   created() {
     // console.log(CryptoJS.MD5('123abc').toString())
+  },
+  mounted() {
+    let islogout = localStorage.getItem('islogout');
+    if(islogout === 'false'){
+      this.$router.push({
+        name: 'home'
+      })
+    }
     let user = localStorage.getItem('momery_username');
     if(this.enabled_jiami_ceshi){
       if(user){
@@ -86,7 +94,6 @@ export default {
     this.loginName = this.momery_username;
     this.loginPwd = this.momery_pwd;
   },
-  mounted() {},
   watch: {
     loginPwd(n, o) {
       if(this.loginPwd !== localStorage.getItem(this.loginName)){
@@ -122,14 +129,15 @@ export default {
     },
     loginFn() {
       const vm = this;
+      // alert('1234')
       if (this.loginName === '') {
-        this.tip = '请输入您的用户名'
+        this.tip = '请输入用户名'
         setTimeout(() => {
           vm.tip = '';
         }, 1500);
         return false;
       } else if (this.loginPwd === '') {
-        this.tip = '请输入您的密码'
+        this.tip = '请输入密码'
         setTimeout(() => {
           vm.tip = '';
         }, 1500);
@@ -199,9 +207,9 @@ export default {
                         localStorage.removeItem(vm.loginName);
                       }
                     }catch(e){
-                      alert('登录---'+e)
+                      // alert('登录---'+e)
                     }
-                    alert('登陆成功,本地测试');
+                    // alert('登陆成功,本地测试');
                     // vm.getToken(success.data.token, vm.loginName);
                   } else if (code == '306') {
                     vm.tip = '您的账号被禁止登陆，请联系管理员';

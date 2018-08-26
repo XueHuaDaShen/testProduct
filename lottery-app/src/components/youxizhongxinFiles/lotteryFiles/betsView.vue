@@ -1,6 +1,6 @@
 <template>
   <div class="betsView-wrap" style="overflow-y:inherit;padding-bottom:0" @click="showMoneyType=false">
-    <div class="top">
+    <div class="top" id="betsView-top">
       <div class="now">
         <p>第{{setIssueNum(lastIssue)}}期</p>
         <p class="lottery-num" v-if="gameCode!=='ks'">
@@ -21,7 +21,7 @@
         </p>
       </div>
     </div>
-    <div class="cen">
+    <div class="cen" id="betsView-cen" @scroll="handleScroll($event)">
       <ssc :betsData="getBetsData" v-if="gameCode==='ssc'&&isShowModel()&&showModle" @sendBetsNumber="handlesendBetsNumber" @sendWei="handlesendWei"></ssc>
       <syxw :betsData="getBetsData" v-if="gameCode==='syxw'&&isShowModel()&&showModle" @sendBetsNumber="handlesendBetsNumber"></syxw>
       <ks :betsData="getBetsData" v-if="gameCode==='ks'&&isShowModel()&&showModle" @sendBetsNumber="handlesendBetsNumber"></ks>
@@ -926,9 +926,15 @@ export default {
     this.userRefund = localStorage.getItem('refund');
     this.getLotteryDetailList();
     this.newIssueInterval();
+    // this.getNewIssue();
     // console.log(this.getBetsData)
   },
-  mounted() {},
+  mounted() {
+    // let top = document.getElementById('betsView-top');
+    // let cen = document.getElementById('betsView-cen');
+    // let h = top.clientHeight;
+    // cen.style.marginTop = h+'px';
+  },
   beforeDestroy() {
     // console.log('beforeDestroy')
   },
@@ -953,6 +959,10 @@ export default {
     }
   },
   methods: {
+    handleScroll(e) {
+      e.stopPropagation();
+      e.preventDefault();
+    },
     //千分函数，暂时不用，站位
     toThousands(val) {
       return val;
@@ -1049,6 +1059,8 @@ export default {
         }
         if(hour === 0 && min === 0 && sec === 0){
           clearInterval(st)
+          // clearInterval(vm.myInterval);
+          // vm.getNewIssue();
           vm.newIssueInterval();
         }
         this.countDownTime = {hour, min, sec};
@@ -1175,6 +1187,7 @@ export default {
           prize = (this.getBetsData.probability * this.userRefund) / this.maxRefund;
           max_multiple = Math.floor(this.maxPrize / prize);
         }
+        console.log(max_multiple)
         this.maxMultiple = max_multiple;
         vm.prize = prize
       } catch (e) {}
@@ -1260,22 +1273,30 @@ export default {
     // 倍数聚焦
     handleFocusMultiple() {
       const vm = this;
-      document.onkeyup = function() {
-        vm.multiple = vm.multiple.toString().replace(/\D/g,function(){return ''})
-        if(Number(vm.multiple) === 0){
-          vm.multiple = 1;
-        }else if (vm.multiple >= vm.maxMultiple) {
-          vm.multiple = vm.maxMultiple
-        }
-        // console.log(vm.multiple)
-      }
+      // document.onkeyup = function() {
+      //   vm.multiple = vm.multiple.toString().replace(/\D/g,function(){return ''})
+      //   if(Number(vm.multiple) === 0){
+      //     vm.multiple = 1;
+      //   }else if (vm.multiple >= vm.maxMultiple) {
+      //     vm.multiple = vm.maxMultiple
+      //   }
+      //   // console.log(vm.multiple)
+      // }
     },
     // 倍数失焦
     handleBlurMultiple() {
-      document.onkeyup = null;
-      if (this.multiple >= this.maxMultiple) {
-        this.multiple = this.maxMultiple
+      // document.onkeyup = null;
+      const vm = this;
+      vm.multiple = vm.multiple.toString().replace(/\D/g,function(){return ''})
+      if(Number(vm.multiple) === 0){
+        vm.multiple = 1;
+      }else if (vm.multiple >= vm.maxMultiple) {
+        vm.multiple = vm.maxMultiple
       }
+
+      // if (this.multiple >= this.maxMultiple) {
+      //   this.multiple = this.maxMultiple
+      // }
     },
     // 加减倍数
     handleReduceMultiple() {
@@ -1312,6 +1333,10 @@ export default {
     //  设置投注数
     setBets(data) {
       // console.log(data)
+      if(data.length===0){
+        this.$store.dispatch('setBets', 0);
+        return false;
+      }
       var danNum, checkBit, isCheckOptional
       try{
         danNum = this.getBetsData.danNum;
@@ -1463,8 +1488,17 @@ export default {
         }
         bets = num1 * num2;
       }else if(type.split('-')[1] === 'end'){
-        arr1 = data[0];
-        bets = lottery.valueEnd(arr1);
+        if(type.split('-')[0] === 'pks'){
+          arr1 = data;
+          let b = 0;
+          arr1.filter(v => {
+            b += v.length
+          })
+          bets = b;
+        }else{
+          arr1 = data[0];
+          bets = lottery.valueEnd(arr1);
+        }
       }else if(type.split('-')[1] === 'value'){
         arr1 = data[0];
         bets = lottery.valueEnd(arr1);
@@ -1592,7 +1626,16 @@ export default {
   position: relative;
   display:-webkit-box;
   -webkit-box-orient:vertical;
+  .top-wrap{
+    -webkit-box-flex:1;
+    display:-webkit-box;
+    -webkit-box-orient:vertical;
+    overflow-y:auto;
+  }
   .top{
+    position: relative;
+    left:0;
+    top:0;
     width:100%;
     // height:1.72rem;
     padding:.3rem;
@@ -1745,12 +1788,20 @@ export default {
     }
   }
   .cen{
-    height:8.78rem;
+    // height:8.78rem;
+    // margin-bottom:1.96rem;
     -webkit-box-flex:1;
+    max-height:8.38rem;
     overflow-y:auto;
   }
   .bot{
     height:1.96rem;
+    width:100%;
+    position: absolute;
+    z-index:99999;
+    left:0;
+    bottom:0;
+    background:#1E1E28;
     .bot-t, .bot-b{
       height:.98rem;
       padding:0 .3rem;

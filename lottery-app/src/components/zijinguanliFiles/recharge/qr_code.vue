@@ -2,9 +2,9 @@
   <div class="bankCard-wrap">
     <h2 class="bankCard-title-wrap"><em></em><p>充值方式</p></h2>
     <ol class="recharge-kind-list">
-      <li v-if="rechargeKindCode==='wxsm'"><i class="recharge-icon"><img src="/static/img/wx.png"></i><span class="recharge-kind-text">{{rechargeKindText}}</span></li>
-      <li v-if="rechargeKindCode==='zfbsm'"><i class="recharge-icon"><img src="/static/img/ali.png"></i><span class="recharge-kind-text">{{rechargeKindText}}</span></li>
-      <li v-if="rechargeKindCode==='ylsm'"><i class="recharge-icon"><img src="/static/img/yl.png"></i><span class="recharge-kind-text">{{rechargeKindText}}</span></li>
+      <li v-if="rechargeKindCode==='wxsm'"><i class="recharge-icon"><img src="/static/img/wx.png"></i><span class="recharge-kind-text">{{receiver}}</span></li>
+      <li v-if="rechargeKindCode==='zfbsm'"><i class="recharge-icon"><img src="/static/img/ali.png"></i><span class="recharge-kind-text">{{receiver}}</span></li>
+      <li v-if="rechargeKindCode==='ylsm'"><i class="recharge-icon"><img src="/static/img/yl.png"></i><span class="recharge-kind-text">{{receiver}}</span></li>
     </ol>
     <div class="recharge-kind"></div>
     <h2 class="bankCard-title-wrap"><em></em><p>充值金额</p></h2>
@@ -16,15 +16,15 @@
       </li>
     </ul>
     <!-- <button class="submit-btn" v-if="rechargeKindCode === 'wykj'" @click="wy_rechargeFn">立即充值</button> -->
-    <button class="submit-btn" v-if="rechargeKindCode!=='ylsm'" @click="qr_code_rechargeFn">立即充值</button>
-    <button class="submit-btn" v-if="rechargeKindCode==='ylsm'" @click="yl_code_rechargeFn">立即充值</button>
+    <button class="submit-btn" :class="(rechargeData.length===0||isClick)?'disabled-btn':''" :disabled="(rechargeData.length===0||isClick)" v-if="rechargeKindCode!=='ylsm'" @click="qr_code_rechargeFn">立即充值</button>
+    <button class="submit-btn" :class="(rechargeData.length===0||isClick)?'disabled-btn':''" :disabled="(rechargeData.length===0||isClick)" v-if="rechargeKindCode==='ylsm'" @click="yl_code_rechargeFn">立即充值</button>
     <div class="dialog-recharge" v-if="rechargeConfirm">
       <div class="dialog-bj"></div>
       <div class="dialog-content">
         <em class="close-em" @click="handleHideDialog('rechargeConfirm')">×</em>
         <p class="dialog-title">为了您的资金安全，请验证您的口令</p>
-        <span class="qr_code"><img :src="rechargeData.qr_code"></span>
-        <p class="margin-left-149">交易账户：{{rechargeData.account_no}}</p>
+        <span class="qr_code"><img :src="rechargeData[0].qr_code"></span>
+        <p class="margin-left-149">交易账户：{{rechargeData[0].account_no}}</p>
         <p class="margin-left-149">交易单号：{{order_no}}</p>
         <div class="remind">
           <p>温馨提示:</p>
@@ -59,6 +59,7 @@ export default {
   },
   data() {
     return {
+      isClick: false,
       selectList: [
         {title: '请选择性别', val: ''},
         {title: '男', val: '男'},
@@ -69,7 +70,7 @@ export default {
       rechargeConfirm: false,
       rechargeSuccess: false,
 
-      rechargeData: null,
+      rechargeData: [],
       order_no: '',
 
       rechargeId: '',
@@ -134,10 +135,13 @@ export default {
         (success) => {
           // console.log(success)
           if(success.returncode === 200){
-            vm.rechargeData = success.data[0].account[0];
-            vm.account = vm.rechargeData._id;
-            vm.receiver = vm.rechargeData.name;
-            vm.receiver_no = vm.rechargeData.account_no;
+            vm.rechargeData = success.data[0].account;
+            // console.log(vm.rechargeData)
+            if(vm.rechargeData.length>0){
+              vm.account = vm.rechargeData[0]._id;
+              vm.receiver = vm.rechargeData[0].name;
+              vm.receiver_no = vm.rechargeData[0].account_no;
+            }
             // vm.tableData = success.data.data
             // vm.formatData(success.data)
             // vm.showSelect = true;
@@ -169,6 +173,7 @@ export default {
           receiver_no: vm.receiver_no
         }
         // console.log(param)
+        this.isClick = true;
         request.http(
           'post',
           '/user/trade/recharge',
@@ -202,6 +207,7 @@ export default {
           type: '11'
         }
         // console.log(param)
+        this.isClick = true;
         request.http(
           'post',
           '/jeepay/recharge',

@@ -159,8 +159,10 @@ export default {
       let arr = [];
       if (val.indexOf('|') > -1) {
         arr = val.split('|');
+      }else if(val.indexOf('-') > -1){
+        arr = val.split('-')
       }else{
-        arr = val.split('')
+        arr = [val]
       }
       return arr
     },
