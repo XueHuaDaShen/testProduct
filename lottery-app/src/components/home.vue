@@ -8,45 +8,37 @@
         </router-link>
       </ul>
     </div>
-    <div class="banner-wrap" style="z-index:99;position:relative" v-loading.fullscreen.lock="loading" element-loading-text="拼命加载中" element-loading-spinner="el-icon-loading" element-loading-background="rgba(0, 0, 0, 0.8)">
+    <!-- <div class="banner-wrap" style="z-index:99;position:relative" v-loading.fullscreen.lock="loading" element-loading-text="拼命加载中" element-loading-spinner="el-icon-loading" element-loading-background="rgba(0, 0, 0, 0.8)">
       <div class="swiper-content" v-if="bannerlist.length>0">
         <div class="swiper-container">
           <div class="swiper-wrapper">
             <div class="swiper-slide b1" v-for="(item, index) in bannerlist" :key="index">
-              <!-- <a target="_blank" :href="item.url">
-                <img :src="item.activity_photo" />
-              </a> -->
-              <!-- 窗口 -->
+              窗口
               <a v-if="item.act===1" :href="item.url" :title="item.title">
                 <img :src="item.activity_photo" />
               </a>
-              <!-- 新窗口 -->
+              新窗口
               <a target="_blank" v-if="item.act===2" :href="item.url" :title="item.title">
                 <img :src="item.activity_photo" />
               </a>
-              <!-- 游戏 -->
+              游戏
               <router-link v-if="item.act===3" :title="item.title" :to="{name:item.gamecode,query:{id:item.game,p_code:item.gamecode,s_code:item.gamecode}}">
                 <img :src="item.activity_photo" />
               </router-link>
-              <!-- 活动 -->
+              活动
               <router-link v-if="item.act===4" :to="{name:'activityDetail',query:{id:item.activity}}" :title="item.title">
                 <img :src="item.activity_photo" />
               </router-link>
-              <!-- 公告 -->
-              <!-- :style="{backgroundImage: 'url(' + item.activity_photo + ')'} "  -->
+              公告
               <router-link v-if="item.act===5" :to="{name:'noticeDetail',query:{id:item.notice}}" :title="item.title">
                 <img :src="item.activity_photo" />
               </router-link>
             </div>
-            <!-- <div class="swiper-slide b2">
-            </div>
-            <div class="swiper-slide b3">
-            </div> -->
           </div>
           <div class="swiper-pagination"></div>
         </div>
       </div>
-    </div>
+    </div> -->
     <div class="split-bar"></div>
     <div class="nav-bar">
       <span></span>
@@ -147,7 +139,7 @@ export default {
     this.$store.dispatch('setShoppingCartData', []);
   },
   mounted() {
-    this.getBanner();
+    // this.getBanner();
     this.getLotteryList();
     this.getActivities();
     this.getNotice();

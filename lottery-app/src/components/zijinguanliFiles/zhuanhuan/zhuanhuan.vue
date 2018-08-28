@@ -300,7 +300,8 @@ export default {
         paramCryptFn(param),
         (success) => {
           // console.log(success)
-          if(success.returncode == 200){
+          let code = success.returncode;
+          if (success.returncode == 200){
             vm.showSelect1 = false;
             vm.showSelect2 = false;
             setTimeout(() => {
@@ -318,7 +319,22 @@ export default {
             setTimeout(() => {
               vm.tipText = '';
             }, vm.tipTimeOut*1000);
-          }else{
+          } else if (code == 301 || code == 305) {
+            vm.tipText = '资金密码不正确';
+            setTimeout(() => {
+              vm.tipText = '';
+            }, vm.tipTimeOut*2000);
+          } else if (code == 304) {
+            vm.tipText = '账户无法进行额度转换';
+            setTimeout(() => {
+              vm.tipText = '';
+            }, vm.tipTimeOut*2000);
+          } else if (code == 302) {
+            vm.tipText = '账户余额不足';
+            setTimeout(() => {
+              vm.tipText = '';
+            }, vm.tipTimeOut*2000);
+          } else {
             vm.tipText = success.data.msg;
             setTimeout(() => {
               vm.tipText = '';

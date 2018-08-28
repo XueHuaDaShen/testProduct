@@ -60,11 +60,8 @@ export default {
   data() {
     return {
       isClick: false,
-      selectList: [
-        {title: '请选择性别', val: ''},
-        {title: '男', val: '男'},
-        {title: '女', val: '女'},
-      ],
+      rechargeRule: null,
+
       rechargeKindCode: '',
       rechargeKindText: '',
       rechargeConfirm: false,
@@ -106,6 +103,7 @@ export default {
       this.rechargeKindText = '银联扫码';
       this.rechargeType = '3';
     }
+    this.getWithdrawRule();
     this.getRechargeData();
     this.$store.dispatch('setFooterStatus', false);
     this.$store.dispatch('setBackStatus', true);
@@ -122,6 +120,24 @@ export default {
       this.$router.push({
         name: 'confirmTixian'
       })
+    },
+    // 获取充值规则
+    getWithdrawRule() {
+      const vm = this;
+      request.http(
+        'get',
+        '/user/trade/withdraw/config',
+        {},
+        (success) => {
+          // console.log(success)
+          if(success.returncode && success.returncode == 200){
+            vm.rechargeRule = success.data;
+          }
+        },
+        (error) => {
+          console.log('数据异常', error)
+        }
+      )
     },
     // 获取充值数据
     getRechargeData() {
@@ -158,8 +174,22 @@ export default {
     // 扫码充值
     qr_code_rechargeFn() {
       const vm = this;
+      let defaultMin = 1;
+      let defaultMax = 50000;
       if (this.rechargeCash === '') {
         this.tipText = '请填写充值金额';
+        setTimeout(() => {
+          vm.tipText = '';
+        }, vm.tipTimeOut*1000);
+        return false;
+      } else if(this.rechargeCash < (this.rechargeRule.min_recharge_scan || defaultMin)) {
+        this.tipText = '每次最少充值'+(this.rechargeRule.min_recharge_scan || defaultMin)+'元';
+        setTimeout(() => {
+          vm.tipText = '';
+        }, vm.tipTimeOut*1000);
+        return false;
+      } else if(this.rechargeCash > (this.rechargeRule.max_recharge_scan || defaultMax)) {
+        this.tipText = '每次最多充值'+(this.rechargeRule.max_recharge_scan || defaultMax)+'元';
         setTimeout(() => {
           vm.tipText = '';
         }, vm.tipTimeOut*1000);
@@ -195,8 +225,22 @@ export default {
     //银联
     yl_code_rechargeFn() {
       const vm = this;
+      let defaultMin = 1;
+      let defaultMax = 50000;
       if (this.rechargeCash === '') {
         this.tipText = '请填写充值金额';
+        setTimeout(() => {
+          vm.tipText = '';
+        }, vm.tipTimeOut*1000);
+        return false;
+      } else if(this.rechargeCash < (this.rechargeRule.third_min_recharge_every_time || defaultMin)) {
+        this.tipText = '每次最少充值'+(this.rechargeRule.third_min_recharge_every_time || defaultMin)+'元';
+        setTimeout(() => {
+          vm.tipText = '';
+        }, vm.tipTimeOut*1000);
+        return false;
+      } else if(this.rechargeCash > (this.rechargeRule.third_max_recharge_every_time || defaultMax)) {
+        this.tipText = '每次最多充值'+(this.rechargeRule.third_max_recharge_every_time || defaultMax)+'元';
         setTimeout(() => {
           vm.tipText = '';
         }, vm.tipTimeOut*1000);

@@ -110,6 +110,7 @@ export default {
   data() {
     return {
       isClick: false,
+      rechargeRule:null,
 
       bankList: [],
       showBank: false,
@@ -151,6 +152,7 @@ export default {
     if(this.rechargeKindCode === 'wykj'){
       txt = '网银快捷'
     }
+    this.getWithdrawRule();
     this.$store.dispatch('setFooterStatus', false);
     this.$store.dispatch('setBackStatus', true);
     this.$store.dispatch('setTitle', txt);
@@ -196,6 +198,24 @@ export default {
       this.yhk_receiver_no = item.account_no;
       this.yhk_account = item._id;
     },
+    // 获取充值规则
+    getWithdrawRule() {
+      const vm = this;
+      request.http(
+        'get',
+        '/user/trade/withdraw/config',
+        {},
+        (success) => {
+          // console.log(success)
+          if(success.returncode && success.returncode == 200){
+            vm.rechargeRule = success.data;
+          }
+        },
+        (error) => {
+          console.log('数据异常', error)
+        }
+      )
+    },
     // 获取充值数据
     getRechargeData() {
       const vm = this;
@@ -220,6 +240,8 @@ export default {
     // 银行卡转账
     yhk_rechargeFn() {
       const vm = this;
+      let defaultMin = 1;
+      let defaultMax = 50000;
       //  else if (this.yhk_toBankCard === '') {
       //   vm.tipText = '请选择存款银行';
       //   setTimeout(() => {
@@ -235,6 +257,18 @@ export default {
         return false;
       } else if (this.yhk_toCash === '') {
         vm.tipText = '请填写存款金额';
+        setTimeout(() => {
+          vm.tipText = '';
+        }, vm.tipTimeOut*1000);
+        return false;
+      } else if(this.yhk_toCash < (this.rechargeRule.min_recharge_every_time || defaultMin)) {
+        this.tipText = '每次最少充值'+(this.rechargeRule.min_recharge_every_time || defaultMin)+'元';
+        setTimeout(() => {
+          vm.tipText = '';
+        }, vm.tipTimeOut*1000);
+        return false;
+      } else if(this.yhk_toCash > (this.rechargeRule.max_recharge_every_time || defaultMax)) {
+        this.tipText = '每次最多充值'+(this.rechargeRule.max_recharge_every_time || defaultMax)+'元';
         setTimeout(() => {
           vm.tipText = '';
         }, vm.tipTimeOut*1000);
@@ -285,6 +319,8 @@ export default {
     // 网银充值
     wy_rechargeFn() {
       const vm = this;
+      let defaultMin = 1;
+      let defaultMax = 50000;
       if (this.bankcode === '') {
         vm.tipText = '请选择银行卡';
         setTimeout(() => {
@@ -293,6 +329,18 @@ export default {
         return false;
       } else if (this.wy_toCash === '') {
         vm.tipText = '请填写充值金额';
+        setTimeout(() => {
+          vm.tipText = '';
+        }, vm.tipTimeOut*1000);
+        return false;
+      } else if(this.wy_toCash < (this.rechargeRule.third_min_recharge_every_time || defaultMin)) {
+        this.tipText = '每次最少充值'+(this.rechargeRule.third_min_recharge_every_time || defaultMin)+'元';
+        setTimeout(() => {
+          vm.tipText = '';
+        }, vm.tipTimeOut*1000);
+        return false;
+      } else if(this.wy_toCash > (this.rechargeRule.third_max_recharge_every_time || defaultMax)) {
+        this.tipText = '每次最多充值'+(this.rechargeRule.third_max_recharge_every_time || defaultMax)+'元';
         setTimeout(() => {
           vm.tipText = '';
         }, vm.tipTimeOut*1000);
@@ -329,8 +377,22 @@ export default {
     // 银联充值
     yl_rechargeFn() {
       const vm = this;
+      let defaultMin = 1;
+      let defaultMax = 50000;
       if (this.rechargeCash === '') {
         vm.tipText = '请填写充值金额';
+        setTimeout(() => {
+          vm.tipText = '';
+        }, vm.tipTimeOut*1000);
+        return false;
+      } else if(this.rechargeCash < (this.rechargeRule.third_min_recharge_every_time || defaultMin)) {
+        this.tipText = '每次最少充值'+(this.rechargeRule.third_min_recharge_every_time || defaultMin)+'元';
+        setTimeout(() => {
+          vm.tipText = '';
+        }, vm.tipTimeOut*1000);
+        return false;
+      } else if(this.rechargeCash > (this.rechargeRule.third_max_recharge_every_time || defaultMax)) {
+        this.tipText = '每次最多充值'+(this.rechargeRule.third_max_recharge_every_time || defaultMax)+'元';
         setTimeout(() => {
           vm.tipText = '';
         }, vm.tipTimeOut*1000);

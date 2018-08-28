@@ -414,7 +414,7 @@ export default {
   watch: {
     getBetsData (n, o) {
       // console.log(n, o)
-      console.log(this.getBetsData)
+      // console.log(this.getBetsData)
       this.betsNumber = [];
       this.confirmBetsData = [];
       this.multiple = 1;
@@ -466,6 +466,7 @@ export default {
     // 设置期数显示样式
     setIssueNum(issue) {
       let s = ''
+      if(!issue){return s;}
       if(this.gameCode === 'ssc'){
         s = issue.toString().substr(2);
       }else {

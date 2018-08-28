@@ -93,8 +93,8 @@
             <td>{{item.issue_no?item.issue_no.substr(2):''}}</td>
             <td>{{item.lotteryname}}</td>
             <td>{{item.vote_no}}</td>
-            <td>{{item.vote_cash||0}}</td>
-            <td>{{item.refund_cash}}</td>
+            <td>{{formatMoney(item.vote_cash)}}</td>
+            <td>{{formatMoney(item.award_cash)}}</td>
             <td>{{getVoteStatus(item.status)}}</td>
           </tr>
         </tbody>
@@ -157,6 +157,13 @@ export default {
   watch: {},
   computed: {},
   methods: {
+    formatMoney(money) {
+      if(money){
+        return Number(money).toFixed(2);
+      }else{
+        return '0';
+      }
+    },
     // 选择游戏名
     selectGameName(item) {
       this.getPlayGroups(item._id)
@@ -217,7 +224,7 @@ export default {
           begintime: vm.start_time,
           endtime: vm.end_time,
           gameid: vm.gameid,
-          status: vm.status
+          status: [vm.status]
         },
         (success) => {
           // console.log(success)

@@ -970,6 +970,7 @@ export default {
     // 设置期数显示样式
     setIssueNum(issue) {
       let s = ''
+      if(!issue){return s;}
       if(this.gameCode === 'ssc'){
         s = issue.toString().substr(2);
       }else {
@@ -1187,7 +1188,7 @@ export default {
           prize = (this.getBetsData.probability * this.userRefund) / this.maxRefund;
           max_multiple = Math.floor(this.maxPrize / prize);
         }
-        console.log(max_multiple)
+        // console.log(max_multiple)
         this.maxMultiple = max_multiple;
         vm.prize = prize
       } catch (e) {}
