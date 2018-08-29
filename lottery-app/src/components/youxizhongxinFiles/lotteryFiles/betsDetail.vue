@@ -122,7 +122,8 @@ export default {
         'get',
         '/lottery/issue/vote/detail',
         {
-          voteid: vm.detailID
+          voteid: vm.detailID,
+          self: 1
         },
         (success) => {
           let code = success.returncode;

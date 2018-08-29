@@ -25,9 +25,16 @@
         <span class="exp ml-20">注单编号：</span>
         <el-input style="width:114px;" placeholder="请输入内容" v-model="form.zdbh.value" clearable>
         </el-input>
-        <span class="exp ml-20">用户名：</span>
+      </div>
+      <div class="option-row mb-20">
+        <span class="exp">用户名：</span>
         <el-input style="width:114px;" placeholder="请输入内容" v-model="form.username.value" clearable>
         </el-input>
+        <span class="exp w-60 ml-20">用户属性：</span>
+        <el-select v-model="form.userTypes.value" placeholder="请选择" clearable style="width:114px">
+          <el-option v-for="item in form.userTypes.options" :key="item.value" :label="item.text" :value="item.value">
+          </el-option>
+        </el-select>
       </div>
       <div class="option-row mb-20">
         <span class="exp w-60">状态：</span>
@@ -62,13 +69,13 @@
           <th>投注返点</th>
           <th>彩票盈亏</th>
         </tr>
-        <tr class="group-item">
-          <td>{{form.username.value}}</td>
-          <td>{{agg.totalVote | formatMoney}}</td>
-          <td>{{agg.totalTrueVote | formatMoney}}</td>
-          <td>{{agg.totalAward | formatMoney}}</td>
-          <td>{{agg.totalRefund | formatMoney}}</td>
-          <td class="success">{{agg.profit | formatMoney}}</td>
+        <tr class="group-item" v-for="(item,index) in agg" :key="index">
+          <td>{{item.username}}</td>
+          <td>{{item.totalVote | formatMoney}}</td>
+          <td>{{item.totalTrueVote | formatMoney}}</td>
+          <td>{{item.totalAward | formatMoney}}</td>
+          <td>{{item.totalRefund | formatMoney}}</td>
+          <td class="success">{{item.profit | formatMoney}}</td>
         </tr>
       </tbody>
     </table>
@@ -352,7 +359,7 @@
           //用户名
           username: {
             key: 'loginname',
-            value: localStorage.getItem('loginname'),
+            value: '',
             getValue() {
               if (this.value) {
                 return this.value;
@@ -373,16 +380,43 @@
               this.error.visible = false;
               return true;
             }
-          }
+          },
+          //用户属性
+          userTypes: {
+            key: 'self',
+            value: 1,
+            options: [{ text: '全部', value: 2 }, { text: '自己', value: 1 }, { text: '下级', value: 0 }],
+            getValue() {
+              if (this.value || this.value == 0) {
+                return this.value;
+              }
+              return 2;
+            },
+            reset() {
+              this.value = 2;
+            },
+            error: {
+              visible: false,
+              message: ''
+            },
+            verify: function(value) {
+              if (!value) {
+                value = this.value;
+              }
+              this.error.visible = false;
+              return true;
+            }
+          },
           //form End
         },
+        username2: '',
         list: [],
         noResult: true,
         totalPageNum: 0, //总页数
         total: 0, //总条数
         pageIndex: 1, //当前页
         pageSize: 15, //单页条数
-        agg: {} //投注统计
+        agg: [] //投注统计
       }
     },
     methods: {
@@ -487,7 +521,17 @@
         let validate = true,
           data = {},
           self = this;
-        this.form.username.value = localStorage.getItem('loginname');
+        if (this.form.userTypes.value == 1) {
+          this.form.username.value = localStorage.getItem('loginname');
+        }
+        // let username = this.form.username.value;
+        // this.username2 = username;
+        // if (username) {
+        //   this.username2 = username;
+        // } else {
+        //   this.form.username.value = localStorage.getItem('loginname');
+        //   this.username2 = localStorage.getItem('loginname');
+        // }
         data['page_size'] = this.pageSize;
         data['page_num'] = this.pageIndex;
         let errorMessage = '查询错误';
@@ -533,28 +577,32 @@
                 } else {
                   self.noResult = true;
                   self.list = [];
-                  // self.$alert('没有符合条件的记录', '系统提醒', {
-                  //   confirmButtonText: '确定',
-                  //   center: true,
-                  // });
+                  self.agg = [];
                 }
+              } else if (success.returncode == 303) {
+                self.noResult = true;
+                self.list = [];
+                self.agg = [];
+                self.$message({
+                  showClose: true,
+                  message: '查询错误',
+                  type: "error"
+                });
               } else {
                 self.noResult = true;
                 self.list = [];
+                self.agg = [];
                 self.$message({
                   showClose: true,
                   message: success.returncode,
                   type: "error"
                 });
-                // self.$alert('没有符合条件的记录', '系统提醒', {
-                //   confirmButtonText: '确定',
-                //   center: true,
-                // });
               }
             }
           }, (error) => {
             self.loading = false;
             self.list = [];
+            self.agg = [];
             self.noResult = true;
             console.log('error', error);
           })
@@ -572,8 +620,8 @@
             if (success.returncode == 103 || success.returncode == 106 || success.returncode == 101) {
               request.loginAgain(self);
             } else if (success.returncode == 200) {
-              if (success.agg.length != 0 && success.agg[0] != null) {
-                this.agg = success.agg[0];
+              if (success.agg.length != 0) {
+                this.agg = success.agg;
               }
             } else {
               self.$message({
@@ -744,21 +792,22 @@
     },
     mounted() {
       this.setTimeToday();
+      this.form.username.value = localStorage.getItem('loginname');
       this.checkId();
     }
   }
 </script>
 <style>
-  .lottery-wrap .el-checkbox__input.is-checked .el-checkbox__inner {
+  /* .lottery-wrap .el-checkbox__input.is-checked .el-checkbox__inner {
     background-color: #3997fa;
     border-color: #3997fa;
-  }
+  } */
 
   .lottery-wrap .el-checkbox__input.is-checked+.el-checkbox__label {
     color: #191919;
   }
 
-  .lottery-wrap .el-checkbox__inner:hover {
+  /* .lottery-wrap .el-checkbox__inner:hover {
     border-color: #3997fa;
   }
 
@@ -768,7 +817,7 @@
 
   .lottery-wrap .el-checkbox__input.is-focus .el-checkbox__inner {
     border-color: #3997fa;
-  }
+  } */
 </style>
 <style scoped>
   .w-60 {

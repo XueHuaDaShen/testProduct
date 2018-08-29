@@ -1251,8 +1251,7 @@
     thead th {
       text-align: center;
       background: #64646C;
-      ;
-      padding: 15px 0px;
+      padding: 15px 0;
       span {
         color: #fff;
       }
@@ -1373,7 +1372,7 @@
           color: #fff;
         }
         .current em {
-          background: #CC3447;
+          background-image: linear-gradient(-180deg, #CFA072 0%, #B68E66 100%);
           font-weight: 600;
           color: #fff;
         }
@@ -1428,6 +1427,7 @@
     -webkit-box-flex: 1; // border:1px solid #D0D0D0;
     border-top: none;
     background: #64646C;
+    overflow: hidden;
     display: -webkit-box;
     -webkit-box-orient: vertical;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);

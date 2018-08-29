@@ -1,9 +1,9 @@
 export default {
   // 线上
-  // login: 'http://a1.8bw.vip/api/v1',
+  login: 'http://a1.8bw.vip/api/v1',
 
   // 线下
-  login: 'http://123.56.6.6:8000/api/v1',
+  // login: 'http://123.56.6.6:8000/api/v1',
 
   // 线上
   // login: 'https://dee.tutulive.tv:8443/api/v1'

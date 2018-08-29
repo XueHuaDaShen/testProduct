@@ -129,7 +129,7 @@
               </div>
             </div>
             <div class="submit-line">
-              <a class="submit" type="submit" @click="validatorCashPsd(nextStep.input_cash_psd)">确认提现</a>
+              <el-button class="submit" type="submit" @click="validatorCashPsd(nextStep.input_cash_psd)" :disabled="disabled">确认提现</el-button>
             </div>
           </div>
         </div>
@@ -500,6 +500,10 @@
       validatorCashPsd(cash_password) {
         let password = cash_password;
         let self = this;
+        self.disabled = true;
+        setTimeout(() => {
+          self.disabled = false
+        }, 1000)
         if (this.dml != 0) {
           this.$message({
             showClose: true,
@@ -794,10 +798,31 @@
     align-items: center;
   }
 
-  .submit {
+  a.submit {
     width: 115px;
     height: 40px;
     line-height: 40px;
+    display: inline-block;
+    text-align: center;
+    cursor: pointer;
+    text-decoration: none;
+    background: #cc3447;
+    border-radius: 2px;
+    font-family: PingFangSC-Regular;
+    font-size: 14px;
+    font-weight: 700;
+    color: #ffffff;
+    margin: 0 auto;
+    &.no-allowed {
+      background-color: #f5f7fa;
+      color: #c0c4cc;
+      border: 1px solid #e4e7ed;
+    }
+  }
+
+  .submit {
+    width: 115px;
+    height: 40px;
     display: inline-block;
     text-align: center;
     cursor: pointer;

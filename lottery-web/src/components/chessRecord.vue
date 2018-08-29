@@ -15,6 +15,16 @@
         <span class="exp ml-20">游戏名：</span>
         <el-input v-model="form.ganmename" placeholder="请输入游戏名" style="width:114px;"></el-input>
       </div>
+      <div class="option-row mb-20">
+        <span class="exp">用户名：</span>
+        <el-input style="width:114px;" placeholder="请输入内容" v-model="form.username.value" clearable>
+        </el-input>
+        <span class="exp w-60 ml-20">用户属性：</span>
+        <el-select v-model="form.userTypes.value" placeholder="请选择" clearable style="width:114px">
+          <el-option v-for="item in form.userTypes.options" :key="item.value" :label="item.text" :value="item.value">
+          </el-option>
+        </el-select>
+      </div>
       <div class="option-row">
         <span class="exp">游戏时间：</span>
         <el-date-picker v-model="form.dateFrom.value" type="datetime" prefix-icon="void-icon" placeholder="选择日期时间" value-format="yyyy-MM-dd HH:mm:ss">
@@ -182,7 +192,58 @@
               this.error.visible = false;
               return true;
             }
-          }
+          },
+          //用户名
+          username: {
+            key: 'loginname',
+            value: '',
+            getValue() {
+              if (this.value) {
+                return this.value;
+              }
+              return '';
+            },
+            reset() {
+              this.value = null;
+            },
+            error: {
+              visible: false,
+              message: ''
+            },
+            verify: function(value) {
+              if (!value) {
+                value = this.value;
+              }
+              this.error.visible = false;
+              return true;
+            }
+          },
+          //用户属性
+          userTypes: {
+            key: 'self',
+            value: 1,
+            options: [{ text: '全部', value: 2 }, { text: '自己', value: 1 }, { text: '下级', value: 0 }],
+            getValue() {
+              if (this.value || this.value == 0) {
+                return this.value;
+              }
+              return 2;
+            },
+            reset() {
+              this.value = 2;
+            },
+            error: {
+              visible: false,
+              message: ''
+            },
+            verify: function(value) {
+              if (!value) {
+                value = this.value;
+              }
+              this.error.visible = false;
+              return true;
+            }
+          },
           //form End
         },
         list: [],
@@ -306,7 +367,9 @@
         let validate = true,
           data = {},
           self = this;
-        // this.form.username.value = localStorage.getItem("loginname");
+        if (this.form.userTypes.value == 1) {
+          this.form.username.value = localStorage.getItem('loginname');
+        }
         data["pageSize"] = this.pageSize;
         data["pageNum"] = this.pageIndex;
         let errorMessage = "查询错误";
@@ -460,6 +523,7 @@
     },
     mounted() {
       this.setTimeToday();
+      this.form.username.value = localStorage.getItem('loginname');
       this.onSubmit();
       this.getPlatform();
     }

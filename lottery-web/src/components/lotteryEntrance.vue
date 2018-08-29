@@ -84,7 +84,7 @@
             self.loading = false;
             if (success.returncode && success.returncode == 200) {
               self.$store.dispatch('setLotteryArr', success.data)
-            } else if(success.returncode == 101 || success.returncode == 103 || success.returncode == 106) {
+            } else if (success.returncode == 101 || success.returncode == 103 || success.returncode == 106) {
               request.loginAgain(self)
             }
           },
@@ -116,7 +116,7 @@
                   });
                 }
               }
-            } else if(success.returncode == 101 || success.returncode == 103 || success.returncode == 106) {
+            } else if (success.returncode == 101 || success.returncode == 103 || success.returncode == 106) {
               request.loginAgain(self)
             }
           },
@@ -280,7 +280,7 @@
 
   .lottery-list dt a {
     font-family: PingFangSC-Medium;
-    font-size: 14px;
+    font-size: 12px;
     color: #000000;
     letter-spacing: 0.75px;
     width: 100px;
@@ -298,7 +298,7 @@
   }
 
   .lottery-list dt a:hover {
-    background: #C83A4C;
+    background: #BD8454;
     color: #fff;
   }
 

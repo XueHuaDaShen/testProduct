@@ -6,6 +6,7 @@
           <img :src="logoImgCode">
         </div>
         <div class="header-left-r">
+          <div class="header-left-r-bj"></div>
           <div class="bets-issue">
             <span>第
               <em style="color:#c83a4c;">{{issue}} </em>期</span>
@@ -26,9 +27,11 @@
         </div>
         <div class="explain">
           <span>
+            <em class="explain-btn-bj"></em>
             <router-link :to="{name:'cpwf',query:{s_p:'ks'}}" target="_blank">玩法说明</router-link>
           </span>
           <span>
+            <em class="explain-btn-bj"></em>
             <router-link :to="{name:'dataCharts',query:{gameid:gameid}}" target="_blank">走势图</router-link>
           </span>
         </div>
@@ -66,10 +69,10 @@
               </div>
               <div class="double">
                 <!-- <span class="tip-title">倍数：</span> -->
-                <span class="jianhao" @click="handleJianMultiple">-</span>
+                <span class="jianhao el-icon-minus" @click="handleJianMultiple"></span>
                 <input class="double-content" @blur="handleSetMaxMultiple" @focus="inputMultiple" type="text" :max="maxMultiple" :min="minMultiple" v-model="multiple">
                 <!-- <span class="double-content">{{multiple}}</span> -->
-                <span class="jiahao" @click="handleJiaMultiple">+</span>
+                <span class="jiahao el-icon-plus" @click="handleJiaMultiple"></span>
               </div>
               <div class="adjust">
                 <span class="tip-title" style="margin-right:20px;">返点
@@ -1839,7 +1842,7 @@
 
   .lottery-header {
     width: 100%;
-    height: 118px; // padding:0 20px;
+    height: 104px; // padding: 0 20px;
     display: -webkit-box;
     -webkit-box-align: center;
     -webkit-box-pack: justify;
@@ -1854,12 +1857,28 @@
         display: -webkit-box;
         -webkit-box-orient: vertical; // -webkit-box-align:center;
         -webkit-box-pack: justify;
+        padding: 8px 10px;
+        position: relative;
+        margin-left: 12px;
+        height: 96px;
+        .header-left-r-bj {
+          position: absolute;
+          left: 0;
+          top: 0;
+          width: 100%;
+          height: 100%;
+          opacity: 0.5;
+          background: #000000;
+          box-shadow: inset 0 2px 6px 0 rgba(0, 0, 0, 0.50);
+          border-radius: 4px;
+        }
       }
     }
   }
 
   .lottery-icon {
-    width: 160px; // margin-left: 25px;
+    width: 140px;
+    height: 104px; // margin-left: 25px;
   }
 
   .lottery-icon img {
@@ -1868,9 +1887,11 @@
 
   .bets-issue {
     display: -webkit-box; // -webkit-box-orient: vertical;
-    font-size: 14px;
-    color: #191919;
+    font-size: 14px; // color: #191919;
+    color: #e2e2e2;
     font-weight: 600; // margin-left: 30px;
+    position: relative;
+    z-index: 2;
   }
 
   .bets-issue span {
@@ -1889,8 +1910,8 @@
   .history-issue {
     font-size: 14px;
     font-weight: 600;
-    text-align: left; // margin-left:7.5px;
-    // margin-left: 33px;
+    color: #e2e2e2;
+    text-align: left; // margin-left: 4px;
     // margin-top: -13px;
   }
 
@@ -1947,6 +1968,7 @@
   .explain {
     margin-left: 20px;
     height: 78px;
+    position: relative;
     display: -webkit-box;
     -webkit-box-orient: vertical;
     -webkit-box-pack: justify;
@@ -1957,13 +1979,25 @@
     width: 86px;
     height: 34px;
     line-height: 34px;
-    color: #fff;
-    background: #BD8454;
+    color: #fff; // background: #1a1a1a;
     border-radius: 2px;
     font-size: 14px;
+    position: relative;
     a {
       color: #fff;
       text-decoration: none;
+      position: relative;
+      z-index: 2;
+      font-weight: 600;
+    }
+    em.explain-btn-bj {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      left: 0;
+      top: 0;
+      background: #000;
+      opacity: .5;
     }
   }
 
@@ -2075,20 +2109,21 @@
     display: block;
     width: 30px;
     height: 30px;
-    line-height: 30px;
+    line-height: 29px;
     text-align: center;
     color: #777;
     background: #FFFFFF;
     border: 1px solid #DDDDDD;
     border-radius: 2px;
-    font-size: 30px;
+    font-size: 16px;
     cursor: pointer;
+    font-weight: bold;
   }
 
-  .jianhao {
+  /*   .jianhao {
     line-height: 25px;
     font-size: 36px;
-  }
+  } */
 
   .double-content {
     display: block;
@@ -2152,12 +2187,7 @@
     margin-left: 12px;
     font-size: 14px;
     font-weight: 600;
-    background: -moz-linear-gradient(top, #FFB126 0%, #9A4E02 100%);
-    background: -webkit-linear-gradient(top, #FFB126 0%, #9A4E02 100%);
-    background: -o-linear-gradient(top, #FFB126 0%, #9A4E02 100%);
-    background: -ms-linear-gradient(top, #FFB126 0%, #9A4E02 100%);
-    background: linear-gradient(to bottom, #FFB126 0%, #9A4E02 100%);
-    background: -webkit-gradient(linear, 0 0, 0 bottom, from(#FFB126), to(#9A4E02));
+    background-image: linear-gradient(-180deg, #DBB894 5%, #7C5D3C 97%);
     cursor: pointer;
     color: #fff;
   }
@@ -2478,8 +2508,11 @@
     margin-top: 38px;
   }
 
+  /* 123123 */
+
   .bets-confirm>div {
-    background: rgba(166, 91, 6, 1);
+    background-image: linear-gradient(-180deg, #CFA072 0%, #B68E66 100%);
+    border: 1px solid #DDDDDD;
     border-radius: 4px;
     display: -webkit-box;
     -webkit-box-pack: center;
@@ -2492,6 +2525,14 @@
     cursor: not-allowed;
   }
 
+  .bets-confirm>div.disabled .bets-confirm-btn {
+    color: #191919;
+  }
+
+  .bets-confirm>div.disabled .bets-confirm-countDown {
+    color: #191919;
+  }
+
   .bets-confirm-btn {
     border: none;
     outline: none;
@@ -2500,7 +2541,7 @@
     background: none;
     border: none; // background: rgba(166, 91, 6, 1);
     // box-shadow: 4px 6px 9px rgba(103, 66, 2, 0.25);
-    color: #191919;
+    color: #fff;
     font-size: 20px;
     font-weight: bold; // cursor: pointer;
     cursor: inherit;
@@ -2516,7 +2557,7 @@
     -webkit-box-orient: vertical;
     -webkit-box-pack: center;
     border-left: 1px solid #ddd;
-    color: #191919;
+    color: #fff;
     font-size: 14px;
   }
 
@@ -2630,7 +2671,7 @@
   }
 
   .my-bets-table .bets-detail-btn a {
-    color: #DB4B48;
+    color: #D4914D;
     text-decoration: underline;
     cursor: pointer;
   }

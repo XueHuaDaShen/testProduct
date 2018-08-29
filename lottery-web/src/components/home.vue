@@ -86,6 +86,7 @@
     background: url('../img/default-bj.png') no-repeat;
     background-size: 100% 100%;
     padding: 20px 0;
+    padding-top:28px;
   }
 
   .content {

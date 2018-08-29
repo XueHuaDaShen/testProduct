@@ -27,6 +27,17 @@
     </ul>
     <button class="submit-btn" @click="confirmWithDraw">确认提现</button>
     <div class="alert-tip-text" v-if="tipText">{{tipText}}</div>
+    <div class="yhk-warning-dialog" v-if="showWarningQueAlert">
+      <div class="dialog-bj"></div>
+      <div class="dialog-content" @click="handleClickContent($event)">
+        <em class="close-em" @click="handleHideDialog('showWarningQueAlert', $event)">×</em>
+        <p class="warning-icon-p"><span class="warning-icon"></span></p>
+        <p class="warning-text-p">
+          您还未设置密保问题！这导致您的账号存在风险！
+        </p>
+        <p class="warning-btn-p"><button @click="toSetQue($event)">前往设置</button></p>
+      </div>
+    </div>
   </div>
 </template>
 <script>
@@ -40,6 +51,7 @@ export default {
   },
   data() {
     return {
+      showWarningQueAlert: false,
       questionArr: [], // 所有问题
       question: '', // 需要回答的问题
       questionid: '', // 问题id
@@ -104,6 +116,10 @@ export default {
           // console.log(success)
           if (success.returncode && success.returncode == 200) {
             vm.questionArr = success.data.questions;
+            if(vm.questionArr.length === 0){
+              vm.showWarningQueAlert = true;
+              vm.$store.dispatch('setHeader', false)
+            }
             vm.randomQuestion(vm.questionArr)
           }
         },
@@ -276,6 +292,27 @@ export default {
         (error) => {}
       )
     },
+    // 阻止事件捕获
+    handleClickContent(e) {
+      e.stopImmediatePropagation();
+    },
+    // 隐藏弹框
+    handleHideDialog(val, e) {
+      this[val] = false;
+      this.$store.dispatch('setHeader', true)
+      this.toSetQue(e);
+      // document.getElementsByClassName('myMain')[0].style.zIndex = 5;
+    },
+    // 去往设置密保页
+    toSetQue(e) {
+      e.stopPropagation();
+      this.showWarningQueAlert = false;
+      this.$store.dispatch('setHeader', true)
+      // document.getElementsByClassName('myMain')[0].style.zIndex = 5;
+      this.$router.push({
+        name: 'mbwt'
+      })
+    },
   },
   beforeDestroy() {},
   destroyed() {},
@@ -376,6 +413,86 @@ export default {
     margin-left:1.55rem;
     font-size:.32rem;
     line-height:.8rem;
+  }
+  .dialog-bj{
+    position: absolute;
+    left:0;
+    top:0;
+    width:100%;
+    height:100%;
+    opacity: 0.8;
+    background: #000000;
+  }
+  .yhk-warning-dialog{
+    width:100%;
+    height:100%;
+    position: absolute;
+    left:0;
+    top:0;
+    z-index:99;
+    .dialog-content{
+      height:6.12rem;
+      width:6.9rem;
+      position: absolute;
+      left:0;
+      top:0;
+      right:0;
+      bottom:0;
+      background: #1E1E28;
+      border-radius: .16rem;
+      margin: auto;
+      font-size:.32rem;
+      display:-webkit-box;
+      -webkit-box-orient:vertical;
+      -webkit-box-align:center;
+      -webkit-box-pack:start;
+      em.close-em{
+        position: absolute;
+        right:.3rem;
+        top:.3rem;
+        width:.46rem;
+        height:.46rem;
+        border-radius:50%;
+        overflow:hidden;
+        background:#191919;
+        font-size:.5rem;
+        color:#fff;
+        // text-align:center;
+        text-indent: .06rem;
+        line-height:.46rem;
+      }
+      p{
+        display:block;
+      }
+      .warning-icon-p{
+        margin-top:.6rem;
+        .warning-icon{
+          display:block;
+          width:1.4rem;
+          height:1.4rem;
+          background:#c7c7c7;
+          border-radius:50%;
+          overflow:hidden;
+        }
+      }
+      .warning-text-p{
+        margin-top:.3rem;
+        margin-bottom:1.2rem;
+        width:5.44rem;
+        line-height:.6rem;
+        text-align:center;
+      }
+      .warning-btn-p{
+        // margin-bottom:.6rem;
+        button{
+          width:4.4rem;
+          height:.88rem;
+          line-height:.88rem;
+          background:#C83C4A;
+          margin:0;
+        }
+      }
+    }
   }
 }
 </style>

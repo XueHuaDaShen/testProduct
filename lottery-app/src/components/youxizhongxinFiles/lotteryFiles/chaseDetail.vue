@@ -170,7 +170,8 @@ export default {
         'get',
         '/lottery/chase/list',
         {
-          chaseid: vm.detailID
+          chaseid: vm.detailID,
+          self: 1
         },
         (success) => {
           let code = success.returncode;
@@ -192,7 +193,8 @@ export default {
         'get',
         '/lottery/chase/luckno/detail',
         {
-          chaseid: vm.detailID
+          chaseid: vm.detailID,
+          self: 1
         },
         (success) => {
           let code = success.returncode;

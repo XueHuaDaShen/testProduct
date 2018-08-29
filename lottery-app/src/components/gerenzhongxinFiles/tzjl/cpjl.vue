@@ -224,7 +224,8 @@ export default {
           begintime: vm.start_time,
           endtime: vm.end_time,
           gameid: vm.gameid,
-          status: [vm.status]
+          status: [vm.status],
+          self: 1
         },
         (success) => {
           // console.log(success)

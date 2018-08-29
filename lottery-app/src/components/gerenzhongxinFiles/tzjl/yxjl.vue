@@ -184,7 +184,8 @@ export default {
           pageSize: 99999,
           begintime: vm.start_time,
           endtime: vm.end_time,
-          platform: vm.platform
+          platform: vm.platform,
+          self: 1
         },
         (success) => {
           // console.log(success)

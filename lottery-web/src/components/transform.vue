@@ -35,7 +35,7 @@
             <div class="transform-inner-title">
               <span class="exp">账户总余额：</span>
               <span class="exp2">{{getTotalCash}}元</span>
-              <img src="@/assets/img/refresh.png" style="margin-left:10px;width:18px;height:16px;" @click="refreshCash">
+              <img src="@/assets/img/refresh.png" style="margin-left:10px;width:18px;height:16px;cursor:pointer;" @click="refreshCash">
               <!-- <i class="el-icon-refresh" style="margin-left:20px;cursor:pointer;"></i> -->
               <button :disabled="isClick" style="margin-left:10px;cursor:pointer;font-size:16px;width:64px;color:#777;text-decoration: underline;border:none;outline:none;background:none;font-weight:bold;" @click="rebackMoney">
                 一键回收
@@ -92,7 +92,7 @@
               </div>
             </div>
             <div class="submit-line">
-              <a class="submit" @click='transformValidator()'>确认转账</a>
+              <el-button class="submit" @click='transformValidator()' :disabled="disabled">确认转账</el-button>
             </div>
           </div>
         </div>
@@ -115,6 +115,7 @@
     },
     data() {
       return {
+        disabled: false,
         loading: false,
         isClick: false, // 双击
         // 额度转换
@@ -322,6 +323,10 @@
       // 额度转换 验证
       transformValidator() {
         let self = this;
+        self.disabled = true;
+        setTimeout(() => {
+          self.disabled = false
+        }, 1000)
         if (!self.transform.from.value) {
           this.$message({
             showClose: true,
@@ -528,7 +533,6 @@
   .submit {
     width: 115px;
     height: 40px;
-    line-height: 40px;
     display: inline-block;
     text-align: center;
     cursor: pointer;
@@ -1157,7 +1161,6 @@
   .submit {
     width: 115px;
     height: 40px;
-    line-height: 40px;
     display: inline-block;
     text-align: center;
     cursor: pointer;

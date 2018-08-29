@@ -28,17 +28,18 @@ em{
     *display:inline;
     *zoom:1;
     /* margin-left:10px; */
-    line-height:46px;
+    line-height:48px;
     vertical-align:middle;
-    font-size:36px;
+    font-size:38px;
+    font-weight:bold;
 }
 .deadline-number em,.deadline-number span{float:left;width: 7px;height: 5px;}
 .deadline-number em{
     text-align:center;
     position:relative;
-    width:29px;
-    height:46px;
-    margin-right:5px;
+    width:32px;
+    height:48px;
+    margin-right:6px;
     border-width:1px;
     border-style:solid;
     background-image:-webkit-linear-gradient(top,rgba(0,0,0,0),rgba(0,0,0,.1));
@@ -52,7 +53,27 @@ em{
     color: #E2E2E2;
 }
 .deadline-number span.space {
-    text-indent: -10000px;
+    /* text-indent: -10000px; */
+    position: relative;
+    display:-webkit-box;
+    -webkit-box-orient:vertical;
+    -webkit-box-pack:justify;
+    font-size:36px;
+    height:48px;
+    width:6px;
+    padding:12px 0;
+    color:#e2e2e2;
+    margin-right:5px;
+    margin-left:-1px;
+    z-index:3;
+}
+.deadline-number span.space i.maohao{
+    width:6px;
+    height:6px;
+    border-radius:50%;
+    background:#e2e2e2;
+    overflow: hidden;
+    display:block;
 }
 /**
 -webkit-perspective: 800px;
@@ -60,13 +81,13 @@ em{
 perspective: 800px;
 **/
 .deadline-number .deadline-num {
-    line-height:46px;font-family:microsoft yahei;font-size:36px;font-weight:100;color:#E2E2E2;
-    position:absolute;left:0;top:0;width:29px;height:51px;overflow:hidden;text-indent: 10px;
+    line-height:48px;font-family:microsoft yahei;font-size:36px;font-weight:500;color:#E2E2E2;
+    position:absolute;left:0;top:0;width:32px;height:51px;overflow:hidden;text-indent: 10px;
     box-shadow: 1px 1px 1px #292B3E;
     text-shadow: 1px 1px 1px #353535;
 }
 .deadline-number .deadline-num-t {
-    height:23px;top:10px;top:0;z-index:50;
+    height:24px;top:10px;top:0;z-index:50;
     background-image: linear-gradient(-180deg, #444658 0%, #26283A 100%);
     background-color:#4a4c60;
     border-top-left-radius:3px;
@@ -80,7 +101,7 @@ perspective: 800px;
     -moz-transform-origin: left bottom 0;
     transform-origin: left bottom 0;
 }
-.deadline-number .deadline-num-b {height:23px;top:10px;top:23px;
+.deadline-number .deadline-num-b {height:24px;top:10px;top:24px;
     background-image:-webkit-linear-gradient(top,rgba(0,0,0,0),rgba(0,0,0,.1));
     background-image:-moz-linear-gradient(top,rgba(0,0,0,0),rgba(0,0,0,.1));
     background-image:-o-linear-gradient(top,rgba(0,0,0,0),rgba(0,0,0,.1));
@@ -91,9 +112,9 @@ perspective: 800px;
     border:0;
 }
 .deadline-number .deadline-num .inner {position:absolute;height:100%;width:100%;left: -5px;}
-.deadline-number .deadline-num-b .inner {top:-23px;}
+.deadline-number .deadline-num-b .inner {top:-24px;}
 
-.deadline-number .deadline-num-next-t {height:23px;overflow:hidden;
+.deadline-number .deadline-num-next-t {height:24px;overflow:hidden;
     background-image: linear-gradient(-180deg, #444658 0%, #26283A 100%);
     background-color:#4a4c60;
     border-top-left-radius:3px;
@@ -102,7 +123,7 @@ perspective: 800px;
 }
 .deadline-number .deadline-num-next-t .inner {background:none;}
 
-.deadline-number .deadline-num-next-b {height:23px;overflow:hidden;top:23px;z-index:50;
+.deadline-number .deadline-num-next-b {height:24px;overflow:hidden;top:24px;z-index:50;
     background-image:-webkit-linear-gradient(top,rgba(0,0,0,0),rgba(0,0,0,.1));
     background-image:-moz-linear-gradient(top,rgba(0,0,0,0),rgba(0,0,0,.1));
     background-image:-o-linear-gradient(top,rgba(0,0,0,0),rgba(0,0,0,.1));
@@ -119,9 +140,9 @@ perspective: 800px;
     -moz-transform-origin: left top 0;
     transform-origin: left top 0;
 }
-.deadline-number .deadline-num-next-b .inner {background:none;top:-23px;}
+.deadline-number .deadline-num-next-b .inner {background:none;top:-24px;}
 
-.deadline-number-mask{position:absolute;top:1px;left:1px;width:28px;height:23px;
+.deadline-number-mask{position:absolute;top:1px;left:1px;width:28px;height:24px;
     /*border-bottom:2px solid #2A2C3A;*/
     border-radius:3px 3px 0 0;z-index:60;
     filter:progid:DXImageTransform.Microsoft.gradient(enabled='true',startColorstr='#26000000', endColorstr='#26000000');

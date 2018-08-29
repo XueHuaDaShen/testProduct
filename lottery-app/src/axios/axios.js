@@ -13,19 +13,25 @@ export default {
   http (method, url, params, callback, fallback, headers) {
     var header = { authorization: localStorage.getItem('phone-token') }
     var o = {}
+    let data = {}
+    for (let i in params) {
+      data[i] = params[i]
+    }
+    data.mobile = 1
+    // console.log(data)
     if (method === 'get') {
       o = {
         method: method,
         headers: header,
         url: url,
-        params: params
+        params: data
       }
     } else if (method === 'post') {
       o = {
         method: method,
         headers: header,
         url: url,
-        data: params
+        data: data
       }
     }
     request(o).then((res) => {

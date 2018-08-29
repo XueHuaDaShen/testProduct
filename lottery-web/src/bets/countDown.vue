@@ -32,7 +32,10 @@
             <span class="inner">{{ch2}}</span>
           </span>
         </em>
-        <span class="space">:</span>
+        <span class="space">
+          <i class="maohao"></i>
+          <i class="maohao"></i>
+        </span>
         <em class="min-left" :class="tm1?'min-left-anim':''">
           <b class="deadline-number-mask"></b>
           <span class="deadline-num deadline-num-next-t">
@@ -63,7 +66,10 @@
             <span class="inner">{{cm2}}</span>
           </span>
         </em>
-        <span class="space">:</span>
+        <span class="space">
+          <i class="maohao"></i>
+          <i class="maohao"></i>
+        </span>
         <em class="sec-left" :class="ts1?'min-left-anim':''">
           <b class="deadline-number-mask"></b>
           <span class="deadline-num deadline-num-next-t">
@@ -79,7 +85,7 @@
             <span class="inner">{{cs1}}</span>
           </span>
         </em>
-        <em class="sec-right" :class="ts2?'min-left-anim':''">
+        <em class="sec-right" style="margin-right:0" :class="ts2?'min-left-anim':''">
           <b class="deadline-number-mask"></b>
           <span class="deadline-num deadline-num-next-t">
             <span class="inner">{{s2}}</span>

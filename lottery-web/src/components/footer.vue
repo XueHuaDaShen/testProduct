@@ -77,7 +77,7 @@
     margin-top: 60px;
     font-family: PingFangSC-Regular;
     font-size: 14px;
-    color: #939DB8;
+    color: #BD8454;
     text-align: center;
   }
 

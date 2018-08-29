@@ -91,7 +91,7 @@
         font-size: 12px;
         color: #777777;
         text-align: center;
-        margin-top: 10px;
+        margin-top: 2px;
       }
       &:first-child:hover {
         background: #C83C4A;

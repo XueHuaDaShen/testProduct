@@ -466,7 +466,7 @@
     background: url('../assets/img/icon_Refresh@3x.png') no-repeat;
     background-size: cover;
     width: 18px;
-    height: 16px;
+    height: 18px;
     &.active {
       animation: rotating 1.2s linear infinite;
     }
@@ -541,7 +541,7 @@
   .header {
     width: 100%;
     background: #64646C;
-    z-index: 1003;
+    z-index: 2003;
     position: fixed;
     top: 0;
   }
@@ -554,7 +554,7 @@
     -moz-box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.5);
     position: fixed;
     top: 36px;
-    z-index: 1002;
+    z-index: 2002;
   }
 
   .container {
@@ -958,7 +958,7 @@
   }
 
   .lottery-list dt a:hover {
-    background: #C83A4C;
+    background: #BD8454;
     color: #fff;
   }
 

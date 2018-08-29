@@ -16,7 +16,7 @@
         <div class="bets-number-wrap" style="padding-left:67px;padding-right:100px;" v-if="betsArr.item.oprateBtn==='bottom'">
           <b class="bets-num" style="font-size:20px;" :class="checkInStyle(item, k)" @click="handleClickBetsNum(item, k, andArr, index, i)" v-for="(k, i) in andArr" :key="i">{{k}}</b>
         </div>
-        <div class="bets-number-wrap special-wrap" v-if="betsArr.item.oprateBtn==='right'&&betsArr.type==='special'">
+        <div class="bets-number-wrap special-wrap" style="padding-left:165px;" v-if="betsArr.item.oprateBtn==='right'&&betsArr.type==='special'">
           <b class="bets-num" :class="checkInStyle(item, k)" @click="handleClickBetsNum(item, k, specialArr, index, i)" v-for="(k, i) in specialArr" :key="i">{{k}}</b>
         </div>
         <div class="bets-number-wrap" v-if="betsArr.item.oprateBtn==='right'&&betsArr.type==='sizeDouble'">
@@ -666,6 +666,10 @@
     font-size: 20px;
   }
 
+  .syxw .bets-num:first-child {
+    margin: 0;
+  }
+
   .tiger-and-value {
     display: block;
     width: 58px;
@@ -748,7 +752,6 @@
     width: 36px;
     margin-left: 8px;
     text-align: center;
-    
     span.active {
       color: #fff;
       background-image: -webkit-gradient(linear, left top, left bottom, color-stop(5%, #DBB894), color-stop(97%, #7C5D3C));
@@ -848,7 +851,7 @@
   .special-wrap .bets-num {
     width: 72px;
     height: 36px;
-    font-size: 20px;
+    font-size: 18px;
     font-weight: bold;
     background-image: linear-gradient(-180deg, #FFFFFF 0%, #BCBCBC 99%);
     border: 1px solid #DDDDDD;
@@ -858,8 +861,8 @@
 
   .bets-wrap .special-wrap b.balls-number-active {
     color: #fff;
-    background: none;
-    background: rgba(220, 133, 44, 1);
+    background-image: linear-gradient(-180deg, #DBB894 5%, #7C5D3C 97%);
+    border: 1px solid #DBB894;
     box-shadow: 1px 2px 6px rgba(102, 66, 1, 0.19);
   }
 
@@ -869,18 +872,21 @@
     background-image: linear-gradient(-180deg, #FFFFFF 0%, #BCBCBC 99%);
     border: 1px solid #DDDDDD;
     border-radius: 100px;
-    font-size: 20px;
+    font-size: 18px;
+    box-shadow: 1px 2px 6px rgba(102, 66, 1, 0.19);
   }
 
   .bets-wrap .special-num-wrap .shuzi b.balls-number-active {
-    background: url('../img/ballsed.png') no-repeat left;
-    background-size: 100% 100%;
+    color: #fff;
+    background-image: linear-gradient(-180deg, #DBB894 5%, #7C5D3C 97%);
+    border: 1px solid #DBB894;
+    box-shadow: 1px 2px 6px rgba(102, 66, 1, 0.19);
   }
 
   .bets-wrap .special-num-wrap b.balls-number-active {
     color: #fff;
-    background: none;
-    background: rgba(220, 133, 44, 1);
+    background-image: linear-gradient(-180deg, #DBB894 5%, #7C5D3C 97%);
+    border: 1px solid #DBB894;
     box-shadow: 1px 2px 6px rgba(102, 66, 1, 0.19);
   }
 

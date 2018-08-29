@@ -8,6 +8,7 @@
             <img :src="logoImgCode">
           </div>
           <div class="header-left-r">
+            <div class="header-left-r-bj"></div>
             <div class="bets-issue">
               <span>第
                 <em style="color:#c83a4c;">{{issue}} </em>期</span>
@@ -33,9 +34,11 @@
           </div>
           <div class="explain">
             <span>
+              <em class="explain-btn-bj"></em>
               <router-link :to="{name:'cpwf',query:{s_p:'lhc'}}" target="_blank">玩法说明</router-link>
             </span>
             <span>
+              <em class="explain-btn-bj"></em>
               <router-link :to="{name:'dataCharts',query:{gameid:gameid}}" target="_blank">走势图</router-link>
             </span>
           </div>
@@ -1039,13 +1042,14 @@
           this.betsMultiple = (this.defaultRefund * this.probability).toFixed(2);
           this.isTeA = true
           this.isTeB = false
-          this.refundText = this.refund + '0%';
+          this.refundText = this.refund + '-0%';
         } else if (word === 'B') {
           this.defaultRefund = this.minRefund / this.maxRefund;
           this.betsMultiple = (this.defaultRefund * this.probability).toFixed(2);
           this.isTeA = false
           this.isTeB = true
-          this.refundText = this.minRefund + '-7.5%';
+          this.refundText = this.minRefund + '-' + (this.refund - this.minRefund) / this.maxRefund * 100 + '%'
+          // this.refundText = this.minRefund + '-'+this.defaultRefund*100+'%';
         }
         this.animatedMoney = true;
         setTimeout(() => {
@@ -2136,11 +2140,11 @@
 
   .lhc-top {
     width: 100%;
-    height: 118px;
+    height: 104px;
     margin-bottom: 10px;
     .lottery-header {
       width: 100%;
-      height: 118px; // padding:0 20px;
+      height: 104px; // padding:0 20px;
       display: -webkit-box;
       -webkit-box-align: center;
       -webkit-box-pack: justify;
@@ -2155,26 +2159,42 @@
           display: -webkit-box;
           -webkit-box-orient: vertical; // -webkit-box-align:center;
           -webkit-box-pack: justify;
-          margin-left: 20px;
+          padding: 8px 10px;
+          position: relative;
+          margin-left: 12px;
+          height: 96px;
+          .header-left-r-bj {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.5;
+            background: #000000;
+            box-shadow: inset 0 2px 6px 0 rgba(0, 0, 0, 0.50);
+            border-radius: 4px;
+          }
         }
       }
     }
     .lottery-icon {
-      width: 160px; // margin-left:25px;
+      width: 140px;
+      height: 104px; // margin-left:25px;
     }
     .lottery-icon img {
       width: 100%;
     }
     .bets-issue {
-      display: -webkit-box; // -webkit-box-orient:vertical;
-      font-size: 14px;
-      margin-bottom: 10px; // margin-left:30px;
-      // margin-left:10px;
+      display: -webkit-box; // -webkit-box-orient: vertical;
+      font-size: 14px; // color: #191919;
+      color: #e2e2e2;
+      font-weight: 600; // margin-left: 30px;
+      position: relative;
+      z-index: 2;
     }
     .bets-issue span {
       display: block;
-      text-align: left;
-      color: #939DB8;
+      text-align: left; // color: #939DB8;
     }
     .bets-issue em {
       font-style: normal;
@@ -2183,11 +2203,10 @@
       // margin-left:4px;
     }
     .history-issue {
-      color: #939DB8;
-      font-size: 14px; // font-weight:600;
-      text-align: left; // margin-left:33px;
-      // margin-left:13px;
-      // margin-top:-13px;
+      font-size: 14px;
+      font-weight: 600;
+      color: #e2e2e2;
+      text-align: left;
     }
     .history-lottery-number {
       // margin-left:33px;
@@ -2260,13 +2279,25 @@
       width: 86px;
       height: 34px;
       line-height: 34px;
-      color: #fff;
-      background: rgba(67, 67, 130, 0.50);
+      color: #fff; // background: #1a1a1a;
       border-radius: 2px;
       font-size: 14px;
+      position: relative;
       a {
         color: #fff;
         text-decoration: none;
+        position: relative;
+        z-index:2;
+        font-weight:600;
+      }
+      em.explain-btn-bj {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        left: 0;
+        top: 0;
+        background: #000;
+        opacity: .5;
       }
     }
   }
@@ -2789,7 +2820,7 @@
               width: 72px;
               height: 30px;
               font-size: 12px;
-              background: #BD8454;
+              background-image: linear-gradient(-180deg, #CFA072 0%, #B68E66 100%);
               border-radius: 2px; // box-shadow: 0 0 1px 1px #111;
             }
             .reset {
@@ -2926,12 +2957,7 @@
         height: 60px;
         font-size: 20px;
         font-weight: bold;
-        background: -moz-linear-gradient(top, #FFB126 0%, #9A4E02 100%);
-        background: -webkit-linear-gradient(top, #FFB126 0%, #9A4E02 100%);
-        background: -o-linear-gradient(top, #FFB126 0%, #9A4E02 100%);
-        background: -ms-linear-gradient(top, #FFB126 0%, #9A4E02 100%);
-        background: linear-gradient(to bottom, #FFB126 0%, #9A4E02 100%);
-        background: -webkit-gradient(linear, 0 0, 0 bottom, from(#FFB126), to(#9A4E02)); // box-shadow: 0 0 1px 1px #111;
+        background-image: linear-gradient(-180deg, #CFA072 0%, #B68E66 100%);
         border-radius: 4px;
       }
       .reset {

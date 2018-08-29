@@ -671,7 +671,7 @@ export default {
       let index = this.betsNumber.indexOf(num);
       if(index > -1){
         this.betsNumber.splice(index, 1)
-        this.confirmBetsData.slice(index, 1);
+        this.confirmBetsData.splice(index, 1);
       }else{
         this.betsNumber.push(num);
         this.confirmBetsData.push(item);
@@ -932,6 +932,8 @@ export default {
     resetBetsNumber() {
       this.animalsArr.filter(v => {v.checked = false;})
       this.betsNumber = [];
+      this.confirmBetsData = [];
+      this.$store.dispatch('setBets', 0);
     },
     // 关闭弹框
     handleCloseBetsDialog(val) {
