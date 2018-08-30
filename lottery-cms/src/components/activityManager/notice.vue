@@ -39,15 +39,15 @@
         </el-table-column>
         <el-table-column align="center" label="展现状态">
           <template slot-scope="scope">
-            <el-switch v-model="scope.row.enabled" @change="enableChange(scope.row.enabled)" :active-value="1" :inactive-value="0" active-color="#2D996E"
-              inactive-color="#C83A4C">
+            <el-switch v-model="scope.row.enabled" @change="enableChange(scope.row.enabled)" :active-value="1"
+              :inactive-value="0" active-color="#2D996E" inactive-color="#C83A4C">
             </el-switch>
           </template>
         </el-table-column>
         <el-table-column align="center" label="滚动显示">
           <template slot-scope="scope">
-            <el-switch v-model="scope.row.isRoll" @change="scrollChange(scope.row.isRoll)" :active-value="1" :inactive-value="0" active-color="#2D996E"
-              inactive-color="#C83A4C">
+            <el-switch v-model="scope.row.isRoll" @change="scrollChange(scope.row.isRoll)" :active-value="1"
+              :inactive-value="0" active-color="#2D996E" inactive-color="#C83A4C">
             </el-switch>
           </template>
         </el-table-column>
@@ -68,8 +68,9 @@
         </el-table-column>
       </el-table>
       <div class="fenye">
-        <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="pageNum" :page-size="pageSize"
-          :page-sizes="[10, 20, 40, 80,160,350,700,1000]" layout="total, sizes, prev, pager, next, jumper" :total="total">
+        <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="pageNum"
+          :page-size="pageSize" :page-sizes="[10, 20, 40, 80,160,350,700,1000]" layout="total, sizes, prev, pager, next, jumper"
+          :total="total">
         </el-pagination>
       </div>
       <!-- <editor v-if="showEditor" @closeEditor="handlecloseEditor" :activityParam="activityParam"></editor> -->
@@ -105,16 +106,18 @@
           <div class="form-row">
             <span class="exp">公告时间</span>
             <span class="exp-after">:</span>
-            <el-date-picker v-model="form.time" type="daterange" align="right" unlink-panels range-separator="至" start-placeholder="开始时间"
-              end-placeholder="结束时间" :picker-options="pickerOptions" :disabled="timeDisabled" style="margin-right:10px;">
+            <el-date-picker v-model="form.time" type="daterange" align="right" unlink-panels range-separator="至"
+              start-placeholder="开始时间" end-placeholder="结束时间" :picker-options="pickerOptions" :disabled="timeDisabled"
+              style="margin-right:10px;">
             </el-date-picker>
             <el-checkbox v-model="forever">永久</el-checkbox>
           </div>
           <div class="form-row file-inner">
             <span class="exp">内容图片</span>
             <span class="exp-after">:</span>
-            <el-upload class="upload-demo" :action="form.content_photo.action" :on-change="handleCoPhotoChange" :file-list="form.content_photo.filterList"
-              :list-type="form.content_photo.listStyle" :limit="form.content_photo.limit" :auto-upload="false" :on-remove="handleRemoveCo">
+            <el-upload class="upload-demo" :action="form.content_photo.action" :on-change="handleCoPhotoChange"
+              :file-list="form.content_photo.filterList" :list-type="form.content_photo.listStyle" :limit="form.content_photo.limit"
+              :auto-upload="false" :on-remove="handleRemoveCo">
               <el-button size="small" class="small edit">上传</el-button>
             </el-upload>
             <span class="tip-after">请上传100x100的图片尺寸，格式为png/jpeg/jpg</span>
@@ -274,7 +277,7 @@
       const menus = JSON.parse(localStorage.getItem('menus'));
       menus[this.index1].child[this.index2].child.filter((v, vi) => {
         let o = new Object();
-        if(v.url === 'notice'){
+        if (v.url === 'notice') {
           this.titleName = v.menu_name;
         }
         o.title = v.menu_name;
@@ -571,11 +574,18 @@
               continue;
             }
             if (i == "content_photo") {
-              this.form[i].filterList = [{
-                name: "",
-                url: row[i]
-              }];
-              this.form[i].url = row[i];
+              if (row[i]) {
+                this.form[i].isFile = false;
+                this.form[i].filterList = [{
+                  name: "",
+                  url: row[i]
+                }];
+                this.form[i].url = row[i];
+              } else {
+                this.form[i].isFile = true;
+                this.form[i].filterList = [];
+                this.form[i].url = "";
+              }
               continue;
             }
             if (i == "content" && row[i]) {
@@ -626,15 +636,15 @@
             return;
           }
         }
-        if (JSON.stringify(this.form.content_photo.file) == "{}" && !this.form.content_photo.url) {
-          this.$message({
-            message: '请上传内容图片',
-            type: 'error',
-            duration: vm.duration,
-            center: true
-          })
-          return;
-        }
+        // if (JSON.stringify(this.form.content_photo.file) == "{}" && !this.form.content_photo.url) {
+        //   this.$message({
+        //     message: '请上传内容图片',
+        //     type: 'error',
+        //     duration: vm.duration,
+        //     center: true
+        //   })
+        //   return;
+        // }
         if (!this.form.content) {
           this.$message({
             message: '请输入内容文字',
@@ -655,85 +665,156 @@
         }
         vm.dialogLoading = true;
         let content_photo = this.form.content_photo.file.raw;
+        let content_true = JSON.stringify(this.form.content_photo.file) == "{}" && !this.form.content_photo.url;
+        console.log("content_photo", content_photo);
+        console.log("content_true", content_true);
         let formdata = new FormData();
         formdata.append("picture", content_photo);
         let isFile1 = this.form.content_photo.isFile;
         if (isFile1) {
-          request.upload(
-            "post",
-            "/uploadFile",
-            formdata,
-            success => {
-              vm.form.content_photo.url = success.toString();
-              request.http(
-                'post',
-                '/notice/update', {
-                  groupid: vm.form.group.checked,
-                  title: vm.form.title,
-                  order: vm.form.order,
-                  start_at: start_at,
-                  stop_at: stop_at,
-                  content_photo: vm.form.content_photo.url,
-                  content: vm.form.content,
-                  enabled: 1,
-                  id: vm.rowKey
-                },
-                (success) => {
-                  vm.dialogLoading = false;
-                  let code = success.returncode;
-                  if (code === 200) {
-                    vm.formVisible = false;
-                    vm.form.content_photo.isFile = false;
-                    vm.getActivityLogList();
-                  } else if (code === 101 || code === 103 || code === 106) {
-                    request.loginAgain(vm)
-                  } else {
-                    alert(success.returncode)
+          if (!content_true) {
+            request.upload(
+              "post",
+              "/uploadFile",
+              formdata,
+              success => {
+                vm.form.content_photo.url = success.toString();
+                request.http(
+                  'post',
+                  '/notice/update', {
+                    groupid: vm.form.group.checked,
+                    title: vm.form.title,
+                    order: vm.form.order,
+                    start_at: start_at,
+                    stop_at: stop_at,
+                    content_photo: vm.form.content_photo.url,
+                    content: vm.form.content,
+                    enabled: 1,
+                    id: vm.rowKey
+                  },
+                  (success) => {
+                    vm.dialogLoading = false;
+                    let code = success.returncode;
+                    if (code === 200) {
+                      vm.formVisible = false;
+                      vm.form.content_photo.isFile = false;
+                      vm.getActivityLogList();
+                    } else if (code === 101 || code === 103 || code === 106) {
+                      request.loginAgain(vm)
+                    } else {
+                      alert(success.returncode)
+                    }
+                  },
+                  (error) => {
+                    vm.dialogLoading = false;
+                    vm.error();
                   }
-                },
-                (error) => {
-                  vm.dialogLoading = false;
-                  vm.error();
-                }
-              )
-            },
-            error => {
-              vm.dialogLoading = false;
-              vm.error();
-            }
-          );
-        } else {
-          request.http(
-            'post',
-            '/notice/update', {
-              groupid: vm.form.group.checked,
-              title: vm.form.title,
-              order: vm.form.order,
-              start_at: start_at,
-              stop_at: stop_at,
-              content_photo: vm.form.content_photo.url,
-              content: vm.form.content,
-              enabled: 1,
-              id: vm.rowKey
-            },
-            (success) => {
-              vm.dialogLoading = false;
-              let code = success.returncode;
-              if (code === 200) {
-                vm.formVisible = false;
-                vm.form.content_photo.isFile = false;
-                vm.getActivityLogList();
-              } else if (code === 101 || code === 103 || code === 106) {
-                request.loginAgain(vm)
-              } else {
-                alert(success.returncode)
+                )
+              },
+              error => {
+                vm.dialogLoading = false;
+                vm.error();
               }
-            },
-            (error) => {
-              vm.dialogLoading = false;
-              vm.error();
-            }
-          )
+            );
+          } else {
+            request.http(
+              'post',
+              '/notice/update', {
+                groupid: vm.form.group.checked,
+                title: vm.form.title,
+                order: vm.form.order,
+                start_at: start_at,
+                stop_at: stop_at,
+                content_photo: "",
+                content: vm.form.content,
+                enabled: 1,
+                id: vm.rowKey
+              },
+              (success) => {
+                vm.dialogLoading = false;
+                let code = success.returncode;
+                if (code === 200) {
+                  vm.formVisible = false;
+                  vm.form.content_photo.isFile = false;
+                  vm.getActivityLogList();
+                } else if (code === 101 || code === 103 || code === 106) {
+                  request.loginAgain(vm)
+                } else {
+                  alert(success.returncode)
+                }
+              },
+              (error) => {
+                vm.dialogLoading = false;
+                vm.error();
+              }
+            )
+          }
+        } else {
+          if (!content_true) {
+            request.http(
+              'post',
+              '/notice/update', {
+                groupid: vm.form.group.checked,
+                title: vm.form.title,
+                order: vm.form.order,
+                start_at: start_at,
+                stop_at: stop_at,
+                content_photo: vm.form.content_photo.url,
+                content: vm.form.content,
+                enabled: 1,
+                id: vm.rowKey
+              },
+              (success) => {
+                vm.dialogLoading = false;
+                let code = success.returncode;
+                if (code === 200) {
+                  vm.formVisible = false;
+                  vm.form.content_photo.isFile = false;
+                  vm.getActivityLogList();
+                } else if (code === 101 || code === 103 || code === 106) {
+                  request.loginAgain(vm)
+                } else {
+                  alert(success.returncode)
+                }
+              },
+              (error) => {
+                vm.dialogLoading = false;
+                vm.error();
+              }
+            )
+          } else {
+            request.http(
+              'post',
+              '/notice/update', {
+                groupid: vm.form.group.checked,
+                title: vm.form.title,
+                order: vm.form.order,
+                start_at: start_at,
+                stop_at: stop_at,
+                content_photo: "",
+                content: vm.form.content,
+                enabled: 1,
+                id: vm.rowKey
+              },
+              (success) => {
+                vm.dialogLoading = false;
+                let code = success.returncode;
+                if (code === 200) {
+                  vm.formVisible = false;
+                  vm.form.content_photo.isFile = false;
+                  vm.getActivityLogList();
+                } else if (code === 101 || code === 103 || code === 106) {
+                  request.loginAgain(vm)
+                } else {
+                  alert(success.returncode)
+                }
+              },
+              (error) => {
+                vm.dialogLoading = false;
+                vm.error();
+              }
+            )
+          }
         }
       },
       createActivity() {
@@ -776,15 +857,15 @@
             return;
           }
         }
-        if (JSON.stringify(this.form.content_photo.file) == "{}" && !this.form.content_photo.url) {
-          this.$message({
-            message: '请上传内容图片',
-            type: 'error',
-            duration: vm.duration,
-            center: true
-          })
-          return;
-        }
+        // if (JSON.stringify(this.form.content_photo.file) == "{}" && !this.form.content_photo.url) {
+        //   this.$message({
+        //     message: '请上传内容图片',
+        //     type: 'error',
+        //     duration: vm.duration,
+        //     center: true
+        //   })
+        //   return;
+        // }
         if (!this.form.content) {
           this.$message({
             message: '请输入内容文字',
@@ -806,49 +887,94 @@
         let content_photo = this.form.content_photo.file.raw;
         console.log("content_photo", content_photo);
         let formdata = new FormData();
-        formdata.append("picture", content_photo);
-        request.upload(
-          "post",
-          "/uploadFile",
-          formdata,
-          success => {
-            vm.form.content_photo.url = success.toString();
-            request.http(
-              'post',
-              '/notice/create', {
-                groupid: vm.form.group.checked,
-                title: vm.form.title,
-                order: vm.form.order,
-                start_at: start_at,
-                stop_at: stop_at,
-                content_photo: vm.form.content_photo.url,
-                content: vm.form.content,
-                enabled: 1,
-                isRoll: "0"
-              },
-              (success) => {
-                vm.dialogLoading = false;
-                let code = success.returncode;
-                if (code === 200) {
-                  vm.formVisible = false;
-                  vm.getActivityLogList();
-                } else if (code === 101 || code === 103 || code === 106) {
-                  request.loginAgain(vm)
-                } else {
-                  alert(success.returncode)
+        if (content_photo) {
+          formdata.append("picture", content_photo);
+          request.upload(
+            "post",
+            "/uploadFile",
+            formdata,
+            success => {
+              vm.form.content_photo.url = success.toString();
+              request.http(
+                'post',
+                '/notice/create', {
+                  groupid: vm.form.group.checked,
+                  title: vm.form.title,
+                  order: vm.form.order,
+                  start_at: start_at,
+                  stop_at: stop_at,
+                  content_photo: vm.form.content_photo.url,
+                  content: vm.form.content,
+                  enabled: 1,
+                  isRoll: "0"
+                },
+                (success) => {
+                  vm.dialogLoading = false;
+                  let code = success.returncode;
+                  if (code === 200) {
+                    vm.formVisible = false;
+                    vm.getActivityLogList();
+                  } else if (code === 101 || code === 103 || code === 106) {
+                    request.loginAgain(vm)
+                  } else {
+                    alert(success.returncode)
+                  }
+                },
+                (error) => {
+                  vm.dialogLoading = false;
+                  vm.error();
                 }
-              },
-              (error) => {
-                vm.dialogLoading = false;
-                vm.error();
-              }
-            )
-          },
-          error => {
-            vm.dialogLoading = false;
-            vm.error();
-          }
-        );
+              )
+            },
+            error => {
+              vm.dialogLoading = false;
+              vm.error();
+            }
+          );
+        } else {
+          formdata.append("picture", content_photo);
+          request.upload(
+            "post",
+            "/uploadFile",
+            formdata,
+            success => {
+              vm.form.content_photo.url = success.toString();
+              request.http(
+                'post',
+                '/notice/create', {
+                  groupid: vm.form.group.checked,
+                  title: vm.form.title,
+                  order: vm.form.order,
+                  start_at: start_at,
+                  stop_at: stop_at,
+                  content: vm.form.content,
+                  enabled: 1,
+                  isRoll: "0"
+                },
+                (success) => {
+                  vm.dialogLoading = false;
+                  let code = success.returncode;
+                  if (code === 200) {
+                    vm.formVisible = false;
+                    vm.getActivityLogList();
+                  } else if (code === 101 || code === 103 || code === 106) {
+                    request.loginAgain(vm)
+                  } else {
+                    alert(success.returncode)
+                  }
+                },
+                (error) => {
+                  vm.dialogLoading = false;
+                  vm.error();
+                }
+              )
+            },
+            error => {
+              vm.dialogLoading = false;
+              vm.error();
+            }
+          );
+        }
       },
       deleteActivity(item) {
         const vm = this;

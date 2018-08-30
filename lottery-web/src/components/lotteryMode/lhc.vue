@@ -2022,7 +2022,7 @@
         const vm = this;
         request.http(
           'get',
-          '/lottery/issue/vote/list', {},
+          '/lottery/issue/vote/list', { page_size: 30, self: 1 },
           (success) => {
             // console.log(success);
             let code = success.returncode;
@@ -2141,14 +2141,15 @@
   .lhc-top {
     width: 100%;
     height: 104px;
-    margin-bottom: 10px;
+    margin-bottom: 20px;
     .lottery-header {
       width: 100%;
       height: 104px; // padding:0 20px;
       display: -webkit-box;
       -webkit-box-align: center;
       -webkit-box-pack: justify;
-      margin-bottom: 20px; // background: #fff;
+      // margin-bottom: 20px;
+      // background: #fff;
       .header-left,
       .header-right {
         display: -webkit-box;
@@ -2307,6 +2308,9 @@
     height: 100%; // padding-top:20px;
     position: relative;
     background: #242445;
+    input.money{
+      font-size:16px;
+    }
     .lhc-nav {
       width: 100%;
       height: 38px;
@@ -3029,7 +3033,7 @@
       color: #fff;
       min-height: 153px;
       margin-top: 31px;
-      margin-bottom: 30px;
+      padding-bottom: 30px;
       .table-title {
         width: 100%;
         height: 40px;

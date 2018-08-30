@@ -66,7 +66,7 @@
         </el-table-column>
         <el-table-column align="center" prop="channel" width="110" label="平台">
         </el-table-column>
-        <el-table-column align="center" prop="amount" label="总金额">
+        <el-table-column align="center" prop="amount" label="总金额" :formatter="formatMoney">
         </el-table-column>
         <el-table-column align="center" prop="type" :formatter="isTypeFn" label="资金方向">
         </el-table-column>
@@ -307,7 +307,7 @@
       const menus = JSON.parse(localStorage.getItem('menus'));
       menus[this.index1].child[this.index2].child.filter((v, vi) => {
         let o = new Object();
-        if(v.url === 'exchange'){
+        if (v.url === 'exchange') {
           this.titleName = v.menu_name;
         }
         o.title = v.menu_name;
@@ -325,6 +325,12 @@
       this.getRechargeLotList();
     },
     methods: {
+      formatMoney(row, column, cellValue) {
+        if (cellValue) {
+          return Number(cellValue).toFixed(2);
+        }
+        return "--"
+      },
       handleChangeRouter(name) {
         this.$router.push({
           name: name,

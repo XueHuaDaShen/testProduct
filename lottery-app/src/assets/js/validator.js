@@ -1,6 +1,6 @@
 
 // 格式化json
-export default function formatJson (json, options) {
+export function formatJson (json, options) {
   var reg = null,
     formatted = '',
     pad = 0,
@@ -58,3 +58,22 @@ export default function formatJson (json, options) {
   })
   return formatted
 };
+
+// 6-16位字符，只能包含英文字母或数字
+export function regexpInput (input) {
+  let exp = new RegExp('^[a-zA-Z0-9]{3,16}$')
+  if (exp.test(input)) {
+    return true
+  }
+  return false
+}
+
+// 6-16位字符，只能包含英文字母或数字，且必须同时包含数字和字母，不允许连续三位相同
+export function regexpPsd (psd) {
+  let exp = /^(?!(?:\d+|[a-zA-Z]+)$)[\da-zA-Z]{6,}$/
+  let exp2 = /(\w)*(\w)\2{2}(\w)*/g
+  if (exp.test(psd) && !exp2.test(psd)) {
+    return true
+  }
+  return false
+}

@@ -40,7 +40,7 @@
           <div class="search-inner-wrap">
             <label>查找时间：</label>
             <el-date-picker v-model="searchTime" type="datetimerange" align="right" unlink-panels range-separator="至" start-placeholder="开始日期"
-              end-placeholder="结束日期" :picker-options="pickerOptions">
+              end-placeholder="结束日期" :picker-options="pickerOptions" :default-time="pickerDefaultTime">
             </el-date-picker>
           </div>
           <!-- <div class="search-inner-wrap">
@@ -68,7 +68,12 @@
       <el-table :data="lotteryColligateListData" header-row-class-name="table-header" stripe border style="width: 100%;font-size:12px;">
         <el-table-column align="center" prop="gamename" label="彩种">
         </el-table-column>
-        <el-table-column align="center" prop="bid_valid" label="有效投注">
+        <el-table-column align="center" label="时间">
+          <template slot-scope="scope">
+            <span>{{formatTime2(scope.row)}}</span>
+          </template>
+        </el-table-column>
+        <el-table-column align="center" prop="bid_valid" label="有效投注" :formatter="formatMoney">
         </el-table-column>
         <el-table-column align="center" prop="reward" label="返奖" :formatter="formatMoney">
         </el-table-column>
@@ -79,23 +84,6 @@
         <el-table-column align="center" prop="user_count" label="投注人数">
         </el-table-column>
         <el-table-column align="center" prop="profit" label="盈利" :formatter="formatMoney">
-        </el-table-column>
-        <!-- <el-table-column align="center" prop="bid_total" label="投注金额">
-        </el-table-column> -->
-        <!-- <el-table-column align="center" prop="bid_invalid" label="撤单总额">
-        </el-table-column>
-        <el-table-column align="center" prop="day" :formatter="formatTime" label="投注日期">
-        </el-table-column>
-        <el-table-column align="center" prop="is_test" :formatter="formatTestUser" width="80" label="测试用户">
-        </el-table-column> -->
-        <!-- <el-table-column align="center" prop="pay_at" :formatter="formatTime" label="实发工资日期">
-        </el-table-column> -->
-        <!-- <el-table-column align="center" prop="status" :formatter="isStatusFn" label="发放工资">
-        </el-table-column> -->
-        <el-table-column align="center" label="投注时间">
-          <template slot-scope="scope">
-            <span>{{formatTime2(scope.row)}}</span>
-          </template>
         </el-table-column>
       </el-table>
       <div class="fenye">
@@ -122,6 +110,7 @@
     },
     data() {
       return {
+        pickerDefaultTime: ['00:00:00', '23:59:59'],
         index1: 0,
         index2: 0,
         titleName: '彩票报表',
@@ -338,7 +327,7 @@
       const menus = JSON.parse(localStorage.getItem('menus'));
       menus[this.index1].child[this.index2].child.filter((v, vi) => {
         let o = new Object();
-        if(v.url === 'lotteryColligate'){
+        if (v.url === 'lotteryColligate') {
           this.titleName = v.menu_name;
         }
         o.title = v.menu_name;
@@ -447,7 +436,7 @@
       },
       formatTime2(row) {
         if (row._id && row._id.day) {
-          return moment(row._id.day).format("YYYY-MM-DD HH:MM:SS");
+          return moment(row._id.day).utcOffset(8).format("YYYY-MM-DD HH:MM:SS");
         }
         return '--'
       },

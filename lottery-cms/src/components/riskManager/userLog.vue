@@ -22,7 +22,7 @@
           <div class="search-inner-wrap">
             <label>查找时间：</label>
             <el-date-picker v-model="searchTime" type="datetimerange" align="right" unlink-panels range-separator="至" start-placeholder="开始日期"
-              end-placeholder="结束日期" :picker-options="pickerOptions">
+              end-placeholder="结束日期" :picker-options="pickerOptions" :default-time="pickerDefaultTime">
             </el-date-picker>
           </div>
           <!--  <div class="search-inner-wrap">
@@ -93,6 +93,7 @@
     },
     data() {
       return {
+        pickerDefaultTime: ['00:00:00', '23:59:59'],
         index1: 0,
         index2: 0,
         titleName: '用户登录记录',
@@ -279,7 +280,7 @@
       const menus = JSON.parse(localStorage.getItem('menus'));
       menus[this.index1].child[this.index2].child.filter((v, vi) => {
         let o = new Object();
-        if(v.url === 'userLog'){
+        if (v.url === 'userLog') {
           this.titleName = v.menu_name;
         }
         o.title = v.menu_name;

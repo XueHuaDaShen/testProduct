@@ -7,18 +7,19 @@
       <!-- <form action=""> -->
         <div class="user-wrap username">
           <span class="user-icon"><img src="@/assets/img/user.png"></span>
-          <input type="text" placeholder="6-16位字符，可使用字母或数字" v-model.trim="loginName">
+          <input type="text" placeholder="6-16位字符，只能包含英文字母或数字" v-model.trim="loginName">
         </div>
         <div class="user-wrap password">
           <span class="lock-icon"><img src="@/assets/img/lock.png"></span>
-          <input type="password" placeholder="6-16位字符，可使用字母或数字" v-model="loginPwd">
+          <input type="password" placeholder="6-16位字符，只能且必须包含英文字母或数字（不允许连续三位相同）" v-model="loginPwd">
         </div>
         <div class="user-wrap password">
           <span class="lock-icon"><img src="@/assets/img/lock.png"></span>
           <input type="password" placeholder="请再次输入密码" v-model="loginPwd2">
         </div>
-        <!-- <div class="login-tip">{{tip}}</div> -->
-        <div class="alert-tip-text" v-if="tip">{{tip}}</div>
+        <div class="login-tip" v-if="tip">{{tip}}</div>
+        <!-- <div class="alert-tip-text" v-if="tip">{{tip}}</div> -->
+        <!-- <div class="reg-tip-text" v-if="tip">{{tip}}</div> -->
         <div class="login-btn">
           <button class="to-log" @click="regFn">立即注册</button>
         </div>
@@ -30,6 +31,7 @@
 import request from '@/axios/axios.js'
 import MD5 from 'MD5'
 import paramCryptFn from '@/assets/js/cryptData'
+import {regexpInput, regexpPsd} from '@/assets/js/validator.js'
 export default {
   name: 'login',
   data() {
@@ -39,6 +41,7 @@ export default {
       loginPwd: '',
       loginPwd2: '',
       tip: '', // 登录文字提示
+      tipTime: 2, // s
       inviteCode: '',
     }
   },
@@ -57,19 +60,31 @@ export default {
         this.tip = '请输入您的用户名'
         setTimeout(() => {
           vm.tip = '';
-        }, 1500);
+        }, vm.tipTime*1000);
+        return false;
+      } else if (!regexpInput(this.loginName)) {
+        this.tip = '用户名为6-16位字符，只能包含英文字母或数字'
+        setTimeout(() => {
+          vm.tip = '';
+        }, vm.tipTime*1000);
         return false;
       } else if (this.loginPwd === '') {
         this.tip = '请输入您的密码'
         setTimeout(() => {
           vm.tip = '';
-        }, 1500);
+        }, vm.tipTime*1000);
+        return false;
+      } else if (!regexpPsd(this.loginPwd)) {
+        this.tip = '密码为6-16位字符，只能且必须包含英文字母或数字（不允许连续三位相同）'
+        setTimeout(() => {
+          vm.tip = '';
+        }, vm.tipTime*1000);
         return false;
       } else if (this.loginPwd !== this.loginPwd2) {
         this.tip = '两次密码不一致'
         setTimeout(() => {
           vm.tip = '';
-        }, 1500);
+        }, vm.tipTime*1000);
         return false;
       } else {
         this.$store.dispatch('setLoading', true)
@@ -89,12 +104,12 @@ export default {
               vm.tip = '用户名已存在';
               setTimeout(function() {
                 vm.tip = '';
-              }, 2000)
+              }, vm.tipTime*1000)
             } else if (code == '301') {
               vm.tip = '参数错误或者邀请码错误';
               setTimeout(function() {
                 vm.tip = '';
-              }, 2000)
+              }, vm.tipTime*1000)
             } else if (code == '200') {
               localStorage.setItem('islogout', false);
               localStorage.setItem('phone-token', success.data.token);
@@ -140,6 +155,16 @@ export default {
   background-size:cover;
   font-size:.28rem;
   color:#c7c7c7;
+  .left-sanjiao{
+    position: absolute;
+    width:.2rem;
+    height:.36rem;
+    z-index:6;
+    left:.3rem;
+    bottom:.22rem;
+    background:url('/static/img/left_jiantou.png') no-repeat;
+    background-size:100% 100%;
+  }
   .logo-wrap{
     padding-top:1rem;
   }
@@ -174,7 +199,8 @@ export default {
         text-align:center;
         color:#C83C4A;
         left:0;
-        bottom:2.5rem;
+        bottom:3.3rem;
+        padding:0 .75rem;
       }
     .user-wrap{
       width:100%;

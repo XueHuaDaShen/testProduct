@@ -42,6 +42,9 @@
             }, {
               "title": "提现记录",
               "url": "withdrawLog"
+            }, {
+              "title": "前端展示",
+              "url": "tradeAccountLog"
             }
           ]
         },

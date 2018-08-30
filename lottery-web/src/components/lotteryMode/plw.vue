@@ -1862,7 +1862,7 @@
         const vm = this;
         request.http(
           'get',
-          '/lottery/issue/vote/list', {},
+          '/lottery/issue/vote/list', { page_size: 30, self: 1 },
           (success) => {
             // console.log(success);
             let code = success.returncode;
@@ -1884,7 +1884,7 @@
         const vm = this;
         request.http(
           'get',
-          '/lottery/chase/list', {},
+          '/lottery/chase/list', { page_size: 30, self: 1 },
           (success) => {
             // console.log(success);
             let code = success.returncode;

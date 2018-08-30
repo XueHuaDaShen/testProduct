@@ -103,28 +103,29 @@
               <el-button size="mini" @click="tixiaxian(scope.row)" class="small no">登出</el-button>
             </el-row>
             <el-row class="tr">
-              <router-link :to="{name: 'accountChange', query: { param: scope.row.loginname }}" target="_blank">
+              <a @click="handleSkip('accountChange',scope.row.loginname)">
                 <el-button size="mini" class="small edit mt-10">
                   帐变
                 </el-button>
-              </router-link>
-              <router-link :to="{name: 'userLog', query: { param: scope.row.loginname }}" target="_blank" class="ml-15">
+              </a>
+              <a @click="handleSkip('userLog',scope.row.loginname)" class="ml-15">
                 <el-button size="mini" class="small edit mt-10">
                   日志
                 </el-button>
-              </router-link>
-              <router-link :to="{name: 'userColligate', query: { param: scope.row.loginname }}" target="_blank" class="ml-15">
+              </a>
+              <a @click="handleSkip('userColligate',scope.row.loginname)" class="ml-15">
                 <el-button size="mini" class="small edit mt-10">
                   盈亏
                 </el-button>
-              </router-link>
+              </a>
             </el-row>
           </template>
         </el-table-column>
       </el-table>
       <div class="fenye">
-        <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="pageNum" :page-size="pageSize"
-          :page-sizes="[10, 20, 40, 80,160,350,700,1000]" layout="total, sizes, prev, pager, next, jumper" :total="total">
+        <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="pageNum"
+          :page-size="pageSize" :page-sizes="[10, 20, 40, 80,160,350,700,1000]" layout="total, sizes, prev, pager, next, jumper"
+          :total="total">
         </el-pagination>
       </div>
     </div>
@@ -560,6 +561,47 @@
             param: param
           }
         });
+      },
+      handleSkip(name, param) {
+        let menus = localStorage.getItem('menus');
+        let menusjson = JSON.parse(menus);
+        const vm = this;
+        console.log('menusjson', menusjson);
+        let index1, index2;
+        let selected = false;
+        for (let i = 0; i < menusjson.length; i++) {
+          index1 = i;
+          let f_obj = menusjson[i];
+          for (let j = 0; j < f_obj.child.length; j++) {
+            index2 = j;
+            let san_ = f_obj.child[j].child;
+            for (let h = 0; h < san_.length; h++) {
+              let url = san_[h].url;
+              if (name === url) {
+                selected = true;
+                break;
+              }
+            }
+            if (selected) {
+              break;
+            }
+          }
+          if (selected) {
+            break;
+          }
+        }
+        const {
+          href
+        } = this.$router.resolve({
+          name: name,
+          query: {
+            param: param,
+            index1: index1,
+            index2: index2
+          }
+        })
+        console.log('href', href);
+        window.open(href, '_blank')
       },
       createUsercount() {
         this.createDialog = true;

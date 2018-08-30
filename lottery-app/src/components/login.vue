@@ -22,8 +22,8 @@
           </label>
           <!-- <a class="lose">忘记密码</a> -->
         </div>
-        <!-- <div class="login-tip">{{tip}}</div> -->
-        <div class="alert-tip-text" v-if="tip">{{tip}}</div>
+        <div class="login-tip" v-if="tip">{{tip}}</div>
+        <!-- <div class="alert-tip-text" v-if="tip">{{tip}}</div> -->
         <div class="login-btn">
           <button class="to-log" @click="loginFn">立即登录</button>
           <button class="to-reg" @click="toRegFn">注册账号</button>
@@ -36,6 +36,7 @@
 import request from '@/axios/axios.js'
 import MD5 from 'MD5'
 import paramCryptFn from '@/assets/js/cryptData'
+import {regexpInput, regexpPsd} from '@/assets/js/validator.js';
 export default {
   name: 'login',
   data() {
@@ -46,6 +47,7 @@ export default {
       loginName: '',
       loginPwd: '',
       tip: '', // 登录文字提示
+      tipTime: 2, // s
       isMomeryed: false,
       isMomery: true,
       momery_username: '',
@@ -134,13 +136,25 @@ export default {
         this.tip = '请输入用户名'
         setTimeout(() => {
           vm.tip = '';
-        }, 1500);
+        }, vm.tipTime*1000);
+        return false;
+      } else if(!regexpInput(this.loginName)) {
+        this.tip = '用户名为6-16位字符，只能包含英文字母或数字'
+        setTimeout(() => {
+          vm.tip = '';
+        }, vm.tipTime*1000);
         return false;
       } else if (this.loginPwd === '') {
         this.tip = '请输入密码'
         setTimeout(() => {
           vm.tip = '';
-        }, 1500);
+        }, vm.tipTime*1000);
+        return false;
+      } else if(!vm.isMomeryed && !regexpPsd(this.loginName)) {
+        this.tip = '密码为6-16位字符，只能且必须包含英文字母或数字（不允许连续三位相同）'
+        setTimeout(() => {
+          vm.tip = '';
+        }, vm.tipTime*1000);
         return false;
       } else {
         this.$store.dispatch('setLoading', true)
@@ -174,12 +188,12 @@ export default {
                     vm.tip = '用户不存在';
                     setTimeout(function() {
                       vm.tip = '';
-                    }, 2000)
+                    }, vm.tipTime*1000)
                   } else if (code == '305') {
                     vm.tip = '密码错误';
                     setTimeout(function() {
                       vm.tip = '';
-                    }, 2000)
+                    }, vm.tipTime*1000)
                   } else if (code == '200') {
                     try{
                       vm.$router.push({ path: '/wrap' })
@@ -215,19 +229,19 @@ export default {
                     vm.tip = '您的账号被禁止登陆，请联系管理员';
                     setTimeout(function() {
                       vm.tip = '';
-                    }, 2000)
+                    }, vm.tipTime*1000)
                   } else if (code == '301') {
                     vm.tip = '系统错误，请联系管理员';
                     setTimeout(function() {
                       vm.tip = '';
-                    }, 2000)
+                    }, vm.tipTime*1000)
                   }
                 },
                 (error) => {
                   vm.tip = '登录失败，请联系管理员';
                   setTimeout(function() {
                     vm.tip = '';
-                  }, 2000)
+                  }, vm.tipTime*1000)
                   vm.$store.dispatch('setLoading', false)
                   console.log('/user/login---error', error)
                 }
@@ -236,7 +250,7 @@ export default {
                 vm.tip = '登录失败，请联系管理员';
                 setTimeout(function() {
                   vm.tip = '';
-                }, 2000)
+                }, vm.tipTime*1000)
               vm.$store.dispatch('setLoading', false)
             }
             // console.log('/user/random---success', success)
@@ -247,15 +261,18 @@ export default {
             vm.tip = '登录失败，请联系管理员';
             setTimeout(function() {
               vm.tip = '';
-            }, 2000)
+            }, vm.tipTime*1000)
             console.log('/user/random---error', error)
           }
         )
       }
     },
     toRegFn() {
-      let reg = 'http://m.8bw.vip/#/reg/0qug9eawf7';
-      location.href = reg;
+      // let reg = 'http://m.8bw.vip/#/reg/0qug9eawf7';
+      // location.href = reg;
+      this.$router.push({
+        name: 'reg'
+      })
     },
   },
   beforeDestroy() {},
@@ -299,11 +316,12 @@ export default {
     // }
       .login-tip{
         width:100%;
+        padding:0 .75rem;
         position: absolute;
         text-align:center;
         color:#C83C4A;
         left:0;
-        bottom:2.5rem;
+        bottom:3.7rem;
       }
     .user-wrap{
       width:100%;

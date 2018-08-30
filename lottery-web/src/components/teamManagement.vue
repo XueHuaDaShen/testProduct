@@ -77,16 +77,16 @@
       <div v-loading="dialog.loading" class="item">
         <div class="dialog-row mb-20 time-row">
           <label class="exp">用户名：</label>
-          <el-input v-model="dialogForm.loginname.value" type="text" placeholder="请输入用户名" style="width:114px" clearable/>
+          <el-input v-model.trim="dialogForm.loginname.value" type="text" placeholder="请输入用户名" style="width:114px" clearable />
         </div>
         <div class="dialog-row mb-30 time-row">
           <label class="exp">登录密码：</label>
-          <el-input v-model="dialogForm.password.value" :type="dialogForm.password.type" placeholder="请输入登录密码" style="width:114px" clearable/>
+          <el-input v-model.trim="dialogForm.password.value" :type="dialogForm.password.type" placeholder="请输入登录密码" style="width:114px" clearable />
         </div>
         <div class="dialog-row time-row">
           <div class="percentage-row">
             <span class="title">设置奖金组</span>
-            <el-input v-model.number="dialogForm.salary.group" @blur="handleInputGroup" style="width:114px"/>
+            <el-input v-model.number="dialogForm.salary.group" @blur="handleInputGroup" style="width:114px" />
             <el-slider v-model.number="dialogForm.salary.group" class="slider" :max="dialogForm.salary.max" :min="dialogForm.salary.min" :step="dialogForm.salary.step" @change="salarySlideChange"></el-slider>
             <span class="rebatesRateTitle">预计平均返点率</span>
             <span class="rebatesRate" v-text="rebatesRate"></span>
@@ -270,7 +270,7 @@
         }
         if (!validator.regexpInput(this.dialogForm.loginname.value)) {
           self.$message({
-            message: '用户名格式不符合要求',
+            message: '用户名需3-16位字符，只能包含英文字母或数字',
             type: 'error',
             duration: 1000
           })
@@ -286,7 +286,7 @@
         }
         if (!validator.regexpPsd(this.dialogForm.password.value)) {
           self.$message({
-            message: '登录密码格式不符合要求',
+            message: '登录密码需6-16位字符，只能且必须同时包含数字和字母，不允许连续三位相同',
             type: 'error',
             duration: 1000
           })
@@ -539,6 +539,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
+
     .exp {
       width: 80px;
       text-align: right;
@@ -575,6 +576,7 @@
     background: #F6F6F6;
     border: 1px solid #DDDDDD;
     padding: 0 24px;
+
     .title {
       font-size: 12px;
       color: #191919;
@@ -582,10 +584,12 @@
       margin-right: 10px;
       font-family: PingFangSC-Regular;
     }
+
     .left1-title {
       margin-left: 188px;
       display: inline-block;
     }
+
     .salary-input {
       width: 112px;
       height: 44px;
@@ -596,17 +600,20 @@
       text-align: center;
       margin-left: 27px;
     }
+
     .slider {
       margin: 0 20px;
       width: 260px;
       display: inline-block;
       vertical-align: middle;
     }
+
     .rebatesRateTitle {
       font-size: 12px;
       color: #777777;
       font-family: PingFangSC-Regular;
     }
+
     .rebatesRate {
       margin-left: 10px;
       height: 30px;
@@ -634,6 +641,7 @@
   .btn-line {
     text-align: right;
     margin-bottom: 20px;
+
     .reg {
       display: inline-block;
       line-height: 28px;

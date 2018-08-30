@@ -38,7 +38,7 @@
           <div class="search-inner-wrap">
             <label>查找时间：</label>
             <el-date-picker v-model="searchTime" type="datetimerange" align="right" unlink-panels range-separator="至" start-placeholder="开始日期"
-              end-placeholder="结束日期" :picker-options="pickerOptions">
+              end-placeholder="结束日期" :picker-options="pickerOptions" :default-time="pickerDefaultTime">
             </el-date-picker>
           </div>
           <!-- <div class="search-inner-wrap">
@@ -73,20 +73,20 @@
         </el-table-column> -->
         <el-table-column align="center" prop="gamename" label="平台">
         </el-table-column>
+        <el-table-column align="center" label="时间">
+          <template slot-scope="scope">
+            <span>{{formatTime2(scope.row)}}</span>
+          </template>
+        </el-table-column>
         <!-- <el-table-column align="center" prop="gamename" label="游戏名">
         </el-table-column> -->
-        <el-table-column align="center" prop="vote" label="投注额">
+        <el-table-column align="center" prop="vote" label="投注额" :formatter="formatMoney">
         </el-table-column>
         <el-table-column align="center" prop="rebate" label="返点">
         </el-table-column>
         <el-table-column align="center" prop="user_count" label="玩家人数">
         </el-table-column>
-        <el-table-column align="center" prop="profit" label="盈利">
-        </el-table-column>
-        <el-table-column align="center" label="游戏时间">
-          <template slot-scope="scope">
-            <span>{{formatTime2(scope.row)}}</span>
-          </template>
+        <el-table-column align="center" prop="profit" label="盈利" :formatter="formatMoney">
         </el-table-column>
         <!-- <el-table-column align="center" prop="bid_invalid" label="撤单总额">
         </el-table-column>
@@ -200,6 +200,7 @@
         loginname: "",
         username: "",
         searchTime: "",
+        pickerDefaultTime: ['00:00:00', '23:59:59'],
         pickerOptions: {
           shortcuts: [{
               text: "昨天",
@@ -361,7 +362,7 @@
       const menus = JSON.parse(localStorage.getItem('menus'));
       menus[this.index1].child[this.index2].child.filter((v, vi) => {
         let o = new Object();
-        if(v.url === 'thirdpartTable'){
+        if (v.url === 'thirdpartTable') {
           this.titleName = v.menu_name;
         }
         o.title = v.menu_name;
@@ -383,9 +384,15 @@
       this.getLotteryColligateList();
     },
     methods: {
+      formatMoney(row, column, cellValue) {
+        if (cellValue) {
+          return Number(cellValue).toFixed(2);
+        }
+        return "--"
+      },
       formatTime2(row) {
         if (row._id && row._id.day) {
-          return moment(row._id.day).format("YYYY-MM-DD HH:MM:SS");
+          return moment(row._id.day).utcOffset(8).format("YYYY-MM-DD HH:MM:SS");
         }
         return '--'
       },

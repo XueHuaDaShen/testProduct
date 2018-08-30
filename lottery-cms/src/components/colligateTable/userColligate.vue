@@ -37,8 +37,8 @@
           </div> -->
           <div class="search-inner-wrap">
             <label>查询时间：</label>
-            <el-date-picker v-model="searchTime" type="datetimerange" align="right" unlink-panels range-separator="至" start-placeholder="开始日期"
-              end-placeholder="结束日期" :picker-options="pickerOptions">
+            <el-date-picker v-model="searchTime" type="datetimerange" align="right" unlink-panels range-separator="至"
+              start-placeholder="开始日期" end-placeholder="结束日期" :picker-options="pickerOptions" :default-time="pickerDefaultTime">
             </el-date-picker>
           </div>
           <div class="search-inner-wrap">
@@ -68,11 +68,11 @@
         </el-table-column>
         <el-table-column align="center" prop="day" width="150" label="时间" :formatter="formatTime">
         </el-table-column>
-        <el-table-column align="center" prop="recharge" width="60" label="充值">
+        <el-table-column align="center" prop="recharge" label="充值" :formatter="formatMoney">
         </el-table-column>
-        <el-table-column align="center" prop="withdrawal" width="60" label="提现">
+        <el-table-column align="center" prop="withdrawal" label="提现" :formatter="formatMoney">
         </el-table-column>
-        <el-table-column align="center" prop="undo" width="60" label="回收" :formatter="formatMoney">
+        <el-table-column align="center" prop="undo" label="回收" :formatter="formatMoney">
         </el-table-column>
         <el-table-column align="center" prop="bid_valid" label="有效投注" :formatter="formatMoney">
         </el-table-column>
@@ -86,30 +86,19 @@
         </el-table-column>
         <el-table-column align="center" prop="commission" label="分红" :formatter="formatMoney">
         </el-table-column>
+        <el-table-column align="center" prop="gift" label="活动" :formatter="formatMoney">
+        </el-table-column>
         <el-table-column align="center" prop="game_profit" label="游戏盈亏" :formatter="formatMoney">
         </el-table-column>
         <el-table-column align="center" prop="game_rebate" label="游戏返点" :formatter="formatMoney">
         </el-table-column>
         <el-table-column align="center" prop="profit" label="盈亏" :formatter="formatMoney">
         </el-table-column>
-        <!-- <el-table-column align="center" prop="bid_total" label="个人投注总额">
-        </el-table-column>
-        <el-table-column align="center" prop="bid_invalid" label="个人撤单总额">
-        </el-table-column>
-        <el-table-column align="center" prop="activity" label="个人活动奖励">
-        </el-table-column>
-        <el-table-column align="center" prop="transferin" width="60" label="转入">
-        </el-table-column>
-        <el-table-column align="center" prop="transferout" width="60" label="转出">
-        </el-table-column>
-        <el-table-column align="center" prop="undo" width="60" label="扣款">
-        </el-table-column> -->
-        <!-- <el-table-column align="center" prop="is_test" :formatter="formatTestUser" width="80" label="测试用户">
-        </el-table-column> -->
       </el-table>
       <div class="fenye">
-        <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="pageNum" :page-size="pageSize"
-          :page-sizes="[10, 20, 40, 80,160,350,700,1000]" layout="total, sizes, prev, pager, next, jumper" :total="total">
+        <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="pageNum"
+          :page-size="pageSize" :page-sizes="[10, 20, 40, 80,160,350,700,1000]" layout="total, sizes, prev, pager, next, jumper"
+          :total="total">
         </el-pagination>
       </div>
     </div>
@@ -154,6 +143,7 @@
         loginname: "",
         username: "",
         searchTime: "",
+        pickerDefaultTime: ['00:00:00', '23:59:59'],
         pickerOptions: {
           shortcuts: [{
               text: "昨天",
@@ -450,7 +440,7 @@
       },
       formatTime(row, column, cellValue) {
         if (cellValue) {
-          return moment(cellValue).format("YYYY-MM-DD");
+          return moment(cellValue).utcOffset(8).format("YYYY-MM-DD");
         }
         return "--"
       },

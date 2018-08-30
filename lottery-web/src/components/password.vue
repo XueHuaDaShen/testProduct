@@ -76,11 +76,11 @@
         </div>
         <div class="time-row mb-20">
           <span class="last-exp">输入旧登录密码：</span>
-          <el-input placeholder="请输入旧密码" v-model="oldPsd" class="content" type="password" clearable></el-input>
+          <el-input placeholder="请输入旧密码" v-model.trim="oldPsd" class="content" type="password" clearable></el-input>
         </div>
         <div class="time-row mb-20">
           <span class="last-exp">输入新登录密码：</span>
-          <el-input placeholder="请输入新密码" v-model="newPsd" class="content" type="password" clearable></el-input>
+          <el-input placeholder="请输入新密码" v-model.trim="newPsd" class="content" type="password" clearable></el-input>
         </div>
         <div class="time-row mb-20">
           <span class="last-exp"></span>
@@ -88,7 +88,7 @@
         </div>
         <div class="time-row">
           <span class="last-exp">确认新登录密码：</span>
-          <el-input placeholder="请输入新密码" v-model="newPsd2" class="content" type="password" clearable></el-input>
+          <el-input placeholder="请输入新密码" v-model.trim="newPsd2" class="content" type="password" clearable></el-input>
         </div>
         <div class="submit-line">
           <a class="submit" type="submit" @click="modifiedLoginPsd()">提交修改</a>
@@ -103,11 +103,11 @@
         </div>
         <div class="time-row mb-20">
           <span class="last-exp">输入旧资金密码：</span>
-          <el-input placeholder="请输入旧密码" v-model="oldPsdzj" class="content" type="password" clearable></el-input>
+          <el-input placeholder="请输入旧密码" v-model.trim="oldPsdzj" class="content" type="password" clearable></el-input>
         </div>
         <div class="time-row mb-20">
           <span class="last-exp">输入新资金密码：</span>
-          <el-input placeholder="请输入旧密码" v-model="newPsdzj" class="content" type="password" clearable></el-input>
+          <el-input placeholder="请输入旧密码" v-model.trim="newPsdzj" class="content" type="password" clearable></el-input>
         </div>
         <div class="time-row mb-20">
           <span class="last-exp"></span>
@@ -115,7 +115,7 @@
         </div>
         <div class="time-row">
           <span class="last-exp">确认新资金密码：</span>
-          <el-input placeholder="请输入旧密码" v-model="newPsd2zj" class="content" type="password" clearable></el-input>
+          <el-input placeholder="请输入旧密码" v-model.trim="newPsd2zj" class="content" type="password" clearable></el-input>
         </div>
         <div class="submit-line">
           <a class="submit" type="submit" @click="modifiedZJPsd()">提交修改</a>
@@ -312,7 +312,7 @@
         if (!validator.regexpPsd(this.newPsd)) {
           this.$message({
             showClose: true,
-            message: '新密码格式不符合要求',
+            message: '新密码需6-16位字符，只能且必须同时包含数字和字母，不允许连续三位相同',
             type: 'error'
           });
           return;
@@ -320,7 +320,7 @@
         if (!validator.regexpPsd(this.newPsd2)) {
           this.$message({
             showClose: true,
-            message: '确认新密码格式不符合要求',
+            message: '确认新密码需6-16位字符，只能且必须同时包含数字和字母，不允许连续三位相同',
             type: 'error'
           });
           return;
@@ -362,6 +362,14 @@
                         center: true,
                         callback: action => {
                           // request.loginAgain(self);
+                        }
+                      });
+                    } else if (success.returncode == 307) {
+                      self.$alert('资金密码和登录密码不能相同', '系统提醒', {
+                        confirmButtonText: '确定',
+                        center: true,
+                        callback: action => {
+                          self.resetPsdzj()
                         }
                       });
                     } else {
@@ -433,7 +441,7 @@
         if (!validator.regexpPsd(this.newPsdzj)) {
           this.$message({
             showClose: true,
-            message: '新资金密码格式不符合要求',
+            message: '新资金密码需6-16位字符，只能且必须同时包含数字和字母，不允许连续三位相同',
             type: 'error'
           });
           return;
@@ -441,7 +449,7 @@
         if (!validator.regexpPsd(this.newPsd2zj)) {
           this.$message({
             showClose: true,
-            message: '确认新资金密码格式不符合要求',
+            message: '确认新资金密码需6-16位字符，只能且必须同时包含数字和字母，不允许连续三位相同',
             type: 'error'
           });
           return;
@@ -488,6 +496,14 @@
                         self.resetPsdzj()
                       }
                     });
+                  } else if (success.returncode == 307) {
+                    self.$alert('资金密码和登录密码不能相同', '系统提醒', {
+                      confirmButtonText: '确定',
+                      center: true,
+                      callback: action => {
+                        self.resetPsdzj()
+                      }
+                    });
                   } else {
                     console.log('error', success.returncode);
                   }
@@ -518,7 +534,7 @@
           (success) => {
             if (success.returncode == 200) {
               self.isSetBankPsd = success.data.isSet;
-            } else if(success.returncode == 101 || success.returncode == 103 || success.returncode == 106) {
+            } else if (success.returncode == 101 || success.returncode == 103 || success.returncode == 106) {
               request.loginAgain(self)
             } else {
               self.$message({
@@ -574,7 +590,7 @@
               } else {
                 this.profile.lastTimeVisible = false;
               }
-            } else if(success.returncode == 101 || success.returncode == 103 || success.returncode == 106) {
+            } else if (success.returncode == 101 || success.returncode == 103 || success.returncode == 106) {
               request.loginAgain(self)
             } else {
               self.$message({
@@ -623,12 +639,15 @@
   .table-xinxi {
     padding: 0 122px;
     width: 100%;
+
     .table-row {
       display: flex;
       justify-content: space-around;
       align-items: center;
+
       .row-item {
         flex: 0.5;
+
         .exp {
           text-align: left;
           font-family: PingFangSC-Regular;
@@ -710,6 +729,7 @@
 
   .time-row {
     text-align: left;
+
     .last-login-time {
       width: 200px;
       height: 40px;
@@ -724,6 +744,7 @@
       border: 1px solid #C8C8C8;
       border-radius: 4px;
     }
+
     .last-exp {
       font-size: 12px;
       color: #191919;
@@ -732,6 +753,7 @@
       text-align: left;
       font-family: PingFangSC-Regular;
     }
+
     .last-tip {
       font-family: PingFangSC-Regular;
       font-size: 12px;

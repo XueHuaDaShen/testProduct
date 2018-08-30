@@ -187,9 +187,9 @@
       return {
         index1: 0,
         index2: 0,
-        titleName: '银行卡管理',
         createLoading: false,
         updateLoading: false,
+        titleName: '银行卡管理',
         routerArr: [{
             title: '第三方渠道',
             name: 'thirdpartyManager',
@@ -207,6 +207,11 @@
           {
             title: '入款记录',
             name: 'rechargeLog',
+            checked: false
+          },
+          {
+            title: '前端展示',
+            name: 'tradeAccountLog',
             checked: false
           },
         ],

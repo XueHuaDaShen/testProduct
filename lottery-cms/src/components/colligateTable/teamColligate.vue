@@ -30,8 +30,8 @@
           </div>
           <div class="search-inner-wrap">
             <label>查询时间：</label>
-            <el-date-picker v-model="searchTime" type="datetimerange" align="right" unlink-panels range-separator="至" start-placeholder="开始日期"
-              end-placeholder="结束日期" :picker-options="pickerOptions">
+            <el-date-picker v-model="searchTime" type="datetimerange" align="right" unlink-panels range-separator="至"
+              start-placeholder="开始日期" end-placeholder="结束日期" :picker-options="pickerOptions" :default-time="pickerDefaultTime">
             </el-date-picker>
           </div>
           <!-- <div class="search-inner-wrap">
@@ -88,6 +88,8 @@
         </el-table-column>
         <el-table-column align="center" prop="commission_team" label="分红" :formatter="formatMoney">
         </el-table-column>
+        <el-table-column align="center" prop="gift" label="活动" :formatter="formatMoney">
+        </el-table-column>
         <el-table-column align="center" prop="game_profit" label="游戏盈亏" :formatter="formatMoney">
         </el-table-column>
         <el-table-column align="center" prop="game_rebate" label="游戏返点" :formatter="formatMoney">
@@ -110,8 +112,9 @@
         </el-table-column> -->
       </el-table>
       <div class="fenye">
-        <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="pageNum" :page-size="pageSize"
-          :page-sizes="[10, 20, 40, 80,160,350,700,1000]" layout="total, sizes, prev, pager, next, jumper" :total="total">
+        <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="pageNum"
+          :page-size="pageSize" :page-sizes="[10, 20, 40, 80,160,350,700,1000]" layout="total, sizes, prev, pager, next, jumper"
+          :total="total">
         </el-pagination>
       </div>
     </div>
@@ -192,6 +195,7 @@
         loginname: "",
         username: "",
         searchTime: "",
+        pickerDefaultTime: ['00:00:00', '23:59:59'],
         pickerOptions: {
           shortcuts: [{
               text: "昨天",
@@ -353,7 +357,7 @@
       const menus = JSON.parse(localStorage.getItem('menus'));
       menus[this.index1].child[this.index2].child.filter((v, vi) => {
         let o = new Object();
-        if(v.url === 'teamColligate'){
+        if (v.url === 'teamColligate') {
           this.titleName = v.menu_name;
         }
         o.title = v.menu_name;
@@ -448,7 +452,7 @@
       },
       formatTime(row, column, cellValue) {
         if (cellValue) {
-          return moment(cellValue).format("YYYY-MM-DD");
+          return moment(cellValue).utcOffset(8).format("YYYY-MM-DD");
         }
         return "--"
       },

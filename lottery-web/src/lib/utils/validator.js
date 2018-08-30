@@ -237,19 +237,20 @@ export function trim(str) {
   return str.replace(/^(\s|\u00A0)+/, '').replace(/(\s|\u00A0)+$/, '')
 }
 
-// 匹配3-20位字母或者数字
+// 3-16位字符，只能包含英文字母或数字
 export function regexpInput(input) {
-  let exp = new RegExp("^[a-zA-Z0-9_]{3,20}$");
+  let exp = new RegExp("^[a-zA-Z0-9]{3,16}$");
   if (exp.test(input)) {
     return true;
   }
   return false;
 }
 
-//匹配6-16位数字或者字母组合
+//6-16位字符，只能包含英文字母或数字，且必须同时包含数字和字母，不允许连续三位相同
 export function regexpPsd(psd) {
-  let exp = new RegExp("^[a-zA-Z0-9]{6,16}$");
-  if (exp.test(psd)) {
+  let exp = /^(?!(?:\d+|[a-zA-Z]+)$)[\da-zA-Z]{6,}$/;
+  let exp2 = /(\w)*(\w)\2{2}(\w)*/g;
+  if (exp.test(psd) && !exp2.test(psd)) {
     return true;
   }
   return false;

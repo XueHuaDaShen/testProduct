@@ -39,8 +39,8 @@
           </div>
           <div class="search-inner-wrap">
             <label>提交时间：</label>
-            <el-date-picker v-model="searchTime" type="daterange" align="right" unlink-panels range-separator="至" start-placeholder="开始日期"
-              end-placeholder="结束日期" :picker-options="pickerOptions">
+            <el-date-picker v-model="searchTime" type="datetimerange" align="right" unlink-panels range-separator="至" start-placeholder="开始日期"
+              end-placeholder="结束日期" :picker-options="pickerOptions" :default-time="pickerDefaultTime">
             </el-date-picker>
           </div>
           <div class="search-inner-wrap">
@@ -74,14 +74,11 @@
             <el-button type="text" @click="getUserInfoFn(scope.row)">{{scope.row.loginname}}</el-button>
           </template>
         </el-table-column>
-        <el-table-column align="center" prop="cash_apply" width="110" label="申请金额">
+        <el-table-column align="center" prop="cash_apply" width="110" label="申请金额" :formatter="formatMoney">
         </el-table-column>
         <el-table-column align="center" prop="create_at" :formatter="formatTime" label="提交时间">
         </el-table-column>
-        <el-table-column align="center" label="到账金额">
-          <template slot-scope="scope">
-            {{scope.row.cash_recharged ? scope.row.cash_recharged:"--"}}
-          </template>
+        <el-table-column align="center" label="到账金额" prop="cash_recharged" :formatter="formatMoney">
         </el-table-column>
         <el-table-column align="center" prop="recharge_at" :formatter="formatTime" label="操作时间">
         </el-table-column>
@@ -99,7 +96,7 @@
           <template slot-scope="scope">
             <el-button v-if="scope.row.status==1" @click="toRechargeFn(scope.row)" class="yes small">充值审核</el-button>
             <el-button v-if="scope.row.status==2" @click="getDetail(scope.row)" class="edit small">详情</el-button>
-            <el-button v-if="scope.row.status==3" @click="resetCheck(scope.row)" class="small yes">恢复申请</el-button>
+            <el-button v-if="scope.row.status==3" @click="resetCheck(scope.row)" class="small edit">恢复申请</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -198,6 +195,7 @@
         }
       };
       return {
+        pickerDefaultTime: ['00:00:00', '23:59:59'],
         index1: 0,
         index2: 0,
         rechargeLoading: false,
@@ -219,6 +217,11 @@
           {
             title: '入款记录',
             name: 'rechargeLog',
+            checked: false
+          },
+          {
+            title: '前端展示',
+            name: 'tradeAccountLog',
             checked: false
           },
         ],
@@ -465,6 +468,12 @@
       this.getRechargeLotList();
     },
     methods: {
+      formatMoney(row, column, cellValue) {
+        if (cellValue) {
+          return Number(cellValue).toFixed(2);
+        }
+        return "--"
+      },
       incomeWayFocus(event) {
         if (this.type.options.length != 0) {
           return;

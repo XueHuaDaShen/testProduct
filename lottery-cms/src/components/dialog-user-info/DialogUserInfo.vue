@@ -83,7 +83,7 @@
                   <td style="width:50%;">
                     <label>主钱包：</label>
                     <span>{{formatcash(data.cash)}}</span>
-                    <img src="@/assets/refresh.png" @click="getziiao" style="width:14px;height:12px;margin:0 10px;margin-bottom:-1px;">
+                    <img src="@/assets/refresh.png" @click="refreshCash" style="width:14px;height:12px;margin:0 10px;margin-bottom:-1px;cursor:pointer;">
                     <button
                       :disabled="isClick"
                       style="cursor:pointer;font-size:12px;width:48px;color:#191919;text-decoration: underline;border:none;outline:none;background:none;font-weight:bold;"
@@ -96,7 +96,7 @@
                 <tr>
                   <td>
                     <label>KY钱包：</label>
-                    <span>{{formatcash(data.cash_ky)}}</span>
+                    <span>{{formatcash(cash_ky)}}</span>
                   </td>
                   <td>
                     <label>AG钱包：</label>
@@ -163,6 +163,7 @@
     data() {
       return {
         isClick: false,
+        cash_ky: 0,
         data: null,
         ziliao: false,
         xinxi: false,
@@ -277,6 +278,34 @@
           (error) => {
             self.loading = false;
             self.isClick = false;
+            console.log('获取用户资金失败', error)
+          }
+        )
+      },
+      // 刷新钱包
+      refreshCash() {
+        let self = this;
+        self.loading = true;
+        request.http('get', '/user/refreshThirdCoin', {id: self.userid},
+          (success) => {
+            let code = success.returncode;
+            self.loading = false;
+            // console.log(success)
+            if (code == 200) {
+              self.cash_ky = success.data;
+            } else if(code == 101 || code == 103 || code == 106) {
+              request.loginAgain(self)
+            } else if(code == 303){
+              self.$message({
+                message: '查询失败',
+                type: "error",
+                duration: 1500,
+                center: true
+              });
+            }
+          },
+          (error) => {
+            self.loading = false;
             console.log('获取用户资金失败', error)
           }
         )
@@ -425,6 +454,7 @@
             let code = success.returncode;
             if (code === 200) {
               vm.data = success.data;
+              vm.cash_ky = vm.data.cash_ky;
               vm.hasSetCashPsd = vm.data.cash_password ? true : false;
               vm.hasSetPsd = vm.data.password ? true : false;
               vm.showTable = true;

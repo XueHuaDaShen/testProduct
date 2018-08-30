@@ -118,7 +118,7 @@
       const menus = JSON.parse(localStorage.getItem('menus'));
       menus[this.index1].child[this.index2].child.filter((v, vi) => {
         let o = new Object();
-        if(v.url === 'userBlance'){
+        if (v.url === 'userBlance') {
           this.titleName = v.menu_name;
         }
         o.title = v.menu_name;
@@ -185,6 +185,7 @@
       },
       getRechargeLotList() {
         const vm = this;
+        vm.rechargeListData = [];
         request.http(
           "get",
           "/user/profile/loginname", {

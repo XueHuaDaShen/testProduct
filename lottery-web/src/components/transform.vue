@@ -392,7 +392,7 @@
               }
             } else if (success.returncode == 101 || success.returncode == 103 || success.returncode == 106) {
               request.loginAgain(self)
-            } else if (code == 301 || code == 305) {
+            } else if (success.returncode == 301 || success.returncode == 305) {
               self.$alert("资金密码不正确", "系统提醒", {
                 confirmButtonText: "确定",
                 center: true,
@@ -400,7 +400,7 @@
                   self.transform.cashPsd = "";
                 }
               });
-            } else if (code == 304) {
+            } else if (success.returncode == 304) {
               self.$alert("账户无法进行额度转换", "系统提醒", {
                 confirmButtonText: "确定",
                 center: true,
@@ -408,7 +408,7 @@
                   self.transform.cashPsd = "";
                 }
               });
-            } else if (code == 302) {
+            } else if (success.returncode == 302) {
               self.$alert("账户余额不足", "系统提醒", {
                 confirmButtonText: "确定",
                 center: true,
@@ -441,7 +441,7 @@
       }
     },
     watch: {
-      "transform.from.value" (newValue, oldValue) {
+      "transform.from.value"(newValue, oldValue) {
         if (newValue !== oldValue) {
           if (newValue) {
             if (newValue == 'main') {
@@ -455,7 +455,7 @@
           }
         }
       },
-      "transform.to.value" (newValue, oldValue) {
+      "transform.to.value"(newValue, oldValue) {
         if (newValue !== oldValue) {
           if (newValue) {
             if (newValue == 'main') {
@@ -497,10 +497,12 @@
 <style scoped lang="scss">
   .table-xinxi {
     width: 100%;
+
     .time-row {
       display: flex;
       justify-content: flex-start;
       align-items: center;
+
       .exp {
         text-align: left;
         font-family: PingFangSC-Regular;
@@ -552,6 +554,7 @@
     padding: 30px 20px;
     border: 1px solid #ddd;
     min-height: 800px;
+
     .inner-pay-title {
       text-align: left;
       font-family: PingFangSC-Regular;
@@ -1196,10 +1199,12 @@
       color: #191919;
       display: flex;
       justify-content: space-between;
+
       .cash {
         font-weight: 700;
         color: #CC3447;
       }
+
       &:last-child {
         margin-bottom: 30px;
       }
@@ -1272,8 +1277,10 @@
 
   .account-done {
     margin-top: 20px;
+
     .done-row {
       text-align: left;
+
       .exp {
         width: 120px;
         font-size: 12px;
@@ -1290,10 +1297,12 @@
     font-family: PingFangSC-Regular;
     font-weight: 700;
     color: #191919;
+
     .exp {
       font-size: 16px;
       display: inline-block;
     }
+
     .exp2 {
       font-size: 16px;
       color: #CC3447;

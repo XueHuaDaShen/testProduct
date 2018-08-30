@@ -192,6 +192,11 @@
             name: 'rechargeLog',
             checked: false
           },
+          {
+            title: '前端展示',
+            name: 'tradeAccountLog',
+            checked: false
+          },
         ],
         createLoading: false,
         updateLoading: false,
@@ -305,7 +310,7 @@
       const menus = JSON.parse(localStorage.getItem('menus'));
       menus[this.index1].child[this.index2].child.filter((v, vi) => {
         let o = new Object();
-        if(v.url === 'thirdpartyManager'){
+        if (v.url === 'thirdpartyManager') {
           this.titleName = v.menu_name;
         }
         o.title = v.menu_name;

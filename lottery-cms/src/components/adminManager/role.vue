@@ -557,9 +557,13 @@
       createRoleFn(formName) {
         const vm = this;
         let data = {};
+        let ids = [];
+        vm.checkedMenu.filter(v => {
+          ids.push(...v.data)
+        })
+        data.ids = ids.join(',');
         data.name = vm.form.name;
         data.message = vm.form.message;
-        data.ids = vm.form.checkList.join(',')
         vm.createLoading = true;
         request.http(
           'post',

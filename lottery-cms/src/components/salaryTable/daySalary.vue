@@ -24,7 +24,7 @@
           <div class="search-inner-wrap">
             <label>查询时间：</label>
             <el-date-picker v-model="searchTime" type="datetimerange" align="right" unlink-panels range-separator="至" start-placeholder="开始日期"
-              end-placeholder="结束日期" :picker-options="pickerOptions">
+              end-placeholder="结束日期" :picker-options="pickerOptions" :default-time="pickerDefaultTime">
             </el-date-picker>
           </div>
           <div class="search-inner-wrap">
@@ -147,6 +147,7 @@
         loginname: "",
         username: "",
         searchTime: "",
+        pickerDefaultTime: ['00:00:00', '23:59:59'],
         pickerOptions: {
           shortcuts: [{
               text: "昨天",
@@ -316,7 +317,7 @@
       const menus = JSON.parse(localStorage.getItem('menus'));
       menus[this.index1].child[this.index2].child.filter((v, vi) => {
         let o = new Object();
-        if(v.url === 'daySalary'){
+        if (v.url === 'daySalary') {
           this.titleName = v.menu_name;
         }
         o.title = v.menu_name;
@@ -522,8 +523,10 @@
         this.dialogIsShow = val;
       },
       formatTime(row, column, cellValue) {
-        return moment(cellValue).format("YYYY-MM-DD");
-        // return moment(cellValue).format('YYYY-MM-DD')
+        if (cellValue) {
+          return moment(cellValue).utcOffset(8).format("YYYY-MM-DD");
+        }
+        return '--'
       },
       formatTestUser(row, column, cellValue) {
         let t = '';

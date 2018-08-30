@@ -55,6 +55,7 @@
 import request from '@/axios/axios.js'
 import MD5 from 'MD5'
 import paramCryptFn from '@/assets/js/cryptData'
+import {regexpPsd} from '@/assets/js/validator.js';
 export default {
   name: 'mmgl',
   data() {
@@ -89,14 +90,6 @@ export default {
   mounted() {},
   computed: {},
   methods: {
-    //匹配6-16位数字和字母组合
-    regexpPsd(psd) {
-      let exp = new RegExp("^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,16}$");
-      if (exp.test(psd)) {
-        return true;
-      }
-      return false;
-    },
     // 获取是否设置了密码字段
     checkIsSetPwdFn() {
       const vm = this;
@@ -137,14 +130,32 @@ export default {
           vm.tip = '';
         }, vm.tipTimeout*1000);
         return false;
+      } else if (!regexpPsd(vm.loginOldPwd)) {
+        vm.tip = '旧密码不符合规范';
+        setTimeout(() => {
+          vm.tip = '';
+        }, vm.tipTimeout*1000);
+        return false;
       } else if (vm.loginNewPwd === '') {
         vm.tip = '新密码不能为空';
         setTimeout(() => {
           vm.tip = '';
         }, vm.tipTimeout*1000);
         return false;
+      } else if (!regexpPsd(vm.loginNewPwd)) {
+        vm.tip = '密码为6-16位字符，只能且必须包含英文字母或数字（不允许连续三位相同）';
+        setTimeout(() => {
+          vm.tip = '';
+        }, vm.tipTimeout*1000);
+        return false;
       } else if (vm.confirmLoginNewPwd === '') {
         vm.tip = '确认新密码不能为空';
+        setTimeout(() => {
+          vm.tip = '';
+        }, vm.tipTimeout*1000);
+        return false;
+      } else if (vm.confirmLoginNewPwd !== vm.loginNewPwd) {
+        vm.tip = '两次密码输入不一致';
         setTimeout(() => {
           vm.tip = '';
         }, vm.tipTimeout*1000);
@@ -228,14 +239,32 @@ export default {
           vm.tip = '';
         }, vm.tipTimeout*1000);
         return false;
+      } else if (!regexpPsd(vm.zijinOldPwd)) {
+        vm.tip = '旧密码不符合规范';
+        setTimeout(() => {
+          vm.tip = '';
+        }, vm.tipTimeout*1000);
+        return false;
       } else if (vm.zijinNewPwd === '') {
         vm.tip = '新密码不能为空';
         setTimeout(() => {
           vm.tip = '';
         }, vm.tipTimeout*1000);
         return false;
+      } else if (!regexpPsd(vm.zijinNewPwd)) {
+        vm.tip = '资金密码为6-16位字符，只能且必须包含英文字母或数字（不允许连续三位相同）';
+        setTimeout(() => {
+          vm.tip = '';
+        }, vm.tipTimeout*1000);
+        return false;
       } else if (vm.confirmZijinNewPwd === '') {
         vm.tip = '确认新密码不能为空';
+        setTimeout(() => {
+          vm.tip = '';
+        }, vm.tipTimeout*1000);
+        return false;
+      } else if (vm.confirmZijinNewPwd !== vm.zijinNewPwd) {
+        vm.tip = '两次密码输入不一致';
         setTimeout(() => {
           vm.tip = '';
         }, vm.tipTimeout*1000);
@@ -399,6 +428,7 @@ export default {
   }
   .edit-pwd-tip{
     width:100%;
+    padding:0 .5rem;
     text-align:center;
     color:#C83C4A;
     position: absolute;

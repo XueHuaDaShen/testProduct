@@ -11,8 +11,8 @@
         <div class="search-content">
           <div class="search-inner-wrap">
             <label>查询时间：</label>
-            <el-date-picker v-model="searchTime" type="datetimerange" align="right" unlink-panels range-separator="至" start-placeholder="开始日期"
-              end-placeholder="结束日期" :picker-options="pickerOptions">
+            <el-date-picker v-model="searchTime" type="datetimerange" align="right" unlink-panels range-separator="至"
+              start-placeholder="开始日期" end-placeholder="结束日期" :picker-options="pickerOptions" :default-time="pickerDefaultTime">
             </el-date-picker>
           </div>
           <div class="search-inner-wrap">
@@ -144,7 +144,7 @@
                   <i class="icon-tip-small"></i>
                   活动礼金
                 </span>
-                <span class="warning">{{formatMoney(data.activity)}} 元</span>
+                <span class="warning">{{formatMoney(data.gift)}} 元</span>
               </div>
             </div>
             <div class="body-row">
@@ -184,6 +184,7 @@
     },
     data() {
       return {
+        pickerDefaultTime: ['00:00:00', '23:59:59'],
         index1: 0,
         index2: 0,
         titleName: "综合报表",
@@ -364,7 +365,7 @@
       const menus = JSON.parse(localStorage.getItem('menus'));
       menus[this.index1].child[this.index2].child.filter((v, vi) => {
         let o = new Object();
-        if(v.url === 'platformColligate'){
+        if (v.url === 'platformColligate') {
           this.titleName = v.menu_name;
         }
         o.title = v.menu_name;

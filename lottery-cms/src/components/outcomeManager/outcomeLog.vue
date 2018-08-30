@@ -33,8 +33,8 @@
           </div>
           <div class="search-inner-wrap">
             <label>提交时间：</label>
-            <el-date-picker v-model="searchTime" type="daterange" align="right" unlink-panels range-separator="至" start-placeholder="开始日期"
-              end-placeholder="结束日期" :picker-options="pickerOptions">
+            <el-date-picker v-model="searchTime" type="daterange" align="right" unlink-panels range-separator="至"
+              start-placeholder="开始日期" end-placeholder="结束日期" :picker-options="pickerOptions" :default-time="pickerDefaultTime">
             </el-date-picker>
           </div>
           <div class="search-inner-wrap">
@@ -62,7 +62,7 @@
             <el-button type="text" @click="getUserInfoFn(scope.row)">{{scope.row.loginname}}</el-button>
           </template>
         </el-table-column>
-        <el-table-column align="center" prop="cash_apply" width="110" label="申请金额">
+        <el-table-column align="center" prop="cash_apply" width="110" label="申请金额" :formatter="formatMoney">
         </el-table-column>
         <el-table-column align="center" prop="create_at" :formatter="formatTime" label="提交时间">
         </el-table-column>
@@ -79,16 +79,17 @@
         <el-table-column align="center" prop="status" fixed="right" label="操作" width="100">
           <template slot-scope="scope">
             <div class="flex-row">
-              <el-button v-if="scope.row.status==1||scope.row.status==2||scope.row.status==3||scope.row.status==4" @click="toWithdrawFn(scope.row)"
-                class="small yes">出款审核</el-button>
+              <el-button v-if="scope.row.status==1||scope.row.status==2||scope.row.status==3||scope.row.status==4"
+                @click="toWithdrawFn(scope.row)" class="small yes">出款审核</el-button>
               <el-button @click="toWithdrawDetail(scope.row)" class="small edit" v-if="!(scope.row.status==1||scope.row.status==2||scope.row.status==3||scope.row.status==4)">详情</el-button>
             </div>
           </template>
         </el-table-column>
       </el-table>
       <div class="fenye">
-        <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="pageNum" :page-size="pageSize"
-          :page-sizes="[10, 20, 40, 80,160,350,700,1000]" layout="total, sizes, prev, pager, next, jumper" :total="total">
+        <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="pageNum"
+          :page-size="pageSize" :page-sizes="[10, 20, 40, 80,160,350,700,1000]" layout="total, sizes, prev, pager, next, jumper"
+          :total="total">
         </el-pagination>
       </div>
     </div>
@@ -102,7 +103,7 @@
         </p>
         <p>
           <span class="exp">账户名：</span>
-          <span>{{form.loginname}}</span>
+          <span>{{form.realname}}</span>
         </p>
         <p>
           <span class="exp">银行名：</span>
@@ -311,6 +312,7 @@
     },
     data() {
       return {
+        pickerDefaultTime: ['00:00:00', '23:59:59'],
         index1: 0,
         index2: 0,
         tuidanLoading: false,
@@ -579,12 +581,19 @@
       this.getWithdrawLotList();
     },
     methods: {
+      formatMoney(row, column, cellValue) {
+        if (cellValue) {
+          return Number(cellValue).toFixed(2);
+        }
+        return "--"
+      },
       handleSkip(name) {
         let menus = localStorage.getItem('menus');
         let menusjson = JSON.parse(menus);
         const vm = this;
         console.log('menusjson', menusjson);
         let index1, index2;
+        let selected = false;
         for (let i = 0; i < menusjson.length; i++) {
           index1 = i;
           let f_obj = menusjson[i];
@@ -593,10 +602,17 @@
             let san_ = f_obj.child[j].child;
             for (let h = 0; h < san_.length; h++) {
               let url = san_[h].url;
-              if (name = url) {
+              if (name === url) {
+                selected = true;
                 break;
               }
             }
+            if (selected) {
+              break;
+            }
+          }
+          if (selected) {
+            break;
           }
         }
         const {
@@ -892,7 +908,7 @@
       }
     },
     watch: {
-      "form.status" (newVal, oldVal) {
+      "form.status"(newVal, oldVal) {
         if (newVal) {
           if (newVal != oldVal) {
             switch (newVal) {
@@ -990,6 +1006,7 @@
 
   .detail-title {
     text-align: left;
+
     p {
       font-family: PingFangSC-Medium;
       font-size: 16px;

@@ -20,7 +20,9 @@
     width: 100%;
     height: 100%;
   }
-
+  .order-detail-wrap{
+    padding-top:20px;
+  }
   #app .main .top-bar {
     font-weight: 800;
   }

@@ -51,13 +51,13 @@
             <span class="icon-user">
               <img src="../img/icon-user.png">
             </span>
-            <input type="text" v-model="loginName" placeholder="请输入您的用户名">
+            <input type="text" v-model.trim="loginName" placeholder="请输入您的用户名">
           </div>
           <div class="user-info">
             <span class="icon-pwd">
               <img src="../img/icon-pwd.png">
             </span>
-            <input type="password" name="pwd" autocomplete="off" v-model="loginPwd" placeholder="请输入您的密码">
+            <input type="password" name="pwd" autocomplete="off" v-model.trim="loginPwd" placeholder="请输入您的密码">
           </div>
           <div class="login-btn-wrap">
             <span>{{tip}}</span>
@@ -76,6 +76,7 @@
   import request from '../axios/axios.js'
   import MD5 from 'MD5'
   import paramCryptFn from '../lib/cryptData'
+  import * as validator from '../lib/utils/validator'
   export default {
     name: 'HelloWorld',
     components: {
@@ -150,8 +151,18 @@
           setTimeout(() => {
             vm.tip = '';
           }, 1000);
+        } else if (!validator.regexpInput(this.loginName)) {
+          this.tip = '用户名需3-16位字符，只能包含英文字母或数字'
+          setTimeout(() => {
+            vm.tip = '';
+          }, 1000);
         } else if (this.loginPwd === '') {
           this.tip = '请输入您的密码'
+          setTimeout(() => {
+            vm.tip = '';
+          }, 1000);
+        } else if (!validator.regexpPsd(this.loginPwd)) {
+          this.tip = '密码需6-16位字符，只能且必须同时包含数字和字母，不允许连续三位相同'
           setTimeout(() => {
             vm.tip = '';
           }, 1000);
@@ -255,7 +266,8 @@
         location.href = reg;
       },
       open() {
-        window.open('https://ytpfx.livechatvalue.com/chat/chatClient/chatbox.jsp?companyID=1027559&configID=43463&jid=8295678173&s=1', 'newwindow', 'height=700, width=900, top=0, left=0, toolbar=no, menubar=no, scrollbars=no, resizable=no,location=n o, status=no')
+        window.open('https://ytpfx.livechatvalue.com/chat/chatClient/chatbox.jsp?companyID=1027559&configID=43463&jid=8295678173&s=1', 'newwindow',
+          'height=700, width=900, top=0, left=0, toolbar=no, menubar=no, scrollbars=no, resizable=no,location=n o, status=no')
       }
       // handleReg() {
       //   const vm = this;

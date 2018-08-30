@@ -103,7 +103,7 @@
             </router-link>
           </td>
           <td>{{item.issue_no}}</td>
-          <td>{{item.lotteryname}}</td>
+          <td>{{item.lottery3name + item.lotteryname}}</td>
           <td>
             <el-popover placement="right" title="投注内容" trigger="click">
               <div>

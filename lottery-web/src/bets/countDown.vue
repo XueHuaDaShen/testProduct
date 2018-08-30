@@ -102,11 +102,11 @@
         </em>
       </div>
     </div>
-    <el-dialog :visible.sync="dialogVisible" :show-close="false" style="margin-top:28vh" width="16%">
+    <el-dialog :visible.sync="dialogVisible" :show-close="false" style="margin-top:28vh">
       <div class="tip-alert-content">
         <span>当前已进入第</span>
         <span class="tip-alert-content-issue">{{issue}} 期</span>
-        <span>请留意期号变化({{alertCount}})</span>
+        <span>请留意期号变化&nbsp;({{alertCount}})</span>
       </div>
     </el-dialog>
   </div>
@@ -126,7 +126,7 @@
       }
     },
     created() {
-      this.issue = this.issueNo+1;
+      this.issue = this.issueNo + 1;
       this.getCountTime();
     },
     data() {
@@ -335,7 +335,7 @@
             } else if (code === 106) {
               request.loginAgain(vm)
             } else if (code === 200) {
-              if(latestIssue !== -1){
+              if (latestIssue !== -1) {
                 vm.issue = latestIssue.issue_no;
               }
               vm.alertTip();
@@ -354,8 +354,20 @@
     padding: 0;
   }
 
+  .count-down-time-wrap .el-dialog {
+    border: 4px solid #BBBBBB;
+    border-radius: 2px;
+    width: 260px;
+    height: 120px;
+    box-shadow: 0 2px 30px rgba(0, 0, 0, 0.1);
+  }
+
   .count-down-time-wrap .el-dialog__body {
     padding: 10px 0;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    background: rgb(244, 244, 244);
   }
 
   .tip-alert-content {
@@ -368,13 +380,21 @@
 
   .tip-alert-content span {
     display: block;
-    font-size: 14px;
+    /* font-size: 14px; */
     font-weight: bold;
+    /* font-family: PingFangSC-Medium; */
+    font-size: 12px;
+    color: #191919;
   }
 
   .tip-alert-content span.tip-alert-content-issue {
     color: #F60;
-    font-size: 16px;
+    /* font-size: 16px; */
+    /* font-family: PingFangSC-Medium; */
+    font-size: 18px;
+    color: #C83A4C;
+    margin: 5px 0;
+    font-weight: bold;
   }
 </style>
 

@@ -44,7 +44,7 @@
           <th>用户属性</th>
           <th>充值总额</th>
           <th>提现总额</th>
-          <th>投资总额</th>
+          <th>有效投注</th>
           <th>派奖总额</th>
           <th>投注返点</th>
           <!-- <th>游戏盈亏</th> -->
@@ -58,7 +58,7 @@
           <td>{{getUserType(item.username[0].status,item.loginname)}}</td>
           <td>{{item.recharge ? formatMoney(item.recharge) :'0'}}</td>
           <td>{{item.withdrawal ? formatMoney(item.withdrawal) :'0'}}</td>
-          <td>{{item.bid_total ? formatMoney(item.bid_total) :'0'}}</td>
+          <td>{{item.bid_valid ? formatMoney(item.bid_valid) :'0'}}</td>
           <td>{{item.reward ? formatMoney(item.reward) :'0'}}</td>
           <td>{{item.rebate ? formatMoney(item.rebate) :'0'}}</td>
           <!-- <td class="failed">{{item.profit}}</td> -->

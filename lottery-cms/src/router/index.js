@@ -93,14 +93,11 @@ const rechargeLog = r => require.ensure([], () => r(require('@/components/income
 const paymentBank = r => require.ensure([], () => r(require('@/components/incomeManager/paymentBank')), 'chunkname-paymentBank')
 const paymentWx = r => require.ensure([], () => r(require('@/components/incomeManager/paymentWx')), 'chunkname-paymentWx')
 const thirdpartyManager = r => require.ensure([], () => r(require('@/components/incomeManager/thirdpartyManager')), 'chunkname-thirdpartyManager')
+const tradeAccountLog = r => require.ensure([], () => r(require('@/components/incomeManager/tradeAccountLog')), 'chunkname-tradeAccountLog')
 
 // 出款管理
 const outcomeManager = r => require.ensure([], () => r(require('@/components/outcomeManager/outcomeManager')), 'chunkname-outcomeManager')
 const outcomeLog = r => require.ensure([], () => r(require('@/components/outcomeManager/outcomeLog')), 'chunkname-outcomeLog')
-
-// 收款账户管理
-const tradeAccountManager = r => require.ensure([], () => r(require('@/components/tradeAccountManager/tradeAccountManager')), 'chunkname-tradeAccountManager')
-const tradeAccountLog = r => require.ensure([], () => r(require('@/components/tradeAccountManager/tradeAccountLog')), 'chunkname-tradeAccountLog')
 
 // 出入款设置
 const outInSetManager = r => require.ensure([], () => r(require('@/components/outInSet/outInSetManager')), 'chunkname-outInSetManager')
@@ -577,6 +574,11 @@ export default new Router({
               path: 'thirdpartyManager',
               name: 'thirdpartyManager',
               component: thirdpartyManager
+            },
+            {
+              path: 'tradeAccountLog',
+              name: 'tradeAccountLog',
+              component: tradeAccountLog
             }
           ]
         },
@@ -588,16 +590,6 @@ export default new Router({
             path: 'outcomeLog',
             name: 'outcomeLog',
             component: outcomeLog
-          }]
-        },
-        // 收款账户管理
-        {
-          path: 'tradeAccountManager',
-          component: tradeAccountManager,
-          children: [{
-            path: 'tradeAccountLog',
-            name: 'tradeAccountLog',
-            component: tradeAccountLog
           }]
         },
         // 出入款设置

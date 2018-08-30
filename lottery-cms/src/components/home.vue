@@ -14,8 +14,8 @@
         <el-aside width="248px">
           <el-row class="tac">
             <el-col>
-              <el-menu :default-active="activeIndex" class="el-menu-vertical-demo" background-color="#1e1e28" text-color="#8989A1"
-                :unique-opened="onlyOneMenuOpen" @select="handleSelect" active-text-color="#ffd04b">
+              <el-menu :default-active="activeIndex" class="el-menu-vertical-demo" background-color="#1e1e28" text-color="#8989A1" :unique-opened="onlyOneMenuOpen"
+                @select="handleSelect" active-text-color="#ffd04b">
                 <el-submenu v-if="item.child.length>0" v-for="(item, index) in menuData" :key="index" :index="index.toString()">
                   <template slot="title">
                     <span class="check-box" :style="{'border': '2px solid '+colors[index]}"></span>
@@ -145,7 +145,7 @@
         setInterval(vm.getCurrentTime, 1000)
       },
       getCurrentTime() {
-        this.currentTime = moment(new Date()).format('HH:mm');
+        this.currentTime = moment(new Date()).utcOffset(8).format('HH:mm');
       },
       handleSlideNav() {
         this.showNav = !this.showNav;

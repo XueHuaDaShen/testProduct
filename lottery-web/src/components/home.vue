@@ -29,7 +29,7 @@
       }
     },
     watch: {
-      '$route' (to, from) {
+      '$route'(to, from) {
         if (to.name === 'home') {
           localStorage.setItem('bodyBG', 'home');
           this.bodyBG = 'home';
@@ -86,7 +86,7 @@
     background: url('../img/default-bj.png') no-repeat;
     background-size: 100% 100%;
     padding: 20px 0;
-    padding-top:28px;
+    padding-top: 28px;
   }
 
   .content {
@@ -94,36 +94,36 @@
     margin: 0 auto;
   }
 
-  .wrap-home{
-    padding-top:0;
+  .wrap-home {
+    padding-top: 0;
   }
 
   .wrap-lhc {
     width: 100%;
     color: #fff;
-    background: url('../img/liuhecai-bj.jpg') no-repeat;
-    background-size: 100% 100%;
+    background: url('../img/liuhecai-bj.png') no-repeat;
+    background-size: cover;
   }
 
   .wrap-syxw {
     width: 100%;
     color: #fff;
     background: url('../img/shiyixuanwu-bj.png') no-repeat;
-    background-size: 100% 100%;
+    background-size: cover;
   }
 
   .wrap-ks {
     width: 100%;
     color: #fff;
     background: url('../img/ks-bj.png') no-repeat;
-    background-size: 100% 100%;
+    background-size: cover;
   }
 
   .wrap-pks {
     width: 100%;
     color: #fff;
     background: url('../img/pks-bj.png') no-repeat;
-    background-size: 100% 100%;
+    background-size: cover;
   }
 
   /* .wrap-pks {

@@ -57,7 +57,7 @@
                 <el-input type="text" v-model="ruleForm.message" placeholder="备注" style="width:300px"></el-input>
               </div> -->
                 <div class="tl content-row clearfix">
-                  <el-button type="primary" @click="recharge()" class="yes fr">确认提出</el-button>
+                  <el-button type="primary" @click="recharge()" class="yes fr" :disabled="disabled">确认提出</el-button>
                 </div>
               </div>
             </div>
@@ -77,6 +77,7 @@
     name: 'rgtc',
     data() {
       return {
+        disabled: false,
         index1: 0,
         index2: 0,
         titleName: '人工提出',
@@ -136,7 +137,7 @@
       const menus = JSON.parse(localStorage.getItem('menus'));
       menus[this.index1].child[this.index2].child.filter((v, vi) => {
         let o = new Object();
-        if(v.url === 'rgtc'){
+        if (v.url === 'rgtc') {
           this.titleName = v.menu_name;
         }
         o.title = v.menu_name;
@@ -245,6 +246,10 @@
       // 充值
       recharge() {
         const vm = this;
+        vm.disabled = true;
+        setTimeout(() => {
+          vm.disabled = false;
+        }, 1000);
         if (!vm.ruleForm.loginname) {
           this.$message({
             message: '请先输入账号',

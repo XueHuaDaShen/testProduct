@@ -44,8 +44,8 @@
         </el-table-column>
         <el-table-column align="center" label="展现状态">
           <template slot-scope="scope">
-            <el-switch v-model="scope.row.enabled" @change="enableChange(scope.row.enabled)" :active-value="1" :inactive-value="0" active-color="#2D996E"
-              inactive-color="#C83A4C">
+            <el-switch v-model="scope.row.enabled" @change="enableChange(scope.row.enabled)" :active-value="1"
+              :inactive-value="0" active-color="#2D996E" inactive-color="#C83A4C">
             </el-switch>
           </template>
         </el-table-column>
@@ -59,8 +59,9 @@
         </el-table-column>
       </el-table>
       <div class="fenye">
-        <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="pageNum" :page-size="pageSize"
-          :page-sizes="[10, 20, 40, 80,160,350,700,1000]" layout="total, sizes, prev, pager, next, jumper" :total="total">
+        <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="pageNum"
+          :page-size="pageSize" :page-sizes="[10, 20, 40, 80,160,350,700,1000]" layout="total, sizes, prev, pager, next, jumper"
+          :total="total">
         </el-pagination>
       </div>
     </div>
@@ -95,8 +96,9 @@
           <div class="form-row file-inner">
             <span class="exp">轮播图片</span>
             <span class="exp-after">:</span>
-            <el-upload class="upload-demo" :action="form.activity_photo.action" :on-change="handleAcPhotoChange" :file-list="form.activity_photo.filterList"
-              :list-type="form.activity_photo.listStyle" :limit="form.activity_photo.limit" :auto-upload="false" :on-remove="handleRemoveAc">
+            <el-upload class="upload-demo" :action="form.activity_photo.action" :on-change="handleAcPhotoChange"
+              :file-list="form.activity_photo.filterList" :list-type="form.activity_photo.listStyle" :limit="form.activity_photo.limit"
+              :auto-upload="false" :on-remove="handleRemoveAc">
               <el-button size="small" class="small edit" style="text-align:left">上传</el-button>
             </el-upload>
             <span class="tip-after">请上传100x100的图片尺寸，格式为png/jpeg/jpg</span>
@@ -323,7 +325,7 @@
       const menus = JSON.parse(localStorage.getItem('menus'));
       menus[this.index1].child[this.index2].child.filter((v, vi) => {
         let o = new Object();
-        if(v.url === 'activityList'){
+        if (v.url === 'activityList') {
           this.titleName = v.menu_name;
         }
         o.title = v.menu_name;
