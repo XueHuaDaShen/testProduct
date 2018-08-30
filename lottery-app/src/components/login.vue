@@ -150,7 +150,7 @@ export default {
           vm.tip = '';
         }, vm.tipTime*1000);
         return false;
-      } else if(!vm.isMomeryed && !regexpPsd(this.loginName)) {
+      } else if(!vm.isMomeryed && !regexpPsd(this.loginPwd)) {
         this.tip = '密码为6-16位字符，只能且必须包含英文字母或数字（不允许连续三位相同）'
         setTimeout(() => {
           vm.tip = '';
@@ -268,11 +268,11 @@ export default {
       }
     },
     toRegFn() {
-      // let reg = 'http://m.8bw.vip/#/reg/0qug9eawf7';
-      // location.href = reg;
-      this.$router.push({
-        name: 'reg'
-      })
+      let reg = 'http://m.8bw.vip/#/reg/0qug9eawf7';
+      location.href = reg;
+      // this.$router.push({
+      //   name: 'reg'
+      // })
     },
   },
   beforeDestroy() {},
