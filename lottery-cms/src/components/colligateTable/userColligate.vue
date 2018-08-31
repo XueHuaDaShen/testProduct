@@ -36,6 +36,9 @@
             </el-select>
           </div> -->
           <div class="search-inner-wrap">
+            <el-checkbox v-model="dateChecked" :true-label="0" :false-label="1">累计显示</el-checkbox>
+          </div>
+          <div class="search-inner-wrap">
             <label>查询时间：</label>
             <el-date-picker v-model="searchTime" type="datetimerange" align="right" unlink-panels range-separator="至"
               start-placeholder="开始日期" end-placeholder="结束日期" :picker-options="pickerOptions" :default-time="pickerDefaultTime">
@@ -58,7 +61,8 @@
       </div>
     </div>
     <div class="data-table" v-loading="loading">
-      <el-table :data="userColligateListData" header-row-class-name="table-header" stripe border style="width: 100%;font-size:12px;">
+      <el-table :data="userColligateListData" header-row-class-name="table-header" stripe border style="width: 100%;font-size:12px;"
+        max-height="450">
         <el-table-column align="center" label="用户名" width="126">
           <template slot-scope="scope">
             <el-button type="text" @click="getUserInfoFn(scope.row)">{{scope.row.loginname}}</el-button>
@@ -120,49 +124,68 @@
     },
     data() {
       return {
+        dateChecked: 1,
         index1: 0,
         index2: 0,
-        titleName: '会员报表',
+        titleName: "会员报表",
         routerArr: [{
-            title: '会员报表',
-            name: 'userColligate',
+            title: "会员报表",
+            name: "userColligate",
             checked: false
           },
           {
-            title: '代理报表',
-            name: 'teamColligate',
+            title: "代理报表",
+            name: "teamColligate",
             checked: false
           }
         ],
         loading: false,
         pageNum: 1,
-        pageSize: 10,
-        total: 10,
+        pageSize: 40,
+        total: 0,
         userColligateListData: [],
         userid: "",
         loginname: "",
         username: "",
         searchTime: "",
-        pickerDefaultTime: ['00:00:00', '23:59:59'],
+        pickerDefaultTime: ["00:00:00", "23:59:59"],
         pickerOptions: {
           shortcuts: [{
               text: "昨天",
               onClick(picker) {
                 const end = new Date();
                 const start = new Date();
-                start.setTime(new Date(new Date(new Date().toLocaleDateString()).getTime()) - 3600 * 1000 * 24 * 1);
-                end.setTime(new Date(new Date(new Date().toLocaleDateString()).getTime() + 24 * 60 * 60 * 1000 - 1) -
-                  3600 * 1000 * 24 * 1);
+                start.setTime(
+                  new Date(new Date(new Date().toLocaleDateString()).getTime()) -
+                  3600 * 1000 * 24 * 1
+                );
+                end.setTime(
+                  new Date(
+                    new Date(new Date().toLocaleDateString()).getTime() +
+                    24 * 60 * 60 * 1000 -
+                    1
+                  ) -
+                  3600 * 1000 * 24 * 1
+                );
                 // console.log("start", start.toLocaleString());
                 // console.log("end", end.toLocaleString());
                 picker.$emit("pick", [start, end]);
               }
-            }, {
+            },
+            {
               text: "今天",
               onClick(picker) {
                 const end = new Date();
-                const start = new Date(new Date(new Date().toLocaleDateString()).getTime());
-                end.setTime(new Date(new Date(new Date().toLocaleDateString()).getTime() + 24 * 60 * 60 * 1000 - 1));
+                const start = new Date(
+                  new Date(new Date().toLocaleDateString()).getTime()
+                );
+                end.setTime(
+                  new Date(
+                    new Date(new Date().toLocaleDateString()).getTime() +
+                    24 * 60 * 60 * 1000 -
+                    1
+                  )
+                );
                 // console.log("start", start.toLocaleString());
                 // console.log("end", end.toLocaleString());
                 picker.$emit("pick", [start, end]);
@@ -176,14 +199,28 @@
                 let nowDay = now.getDate(); //当前日
                 let nowMonth = now.getMonth(); //当前月
                 let nowYear = now.getFullYear(); //当前年
-                let getWeekStartDate = new Date(nowYear, nowMonth, nowDay - nowDayOfWeek);
-                let getWeekEndDate = new Date(new Date(new Date(nowYear, nowMonth, nowDay + (6 - nowDayOfWeek)).toLocaleDateString())
-                  .getTime() + 24 * 60 * 60 * 1000 - 1);
+                let getWeekStartDate = new Date(
+                  nowYear,
+                  nowMonth,
+                  nowDay - nowDayOfWeek
+                );
+                let getWeekEndDate = new Date(
+                  new Date(
+                    new Date(
+                      nowYear,
+                      nowMonth,
+                      nowDay + (6 - nowDayOfWeek)
+                    ).toLocaleDateString()
+                  ).getTime() +
+                  24 * 60 * 60 * 1000 -
+                  1
+                );
                 // console.log("start", getWeekStartDate.toLocaleString());
                 // console.log("end", getWeekEndDate.toLocaleString());
                 picker.$emit("pick", [getWeekStartDate, getWeekEndDate]);
               }
-            }, {
+            },
+            {
               text: "上周",
               onClick(picker) {
                 let now = new Date();
@@ -191,15 +228,31 @@
                 let nowDay = now.getDate(); //当前日
                 let nowMonth = now.getMonth(); //当前月
                 let nowYear = now.getFullYear(); //当前年
-                let getWeekStartDate = new Date(new Date(new Date(nowYear, nowMonth, nowDay - nowDayOfWeek).toLocaleDateString())
-                  .getTime() -
-                  3600 * 1000 * 24 * 7);
-                let getWeekEndDate = new Date(new Date(new Date(nowYear, nowMonth, nowDay + (6 - nowDayOfWeek)).toLocaleDateString())
-                  .getTime() + 24 * 60 * 60 * 1000 - 1 - 3600 * 1000 * 24 * 7);
+                let getWeekStartDate = new Date(
+                  new Date(
+                    new Date(
+                      nowYear,
+                      nowMonth,
+                      nowDay - nowDayOfWeek
+                    ).toLocaleDateString()
+                  ).getTime() -
+                  3600 * 1000 * 24 * 7
+                );
+                let getWeekEndDate = new Date(
+                  new Date(
+                    new Date(
+                      nowYear,
+                      nowMonth,
+                      nowDay + (6 - nowDayOfWeek)
+                    ).toLocaleDateString()
+                  ).getTime() +
+                  24 * 60 * 60 * 1000 -
+                  1 -
+                  3600 * 1000 * 24 * 7
+                );
                 // console.log("start", getWeekStartDate.toLocaleString());
                 // console.log("end", getWeekEndDate.toLocaleString());
-                picker
-                  .$emit("pick", [getWeekStartDate, getWeekEndDate]);
+                picker.$emit("pick", [getWeekStartDate, getWeekEndDate]);
               }
             },
             {
@@ -212,10 +265,16 @@
                 let getMonthStartDate = new Date(nowYear, nowMonth, 1);
                 var monthStartDate = new Date(nowYear, nowMonth, 1);
                 var monthEndDate = new Date(nowYear, nowMonth + 1, 1);
-                var days = (monthEndDate - monthStartDate) / (1000 * 60 * 60 * 24);
+                var days =
+                  (monthEndDate - monthStartDate) / (1000 * 60 * 60 * 24);
                 //获得本月的结束日期
-                let getMonthEndDate = new Date(new Date(new Date(nowYear, nowMonth, days).toLocaleDateString()).getTime() +
-                  24 * 60 * 60 * 1000 - 1);
+                let getMonthEndDate = new Date(
+                  new Date(
+                    new Date(nowYear, nowMonth, days).toLocaleDateString()
+                  ).getTime() +
+                  24 * 60 * 60 * 1000 -
+                  1
+                );
                 // console.log("start", getMonthStartDate.toLocaleString());
                 // console.log("end", getMonthEndDate.toLocaleString());
                 picker.$emit("pick", [getMonthStartDate, getMonthEndDate]);
@@ -224,11 +283,28 @@
             {
               text: "上月",
               onClick(picker) {
-                var firstdate = new Date(new Date().getFullYear(), new Date().getMonth() - 1, 1);
+                var firstdate = new Date(
+                  new Date().getFullYear(),
+                  new Date().getMonth() - 1,
+                  1
+                );
                 var date = new Date();
-                var day = new Date(date.getFullYear(), date.getMonth(), 0).getDate();
-                var enddate = new Date(new Date(new Date(new Date().getFullYear(), new Date().getMonth() - 1, day).toLocaleDateString())
-                  .getTime() + 24 * 60 * 60 * 1000 - 1);
+                var day = new Date(
+                  date.getFullYear(),
+                  date.getMonth(),
+                  0
+                ).getDate();
+                var enddate = new Date(
+                  new Date(
+                    new Date(
+                      new Date().getFullYear(),
+                      new Date().getMonth() - 1,
+                      day
+                    ).toLocaleDateString()
+                  ).getTime() +
+                  24 * 60 * 60 * 1000 -
+                  1
+                );
                 // console.log("start", firstdate.toLocaleString());
                 // console.log("end", enddate.toLocaleString());
                 picker.$emit("pick", [firstdate, enddate]);
@@ -237,8 +313,15 @@
             {
               text: "最近一周",
               onClick(picker) {
-                const end = new Date(new Date(new Date().toLocaleDateString()).getTime() + 24 * 60 * 60 * 1000 - 1);
-                const start = new Date(new Date(new Date().toLocaleDateString()).getTime() - 3600 * 1000 * 24 * 7);
+                const end = new Date(
+                  new Date(new Date().toLocaleDateString()).getTime() +
+                  24 * 60 * 60 * 1000 -
+                  1
+                );
+                const start = new Date(
+                  new Date(new Date().toLocaleDateString()).getTime() -
+                  3600 * 1000 * 24 * 7
+                );
                 // console.log("start", start.toLocaleString());
                 // console.log("end", end.toLocaleString());
                 picker.$emit("pick", [start, end]);
@@ -247,8 +330,15 @@
             {
               text: "最近一个月",
               onClick(picker) {
-                const end = new Date(new Date(new Date().toLocaleDateString()).getTime() + 24 * 60 * 60 * 1000 - 1);
-                const start = new Date(new Date(new Date().toLocaleDateString()).getTime() - 3600 * 1000 * 24 * 30);
+                const end = new Date(
+                  new Date(new Date().toLocaleDateString()).getTime() +
+                  24 * 60 * 60 * 1000 -
+                  1
+                );
+                const start = new Date(
+                  new Date(new Date().toLocaleDateString()).getTime() -
+                  3600 * 1000 * 24 * 30
+                );
                 // console.log("start", start.toLocaleString());
                 // console.log("end", end.toLocaleString());
                 picker.$emit("pick", [start, end]);
@@ -257,8 +347,15 @@
             {
               text: "最近三个月",
               onClick(picker) {
-                const end = new Date(new Date(new Date().toLocaleDateString()).getTime() + 24 * 60 * 60 * 1000 - 1);
-                const start = new Date(new Date(new Date().toLocaleDateString()).getTime() - 3600 * 1000 * 24 * 90);
+                const end = new Date(
+                  new Date(new Date().toLocaleDateString()).getTime() +
+                  24 * 60 * 60 * 1000 -
+                  1
+                );
+                const start = new Date(
+                  new Date(new Date().toLocaleDateString()).getTime() -
+                  3600 * 1000 * 24 * 90
+                );
                 // console.log("start", start.toLocaleString());
                 // console.log("end", end.toLocaleString());
                 picker.$emit("pick", [start, end]);
@@ -279,7 +376,8 @@
         testUser: [{
             value: "",
             label: "全显示"
-          }, {
+          },
+          {
             value: "0",
             label: "不显示"
           },
@@ -289,42 +387,42 @@
           }
         ],
         orderArr: [{
-            title: '充值',
-            code: 'recharge'
+            title: "充值",
+            code: "recharge"
           },
           {
-            title: '提现',
-            code: 'withdrawal'
+            title: "提现",
+            code: "withdrawal"
           },
           {
-            title: '有效投注',
-            code: 'bid_valid'
+            title: "有效投注",
+            code: "bid_valid"
           },
           {
-            title: '返奖',
-            code: 'rebate'
+            title: "返奖",
+            code: "rebate"
           },
           {
-            title: '盈利',
-            code: 'profit'
+            title: "盈利",
+            code: "profit"
           },
           {
-            title: '游戏盈利',
-            code: 'game_profit'
-          },
-        ],
-        descArr: [{
-            title: '升序',
-            val: '1'
-          },
-          {
-            title: '降序',
-            val: '-1'
+            title: "游戏盈利",
+            code: "game_profit"
           }
         ],
-        order: '',
-        desc: '',
-        is_test: '0',
+        descArr: [{
+            title: "升序",
+            val: "1"
+          },
+          {
+            title: "降序",
+            val: "-1"
+          }
+        ],
+        order: "",
+        desc: "",
+        is_test: "0",
         status: "",
         order_no: "",
         duration: 1000,
@@ -338,24 +436,24 @@
       let query = this.$route.query;
       this.index1 = Number(query.index1);
       this.index2 = Number(query.index2);
-      const menus = JSON.parse(localStorage.getItem('menus'));
+      const menus = JSON.parse(localStorage.getItem("menus"));
       menus[this.index1].child[this.index2].child.filter((v, vi) => {
         let o = new Object();
-        if (v.url === 'userColligate') {
+        if (v.url === "userColligate") {
           this.titleName = v.menu_name;
         }
         o.title = v.menu_name;
         o.name = v.url;
         o.checked = false;
         this.routerArr.push(o);
-      })
+      });
       this.routerArr.filter(v => {
         if (this.titleName === v.title) {
-          v.checked = true
+          v.checked = true;
         } else {
-          v.checked = false
+          v.checked = false;
         }
-      })
+      });
       if (this.$route.query && this.$route.query.param) {
         this.username = this.$route.query.param;
       }
@@ -369,7 +467,7 @@
             index1: this.index1,
             index2: this.index2
           }
-        })
+        });
         // console.log(name)
       },
       succee() {
@@ -400,11 +498,11 @@
         }
       },
       formatTestUser(row, column, cellValue) {
-        let t = '';
+        let t = "";
         if (cellValue === 1) {
-          t = '是'
+          t = "是";
         } else {
-          t = '否'
+          t = "否";
         }
         return t;
         // return moment(cellValue).format('YYYY-MM-DD')
@@ -413,7 +511,7 @@
         if (cellValue) {
           return Number(cellValue).toFixed(2);
         }
-        return "--"
+        return "--";
       },
       handleSizeChange(val) {
         // console.log(`每页 ${val} 条`);
@@ -440,9 +538,11 @@
       },
       formatTime(row, column, cellValue) {
         if (cellValue) {
-          return moment(cellValue).utcOffset(8).format("YYYY-MM-DD");
+          return moment(cellValue)
+            .utcOffset(8)
+            .format("YYYY-MM-DD");
         }
-        return "--"
+        return "--";
       },
       getUserColligateList() {
         const vm = this;
@@ -463,7 +563,8 @@
             endTime: endTime,
             is_test: vm.is_test,
             order: vm.order,
-            desc: Number(vm.desc)
+            desc: Number(vm.desc),
+            date: vm.dateChecked
             // status: vm.status,
           },
           success => {
@@ -493,8 +594,9 @@
         this.status = "";
         this.order_no = "";
         this.is_test = "0";
-        this.order = '';
-        this.desc = '';
+        this.order = "";
+        this.desc = "";
+        this.dateChecked = 1;
       },
       handleSearch() {
         this.pageNum = 1;

@@ -519,6 +519,8 @@
       this.dialogForm.salary.group = Number(localStorage.getItem('refund'));
       // this.setTimeToday();
       this.handleSearch();
+      this.$store.dispatch('setbodyBG', 'no-bg');
+      localStorage.setItem('bodyBG', 'no-bg');
     }
   }
 </script>

@@ -56,8 +56,8 @@
         </el-table-column>
         <el-table-column label="是否开启" align="center">
           <template slot-scope="scope">
-            <el-switch v-model="scope.row.status" @change="enableChange(scope.row.status)" :active-value="elswitch.activeValue" :inactive-value="elswitch.inactiveValue"
-              active-color="#2D996E" inactive-color="#C83A4C">
+            <el-switch v-model="scope.row.status" @change="enableChange(scope.row.status)" :active-value="elswitch.activeValue"
+              :inactive-value="elswitch.inactiveValue" active-color="#2D996E" inactive-color="#C83A4C">
             </el-switch>
           </template>
         </el-table-column>
@@ -68,8 +68,8 @@
         </el-table-column>
       </el-table>
       <div class="fenye">
-        <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="pageNum" :page-size="pageSize"
-          :total="total" :page-sizes="[10, 20, 40, 80,160,350,700,1000]" layout="total, sizes, prev, pager, next, jumper">
+        <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="pageNum"
+          :page-size="pageSize" :total="total" :page-sizes="[10, 20, 40, 80,160,350,700,1000]" layout="total, sizes, prev, pager, next, jumper">
         </el-pagination>
       </div>
     </div>
@@ -111,8 +111,9 @@
           <div class="form-row file-inner">
             <span class="exp">二维码</span>
             <span class="exp-after">:</span>
-            <el-upload class="upload-demo" :action="createForm.qr_code.action" :on-change="handleCreateUploadChange" :file-list="createForm.qr_code.filterList"
-              :list-type="createForm.qr_code.listStyle" :limit="createForm.qr_code.limit" :auto-upload="false" :on-remove="handleCreateRemoveAc">
+            <el-upload class="upload-demo" :action="createForm.qr_code.action" :on-change="handleCreateUploadChange"
+              :file-list="createForm.qr_code.filterList" :list-type="createForm.qr_code.listStyle" :limit="createForm.qr_code.limit"
+              :auto-upload="false" :on-remove="handleCreateRemoveAc">
               <el-button size="small" class="small edit">上传</el-button>
             </el-upload>
           </div>
@@ -163,8 +164,9 @@
           <div class="form-row file-inner">
             <span class="exp">二维码</span>
             <span class="exp-after">:</span>
-            <el-upload class="upload-demo" :action="updateForm.qr_code.action" :on-change="handleUpdateUploadChange" :file-list="updateForm.qr_code.filterList"
-              :list-type="updateForm.qr_code.listStyle" :limit="updateForm.qr_code.limit" :auto-upload="false" :on-remove="handleUpdateRemoveAc">
+            <el-upload class="upload-demo" :action="updateForm.qr_code.action" :on-change="handleUpdateUploadChange"
+              :file-list="updateForm.qr_code.filterList" :list-type="updateForm.qr_code.listStyle" :limit="updateForm.qr_code.limit"
+              :auto-upload="false" :on-remove="handleUpdateRemoveAc">
               <el-button size="small" class="small edit">上传</el-button>
             </el-upload>
           </div>
@@ -210,8 +212,13 @@
             checked: false
           },
           {
-            title: '入款记录',
+            title: 'BWIN入款记录',
             name: 'rechargeLog',
+            checked: false
+          },
+          {
+            title: '第三方入款记录',
+            name: 'thirdRechargeLog',
             checked: false
           },
           {
@@ -225,8 +232,8 @@
         loading: false,
         opText: "",
         pageNum: 1,
-        pageSize: 10,
-        total: 10,
+        pageSize: 40,
+        total: 0,
         userid: "",
         loginname: "",
         status: {

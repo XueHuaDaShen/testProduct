@@ -1,7 +1,8 @@
 <!-- 支付宝 -->
 <template>
   <div class="ali-wrap">
-    <DialogUserInfo v-if="dialog" :userid="userid" :loginname="loginname" @sendDiglogShow="handleDialogShow" @closeDialog="handleCloseDialog"></DialogUserInfo>
+    <DialogUserInfo v-if="dialog" :userid="userid" :loginname="loginname" @sendDiglogShow="handleDialogShow"
+      @closeDialog="handleCloseDialog"></DialogUserInfo>
     <div class="content-header">
       <div class="title">
         <h2>{{titleName}}</h2>
@@ -20,7 +21,8 @@
       </div>
     </div>
     <div class="data-table" v-loading="loading">
-      <el-table :data="usercountDataList" header-row-class-name="table-header" stripe border style="width: 100%" @cell-mouse-enter="mouseOver">
+      <el-table :data="usercountDataList" header-row-class-name="table-header" stripe border style="width: 100%"
+        @cell-mouse-enter="mouseOver">
         <el-table-column align="center" label="名称">
           <template slot-scope="scope">
             <el-button type="text" @click="getUserInfoFn(scope.row)">{{scope.row.name}}</el-button>
@@ -32,7 +34,8 @@
         </el-table-column>
         <el-table-column label="是否开启" align="center">
           <template slot-scope="scope">
-            <el-switch v-model="scope.row.status" @change="enableChange(scope.row.status)" :active-value="elswitch.activeValue" :inactive-value="elswitch.inactiveValue">
+            <el-switch v-model="scope.row.status" @change="enableChange(scope.row.status)" :active-value="elswitch.activeValue"
+              :inactive-value="elswitch.inactiveValue">
             </el-switch>
           </template>
         </el-table-column>
@@ -43,8 +46,8 @@
         </el-table-column>
       </el-table>
       <div class="fenye">
-        <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="pageNum" :page-size="pageSize"
-          layout="total, prev, pager, next, jumper" :total="total">
+        <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="pageNum"
+          :page-size="pageSize" layout="total, prev, pager, next, jumper" :total="total">
         </el-pagination>
       </div>
     </div>
@@ -123,8 +126,8 @@
         loading: false,
         opText: '',
         pageNum: 1,
-        pageSize: 10,
-        total: 10,
+        pageSize: 40,
+        total: 0,
         userid: '',
         loginname: '',
         usercountDataList: [],
@@ -177,7 +180,7 @@
       const menus = JSON.parse(localStorage.getItem('menus'));
       menus[this.index1].child[this.index2].child.filter((v, vi) => {
         let o = new Object();
-        if(v.url === 'paymentAli'){
+        if (v.url === 'paymentAli') {
           this.titleName = v.menu_name;
         }
         o.title = v.menu_name;

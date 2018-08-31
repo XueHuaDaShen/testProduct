@@ -21,8 +21,8 @@
           </div>
           <div class="search-inner-wrap">
             <label>开户银行：</label>
-            <el-select v-model="form.bank.selected" clearable placeholder="开户银行" class="small" @focus="getBankList()" :loading="form.bank.loading"
-              :loading-text="form.bank.loadingText">
+            <el-select v-model="form.bank.selected" clearable placeholder="开户银行" class="small" @focus="getBankList()"
+              :loading="form.bank.loading" :loading-text="form.bank.loadingText">
               <el-option v-for="item in form.bank.options" :key="item._id" :label="item.bank_name" :value="item.bank_name">
               </el-option>
             </el-select>
@@ -46,7 +46,8 @@
       </div>
     </div>
     <div class="data-table" v-loading="loading">
-      <el-table :data="list" header-row-class-name="table-header" stripe border style="width: 100%;font-size:12px;">
+      <el-table :data="list" header-row-class-name="table-header" stripe border style="width: 100%;font-size:12px;"
+        max-height="450">
         <el-table-column align="center" label="用户名" width="126">
           <template slot-scope="scope">
             <el-button type="text" size="small" @click="getUserInfoFn(scope.row)">{{getLoginName(scope.row)}}</el-button>
@@ -83,8 +84,9 @@
         </el-table-column>
       </el-table>
       <div class="fenye">
-        <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="pageIndex" :page-size="pageSize"
-          :page-sizes="[10, 20, 40, 80,160,350,700,1000]" layout="total, sizes, prev, pager, next, jumper" :total="total">
+        <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="pageIndex"
+          :page-size="pageSize" :page-sizes="[10, 20, 40, 80,160,350,700,1000]" layout="total, sizes, prev, pager, next, jumper"
+          :total="total">
         </el-pagination>
       </div>
     </div>
@@ -152,7 +154,7 @@
         totalPageNum: 0, //总页数
         total: 0, //总条数
         pageIndex: 1, //当前页
-        pageSize: 10, //单页条数
+        pageSize: 40, //单页条数
       };
     },
     created() {
@@ -163,7 +165,7 @@
       const menus = JSON.parse(localStorage.getItem('menus'));
       menus[this.index1].child[this.index2].child.filter((v, vi) => {
         let o = new Object();
-        if(v.url === 'bankList'){
+        if (v.url === 'bankList') {
           this.titleName = v.menu_name;
         }
         o.title = v.menu_name;

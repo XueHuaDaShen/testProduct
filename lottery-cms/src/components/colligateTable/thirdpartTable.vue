@@ -1,6 +1,7 @@
 <template>
   <div class="rechargeLot-wrap el-custom">
-    <DialogUserInfo v-if="dialog" :loginname="loginname" :userid="userid" @sendDiglogShow="handleDialogShow" @closeDialog="handleCloseDialog"></DialogUserInfo>
+    <DialogUserInfo v-if="dialog" :loginname="loginname" :userid="userid" @sendDiglogShow="handleDialogShow"
+      @closeDialog="handleCloseDialog"></DialogUserInfo>
     <div class="content-header">
       <div class="title">
         <h2>{{titleName}}</h2>
@@ -36,9 +37,12 @@
             </el-select>
           </div>
           <div class="search-inner-wrap">
+            <el-checkbox v-model="dateChecked" :true-label="0" :false-label="1" size="small">累计显示</el-checkbox>
+          </div>
+          <div class="search-inner-wrap">
             <label>查找时间：</label>
-            <el-date-picker v-model="searchTime" type="datetimerange" align="right" unlink-panels range-separator="至" start-placeholder="开始日期"
-              end-placeholder="结束日期" :picker-options="pickerOptions" :default-time="pickerDefaultTime">
+            <el-date-picker v-model="searchTime" type="datetimerange" align="right" unlink-panels range-separator="至"
+              start-placeholder="开始日期" end-placeholder="结束日期" :picker-options="pickerOptions" :default-time="pickerDefaultTime">
             </el-date-picker>
           </div>
           <!-- <div class="search-inner-wrap">
@@ -65,7 +69,8 @@
       </div>
     </div>
     <div class="data-table" v-loading="loading">
-      <el-table :data="lotteryColligateListData" header-row-class-name="table-header" stripe border style="width: 100%;font-size:12px;">
+      <el-table :data="lotteryColligateListData" header-row-class-name="table-header" stripe border style="width: 100%;font-size:12px;"
+        max-height="450">
         <!-- <el-table-column align="center" label="用户名">
           <template slot-scope="scope">
             <el-button type="text" @click="getUserInfoFn(scope.row)">{{scope.row.loginname}}</el-button>
@@ -106,8 +111,9 @@
         </el-table-column> -->
       </el-table>
       <div class="fenye">
-        <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="pageNum" :page-size="pageSize"
-          :page-sizes="[10, 20, 40, 80,160,350,700,1000]" layout="total, sizes, prev, pager, next, jumper" :total="total">
+        <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="pageNum"
+          :page-size="pageSize" :page-sizes="[10, 20, 40, 80,160,350,700,1000]" layout="total, sizes, prev, pager, next, jumper"
+          :total="total">
         </el-pagination>
       </div>
     </div>
@@ -129,6 +135,7 @@
     },
     data() {
       return {
+        dateChecked: 1,
         index1: 0,
         index2: 0,
         titleName: '第三方游戏',
@@ -193,7 +200,7 @@
         desc: '',
         loading: false,
         pageNum: 1,
-        pageSize: 10,
+        pageSize: 40,
         total: 0,
         lotteryColligateListData: [],
         userid: "",
@@ -484,6 +491,7 @@
           is_test: vm.is_test,
           order: vm.order,
           platform: vm.platform,
+          date: vm.dateChecked
         };
         if (vm.desc) {
           data['desc'] = Number(vm.desc);
@@ -521,6 +529,7 @@
         this.desc = "";
         this.is_test = "0";
         this.platform = "";
+        this.dateChecked = 1;
       },
       handleSearch() {
         this.pageNum = 1;

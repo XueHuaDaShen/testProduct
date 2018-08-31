@@ -284,13 +284,13 @@
         }
       },
       //赋值filter.bankid
-      "banks.value" (newValue, oldValue) {
+      "banks.value"(newValue, oldValue) {
         if (newValue !== oldValue) {
           this.filter.bankid = newValue;
         }
       },
       //赋值filter.cityid
-      "cities.value" (newValue, oldValue) {
+      "cities.value"(newValue, oldValue) {
         if (newValue !== oldValue) {
           this.filter.cityid = newValue;
         }
@@ -928,7 +928,7 @@
                   self.bankcards.options = success.data.bankcards;
                 } else {}
               }
-            } else if(success.returncode == 101 || success.returncode == 103 || success.returncode == 106) {
+            } else if (success.returncode == 101 || success.returncode == 103 || success.returncode == 106) {
               request.loginAgain(self)
             } else {
               self.$message({
@@ -984,6 +984,10 @@
       getKhyhArea() {
         return this.inputAccountArea.pro + this.inputAccountArea.city;
       }
+    },
+    created() {
+      this.$store.dispatch('setbodyBG', 'no-bg');
+      localStorage.setItem('bodyBG', 'no-bg');
     }
   };
 </script>
@@ -995,6 +999,7 @@
     position: relative;
     text-align: center;
     margin-right: 20px;
+
     .info-no {
       position: relative;
       display: block;

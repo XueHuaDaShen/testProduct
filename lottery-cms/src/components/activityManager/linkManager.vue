@@ -38,7 +38,8 @@
       </div>
     </div> -->
     <div class="data-table" v-loading="loading">
-      <el-table :data="activityLogListData" header-row-class-name="table-header" stripe border style="width: 100%;font-size:12px;">
+      <el-table :data="activityLogListData" header-row-class-name="table-header" stripe border style="width: 100%;font-size:12px;"
+        max-height="450">
         <el-table-column align="center" prop="name" label="项目">
         </el-table-column>
         <el-table-column align="center" prop="url" label="网址">
@@ -53,8 +54,9 @@
         </el-table-column>
       </el-table>
       <div class="fenye">
-        <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="pageNum" :page-size="pageSize"
-          :page-sizes="[10, 20, 40, 80,160,350,700,1000]" layout="total, sizes, prev, pager, next, jumper" :total="total">
+        <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="pageNum"
+          :page-size="pageSize" :page-sizes="[10, 20, 40, 80,160,350,700,1000]" layout="total, sizes, prev, pager, next, jumper"
+          :total="total">
         </el-pagination>
       </div>
     </div>
@@ -130,7 +132,7 @@
           func: null, // 活动函数
         },
         pageNum: 1,
-        pageSize: 10,
+        pageSize: 40,
         enabled: {
           value: "",
           options: [{
@@ -169,7 +171,7 @@
         },
         formTitle: "新增链接",
         formCreate: true,
-        total: 10,
+        total: 0,
         activityLogListData: [],
         ip: '',
         keywords: '',
@@ -206,7 +208,7 @@
       const menus = JSON.parse(localStorage.getItem('menus'));
       menus[this.index1].child[this.index2].child.filter((v, vi) => {
         let o = new Object();
-        if(v.url === 'linkManager'){
+        if (v.url === 'linkManager') {
           this.titleName = v.menu_name;
         }
         o.title = v.menu_name;

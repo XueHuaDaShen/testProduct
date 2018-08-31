@@ -113,7 +113,7 @@
                           self.$router.push({ name: 'userSecurityQuestions' });
                         }
                       });
-                    } else if(success.returncode == 101 || success.returncode == 103 || success.returncode == 106) {
+                    } else if (success.returncode == 101 || success.returncode == 103 || success.returncode == 106) {
                       request.loginAgain(self)
                     } else if (success.returncode == 301) {
                       self.$alert('设置失败', '系统提醒', {
@@ -162,7 +162,7 @@
       }
     },
     watch: {
-      'isSetBankPsd' (newValue, oldValue) {
+      'isSetBankPsd'(newValue, oldValue) {
         if (newValue) {
 
         } else {
@@ -173,6 +173,10 @@
     computed: {},
     mounted() {
 
+    },
+    created() {
+      this.$store.dispatch('setbodyBG', 'no-bg');
+      localStorage.setItem('bodyBG', 'no-bg');
     }
   }
 </script>
@@ -180,12 +184,15 @@
   .table-xinxi {
     width: 320px;
     margin: 0 auto;
+
     .table-row {
       display: flex;
       justify-content: center;
       align-items: center;
+
       .row-item {
         flex: 0.5;
+
         .exp {
           text-align: left;
           font-family: PingFangSC-Regular;

@@ -437,6 +437,10 @@
       this.setTimeToday();
       this.getTypeList();
       this.handleSearch();
+    },
+    created() {
+      this.$store.dispatch('setbodyBG', 'no-bg');
+      localStorage.setItem('bodyBG', 'no-bg');
     }
   }
 </script>
@@ -673,4 +677,4 @@
     margin-left: 20px;
   }
 </style>
-<link/>
+<link />

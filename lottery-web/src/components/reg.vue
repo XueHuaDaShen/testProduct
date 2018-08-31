@@ -45,13 +45,13 @@
 </template>
 
 <script>
-  import myFooter from './footer';
-  import request from '../axios/axios.js'
-  import MD5 from 'MD5'
-  import paramCryptFn from '../lib/cryptData'
-  import * as validator from '../lib/utils/validator'
+  import myFooter from "./footer";
+  import request from "../axios/axios.js";
+  import MD5 from "MD5";
+  import paramCryptFn from "../lib/cryptData";
+  import * as validator from "../lib/utils/validator";
   export default {
-    name: 'HelloWorld',
+    name: "HelloWorld",
     components: {
       myFooter
     },
@@ -69,32 +69,35 @@
       return {
         showInput: false,
         loading: false,
-        tip: '',
+        tip: "",
         loginArr: [
-          { title: '登录', checked: true },
-          { title: '注册', checked: false }
+          { title: "登录", checked: true },
+          { title: "注册", checked: false }
         ],
-        loginName: '',
-        loginPwd: '',
-        repeatPwd: '',
+        loginName: "",
+        loginPwd: "",
+        repeatPwd: "",
         isClick: false,
         animated: false,
         duration: 1000,
-        inviteCode: '',
-      }
+        inviteCode: ""
+      };
     },
     methods: {
       open() {
-        window.open('https://ytpfx.livechatvalue.com/chat/chatClient/chatbox.jsp?companyID=1027559&configID=43463&jid=8295678173&s=1', 'newwindow',
-          'height=700, width=900, top=0, left=0, toolbar=no, menubar=no, scrollbars=no, resizable=no,location=n o, status=no')
+        window.open(
+          "https://ytpfx.livechatvalue.com/chat/chatClient/chatbox.jsp?companyID=1027559&configID=43463&jid=8295678173&s=1",
+          "newwindow",
+          "height=700, width=900, top=0, left=0, toolbar=no, menubar=no, scrollbars=no, resizable=no,location=n o, status=no"
+        );
       },
       error() {
         const vm = this;
         this.$message({
-          message: '请求错误',
-          type: 'error',
+          message: "请求错误",
+          type: "error",
           duration: vm.duration
-        })
+        });
       },
       // handleChangemyTableTipTitle(item) {
       //   this.loginArr.filter(v => {
@@ -120,48 +123,53 @@
           if (e.keyCode == 13) {
             vm.handleReg();
           }
-        }
+        };
       },
       handleReg() {
+        console.log("loginName", this.loginName + "loginName");
+        console.log("loginPwd", this.loginPwd + "loginPwd");
         const vm = this;
-        this.inviteCode = this.$route.params[0];
-        if (this.inviteCode === '') {
-          alert('缺少邀请码，无法注册！')
+        // this.inviteCode = this.$route.params[0];
+        this.inviteCode = 'bj1yke8px';
+        if (this.inviteCode === "") {
+          alert("缺少邀请码，无法注册！");
           return false;
-        } else if (this.loginName === '') {
-          this.tip = '请输入您的用户名'
+        } else if (this.loginName === "") {
+          this.tip = "请输入您的用户名";
           setTimeout(() => {
-            vm.tip = '';
+            vm.tip = "";
           }, 1000);
         } else if (!validator.regexpInput(this.loginName)) {
-          this.tip = '用户名需3-16位字符，只能包含英文字母或数字'
+          this.tip = "用户名需3-16位字符，只能包含英文字母或数字";
           setTimeout(() => {
-            vm.tip = '';
+            vm.tip = "";
           }, 1000);
-        } else if (this.loginPwd === '') {
-          this.tip = '请输入您的密码'
+        } else if (this.loginPwd === "") {
+          this.tip = "请输入您的密码";
           setTimeout(() => {
-            vm.tip = '';
+            vm.tip = "";
           }, 1000);
         } else if (!validator.regexpPsd(this.loginPwd)) {
-          this.tip = '密码需6-16位字符，只能且必须同时包含数字和字母，不允许连续三位相同'
+          this.tip =
+            "密码需6-16位字符，只能且必须同时包含数字和字母，不允许连续三位相同";
           setTimeout(() => {
-            vm.tip = '';
+            vm.tip = "";
           }, 1000);
-        } else if (this.repeatPwd === '') {
-          this.tip = '请确认您的密码'
+        } else if (this.repeatPwd === "") {
+          this.tip = "请确认您的密码";
           setTimeout(() => {
-            vm.tip = '';
+            vm.tip = "";
           }, 1000);
         } else if (!validator.regexpPsd(this.repeatPwd)) {
-          this.tip = '确认密码需6-16位字符，只能且必须同时包含数字和字母，不允许连续三位相同'
+          this.tip =
+            "确认密码需6-16位字符，只能且必须同时包含数字和字母，不允许连续三位相同";
           setTimeout(() => {
-            vm.tip = '';
+            vm.tip = "";
           }, 1000);
         } else if (this.repeatPwd !== this.loginPwd) {
-          this.tip = '两次密码不一致'
+          this.tip = "两次密码不一致";
           setTimeout(() => {
-            vm.tip = '';
+            vm.tip = "";
           }, 1000);
         } else {
           this.loading = true;
@@ -169,34 +177,34 @@
             loginname: vm.loginName,
             password: MD5(vm.loginPwd),
             code: vm.inviteCode
-          }
+          };
           request.login(
-            'post',
-            '/user/register',
+            "post",
+            "/user/register",
             paramCryptFn(data),
-            (success) => {
+            success => {
               let code = success.returncode;
               vm.loading = false;
-              if (code == '305') {
-                vm.tip = '用户名已存在';
+              if (code == "305") {
+                vm.tip = "用户名已存在";
                 setTimeout(function() {
-                  vm.tip = '';
-                }, 2000)
-              } else if (code == '301') {
-                vm.tip = '参数错误或者邀请码错误';
+                  vm.tip = "";
+                }, 2000);
+              } else if (code == "301") {
+                vm.tip = "参数错误或者邀请码错误";
                 setTimeout(function() {
-                  vm.tip = '';
-                }, 2000)
-              } else if (code == '200') {
-                localStorage.setItem('islogout', false);
-                localStorage.setItem('A-TOKEN', success.data.token);
-                localStorage.setItem('refund', success.data.refund || 0);
-                localStorage.setItem('blance', success.data.cash || 0);
-                vm.$store.dispatch('setBlance', success.data.cash || 0);
-                localStorage.setItem('bodyBG', 'default');
-                vm.$store.dispatch('setbodyBG', 'default');
-                localStorage.setItem('loginname', vm.loginName);
-                vm.$router.push({ name: 'home' })
+                  vm.tip = "";
+                }, 2000);
+              } else if (code == "200") {
+                localStorage.setItem("islogout", false);
+                localStorage.setItem("A-TOKEN", success.data.token);
+                localStorage.setItem("refund", success.data.refund || 0);
+                localStorage.setItem("blance", success.data.cash || 0);
+                vm.$store.dispatch("setBlance", success.data.cash || 0);
+                localStorage.setItem("bodyBG", "default");
+                vm.$store.dispatch("setbodyBG", "default");
+                localStorage.setItem("loginname", vm.loginName);
+                vm.$router.push({ name: "home" });
               } else {
                 vm.$message({
                   showClose: true,
@@ -205,16 +213,16 @@
                 });
               }
             },
-            (error) => {
+            error => {
               vm.error();
               vm.loading = false;
-              console.log('/user/login---error', error)
+              console.log("/user/login---error", error);
             }
-          )
+          );
         }
-      },
+      }
     }
-  }
+  };
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
@@ -238,7 +246,7 @@
     margin: auto;
     width: 540px;
     min-height: 400px;
-    background: #FFFFFF;
+    background: #ffffff;
     border: 6px solid #979797;
     padding: 39px 50px;
     display: -webkit-box;
@@ -259,7 +267,7 @@
   }
 
   .login-title span {
-    color: #D4914D;
+    color: #d4914d;
     font-size: 26px;
   }
 
@@ -328,7 +336,7 @@
 
   .login-btn-wrap span {
     position: absolute;
-    color: #F56C6C;
+    color: #f56c6c;
     font-size: 12px;
     width: 100%;
     text-align: center;
@@ -339,9 +347,9 @@
   .login-btn {
     width: 100%;
     height: 60px;
-    background: #1B1B1B;
+    background: #1b1b1b;
     font-size: 18px;
-    color: #FFFFFF;
+    color: #ffffff;
     letter-spacing: 1.12px;
     cursor: pointer;
   }
@@ -349,7 +357,7 @@
   .header {
     width: 100%;
     height: 80px;
-    background: #1B1B1B;
+    background: #1b1b1b;
   }
 
   .header>div {

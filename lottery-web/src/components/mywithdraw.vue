@@ -372,6 +372,10 @@
       this.setTimeToday();
       this.onSubmit();
     },
+    created() {
+      this.$store.dispatch('setbodyBG', 'no-bg');
+      localStorage.setItem('bodyBG', 'no-bg');
+    },
     computed: {
       getCurrentPageApply() {
         let amount = 0.00;
@@ -644,4 +648,4 @@
     margin-left: 20px;
   }
 </style>
-<link/>
+<link />

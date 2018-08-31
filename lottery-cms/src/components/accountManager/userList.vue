@@ -56,7 +56,7 @@
     </div>
     <!-- table START -->
     <div class="data-table" v-loading="loading">
-      <el-table :data="userListData" align="center" header-row-class-name="table-header" stripe border style="width: 100%;font-size:12px;">
+      <el-table :data="userListData" align="center" header-row-class-name="table-header" stripe border style="width: 100%;font-size:12px;" max-height="450">
         <el-table-column align="center" label="用户名" width="126">
           <template slot-scope="scope">
             <el-button type="text" size="small" @click="getUserInfoFn(scope.row)">{{scope.row.loginname}}</el-button>
@@ -261,8 +261,8 @@
         maxBlance: '',
         userListData: [],
         pageNum: 1,
-        pageSize: 10,
-        total: 10,
+        pageSize: 40,
+        total: 0,
         group: {
           value: "",
           options: [],

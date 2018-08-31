@@ -16,8 +16,8 @@
           </div>
           <div class="search-inner-wrap">
             <label>入款渠道：</label>
-            <el-select clearable v-model="type.value" placeholder="入款渠道：" @focus="incomeWayFocus" class="small" :loading="type.loading"
-              :loading-text="type.loadingtext">
+            <el-select clearable v-model="type.value" placeholder="入款渠道：" @focus="incomeWayFocus" class="small"
+              :loading="type.loading" :loading-text="type.loadingtext">
               <el-option v-for="item in type.options" :key="item._id" :label="item.ditch" :value="item._id">
               </el-option>
             </el-select>
@@ -39,8 +39,8 @@
           </div>
           <div class="search-inner-wrap">
             <label>提交时间：</label>
-            <el-date-picker v-model="searchTime" type="datetimerange" align="right" unlink-panels range-separator="至" start-placeholder="开始日期"
-              end-placeholder="结束日期" :picker-options="pickerOptions" :default-time="pickerDefaultTime">
+            <el-date-picker v-model="searchTime" type="datetimerange" align="right" unlink-panels range-separator="至"
+              start-placeholder="开始日期" end-placeholder="结束日期" :picker-options="pickerOptions" :default-time="pickerDefaultTime">
             </el-date-picker>
           </div>
           <div class="search-inner-wrap">
@@ -101,8 +101,9 @@
         </el-table-column>
       </el-table>
       <div class="fenye">
-        <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="pageNum" :page-size="pageSize"
-          :page-sizes="[10, 20, 40, 80,160,350,700,1000]" layout="total, sizes, prev, pager, next, jumper" :total="total">
+        <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="pageNum"
+          :page-size="pageSize" :page-sizes="[10, 20, 40, 80,160,350,700,1000]" layout="total, sizes, prev, pager, next, jumper"
+          :total="total">
         </el-pagination>
       </div>
     </div>
@@ -199,7 +200,7 @@
         index1: 0,
         index2: 0,
         rechargeLoading: false,
-        titleName: '入款记录',
+        titleName: 'BWIN入款记录',
         routerArr: [{
             title: '第三方渠道',
             name: 'thirdpartyManager',
@@ -215,8 +216,13 @@
             checked: false
           },
           {
-            title: '入款记录',
+            title: 'BWIN入款记录',
             name: 'rechargeLog',
+            checked: false
+          },
+          {
+            title: '第三方入款记录',
+            name: 'thirdRechargeLog',
             checked: false
           },
           {
@@ -227,8 +233,8 @@
         ],
         loading: false,
         pageNum: 1,
-        pageSize: 10,
-        total: 10,
+        pageSize: 40,
+        total: 0,
         rechargeListData: [],
         userid: "",
         loginname: "",
@@ -497,7 +503,8 @@
         request.http(
           "get",
           url, {
-            PageSize: 1000
+            PageSize: 1000,
+            bwin: 1, // 1,bwin 2,第三方
           },
           success => {
             vm.type.loading = false;
@@ -773,7 +780,7 @@
       }
     },
     watch: {
-      'form.rechargeStatus' () {
+      'form.rechargeStatus'() {
         this.form.realRecharge = (this.form.rechargeStatus === "2" ? this.recharge : 0);
       }
     }

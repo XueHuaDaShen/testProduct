@@ -20,8 +20,8 @@
           </el-table-column>
         </el-table>
       </div>
-      <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="pageNum" :page-size="pageSize"
-        layout="total, prev, pager, next, jumper" :total="total" class="abs">
+      <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="pageNum"
+        :page-size="pageSize" layout="total, prev, pager, next, jumper" :total="total" class="abs">
       </el-pagination>
     </div>
   </div>
@@ -43,8 +43,8 @@
     data() {
       return {
         pageNum: 1,
-        pageSize: 10,
-        total: 10,
+        pageSize: 40,
+        total: 0,
         pickerOptions1: {
           shortcuts: [{
             text: '今天',

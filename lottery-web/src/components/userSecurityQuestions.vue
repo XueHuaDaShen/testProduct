@@ -150,7 +150,7 @@
                 });*/
                 self.isSetSafeQ = false;
                 self.getSafeArrayList();
-              } else if(success.returncode == 101 || success.returncode == 103 || success.returncode == 106) {
+              } else if (success.returncode == 101 || success.returncode == 103 || success.returncode == 106) {
                 request.loginAgain(self)
               } else {
                 self.isSetSafeQ = true;
@@ -332,6 +332,10 @@
     },
     mounted() {
       this.getIsSetSafeQ();
+    },
+    created() {
+      this.$store.dispatch('setbodyBG', 'no-bg');
+      localStorage.setItem('bodyBG', 'no-bg');
     }
   }
 </script>

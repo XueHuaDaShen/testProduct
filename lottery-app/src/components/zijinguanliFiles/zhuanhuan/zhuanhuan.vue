@@ -7,7 +7,7 @@
           <tr>
             <td colspan="2">
               账户总余额：<em class="color-red">{{ (Number(profile.cash) + Number(profile.cash_ky)).toFixed(2) || 0 }}元</em>
-              <img src="@/assets/img/refresh.png" class="refresh-icon" @click="refreshCash">
+              <img src="@/assets/img/refresh.png" class="refresh-icon" @click="refreshUser">
               <button class="reback-btn" :disabled="isClick" @click="rebackMoney">一键回收</button>
             </td>
           </tr>
@@ -145,6 +145,25 @@ export default {
       let vm = this;
       vm.$store.dispatch('setLoading', true);
       request.http('get', '/user/profile', {},
+        (success) => {
+          vm.$store.dispatch('setLoading', false);
+          if (success.returncode == 200) {
+            let profile = success.data;
+            vm.profile = profile;
+            vm.showProfile = true;
+          }
+        },
+        (error) => {
+          vm.$store.dispatch('setLoading', false);
+          console.log('获取用户资金失败', error)
+        }
+      )
+    },
+    // 刷新
+    refreshUser() {
+      let vm = this;
+      vm.$store.dispatch('setLoading', true);
+      request.http('get', '/user/refreshThirdCoin', {},
         (success) => {
           vm.$store.dispatch('setLoading', false);
           if (success.returncode == 200) {

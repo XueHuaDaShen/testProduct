@@ -794,6 +794,10 @@
       this.setTimeToday();
       this.form.username.value = localStorage.getItem('loginname');
       this.checkId();
+    },
+    created() {
+      this.$store.dispatch('setbodyBG', 'no-bg');
+      localStorage.setItem('bodyBG', 'no-bg');
     }
   }
 </script>

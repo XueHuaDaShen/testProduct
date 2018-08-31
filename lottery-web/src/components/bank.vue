@@ -281,13 +281,13 @@
         }
       },
       //赋值filter.bankid
-      "banks.value" (newValue, oldValue) {
+      "banks.value"(newValue, oldValue) {
         if (newValue !== oldValue) {
           this.filter.bankid = newValue;
         }
       },
       //赋值filter.cityid
-      "cities.value" (newValue, oldValue) {
+      "cities.value"(newValue, oldValue) {
         if (newValue !== oldValue) {
           this.filter.cityid = newValue;
         }
@@ -567,7 +567,7 @@
                   self.isBindBank = false;
                 }
               }
-            } else if(success.returncode == 101 || success.returncode == 103 || success.returncode == 106) {
+            } else if (success.returncode == 101 || success.returncode == 103 || success.returncode == 106) {
               request.loginAgain(self)
             } else {
               self.$message({
@@ -774,7 +774,7 @@
                 self.bindActive = 0;
                 self.$router.push({ name: "resetPsd" });
               }
-            } else if(success.returncode == 101 || success.returncode == 103 || success.returncode == 106) {
+            } else if (success.returncode == 101 || success.returncode == 103 || success.returncode == 106) {
               request.loginAgain(self)
             } else {
               self.$message({
@@ -848,7 +848,7 @@
                         center: true,
                         callback: action => {}
                       });
-                    } else if(success.returncode == 101 || success.returncode == 103 || success.returncode == 106) {
+                    } else if (success.returncode == 101 || success.returncode == 103 || success.returncode == 106) {
                       request.loginAgain(self)
                     } else {
                       self.$message({
@@ -893,6 +893,10 @@
     },
     mounted() {
       this.getUserBankList();
+    },
+    created() {
+      this.$store.dispatch('setbodyBG', 'no-bg');
+      localStorage.setItem('bodyBG', 'no-bg');
     }
   };
 </script>
@@ -904,6 +908,7 @@
     position: relative;
     text-align: center;
     margin-right: 20px;
+
     .info-no {
       position: relative;
       display: block;

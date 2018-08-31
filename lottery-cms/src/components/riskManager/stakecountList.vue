@@ -1,6 +1,7 @@
 <template>
   <div class="rechargeLot-wrap el-custom">
-    <DialogUserInfo v-if="dialog" :userid="userid" :loginname="loginname" @sendDiglogShow="handleDialogShow" @closeDialog="handleCloseDialog"></DialogUserInfo>
+    <DialogUserInfo v-if="dialog" :userid="userid" :loginname="loginname" @sendDiglogShow="handleDialogShow"
+      @closeDialog="handleCloseDialog"></DialogUserInfo>
     <div class="content-header">
       <div class="title">
         <h2>{{titleName}}</h2>
@@ -20,7 +21,8 @@
           </div>
           <div class="search-inner-wrap">
             <label>入款类型：</label>
-            <el-select clearable v-model="incomeType.value" placeholder="请选择" class="small" :loading="incomeType.loading" :loading-text="incomeType.loadingText">
+            <el-select clearable v-model="incomeType.value" placeholder="请选择" class="small" :loading="incomeType.loading"
+              :loading-text="incomeType.loadingText">
               <!-- <el-option v-for="(item,index) in incomeType.options" :key="index" :label="item.name" :value="item.type">
               </el-option> -->
               <el-option-group v-for="group in incomeType.options" :key="group._id" :label="group.name">
@@ -90,8 +92,8 @@
         </el-table-column> -->
       </el-table>
       <div class="fenye">
-        <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="pageNum" :page-size="pageSize"
-          layout="total, prev, pager, next, jumper" :total="total">
+        <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="pageNum"
+          :page-size="pageSize" layout="total, prev, pager, next, jumper" :total="total">
         </el-pagination>
       </div>
     </div>
@@ -129,8 +131,8 @@
         ],
         loading: false,
         pageNum: 1,
-        pageSize: 10,
-        total: 10,
+        pageSize: 40,
+        total: 0,
         withdrawListData: [],
         userid: '',
         id: "", // 流水号
@@ -263,7 +265,7 @@
       const menus = JSON.parse(localStorage.getItem('menus'));
       menus[this.index1].child[this.index2].child.filter((v, vi) => {
         let o = new Object();
-        if(v.url === 'stakecountList'){
+        if (v.url === 'stakecountList') {
           this.titleName = v.menu_name;
         }
         o.title = v.menu_name;

@@ -24,7 +24,8 @@
         <el-table-column width="200" label="一级菜单" prop="menu_name">
           <template slot-scope="scope">
             <span>{{scope.row.menu_name}}</span>
-            <el-button class="small my-add-button" @click="createMenu('二', scope.row._id)" icon="el-icon-plus" type="success" circle></el-button>
+            <el-button class="small my-add-button" @click="createMenu('二', scope.row._id)" icon="el-icon-plus" type="success"
+              circle></el-button>
             <!-- <el-button @click="editMenu(scope.row)" class="small edit">编辑</el-button> -->
           </template>
         </el-table-column>
@@ -35,43 +36,39 @@
         </el-table-column>
         <el-table-column label="二级菜单">
           <template slot-scope="props">
-            <el-form label-position="left" inline class="demo-table-expand"> 
+            <el-form label-position="left" inline class="demo-table-expand">
               <!-- -->
               <el-table :data="props.row.child" :show-header="false" :default-expand-all="true">
-                  <el-table-column
-                    fixed
-                    prop="menu_name">
-                    <template slot-scope="scope">
-                      <span>{{scope.row.menu_name}}</span>
-                      <el-button class="small my-add-button" @click="createMenu('三', scope.row._id)" icon="el-icon-plus" type="success" circle></el-button>
-                      <!-- <el-button @click="editMenu(scope.row)" class="small edit">编辑</el-button> -->
-                    </template>
-                  </el-table-column>
-                  <el-table-column align="center" width="80" label="排序值" prop="order">
-                    <template slot-scope="scope">
-                      <el-button @click="editMenu('二', props.row, scope)" class="small edit" style="padding:0 12px;">编辑</el-button>
-                    </template>
-                  </el-table-column>
-                  <el-table-column type="expand">
-                    <template slot-scope="props">
-                      <el-form label-position="left" inline class="demo-table-expand">
-                        <el-table :data="props.row.child" :show-header="false">
-                            <el-table-column
-                              fixed
-                              prop="menu_name">
-                            </el-table-column>
-                            <el-table-column
-                              prop="url">
-                            </el-table-column>
-                            <el-table-column width="180" align="center">
-                              <template slot-scope="scope">
-                                <el-button @click="editMenu('三', props.row, scope)" class="small edit" style="padding:0 12px;">编辑</el-button>
-                              </template>
-                            </el-table-column>
-                        </el-table>
-                      </el-form>
-                    </template>
-                  </el-table-column>
+                <el-table-column fixed prop="menu_name">
+                  <template slot-scope="scope">
+                    <span>{{scope.row.menu_name}}</span>
+                    <el-button class="small my-add-button" @click="createMenu('三', scope.row._id)" icon="el-icon-plus"
+                      type="success" circle></el-button>
+                    <!-- <el-button @click="editMenu(scope.row)" class="small edit">编辑</el-button> -->
+                  </template>
+                </el-table-column>
+                <el-table-column align="center" width="80" label="排序值" prop="order">
+                  <template slot-scope="scope">
+                    <el-button @click="editMenu('二', props.row, scope)" class="small edit" style="padding:0 12px;">编辑</el-button>
+                  </template>
+                </el-table-column>
+                <el-table-column type="expand">
+                  <template slot-scope="props">
+                    <el-form label-position="left" inline class="demo-table-expand">
+                      <el-table :data="props.row.child" :show-header="false">
+                        <el-table-column fixed prop="menu_name">
+                        </el-table-column>
+                        <el-table-column prop="url">
+                        </el-table-column>
+                        <el-table-column width="180" align="center">
+                          <template slot-scope="scope">
+                            <el-button @click="editMenu('三', props.row, scope)" class="small edit" style="padding:0 12px;">编辑</el-button>
+                          </template>
+                        </el-table-column>
+                      </el-table>
+                    </el-form>
+                  </template>
+                </el-table-column>
               </el-table>
             </el-form>
           </template>
@@ -91,7 +88,8 @@
               <el-input v-model="form.menu_name" auto-complete="off"></el-input>
             </el-form-item>
             <el-form-item label="排序" prop="order">
-              <el-input v-model.number="form.order" @blur="()=>{!isNaN(form.order)&&(form.order = Math.floor(form.order))}" auto-complete="off"></el-input>
+              <el-input v-model.number="form.order" @blur="()=>{!isNaN(form.order)&&(form.order = Math.floor(form.order))}"
+                auto-complete="off"></el-input>
             </el-form-item>
             <el-form-item label="菜单路径" prop="url" v-if="menu_type === '三'">
               <el-input v-model="form.url" auto-complete="off"></el-input>
@@ -101,7 +99,8 @@
       </div>
       <div slot="footer" class="dialog-footer">
         <el-button @click="resetForm('form')" class="no">取 消</el-button>
-        <el-button v-if="isCreate" type="primary" @click="createMenuFn('form')" class="yes" :loading="createLoading">确 定</el-button>
+        <el-button v-if="isCreate" type="primary" @click="createMenuFn('form')" class="yes" :loading="createLoading">确
+          定</el-button>
         <el-button v-if="!isCreate" type="primary" @click="editMenuFn('form')" class="yes" :loading="updateLoading">确 定</el-button>
       </div>
     </el-dialog>
@@ -134,8 +133,8 @@
         loading: false,
         isCreate: false,
         pageNum: 1,
-        pageSize: 10,
-        total: 10,
+        pageSize: 40,
+        total: 0,
         activityLogListData: [],
         duration: 1000,
         dialogFormVisible: false,
@@ -174,7 +173,7 @@
       const menus = JSON.parse(localStorage.getItem('menus'));
       menus[this.index1].child[this.index2].child.filter((v, vi) => {
         let o = new Object();
-        if(v.url === 'menu'){
+        if (v.url === 'menu') {
           this.titleName = v.menu_name;
         }
         o.title = v.menu_name;
@@ -238,9 +237,9 @@
         const vm = this;
         this.operateTitle = '修改菜单';
         let item;
-        if(type === '一'){
+        if (type === '一') {
           item = row;
-        }else{
+        } else {
           item = row.child[scope.$index];
           vm.parentId = row._id;
         }
@@ -259,7 +258,7 @@
           for (let i in vm.form) {
             data[i] = vm.form[i]
           }
-          if(this.menu_type === '二' || this.menu_type === '三'){
+          if (this.menu_type === '二' || this.menu_type === '三') {
             data.parentid = vm.parentId;
           }
           data.id = vm.editId;
@@ -313,7 +312,7 @@
           for (let i in vm.form) {
             data[i] = vm.form[i]
           }
-          if(this.menu_type === '二' || this.menu_type === '三'){
+          if (this.menu_type === '二' || this.menu_type === '三') {
             data.parentid = this.parentId;
           }
           if (valid) {
@@ -388,12 +387,13 @@
 
 </script>
 <style>
-/* @import '../../publicCss/header.css'; */
-.my-add-button{
-  padding:0 !important;
-  width:24px !important;
-  position: absolute;
-  right:10px;
-  background:#2D996E !important;
-}
+  /* @import '../../publicCss/header.css'; */
+  .my-add-button {
+    padding: 0 !important;
+    width: 24px !important;
+    position: absolute;
+    right: 10px;
+    background: #2D996E !important;
+  }
+
 </style>

@@ -34,7 +34,8 @@
       </div>
     </div>
     <div class="data-table" v-loading="loading">
-      <el-table :data="activityLogListData" header-row-class-name="table-header" stripe border style="width: 100%">
+      <el-table :data="activityLogListData" header-row-class-name="table-header" stripe border style="width: 100%"
+        max-height="450">
         <el-table-column align="center" prop="type" label="类型">
         </el-table-column>
         <el-table-column align="center" prop="title" label="标题">
@@ -51,8 +52,8 @@
         </el-table-column>
       </el-table>
       <div class="fenye">
-        <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="pageNum" :page-size="pageSize"
-          layout="total, prev, pager, next, jumper" :total="total">
+        <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="pageNum"
+          :page-size="pageSize" layout="total, prev, pager, next, jumper" :total="total">
         </el-pagination>
       </div>
       <editor v-if="showEditor" @closeEditor="handlecloseEditor" :activityParam="activityParam"></editor>
@@ -93,8 +94,8 @@
           func: null, // 活动函数
         },
         pageNum: 1,
-        pageSize: 10,
-        total: 10,
+        pageSize: 40,
+        total: 0,
         activityLogListData: [],
         username: '',
         searchTime: '',
@@ -156,7 +157,7 @@
       const menus = JSON.parse(localStorage.getItem('menus'));
       menus[this.index1].child[this.index2].child.filter((v, vi) => {
         let o = new Object();
-        if(v.url === 'activityPromotion'){
+        if (v.url === 'activityPromotion') {
           this.titleName = v.menu_name;
         }
         o.title = v.menu_name;

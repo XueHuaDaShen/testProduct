@@ -526,6 +526,10 @@
       this.form.username.value = localStorage.getItem('loginname');
       this.onSubmit();
       this.getPlatform();
+    },
+    created() {
+      this.$store.dispatch('setbodyBG', 'no-bg');
+      localStorage.setItem('bodyBG', 'no-bg');
     }
   };
 </script>

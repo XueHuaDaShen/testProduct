@@ -1784,17 +1784,21 @@
         let wei = vm.wei;
 
         let title = '<div class="lottery-title">' + vm.gameName + ' 第<strong>' + issue_no + '</strong>期</div>';
-        let content = '<div>总计' + vote_num + '注，总共' + vote_cash + '元</div>';
+        let content = '<div class="lottery-bottom">总计' + vote_num + '注，总共' + vote_cash + '元</div>';
         let html = title + content;
         vm.$alert(html, '确认信息', {
           dangerouslyUseHTMLString: true,
           confirmButtonText: '确定',
           center: true,
+          customClass: "syxw-wrap-inner"
         }).then(() => {
           if (vm.userBlance < vote_cash) {
-            vm.$alert('投注失败-余额不足', '温馨提示', {
+            let title = '<div class="lottery-title">投注失败-<strong>余额不足</strong></div>';
+            vm.$alert(title, '温馨提示', {
               confirmButtonText: '关闭',
               center: true,
+              dangerouslyUseHTMLString: true,
+              customClass: "syxw-wrap-inner"
             })
           } else {
             var data = { voteList: [{ lottery3id, lotteryid, gameid, vote_no, vote_cash, unit, times, issue_no, vote_num, refund, wei }] }
@@ -1812,9 +1816,12 @@
                 } else if (code === 106) {
                   request.loginAgain(vm)
                 } else if (code === 304) {
-                  vm.$alert('投注失败-余额不足', '温馨提示', {
+                  let title = '<div class="lottery-title">投注失败-<strong>余额不足</strong></div>';
+                  vm.$alert(title, '温馨提示', {
                     confirmButtonText: '关闭',
                     center: true,
+                    dangerouslyUseHTMLString: true,
+                    customClass: "syxw-wrap-inner"
                   })
                 } else if (code === 200) {
                   // console.log()
@@ -1836,14 +1843,20 @@
                   vm.toBets = true;
                   // console.log(vm.$store)
                 } else if (code === 301 || code == 303) {
-                  vm.$alert('投注失败-参数错误', '温馨提示', {
+                  let title = '<div class="lottery-title">投注失败-<strong>参数错误</strong></div>';
+                  vm.$alert(title, '温馨提示', {
                     confirmButtonText: '关闭',
                     center: true,
+                    dangerouslyUseHTMLString: true,
+                    customClass: "syxw-wrap-inner"
                   })
                 } else if (code === 305) {
-                  vm.$alert('期号过期', '温馨提示', {
+                  let title = '<div class="lottery-title">期号过期</div>';
+                  vm.$alert(title, '温馨提示', {
                     confirmButtonText: '关闭',
                     center: true,
+                    dangerouslyUseHTMLString: true,
+                    customClass: "syxw-wrap-inner"
                   })
                 }
               },
@@ -1960,11 +1973,14 @@
     -webkit-box-align: center;
     -webkit-box-pack: justify;
     margin-bottom: 20px; // background: #fff;
+
     .header-left,
     .header-right {
       display: -webkit-box;
     }
+
     .header-left {
+
       // margin-left:20px;
       .header-left-r {
         display: -webkit-box;
@@ -1974,6 +1990,7 @@
         position: relative;
         margin-left: 12px;
         height: 96px;
+
         .header-left-r-bj {
           position: absolute;
           left: 0;
@@ -2047,6 +2064,7 @@
     margin-right: 2px;
     background: url('../../assets/img/bets-num.png') no-repeat;
     background-size: 100% 100%; // box-shadow: 0 2px 4px 0 rgba(0,0,0,0.50);
+
     &:last-child {
       margin-right: 0;
     }
@@ -2070,13 +2088,15 @@
     border-radius: 2px;
     font-size: 14px;
     position: relative;
+
     a {
       color: #fff;
       text-decoration: none;
       position: relative;
       z-index: 2;
-      font-weight:600;
+      font-weight: 600;
     }
+
     em.explain-btn-bj {
       position: absolute;
       width: 100%;
@@ -2161,11 +2181,13 @@
   .bets-result-top {
     width: 100%;
     display: -webkit-box; // padding-left: 10px;
+
     .mode {
       border: 1px solid #DDDDDD;
       border-radius: 2px;
       border-right: none;
       overflow: hidden;
+
       span {
         display: block;
         width: 30px;
@@ -2178,6 +2200,7 @@
         text-align: center;
         cursor: pointer;
       }
+
       span.current {
         color: #191919;
         background-image: linear-gradient(-180deg, #CFA072 0%, #B68E66 100%);
@@ -2259,7 +2282,9 @@
     color: #333;
     font-weight: 600; // margin-bottom:10px;
     margin-right: 8px;
-  } // .bets-and-join {
+  }
+
+  // .bets-and-join {
   //   position: absolute;
   //   bottom: 0;
   //   right: 0;
@@ -2626,7 +2651,9 @@
     font-size: 20px;
     font-weight: bold; // cursor: pointer;
     cursor: inherit;
-  } // .bets-confirm button.disabled {
+  }
+
+  // .bets-confirm button.disabled {
   //   background: #BBBBBB;
   //   color: #333;
   //   cursor: not-allowed;
@@ -2703,6 +2730,7 @@
   .my-bets-table thead th {
     padding: 20px 0 10px 0;
     font-weight: normal;
+
     span {
       display: inline-block;
       width: 100%;
@@ -2713,6 +2741,7 @@
       font-size: 12px;
       color: #191919;
     }
+
     &:last-child {
       span {
         border-right: none;
@@ -2740,6 +2769,7 @@
 
   .my-bets-table tbody tr {
     border-top: 1px solid #DDDDDD;
+
     &:first-child {
       border-top: none;
     }

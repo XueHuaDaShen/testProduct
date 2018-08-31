@@ -66,8 +66,9 @@
         </el-table-column>
       </el-table>
       <div class="fenye">
-        <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="pageNum" :page-size="pageSize"
-          :page-sizes="[10, 20, 40, 80,160,350,700,1000]" layout="total, sizes, prev, pager, next, jumper" :total="total">
+        <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="pageNum"
+          :page-size="pageSize" :page-sizes="[10, 20, 40, 80,160,350,700,1000]" layout="total, sizes, prev, pager, next, jumper"
+          :total="total">
         </el-pagination>
       </div>
     </div>
@@ -146,8 +147,10 @@
         </div>
       </div>
       <div slot="footer" class="dialog-footer">
-        <el-button v-if="isCreate" type="primary" @click="createSetFn('ruleForm')" class="yes" :loading="createLoading">确 定</el-button>
-        <el-button v-if="!isCreate" type="primary" @click="editSetFn('ruleForm')" class="yes" :loading="editLoading">确 定</el-button>
+        <el-button v-if="isCreate" type="primary" @click="createSetFn('ruleForm')" class="yes" :loading="createLoading">确
+          定</el-button>
+        <el-button v-if="!isCreate" type="primary" @click="editSetFn('ruleForm')" class="yes" :loading="editLoading">确
+          定</el-button>
         <el-button @click="resetForm('ruleForm')" class="no">取 消</el-button>
       </div>
     </el-dialog>
@@ -186,8 +189,8 @@
         loading: false,
         withdrawSetListData: [],
         pageNum: 1,
-        pageSize: 10,
-        total: 10,
+        pageSize: 40,
+        total: 0,
         dialogFormVisible: false,
         dialogFormTitle: "新增配置项",
         isCreate: false,
@@ -218,7 +221,7 @@
       const menus = JSON.parse(localStorage.getItem('menus'));
       menus[this.index1].child[this.index2].child.filter((v, vi) => {
         let o = new Object();
-        if(v.url === 'limitCashSet'){
+        if (v.url === 'limitCashSet') {
           this.titleName = v.menu_name;
         }
         o.title = v.menu_name;

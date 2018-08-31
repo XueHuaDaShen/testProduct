@@ -64,8 +64,8 @@
           </el-table-column>
           <el-table-column align="center" label="开启">
             <template slot-scope="scope">
-              <el-switch @change="handleEditData(scope.row)" :inactive-value="0" :active-value="1" v-model="scope.row.enabled" active-color="#2D996E"
-                inactive-color="#C83A4C"></el-switch>
+              <el-switch @change="handleEditData(scope.row)" :inactive-value="0" :active-value="1" v-model="scope.row.enabled"
+                active-color="#2D996E" inactive-color="#C83A4C"></el-switch>
             </template>
           </el-table-column>
           <el-table-column align="center" label="操作">
@@ -124,8 +124,8 @@
         ],
         loading: false,
         pageNum: 1,
-        pageSize: 10,
-        total: 10,
+        pageSize: 40,
+        total: 0,
         tableData: 0,
         lotteryTypeData: [],
         username: '',
@@ -172,7 +172,7 @@
       const menus = JSON.parse(localStorage.getItem('menus'));
       menus[this.index1].child[this.index2].child.filter((v, vi) => {
         let o = new Object();
-        if(v.url === 'lotteryType'){
+        if (v.url === 'lotteryType') {
           this.titleName = v.menu_name;
         }
         o.title = v.menu_name;

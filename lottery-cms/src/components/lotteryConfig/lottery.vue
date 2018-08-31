@@ -26,8 +26,8 @@
           </div>
           <div class="search-inner-wrap">
             <label>查找时间：</label>
-            <el-date-picker v-model="searchTime" type="daterange" align="right" unlink-panels range-separator="至" start-placeholder="开始日期"
-              end-placeholder="结束日期" :picker-options="pickerOptions" :default-time="pickerDefaultTime">
+            <el-date-picker v-model="searchTime" type="daterange" align="right" unlink-panels range-separator="至"
+              start-placeholder="开始日期" end-placeholder="结束日期" :picker-options="pickerOptions" :default-time="pickerDefaultTime">
             </el-date-picker>
           </div>
           <div class="search-inner-wrap">
@@ -57,8 +57,9 @@
         </el-table-column>
       </el-table>
       <div class="fenye">
-        <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="pageNum" :page-size="pageSize"
-          :page-sizes="[10, 20, 40, 80,160,350,700,1000]" layout="total, sizes, prev, pager, next, jumper" :total="total">
+        <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="pageNum"
+          :page-size="pageSize" :page-sizes="[10, 20, 40, 80,160,350,700,1000]" layout="total, sizes, prev, pager, next, jumper"
+          :total="total">
         </el-pagination>
       </div>
     </div>
@@ -79,15 +80,15 @@
           <div class="form-row">
             <span class="exp">彩期</span>
             <span class="exp-after">：</span>
-            <el-date-picker v-model="dialogTime" type="daterange" align="right" unlink-panels range-separator="至" start-placeholder="开始日期"
-              end-placeholder="结束日期" :picker-options="pickerOptions" @change="dateChange()">
+            <el-date-picker v-model="dialogTime" type="daterange" align="right" unlink-panels range-separator="至"
+              start-placeholder="开始日期" end-placeholder="结束日期" :picker-options="pickerOptions" @change="dateChange()">
             </el-date-picker>
           </div>
           <div class="form-row">
             <span class="exp"></span>
             <span class="exp-after" style="width:12px;"></span>
-            <el-select clearable v-model="form.lotteryNo.value" :placeholder="form.lotteryNo.placeholder" class="small" @focus="formLotteryNoFocus()"
-              :loading-text="form.lotteryNo.loadingText" :loading="form.lotteryNo.loading">
+            <el-select clearable v-model="form.lotteryNo.value" :placeholder="form.lotteryNo.placeholder" class="small"
+              @focus="formLotteryNoFocus()" :loading-text="form.lotteryNo.loadingText" :loading="form.lotteryNo.loading">
               <el-option v-for="(item,index) in form.lotteryNo.options" :key="index" :label="item.issue_no +'--' + formatTime2(item.open_at)"
                 :value="item.issue_no">
               </el-option>
@@ -122,15 +123,15 @@
           <div class="form-row">
             <span class="exp">彩期</span>
             <span class="exp-after">：</span>
-            <el-date-picker v-model="dialogTimeS" type="daterange" align="right" unlink-panels range-separator="至" start-placeholder="开始日期"
-              end-placeholder="结束日期" :picker-options="pickerOptions" @change="dateChangeS()">
+            <el-date-picker v-model="dialogTimeS" type="daterange" align="right" unlink-panels range-separator="至"
+              start-placeholder="开始日期" end-placeholder="结束日期" :picker-options="pickerOptions" @change="dateChangeS()">
             </el-date-picker>
           </div>
           <div class="form-row">
             <span class="exp"></span>
             <span class="exp-after" style="width:12px;"></span>
-            <el-select clearable v-model="formS.lotteryNo.value" :placeholder="formS.lotteryNo.placeholder" class="small" @focus="formLotteryNoFocusS()"
-              :loading-text="formS.lotteryNo.loadingText" :loading="formS.lotteryNo.loading">
+            <el-select clearable v-model="formS.lotteryNo.value" :placeholder="formS.lotteryNo.placeholder" class="small"
+              @focus="formLotteryNoFocusS()" :loading-text="formS.lotteryNo.loadingText" :loading="formS.lotteryNo.loading">
               <el-option v-for="(item,index) in formS.lotteryNo.options" :key="index" :label="item.issue_no +'--' + formatTime2(item.open_at)"
                 :value="item.issue_no">
               </el-option>
@@ -183,8 +184,8 @@
         dialogTimeS: "",
         loading: false,
         pageNum: 1,
-        pageSize: 10,
-        total: 10,
+        pageSize: 40,
+        total: 0,
         logListData: [],
         username: '',
         searchTime: '',

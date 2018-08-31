@@ -3,8 +3,8 @@
     <div style="padding: 12px 20px 20px;">
       <div class="jilu-search-term">
         <div class="jilu-search-time">
-          <el-date-picker v-model="searchTime" type="datetimerange" align="right" unlink-panels range-separator="至" start-placeholder="开始日期"
-            end-placeholder="结束日期" :picker-options="pickerOptions1">
+          <el-date-picker v-model="searchTime" type="datetimerange" align="right" unlink-panels range-separator="至"
+            start-placeholder="开始日期" end-placeholder="结束日期" :picker-options="pickerOptions1">
           </el-date-picker>
         </div>
         <!-- <div class="jilu-search-keyWord">
@@ -33,7 +33,7 @@
         </div>
       </div>
       <div class="jilu-content">
-        <el-table :data="tableData" v-loading="dataLoading" empty-text="没有符合当前条件的记录" style="width: 100%">
+        <el-table :data="tableData" v-loading="dataLoading" empty-text="没有符合当前条件的记录" style="width: 100%" max-height="450">
           <el-table-column prop="order_no" label="编号" align="center" width="180">
           </el-table-column>
           <el-table-column prop="type" :formatter="isTypeFn" label="类型" align="center">
@@ -48,8 +48,8 @@
           </el-table-column>
         </el-table>
       </div>
-      <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="pageNum" :page-size="pageSize"
-        layout="total, prev, pager, next, jumper" :total="total">
+      <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="pageNum"
+        :page-size="pageSize" layout="total, prev, pager, next, jumper" :total="total">
       </el-pagination>
     </div>
   </div>
@@ -71,7 +71,7 @@
     data() {
       return {
         pageNum: 1,
-        pageSize: 10,
+        pageSize: 40,
         total: 0,
         pickerOptions1: {
           shortcuts: [{
@@ -90,7 +90,7 @@
               start.setTime(start.getTime() - 3600 * 1000 * 24);
               picker.$emit('pick', [start, end]);
             }
-          },{
+          }, {
             text: '最近一周',
             onClick(picker) {
               const end = new Date();

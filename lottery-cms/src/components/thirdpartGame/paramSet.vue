@@ -65,7 +65,8 @@
         </div>
         <div class="top-row">
           <span class="exp">是否开启：</span>
-          <el-switch inactive-value="1" active-value="0" v-model="contractFrom.disabled" active-color="#2D996E" inactive-color="#C83A4C"></el-switch>
+          <el-switch inactive-value="1" active-value="0" v-model="contractFrom.disabled" active-color="#2D996E"
+            inactive-color="#C83A4C"></el-switch>
         </div>
       </div>
       <table class="dialog-table">
@@ -155,7 +156,7 @@
         totalPageNum: 0, //总页数
         total: 0, //总条数
         pageIndex: 1, //当前页
-        pageSize: 10, //单页条数
+        pageSize: 40, //单页条数
         contractDialogAdd: {
           visible: false,
           title: "平台参数设置",
@@ -175,7 +176,7 @@
       const menus = JSON.parse(localStorage.getItem('menus'));
       menus[this.index1].child[this.index2].child.filter((v, vi) => {
         let o = new Object();
-        if(v.url === 'contractManage'){
+        if (v.url === 'contractManage') {
           this.titleName = v.menu_name;
         }
         o.title = v.menu_name;
@@ -568,7 +569,7 @@
       this.getList();
     },
     watch: {
-      "contractDialogAdd.dialogNew" () {
+      "contractDialogAdd.dialogNew"() {
         if (this.contractDialogAdd.dialogNew) {
           this.contractDialogAdd.title = "平台参数设置";
         } else {

@@ -45,8 +45,8 @@
         </el-table-column>
       </el-table>
       <div class="fenye">
-        <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="pageNum" :page-size="pageSize"
-          layout="total, prev, pager, next, jumper" :total="total">
+        <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="pageNum"
+          :page-size="pageSize" layout="total, prev, pager, next, jumper" :total="total">
         </el-pagination>
       </div>
     </div>
@@ -171,8 +171,8 @@
         loading: false,
         withdrawSetListData: [],
         pageNum: 1,
-        pageSize: 10,
-        total: 10,
+        pageSize: 40,
+        total: 0,
         dialogFormVisible: false,
         isCreate: false,
         editId: '',
@@ -240,7 +240,7 @@
       const menus = JSON.parse(localStorage.getItem('menus'));
       menus[this.index1].child[this.index2].child.filter((v, vi) => {
         let o = new Object();
-        if(v.url === 'withdrawSet'){
+        if (v.url === 'withdrawSet') {
           this.titleName = v.menu_name;
         }
         o.title = v.menu_name;

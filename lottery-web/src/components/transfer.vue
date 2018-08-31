@@ -98,7 +98,7 @@
                   }
                 });
               }
-            } else if(success.returncode == 101 || success.returncode == 103 || success.returncode == 106) {
+            } else if (success.returncode == 101 || success.returncode == 103 || success.returncode == 106) {
               request.loginAgain(self)
             } else {
               self.$message({
@@ -278,7 +278,7 @@
                   if (success.returncode) {
                     if (success.returncode == 200) {
                       self.postTransfer();
-                    } else if(success.returncode == 101 || success.returncode == 103 || success.returncode == 106) {
+                    } else if (success.returncode == 101 || success.returncode == 103 || success.returncode == 106) {
                       request.loginAgain(self)
                     } else if (
                       success.returncode == 301 ||
@@ -340,6 +340,10 @@
     },
     mounted() {
       this.isSetBankPassword();
+    },
+    created() {
+      this.$store.dispatch('setbodyBG', 'no-bg');
+      localStorage.setItem('bodyBG', 'no-bg');
     }
   };
 </script>
@@ -347,10 +351,12 @@
 <style scoped lang="scss">
   .table-xinxi {
     width: 100%;
+
     .time-row {
       display: flex;
       justify-content: flex-start;
       align-items: center;
+
       .exp {
         text-align: left;
         font-family: PingFangSC-Regular;
@@ -402,6 +408,7 @@
     width: 100%;
     padding: 30px 20px;
     border: 1px solid #ddd;
+
     .inner-pay-title {
       text-align: left;
       font-family: PingFangSC-Regular;
@@ -1013,6 +1020,7 @@
     margin-top: 30px;
     width: 400px;
     border: 1px solid #333;
+
     td {
       border: 1px solid #333;
       height: 34px;
@@ -1087,16 +1095,20 @@
   .account-done {
     margin-top: 30px;
     width: 340px;
+
     td.exp {
       min-width: 150px;
       font-size: 14px;
     }
+
     td.content {
       text-align: right
     }
+
     td {
       padding: 5px 0;
     }
+
     .submit {
       display: inline-block;
       text-align: center;
@@ -1116,6 +1128,7 @@
     height: 34px;
     line-height: 34px;
     margin-bottom: 30px;
+
     .exp {
       font-size: 16px;
       font-family: MicrosoftYaHei;
@@ -1123,6 +1136,7 @@
       line-height: 20px;
       display: inline-block;
     }
+
     .exp2 {
       font-size: 16px;
       font-family: MicrosoftYaHei;

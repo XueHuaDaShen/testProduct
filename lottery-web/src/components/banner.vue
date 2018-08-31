@@ -2,8 +2,8 @@
   <div>
     <div class="full">
       <div class="swiper-content">
-        <a class="arrow-left" href='javascript:void(0)'></a>
-        <a class="arrow-right" href='javascript:void(0)'></a>
+        <!-- <a class="arrow-left" href='javascript:void(0)'></a>
+        <a class="arrow-right" href='javascript:void(0)'></a> -->
         <div class="cover-left"></div>
         <div class="swiper-container" id="mySwiper" v-loading="loading">
           <div class="swiper-wrapper">
@@ -100,7 +100,7 @@
                 self.bannerlist = [];
                 self.swiperInit();
               }
-            } else if(success.returncode == 101 || success.returncode == 103 || success.returncode == 106) {
+            } else if (success.returncode == 101 || success.returncode == 103 || success.returncode == 106) {
               request.loginAgain(self)
             } else {
               self.$message({
@@ -347,18 +347,21 @@
   #mySwiper.swiper-container {
     overflow: visible;
     height: 300px;
+
     .swiper-slide {
       height: 300px;
       position: relative;
       cursor: pointer;
+
       img {
         max-width: 100%;
         width: 100%;
         height: 100%;
-        opacity: 0.7;
+        // opacity: 0.7;
         -webkit-transition: all linear 300ms;
         transition: all linear 300ms;
       }
+
       a {
         width: 100%;
         height: 100%;
@@ -368,10 +371,12 @@
         text-decoration: none;
         cursor: pointer;
       }
+
       a:hover img {
         opacity: 1;
       }
     }
+
     .my-bullet {
       width: 40px;
       height: 6px;
@@ -385,6 +390,7 @@
       display: inline-block;
       margin: 0 5px;
     }
+
     .my-bullet-active {
       color: #fff;
       background: #f4f4f4;

@@ -125,6 +125,10 @@
         self.noMessage();
       }
     },
+    created() {
+      this.$store.dispatch('setbodyBG', 'no-bg');
+      localStorage.setItem('bodyBG', 'no-bg');
+    },
     watch: {
       $route(to, from) {
         // react to route changes...
@@ -146,10 +150,12 @@
     font-size: 14px;
     color: #777;
     width: 100%;
+
     .content-photo {
       text-align: center;
       margin-bottom: 20px;
       width: 100%;
+
       >img {
         width: auto;
         height: auto;
@@ -183,7 +189,7 @@
     height: 40px;
     line-height: 40px;
     display: flex;
-    display:none;
+    display: none;
   }
 
   .tabs .tab-title {
@@ -286,10 +292,12 @@
     font-size: 14px;
     color: #777;
     width: 100%;
+
     .content-photo {
       text-align: center;
       margin-bottom: 20px;
       width: 100%;
+
       >img {
         width: auto;
         height: auto;
@@ -312,7 +320,7 @@
     color: #191919;
     padding: 30px 20px 0;
     text-align: left;
-    font-weight:800;
+    font-weight: 800;
   }
 
   .main .top-bar>i {

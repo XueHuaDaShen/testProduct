@@ -98,6 +98,10 @@
       // if (this.$store.state.notices.length == 0) {
       // }
       this.getNotices();
+    },
+    created() {
+      this.$store.dispatch('setbodyBG', 'no-bg');
+      localStorage.setItem('bodyBG', 'no-bg');
     }
   }
 </script>

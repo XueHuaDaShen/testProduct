@@ -379,7 +379,7 @@
       },
     },
     watch: {
-      "salary.group" (newVal, oldVal) {
+      "salary.group"(newVal, oldVal) {
         // this.salary.group = parseFloat(this.salary.group);
         if (newVal != oldVal) {
           if (newVal) {
@@ -394,6 +394,10 @@
       this.salary.max = parseFloat(localStorage.getItem('refund').toString());
       this.salary.group = parseFloat(localStorage.getItem('refund').toString());
       this.getLinkList();
+    },
+    created() {
+      this.$store.dispatch('setbodyBG', 'no-bg');
+      localStorage.setItem('bodyBG', 'no-bg');
     }
   };
 </script>
@@ -406,6 +410,7 @@
       border-bottom-left-radius: 3px;
       position: absolute;
     }
+
     .el-slider__button {
       border-color: #CC3447;
     }

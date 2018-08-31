@@ -43,7 +43,7 @@
       </div>
     </div>
     <div class="data-table" v-loading="loading">
-      <el-table :data="activityLogListData" header-row-class-name="table-header" align="left" stripe border style="width: 100%;font-size:12px;">
+      <el-table :data="activityLogListData" header-row-class-name="table-header" align="left" stripe border style="width: 100%;font-size:12px;" max-height="450">
         <el-table-column width="180" prop="loginname" label="用户名">
         </el-table-column>
         <el-table-column width="180" label="群组">
@@ -60,8 +60,8 @@
         </el-table-column>
         <el-table-column label="启用">
           <template slot-scope="scope">
-            <el-switch v-model="scope.row.status" @change="handleChangeStatus(scope.row)" :active-value="0" :inactive-value="1" active-color="#2D996E"
-              inactive-color="#C83A4C">
+            <el-switch v-model="scope.row.status" @change="handleChangeStatus(scope.row)" :active-value="0"
+              :inactive-value="1" active-color="#2D996E" inactive-color="#C83A4C">
             </el-switch>
           </template>
         </el-table-column>
@@ -78,8 +78,9 @@
         </el-table-column>
       </el-table>
       <div class="fenye">
-        <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="pageNum" :page-size="pageSize"
-          :page-sizes="[10, 20, 40, 80,160,350,700,1000]" layout="total, sizes, prev, pager, next, jumper" :total="total">
+        <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="pageNum"
+          :page-size="pageSize" :page-sizes="[10, 20, 40, 80,160,350,700,1000]" layout="total, sizes, prev, pager, next, jumper"
+          :total="total">
         </el-pagination>
       </div>
     </div>
@@ -259,8 +260,8 @@
           value: ""
         },
         pageNum: 1,
-        pageSize: 10,
-        total: 10,
+        pageSize: 40,
+        total: 0,
         activityLogListData: [],
         duration: 1000,
         dialogFormVisible: false,
@@ -359,7 +360,7 @@
       const menus = JSON.parse(localStorage.getItem('menus'));
       menus[this.index1].child[this.index2].child.filter((v, vi) => {
         let o = new Object();
-        if(v.url === 'admin'){
+        if (v.url === 'admin') {
           this.titleName = v.menu_name;
         }
         o.title = v.menu_name;

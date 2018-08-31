@@ -31,7 +31,8 @@
     </div>
     <!-- table S -->
     <div class="data-table" v-loading="loading">
-      <el-table :data="groupListData" header-row-class-name="table-header" stripe border style="width: 100%;font-size:12px;">
+      <el-table :data="groupListData" header-row-class-name="table-header" stripe border style="width: 100%;font-size:12px;"
+        max-height="450">
         <el-table-column align="center" prop="no" label="层级编号">
         </el-table-column>
         <el-table-column align="center" prop="name" label="层级名称">
@@ -57,8 +58,8 @@
         </el-table-column>
         <el-table-column align="center" label="出入款项" width="158px">
           <template slot-scope="scope">
-            <el-select clearable placeholder="选择" v-model="scope.row.pay_setting_id._id" :loading="setting.loading" :loading-text="setting.loadingtext"
-              class="small" @change="getSettingChange(scope.row)">
+            <el-select clearable placeholder="选择" v-model="scope.row.pay_setting_id._id" :loading="setting.loading"
+              :loading-text="setting.loadingtext" class="small" @change="getSettingChange(scope.row)">
               <el-option v-for="(item,index) in setting.options" :key="index" :label="item.name" :value="item._id">
               </el-option>
             </el-select>
@@ -72,8 +73,9 @@
         </el-table-column>
       </el-table>
       <div class="fenye">
-        <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="pageNum" :page-size="pageSize"
-          :page-sizes="[10, 20, 40, 80,160,350,700,1000]" layout="total, sizes, prev, pager, next, jumper" :total="total">
+        <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="pageNum"
+          :page-size="pageSize" :page-sizes="[10, 20, 40, 80,160,350,700,1000]" layout="total, sizes, prev, pager, next, jumper"
+          :total="total">
         </el-pagination>
       </div>
     </div>
@@ -132,8 +134,10 @@
         </div>
       </div>
       <div slot="footer" class="dialog-footer">
-        <el-button v-if="isCreate" type="primary" @click="createSetFn('ruleForm')" class="yes" :loading="createLoading">确 定</el-button>
-        <el-button v-if="!isCreate" type="primary" @click="editSetFn('ruleForm')" class="yes" :loading="editLoading">修 改</el-button>
+        <el-button v-if="isCreate" type="primary" @click="createSetFn('ruleForm')" class="yes" :loading="createLoading">确
+          定</el-button>
+        <el-button v-if="!isCreate" type="primary" @click="editSetFn('ruleForm')" class="yes" :loading="editLoading">修
+          改</el-button>
         <el-button @click="resetForm('ruleForm')" class="no">取 消</el-button>
       </div>
     </el-dialog>
@@ -183,8 +187,8 @@
             <span style="float:left">{{groupLockedName}}</span>
           </el-form-item>
           <el-form-item label="锁定至：" prop="group.value">
-            <el-select clearable v-model="lockForm.group.value" placeholder="选择" style="width:300px;" @focus="lockFormGroupFocus" :loading="lockForm.group.loading"
-              :loading-text="lockForm.group.loadingtext">
+            <el-select clearable v-model="lockForm.group.value" placeholder="选择" style="width:300px;" @focus="lockFormGroupFocus"
+              :loading="lockForm.group.loading" :loading-text="lockForm.group.loadingtext">
               <el-option v-for="(item,index) in lockForm.group.options" :key="index" :label="item.name" :value="item._id">
               </el-option>
             </el-select>
@@ -237,8 +241,8 @@
         groupListData: [],
         paySetList: [],
         pageNum: 1,
-        pageSize: 10,
-        total: 10,
+        pageSize: 40,
+        total: 0,
         dialogFormVisible: false,
         dialogFormTitle: "新增层级",
         isCreate: false,
@@ -1070,7 +1074,7 @@
       }
     },
     watch: {
-      "lockForm.username" () {
+      "lockForm.username"() {
         if (!this.lockForm.username) {
           this.lockForm.hasLoginname = false;
         }

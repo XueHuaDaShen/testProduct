@@ -4,12 +4,12 @@
       <div class="binding-inner">
         <div class="x-auto">
           为了账户的资金安全，建议锁定银行卡信息。
-          <br/>
-          <br/>锁定后不能增加新卡绑定，已绑定的银行信息不能进行修改和删除。
+          <br />
+          <br />锁定后不能增加新卡绑定，已绑定的银行信息不能进行修改和删除。
         </div>
         <table>
           <tbody>
-            <tr v-for="(item,index) in bankCards" v-cloak>
+            <tr v-for="(item,index) in bankCards" v-cloak :key="index">
               <td align="right" class="exp">已绑卡{{index+1}}：</td>
               <td align="left" class="content">
                 <el-input v-model="item.bank[0].bank_name+item.card_no" clearable :disabled="true">
@@ -161,7 +161,7 @@
                   self.bankCards = success.data.bankcards;
                 }
               }
-            } else if(success.returncode == 101 || success.returncode == 103 || success.returncode == 106) {
+            } else if (success.returncode == 101 || success.returncode == 103 || success.returncode == 106) {
               request.loginAgain(self)
             }
           },
@@ -178,6 +178,10 @@
     },
     mounted() {
       this.getUserBankList();
+    },
+    created() {
+      this.$store.dispatch('setbodyBG', 'no-bg');
+      localStorage.setItem('bodyBG', 'no-bg');
     }
   }
 </script>

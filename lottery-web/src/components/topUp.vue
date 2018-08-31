@@ -108,10 +108,10 @@
               <div class="tip-title">注意事项：</div>
               <p class="tip-content">
                 1. 本页显示的银行账号将不定期更换，请核对正确后再转账，转账备注/留言填写入款会员账号。
-                <br/> 2. 建议您选择与公司相同的银行，同银行间转账可以立即到账，若是跨行转账，则取决于银行的处理时间，会较晚到账。
-                <br/> 3. 充值不成功，请联系在线客服。
-                <br/> 4. 请避免存入个位数为0金额以便于区别您的入款，建议使用诸如51.05、204.10、3001.50、10008.88等的随机金额，微信支付宝转账请备注姓名说明。
-                <br/> 5. 谢谢大家的支持与配合！
+                <br /> 2. 建议您选择与公司相同的银行，同银行间转账可以立即到账，若是跨行转账，则取决于银行的处理时间，会较晚到账。
+                <br /> 3. 充值不成功，请联系在线客服。
+                <br /> 4. 请避免存入个位数为0金额以便于区别您的入款，建议使用诸如51.05、204.10、3001.50、10008.88等的随机金额，微信支付宝转账请备注姓名说明。
+                <br /> 5. 谢谢大家的支持与配合！
               </p>
             </div>
             <hr class="user-split-line">
@@ -1355,7 +1355,7 @@
       }
     },
     watch: {
-      "form.cash_apply.value" (newValue, oldValue) {
+      "form.cash_apply.value"(newValue, oldValue) {
         if (newValue !== oldValue) {
           if (newValue) {
             if (!validator.posPattern(newValue)) {
@@ -1364,14 +1364,14 @@
           }
         }
       },
-      "topUpType.active" (newValue, oldValue) {
+      "topUpType.active"(newValue, oldValue) {
         if (newValue != oldValue) {
           if (newValue) {
             this.getthirdLvList("web", newValue);
           }
         }
       },
-      "entrance.thirdLvList.value" (newValue, oldValue) {
+      "entrance.thirdLvList.value"(newValue, oldValue) {
         if (newValue != oldValue) {
           if (newValue) {
             this.form.receiver.value = newValue.realname;
@@ -1380,7 +1380,7 @@
           }
         }
       },
-      "entrance.thirdLvList.options" () {
+      "entrance.thirdLvList.options"() {
         let options = this.entrance.thirdLvList.options;
         if (options.length != 0) {
           this.entrance.thirdLvList.allowed = true;
@@ -1393,6 +1393,10 @@
       this.getWithdrawLimit();
       this.getJeepayList();
       this.getthirdLvList("web", 1);
+    },
+    created() {
+      this.$store.dispatch('setbodyBG', 'no-bg');
+      localStorage.setItem('bodyBG', 'no-bg');
     }
   };
 </script>
@@ -1401,6 +1405,7 @@
     .dialog-header {
       width: 500px;
     }
+
     .dialog-class {
       width: 500px;
       padding: 20px 0 0;
@@ -1422,12 +1427,14 @@
     font-family: PingFangSC-Regular;
     font-size: 12px;
     color: #191919;
+
     .dialog-footer {
       position: absolute;
       bottom: 30px;
       left: 0;
       right: 0;
     }
+
     .finished-icon {
       width: 100px;
       height: 100px;
@@ -1437,6 +1444,7 @@
       background: url("../assets/img/topUp/Shape@3x.png") no-repeat;
       background-size: cover;
     }
+
     .finished-text {
       font-family: PingFangSC-Regular;
       font-size: 16px;
@@ -1445,34 +1453,41 @@
       width: 384px;
       margin: 0 auto;
     }
+
     .inner-title {
       font-family: PingFangSC-Regular;
       font-size: 16px;
       color: #191919;
       text-align: center;
     }
+
     .inner-image {
       width: 240px;
       height: 240px;
       margin: 30px auto;
+
       >img {
         width: 100%;
         height: 100%;
       }
     }
+
     .inner-row {
       width: 100%;
       text-align: center;
+
       .important {
         font-weight: 700;
         text-align: left;
         min-width: 200px;
         display: inline-block;
       }
+
       .mb-10 {
         margin-bottom: 10px;
       }
     }
+
     .tip {
       font-family: PingFangSC-Regular;
       font-size: 12px;
@@ -1481,6 +1496,7 @@
       width: 420px;
       margin: 20px auto 30px;
     }
+
     .qr-submit {
       width: 115px;
       height: 40px;
@@ -1525,6 +1541,7 @@
     width: 100%;
     padding: 30px 20px;
     border: 1px solid #ddd;
+
     .inner-pay-title {
       text-align: left;
       font-family: PingFangSC-Regular;
@@ -1532,10 +1549,12 @@
       font-size: 16px;
       color: #191919;
     }
+
     .inner-pay-ways {
       display: flex;
       justify-content: flex-start;
       align-items: center;
+
       >li {
         margin-right: 20px;
         list-style: none;
@@ -1550,13 +1569,16 @@
         border: 1px solid #dddddd;
         border-radius: 2px;
         position: relative;
+
         &:last-child {
           margin-right: 0;
         }
+
         &.active {
           border: 1px solid #cc3447;
           color: #cc3447;
         }
+
         &.active:after {
           position: absolute;
           right: 0;
@@ -1678,6 +1700,7 @@
     text-align: left;
     font-size: 12px;
     margin-bottom: 30px;
+
     .title {
       font-family: PingFangSC-Regular;
       font-weight: 700;
@@ -1686,6 +1709,7 @@
       margin-bottom: 20px;
       display: inline-block;
     }
+
     .recharge-bank {
       width: 424px;
       height: 168px;
@@ -1697,6 +1721,7 @@
       display: flex;
       flex-direction: row;
       align-items: center;
+
       .exp {
         font-family: PingFangSC-Regular;
         font-size: 12px;
@@ -1706,6 +1731,7 @@
         text-align-last: justify;
         display: inline-block;
       }
+
       .content {
         font-family: PingFangSC-Regular;
         font-size: 12px;
@@ -1866,6 +1892,7 @@
     font-weight: 700;
     color: #ffffff;
     margin: 0 auto;
+
     &.no-allowed {
       background-color: #f5f7fa;
       color: #c0c4cc;
@@ -2018,6 +2045,7 @@
     font-family: PingFangSC-Regular;
     font-size: 16px;
     color: #191919;
+
     &.no-allowed {
       background-color: #f5f7fa;
       border-color: #e4e7ed;
@@ -2130,32 +2158,38 @@
     flex-direction: row;
     align-items: center;
     justify-content: center;
+
     .kj {
       background-image: url("../assets/img/topUp/kj.png");
       height: 16px;
       width: 22px;
     }
+
     .sm {
       background-image: url("../assets/img/topUp/sm.png");
       height: 18px;
       width: 18px;
     }
+
     &.active {
       background: #cc3447;
       font-family: PingFangSC-Regular;
       font-size: 14px;
       color: #ffffff;
+
       .kj {
         background-image: url("../assets/img/topUp/kj_active.png");
         height: 16px;
         width: 22px;
       }
+
       .sm {
         background-image: url("../assets/img/topUp/sm_active.png");
         height: 18px;
         width: 18px;
       }
     }
+
     >i {
       display: inline-block;
       background-size: cover;

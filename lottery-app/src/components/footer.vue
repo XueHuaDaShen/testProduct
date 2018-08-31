@@ -141,7 +141,7 @@ export default {
       background:#CC3447;
     }
     .shouye-icon{
-      background:url('/static/img/homed.png') no-repeat;
+      background:url('/@/assets/img/user.png') no-repeat;
       background-size:100% 100%;
     }
     .youxi-icon{

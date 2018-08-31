@@ -341,6 +341,10 @@
         })
       }
     },
+    created() {
+      this.$store.dispatch('setbodyBG', 'no-bg');
+      localStorage.setItem('bodyBG', 'no-bg');
+    },
     computed: {
       getVoteTime() {
         return moment(this.result.create_at).format('YYYY-MM-DD HH:mm:ss');
@@ -374,6 +378,7 @@
 
   .project-content {
     padding: 30px 20px;
+
     .wrap-inner {
       min-height: 731px;
       color: #333333;
@@ -580,6 +585,7 @@
     font-weight: 700;
     color: #FFFFFF;
     margin: 0 auto;
+
     &.back {
       background: #777777;
     }
@@ -589,6 +595,7 @@
     height: 40px;
     line-height: 40px;
     display: flex;
+
     .tab-title {
       width: 100px;
       background: #d8d8d8;
@@ -600,18 +607,22 @@
       font-family: MicrosoftYaHei;
       cursor: pointer;
       position: relative;
+
       >a {
         font-size: 14px;
         color: #191919;
         outline: none;
         text-decoration: none;
       }
+
       a {
         display: block;
       }
+
       &:hover>a {
         color: #847b5f;
       }
+
       &.active {
         color: #bd8454;
         box-sizing: border-box;
@@ -619,6 +630,7 @@
         border: 1px solid #ddd;
         border-bottom: none;
         border-radius: 4px 4px 0 0;
+
         >a {
           color: #bd8454;
         }

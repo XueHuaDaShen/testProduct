@@ -70,7 +70,7 @@
                 self.result = [];
                 self.noResult = true;
               }
-            } else if(success.returncode == 101 || success.returncode == 103 || success.returncode == 106) {
+            } else if (success.returncode == 101 || success.returncode == 103 || success.returncode == 106) {
               request.loginAgain(self)
             } else {
               self.$message({
@@ -266,6 +266,7 @@
     font-size: 16px;
     color: #BD8454;
     text-decoration: underline;
+    font-weight: bold;
   }
 
   .activity-wrap .main {

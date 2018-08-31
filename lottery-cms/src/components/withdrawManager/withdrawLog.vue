@@ -1,6 +1,7 @@
 <template>
   <div class="rechargeLot-wrap">
-    <DialogUserInfo v-if="dialog" :userid="userid" :loginname="loginname" @sendDiglogShow="handleDialogShow" @closeDialog="handleCloseDialog"></DialogUserInfo>
+    <DialogUserInfo v-if="dialog" :userid="userid" :loginname="loginname" @sendDiglogShow="handleDialogShow"
+      @closeDialog="handleCloseDialog"></DialogUserInfo>
     <div class="content-header">
       <div class="title">
         <h2>{{titleName}}</h2>
@@ -16,8 +17,8 @@
           </div>
           <div class="search-inner-wrap">
             <label>查找时间：</label>
-            <el-date-picker v-model="searchTime" type="datetimerange" align="right" unlink-panels range-separator="至" start-placeholder="开始日期"
-              end-placeholder="结束日期" :picker-options="pickerOptions">
+            <el-date-picker v-model="searchTime" type="datetimerange" align="right" unlink-panels range-separator="至"
+              start-placeholder="开始日期" end-placeholder="结束日期" :picker-options="pickerOptions">
             </el-date-picker>
           </div>
           <div class="search-inner-wrap">
@@ -79,8 +80,8 @@
         </el-table-column>
       </el-table>
       <div class="fenye">
-        <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="pageNum" :page-size="pageSize"
-          layout="total, prev, pager, next, jumper" :total="total">
+        <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="pageNum"
+          :page-size="pageSize" layout="total, prev, pager, next, jumper" :total="total">
         </el-pagination>
       </div>
     </div>
@@ -195,8 +196,8 @@
         ],
         loading: false,
         pageNum: 1,
-        pageSize: 10,
-        total: 10,
+        pageSize: 40,
+        total: 0,
         withdrawListData: [],
         userid: '',
         loginname: '',
@@ -329,7 +330,7 @@
       const menus = JSON.parse(localStorage.getItem('menus'));
       menus[this.index1].child[this.index2].child.filter((v, vi) => {
         let o = new Object();
-        if(v.url === 'withdrawLog'){
+        if (v.url === 'withdrawLog') {
           this.titleName = v.menu_name;
         }
         o.title = v.menu_name;
@@ -570,7 +571,7 @@
       }
     },
     watch: {
-      "form.status" (newVal, oldVal) {
+      "form.status"(newVal, oldVal) {
         if (newVal) {
           if (newVal != oldVal) {
             switch (newVal) {

@@ -262,8 +262,11 @@
         }
       },
       toReg() {
-        let reg = 'http://www.8bw.vip/#/reg/0qug9eawf7';
-        location.href = reg;
+        // let reg = 'http://www.8bw.vip/#/reg/0qug9eawf7';
+        // location.href = reg;
+        this.$router.push({
+          name: 'reg'
+        })
       },
       open() {
         window.open('https://ytpfx.livechatvalue.com/chat/chatClient/chatbox.jsp?companyID=1027559&configID=43463&jid=8295678173&s=1', 'newwindow',

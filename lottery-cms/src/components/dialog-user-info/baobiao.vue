@@ -3,8 +3,8 @@
     <div style="padding: 12px 20px 0px;">
       <div class="baobiao-search-term">
         <div class="baobiao-search-time">
-          <el-date-picker v-model="searchTime" type="datetimerange" align="right" unlink-panels range-separator="至" start-placeholder="开始日期"
-            end-placeholder="结束日期" :picker-options="pickerOptions1">
+          <el-date-picker v-model="searchTime" type="datetimerange" align="right" unlink-panels range-separator="至"
+            start-placeholder="开始日期" end-placeholder="结束日期" :picker-options="pickerOptions1">
           </el-date-picker>
         </div>
         <div class="baobiao-search-btn">
@@ -16,7 +16,7 @@
       </div>
       <div class="baobiao-content">
         <el-table :data="tableData" show-summary :summary-method="getSummaries" v-loading="dataLoading" empty-text="没有符合当前条件的记录"
-          style="width: 100%">
+          style="width: 100%" max-height="450">
           <el-table-column label="投注" align="center" width="180">
             <template slot-scope="scope">
               {{scope.row.totalVote.toFixed(2)}}
@@ -63,8 +63,8 @@
     data() {
       return {
         pageNum: 1,
-        pageSize: 10,
-        total: 10,
+        pageSize: 40,
+        total: 0,
         pickerOptions1: {
           shortcuts: [{
             text: '今天',
@@ -82,7 +82,7 @@
               start.setTime(start.getTime() - 3600 * 1000 * 24);
               picker.$emit('pick', [start, end]);
             }
-          },{
+          }, {
             text: '最近一周',
             onClick(picker) {
               const end = new Date();

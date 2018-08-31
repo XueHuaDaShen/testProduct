@@ -48,7 +48,7 @@
     <ul class="caipiaoList">
       <router-link v-for="(lottery, li) in lotteryList" :key="li" :to="{ name: lottery.gamecode.split('.')[0]==='lhc'?'lhc':'betsView', query:{id: lottery.gameid, name: lottery.gamename, code: lottery.gamecode.split('.')[0]==='qt'?lottery.gamecode.split('.')[1]:lottery.gamecode.split('.')[0]} }">
         <li>
-          <span><img :src="'../static/img/'+lottery.gamecode.split('.')[0]+'_icon.png'"></span>
+          <span><img :src="'static/img/'+lottery.gamecode.split('.')[0]+'_icon.png'"></span>
           <em>{{lottery.gamename}}</em>
         </li>
       </router-link>
@@ -130,6 +130,10 @@ export default {
     // alert('loginname-----'+localStorage.getItem('loginname'))
     // alert('refund-----'+localStorage.getItem('refund'))
     // alert('blance-----'+localStorage.getItem('blance'))
+    if(!localStorage.getItem('phone-token')){
+      request.loginAgain(vm);
+      return false;
+    }
     this.$store.dispatch('setTitle', '首页');
     this.$store.dispatch('setFooterStatus', true);
     this.$store.dispatch('setBackStatus', false);
@@ -155,7 +159,8 @@ export default {
       request.http('get', '/ad/list', {},
         (success) => {
           // console.log(success)
-          this.loading = false;
+          vm.loading = false;
+          let code = success.returncode;
           if (success.returncode == 200) {
             // let bannerlist = success.data;
             if (success.data.total != 0) {
@@ -171,6 +176,8 @@ export default {
               vm.bannerlist = [];
               vm.initSwiperData()
             }
+          } else if(code == 101 || code == 103 || code == 106) {
+            request.loginAgain(vm)
           }
         },
         (error) => {
@@ -220,6 +227,7 @@ export default {
         "get",
         url, { pagenum: 1, pagesize: 1000 },
         success => {
+          let code = success.returncode;
           if (success.returncode && success.returncode == 200) {
             if (success.data.total != 0) {
               try{
@@ -245,6 +253,8 @@ export default {
             } else {
               vm.huodongList = [];
             }
+          } else if(code == 101 || code == 103 || code == 106) {
+            request.loginAgain(vm)
           }
         },
         error => {
@@ -260,12 +270,15 @@ export default {
         '/lottery/hots',
         {},
         (success) => {
+          let code = success.returncode;
           // console.log(success.data)
           if (success.returncode && success.returncode == 200) {
             vm.lotteryList = success.data;
             // vm.lotteryList.sort((a, b) => {
             //   return a.order-b.order
             // })
+          } else if(code == 101 || code == 103 || code == 106) {
+            request.loginAgain(vm)
           }
         },
         (error) => {
@@ -281,6 +294,7 @@ export default {
         "get",
         url, { page_num: 1, page_size: 1000 },
         success => {
+          let code = success.returncode;
           if (success.returncode && success.returncode == 200) {
             if (success.data.total != 0) {
               try{
@@ -294,6 +308,8 @@ export default {
               vm.huodongList = [];
               vm.noResult = true;
             }
+          } else if(code == 101 || code == 103 || code == 106) {
+            request.loginAgain(vm)
           }
         },
         error => {

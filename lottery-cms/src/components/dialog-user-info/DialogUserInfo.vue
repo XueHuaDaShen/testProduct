@@ -82,7 +82,7 @@
                 <tr>
                   <td style="width:50%;">
                     <label>主钱包：</label>
-                    <span>{{formatcash(data.cash)}}</span>
+                    <span>{{formatcash(cash)}}</span>
                     <img src="@/assets/refresh.png" @click="refreshCash" style="width:14px;height:12px;margin:0 10px;margin-bottom:-1px;cursor:pointer;">
                     <button
                       :disabled="isClick"
@@ -163,6 +163,7 @@
     data() {
       return {
         isClick: false,
+        cash: 0,
         cash_ky: 0,
         data: null,
         ziliao: false,
@@ -292,7 +293,8 @@
             self.loading = false;
             // console.log(success)
             if (code == 200) {
-              self.cash_ky = success.data;
+              self.cash_ky = success.data.cash_ky;
+              self.cash = success.data.cash;
             } else if(code == 101 || code == 103 || code == 106) {
               request.loginAgain(self)
             } else if(code == 303){
@@ -455,6 +457,7 @@
             if (code === 200) {
               vm.data = success.data;
               vm.cash_ky = vm.data.cash_ky;
+              vm.cash = vm.data.cash;
               vm.hasSetCashPsd = vm.data.cash_password ? true : false;
               vm.hasSetPsd = vm.data.password ? true : false;
               vm.showTable = true;

@@ -69,6 +69,10 @@
             return 'wrap-dataCharts';
           case 'home':
             return 'wrap-home';
+          case 'no-bg':
+            return 'wrap-no-bg';
+          case 'ac-bg':
+            return 'wrap-ac-bg';
           case 'default':
             return 'my-home-content-wrap'
         }
@@ -78,7 +82,68 @@
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style>
+<style lang="scss">
+  /* alert html弹框样式 加上.syxw-wrap-inner 即可 */
+  .el-message-box.syxw-wrap-inner {
+    background: #F4F4F4;
+    border: 4px solid #BBBBBB;
+    border-radius: 2px;
+    padding-bottom: 20px;
+    box-shadow: 0 2px 30px rgba(0, 0, 0, 0.1);
+
+    .el-message-box__header {
+      padding: 20px;
+      font-family: PingFangSC-Medium;
+      font-size: 18px;
+      color: #191919;
+      font-weight: bold;
+      border-bottom: 1px solid #ddd;
+    }
+
+    .el-message-box__content {
+      padding: 20px;
+
+      .el-message-box__message {
+        .lottery-title {
+          font-family: PingFangSC-Medium;
+          font-size: 14px;
+          color: #191919;
+          font-weight: bold;
+          margin-bottom: 5px;
+          text-align: center;
+
+          >strong {
+            color: #CC3447;
+          }
+        }
+
+        .lottery-bottom {
+          font-family: PingFangSC-Medium;
+          font-size: 14px;
+          color: #777777;
+          font-weight: bold;
+        }
+      }
+    }
+
+    .el-message-box__headerbtn {
+      top: 20px;
+    }
+
+    .el-message-box__btns {
+      padding-top: 0;
+
+      >button {
+        background-image: linear-gradient(-180deg, #DBB894 5%, #7C5D3C 97%);
+        border: 1px solid #DBB894;
+        border-radius: 2px;
+        width: 115px;
+        height: 40px;
+        font-size: 14px;
+      }
+    }
+  }
+
   .my-home-content-wrap {
     width: 100%;
     color: #fff;
@@ -136,5 +201,17 @@
     width: 100%;
     color: #fff;
     background: #e6e6e6;
+  }
+
+  .wrap-no-bg {
+    width: 100%;
+    color: #fff;
+  }
+
+  .wrap-ac-bg {
+    width: 100%;
+    color: #fff;
+    background: url('../assets/img/activity/Background.png') no-repeat;
+    background-size: cover;
   }
 </style>

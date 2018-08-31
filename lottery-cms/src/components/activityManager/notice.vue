@@ -32,7 +32,7 @@
     </div>
     <div class="data-table" v-loading="loading">
       <el-table :data="activityLogListData" header-row-class-name="table-header" stripe border style="width: 100%;fong-size:12px;"
-        @cell-mouse-enter="mouseOver">
+        @cell-mouse-enter="mouseOver" max-height="450">
         <el-table-column align="center" prop="order" label="排序值">
         </el-table-column>
         <el-table-column align="center" prop="title" label="标题">
@@ -172,7 +172,7 @@
         loading: false,
         dialogLoading: false,
         pageNum: 1,
-        pageSize: 10,
+        pageSize: 40,
         enabled: {
           value: "",
           options: [{

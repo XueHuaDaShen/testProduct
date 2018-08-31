@@ -325,8 +325,8 @@
         }],
         loading: false,
         pageNum: 1,
-        pageSize: 10,
-        total: 10,
+        pageSize: 40,
+        total: 0,
         withdrawListData: [],
         userid: '',
         loginname: '',
@@ -522,7 +522,8 @@
           bank: "",
           card_no: "",
           cash_apply: "",
-          message: ''
+          message: '',
+          realname: ''
         },
         rules: {
           statusSelected: [{
@@ -831,6 +832,7 @@
         this.form.status = row.status;
         this.currId = row._id;
         this.form.loginname = row.loginname;
+        this.form.realname = row.realname;
         this.form.account = row.loginname;
         this.form.bank = row.bank;
         this.form.card_no = row.card_no;

@@ -32,8 +32,8 @@
         </el-table-column>
         <el-table-column align="center" label="展现状态">
           <template slot-scope="scope">
-            <el-switch v-model="scope.row.status" @change="enableChange(scope.row.status)" :active-value="0" :inactive-value="1" active-color="#2D996E"
-              inactive-color="#C83A4C">
+            <el-switch v-model="scope.row.status" @change="enableChange(scope.row.status)" :active-value="0"
+              :inactive-value="1" active-color="#2D996E" inactive-color="#C83A4C">
             </el-switch>
           </template>
         </el-table-column>
@@ -136,8 +136,13 @@
             checked: false
           },
           {
-            title: '入款记录',
+            title: 'BWIN入款记录',
             name: 'rechargeLog',
+            checked: false
+          },
+          {
+            title: '第三方入款记录',
+            name: 'thirdRechargeLog',
             checked: false
           },
           {
@@ -148,8 +153,8 @@
         ],
         loading: false,
         pageNum: 1,
-        pageSize: 10,
-        total: 10,
+        pageSize: 40,
+        total: 0,
         withdrawListData: [],
         typeArr: [{
           value: '1',
@@ -701,6 +706,7 @@
 
   .detail-title {
     text-align: left;
+
     p {
       font-family: PingFangSC-Medium;
       font-size: 16px;

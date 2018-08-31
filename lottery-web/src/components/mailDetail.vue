@@ -159,6 +159,10 @@
         self.noMessage();
       }
     },
+    created() {
+      this.$store.dispatch('setbodyBG', 'no-bg');
+      localStorage.setItem('bodyBG', 'no-bg');
+    },
     watch: {
       $route(to, from) {
         // react to route changes...
@@ -300,10 +304,12 @@
     font-size: 14px;
     color: #777;
     width: 100%;
+
     .content-photo {
       text-align: center;
       margin-bottom: 20px;
       width: 100%;
+
       >img {
         width: auto;
         height: auto;

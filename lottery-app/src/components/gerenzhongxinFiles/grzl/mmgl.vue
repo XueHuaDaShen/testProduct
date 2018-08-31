@@ -210,6 +210,17 @@ export default {
                       request.loginAgain(vm);
                     } else if (code == 200) {
                       vm.showDialogFn('修改成功，请重新登录')
+                    } else if (code == 305) {
+                      vm.tip = '旧密码不正确，请重新输入';
+                      setTimeout(() => {
+                        vm.tip = '';
+                      }, vm.tipTimeout*1000);
+                    } else if (code == 307) {
+                      vm.tip = '登录密码不能和资金密码一致';
+                      setTimeout(() => {
+                        vm.tip = '';
+                      }, vm.tipTimeout*1000);
+                      return false;
                     } else {
                       // console.log('error', code);
                     }
@@ -322,6 +333,12 @@ export default {
                       setTimeout(() => {
                         vm.tip = '';
                       }, vm.tipTimeout*1000);
+                    } else if (code == 307) {
+                      vm.tip = '资金密码不能和登录密码一致';
+                      setTimeout(() => {
+                        vm.tip = '';
+                      }, vm.tipTimeout*1000);
+                      return false;
                     } else if (code == 200) {
                       vm.showDialogFn('修改成功')
                     } else {

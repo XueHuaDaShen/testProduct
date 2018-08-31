@@ -406,7 +406,7 @@
       }
     },
     watch: {
-      "form.channelIn.value" (newValue, oldValue) {
+      "form.channelIn.value"(newValue, oldValue) {
         if (newValue !== oldValue) {
           if (newValue) {
             if (newValue == 'main') {
@@ -441,7 +441,7 @@
           }
         }
       },
-      "form.channelOut.value" (newValue, oldValue) {
+      "form.channelOut.value"(newValue, oldValue) {
         if (newValue !== oldValue) {
           if (newValue) {
             if (newValue == 'main') {
@@ -493,6 +493,10 @@
     mounted() {
       this.setTimeToday();
       this.handleSearch();
+    },
+    created() {
+      this.$store.dispatch('setbodyBG', 'no-bg');
+      localStorage.setItem('bodyBG', 'no-bg');
     }
   }
 </script>
@@ -741,4 +745,4 @@
     margin-left: 20px;
   }
 </style>
-<link/>
+<link />

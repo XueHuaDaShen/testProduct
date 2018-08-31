@@ -744,6 +744,8 @@
       }
     },
     created() {
+      this.$store.dispatch('setbodyBG', 'no-bg');
+      localStorage.setItem('bodyBG', 'no-bg');
       //query字段
       //id:1 提现,2 转账，3 额度转换
       //nextStep:true 下一步显示,false 隐藏
@@ -767,10 +769,12 @@
 <style scoped lang="scss">
   .table-xinxi {
     width: 100%;
+
     .time-row {
       display: flex;
       justify-content: flex-start;
       align-items: center;
+
       .exp {
         text-align: left;
         font-family: PingFangSC-Regular;
@@ -813,6 +817,7 @@
     font-weight: 700;
     color: #ffffff;
     margin: 0 auto;
+
     &.no-allowed {
       background-color: #f5f7fa;
       color: #c0c4cc;
@@ -834,6 +839,7 @@
     font-weight: 700;
     color: #ffffff;
     margin: 0 auto;
+
     &.no-allowed {
       background-color: #f5f7fa;
       color: #c0c4cc;
@@ -843,6 +849,7 @@
 
   .time-row {
     text-align: left; // position: relative;
+
     .last-login-time {
       width: 200px;
       height: 40px;
@@ -857,6 +864,7 @@
       border: 1px solid #c8c8c8;
       border-radius: 4px;
     }
+
     .last-exp {
       font-size: 12px;
       color: #191919;
@@ -865,6 +873,7 @@
       text-align: left;
       font-family: PingFangSC-Regular;
     }
+
     .last-tip {
       font-family: PingFangSC-Regular;
       font-size: 12px;
@@ -948,6 +957,7 @@
     font-size: 12px;
     color: #191919;
     font-family: PingFangSC-Regular;
+
     &.error {
       color: #cc3447;
     }
@@ -1021,6 +1031,7 @@
     width: 100%;
     padding: 30px 20px;
     border: 1px solid #ddd;
+
     .inner-pay-title {
       text-align: left;
       font-family: PingFangSC-Regular;
@@ -1074,12 +1085,15 @@
     font-family: PingFangSC-Regular;
     font-size: 12px;
     color: #001600;
+
     .tip-row {
       margin-bottom: 20px;
       text-align: left;
+
       .red {
         color: #cc3447;
       }
+
       &:last-child {
         margin-bottom: 0;
       }
@@ -1134,6 +1148,7 @@
     position: relative;
     text-align: center;
     margin-right: 20px;
+
     &:last-child {
       margin-right: 0;
     }
@@ -1581,6 +1596,7 @@
     margin-top: 30px;
     width: 400px;
     border: 1px solid #333;
+
     td {
       border: 1px solid #333;
       height: 34px;
@@ -1655,16 +1671,20 @@
   .account-done {
     margin-top: 30px;
     width: 340px;
+
     td.exp {
       min-width: 150px;
       font-size: 14px;
     }
+
     td.content {
       text-align: right;
     }
+
     td {
       padding: 5px 0;
     }
+
     .submit {
       display: inline-block;
       text-align: center;
@@ -1684,6 +1704,7 @@
     height: 34px;
     line-height: 34px;
     margin-bottom: 30px;
+
     .exp {
       font-size: 16px;
       font-family: MicrosoftYaHei;
@@ -1691,6 +1712,7 @@
       line-height: 20px;
       display: inline-block;
     }
+
     .exp2 {
       font-size: 16px;
       font-family: MicrosoftYaHei;

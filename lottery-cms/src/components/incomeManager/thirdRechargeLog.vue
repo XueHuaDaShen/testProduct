@@ -15,25 +15,43 @@
             <el-input clearable v-model="username" placeholder="姓名" style="width:114px"></el-input>
           </div>
           <div class="search-inner-wrap">
-            <label>平台：</label>
-            <el-select clearable v-model="platform" placeholder="选择" class="small">
-              <el-option label="KY" value="ky">
+            <label>入款渠道：</label>
+            <el-select clearable v-model="type.value" placeholder="入款渠道：" @focus="incomeWayFocus" class="small"
+              :loading="type.loading" :loading-text="type.loadingtext">
+              <el-option v-for="item in type.options" :key="item._id" :label="item.ditch" :value="item._id">
+              </el-option>
+            </el-select>
+          </div>
+          <!-- <div class="search-inner-wrap">
+            <label>入款账户：</label>
+            <el-input clearable v-model="card_no" placeholder="入款账户" style="width:114px"></el-input>
+          </div> -->
+          <div class="search-inner-wrap">
+            <label>流水号：</label>
+            <el-input clearable v-model="order_no" placeholder="流水号" style="width:114px"></el-input>
+          </div>
+          <div class="search-inner-wrap">
+            <label>状态：</label>
+            <el-select clearable v-model="status" placeholder="请选择状态" class="small">
+              <el-option v-for="item in statusArr" :key="item.value" :label="item.label" :value="item.value">
               </el-option>
             </el-select>
           </div>
           <div class="search-inner-wrap">
-            <label>游戏名：</label>
-            <el-input clearable v-model="game" placeholder="游戏名称" style="width:114px"></el-input>
-          </div>
-          <div class="search-inner-wrap">
-            <label>游戏时间：</label>
+            <label>提交时间：</label>
             <el-date-picker v-model="searchTime" type="datetimerange" align="right" unlink-panels range-separator="至"
               start-placeholder="开始日期" end-placeholder="结束日期" :picker-options="pickerOptions" :default-time="pickerDefaultTime">
             </el-date-picker>
           </div>
           <div class="search-inner-wrap">
+            <label>申请金额：</label>
+            <el-input clearable v-model="incomeRange.min" placeholder="最小金额" style="width:114px" type="number"></el-input>
+            <span>--</span>
+            <el-input clearable v-model="incomeRange.max" placeholder="最大金额" style="width:114px" type="number"></el-input>
+          </div>
+          <div class="search-inner-wrap">
             <label>测试账号：</label>
-            <el-select clearable v-model="is_test" placeholder="测试账号" class="small">
+            <el-select clearable v-model="is_test" placeholder="选择" class="small">
               <el-option v-for="item in testUser" :key="item.value" :label="item.label" :value="item.value">
               </el-option>
             </el-select>
@@ -42,51 +60,43 @@
             <el-button type="danger" @click="handleSearch" size="medium" class="small yes">搜索</el-button>
             <el-button type="info" @click="handleReset" size="medium" class="small no">重置</el-button>
           </div>
+          <!-- <tableBtn :text="'搜索'" :plain="false" :btnType="'success'" :func="handleSearch"></tableBtn>
+          <tableBtn :text="'重置'" :func="handleReset"></tableBtn> -->
         </div>
       </div>
     </div>
     <div class="data-table" v-loading="loading">
       <el-table :data="rechargeListData" header-row-class-name="table-header" stripe border style="width: 100%;font-size:12px;">
+        <el-table-column align="center" prop="order_no" label="流水号" width="145">
+        </el-table-column>
         <el-table-column align="center" label="用户名" width="126">
           <template slot-scope="scope">
             <el-button type="text" @click="getUserInfoFn(scope.row)">{{scope.row.loginname}}</el-button>
           </template>
         </el-table-column>
-        <!-- <el-table-column align="center" prop="account" label="第三方游戏用户名">
+        <el-table-column align="center" prop="cash_apply" width="110" label="申请金额" :formatter="formatMoney">
+        </el-table-column>
+        <el-table-column align="center" prop="create_at" :formatter="formatTime" label="提交时间">
+        </el-table-column>
+        <el-table-column align="center" label="到账金额" prop="cash_recharged" :formatter="formatMoney">
+        </el-table-column>
+        <el-table-column align="center" prop="recharge_at" :formatter="formatTime" label="操作时间">
+        </el-table-column>
+        <!-- <el-table-column align="center" prop="card_no" label="银行卡号">
         </el-table-column> -->
-        <el-table-column align="center" prop="platform" label="平台名">
+        <el-table-column align="center" prop="account.method" label="充值类型">
         </el-table-column>
-        <!-- <el-table-column align="center" prop="channel" label="代理渠道">
-        </el-table-column> -->
-        <el-table-column align="center" prop="game" label="游戏名">
+        <el-table-column align="center" prop="account.name" width="150" label="存入账户">
         </el-table-column>
-        <!-- <el-table-column align="center" prop="room" :formatter="isTypeFn" label="房间号">
+        <el-table-column align="center" prop="status" :formatter="isStatusFn" label="状态">
         </el-table-column>
-        <el-table-column align="center" prop="table" label="桌号">
+        <el-table-column align="center" prop="message" width="80" label="备注">
         </el-table-column>
-        <el-table-column align="center" prop="chair" label="椅号">
-        </el-table-column> -->
-        <el-table-column align="center" prop="vote" label="投注额">
-        </el-table-column>
-        <el-table-column align="center" prop="profit" label="盈利额">
-        </el-table-column>
-        <!-- <el-table-column align="center" prop="revenue" label="平台抽水额">
-        </el-table-column>
-        <el-table-column align="center" prop="current_cash" label="当前金额">
-        </el-table-column> -->
-        <!-- <el-table-column align="center" prop="start_at" :formatter="formatTime" label="游戏开始时间">
-        </el-table-column>
-        <el-table-column align="center" prop="end_at" :formatter="formatTime" label="游戏结束时间">
-        </el-table-column> -->
-        <el-table-column align="center" prop="create_at" :formatter="formatTime" label="游戏时间">
-        </el-table-column>
-        <el-table-column align="center" prop="update_at" :formatter="formatTime" label="同步时间">
-        </el-table-column>
-        <!-- <el-table-column align="center" prop="is_test" :formatter="formatTestUser" width="80" label="测试用户">
-        </el-table-column> -->
-        <el-table-column align="center" label="操作">
+        <el-table-column align="center" prop="status" fixed="right" label="操作" width="150">
           <template slot-scope="scope">
-            <el-button class="small edit">原始数据</el-button>
+            <el-button v-if="scope.row.status==1" @click="toRechargeFn(scope.row)" class="yes small">充值审核</el-button>
+            <el-button v-if="scope.row.status==2" @click="getDetail(scope.row)" class="edit small">详情</el-button>
+            <el-button v-if="scope.row.status==3" @click="resetCheck(scope.row)" class="small edit">恢复申请</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -97,6 +107,69 @@
         </el-pagination>
       </div>
     </div>
+    <el-dialog title="充值审核" :center="false" :visible.sync="dialogFormVisible">
+      <div class="body-middle">
+        <el-form ref="form" :rules="rules" :model="form">
+          <el-form-item label="真实姓名：" v-if="form.realName">
+            <el-input v-model="form.realName" disabled>
+            </el-input>
+          </el-form-item>
+          <el-form-item label="银行卡卡号" v-if="form.bank_no">
+            <el-input v-model="form.bank_no" disabled>
+            </el-input>
+          </el-form-item>
+          <el-form-item label="审核结果：" prop="rechargeStatus">
+            <el-select v-model="form.rechargeStatus" placeholder="请选择状态">
+              <el-option label="充值成功" value="2"></el-option>
+              <el-option label="充值失败" value="3"></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="到账金额：" prop="realRecharge">
+            <el-input v-model="form.realRecharge" placeholder="请输入实际充值金额" disabled>
+            </el-input>
+          </el-form-item>
+          <el-form-item label="备注：" prop="message">
+            <el-input v-model="form.message" placeholder="请输入备注">
+            </el-input>
+          </el-form-item>
+        </el-form>
+      </div>
+      <div slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="submitForm('form')" class="yes" :loading="rechargeLoading">确 定</el-button>
+        <el-button @click="resetForm('form')" class="no">取 消</el-button>
+      </div>
+    </el-dialog>
+    <el-dialog title="充值详情" :center="false" :visible.sync="detailVisible">
+      <div class="body-middle">
+        <el-form>
+          <el-form-item label="真实姓名：" v-if="detail.realName">
+            <el-input v-model="detail.realName" disabled>
+            </el-input>
+          </el-form-item>
+          <el-form-item label="银行卡卡号" v-if="detail.bank_no">
+            <el-input v-model="detail.bank_no" disabled>
+            </el-input>
+          </el-form-item>
+          <el-form-item label="审核结果：" v-if="detail.rechargeStatus">
+            <el-select v-model="detail.rechargeStatus" disabled>
+              <el-option label="充值成功" :value="2"></el-option>
+              <el-option label="充值失败" :value="3"></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="到账金额：" v-if="detail.realRecharge">
+            <el-input v-model="detail.realRecharge" disabled>
+            </el-input>
+          </el-form-item>
+          <el-form-item label="备注：" v-if="detail.message">
+            <el-input v-model="detail.message" disabled>
+            </el-input>
+          </el-form-item>
+        </el-form>
+      </div>
+      <div slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="closeDetail()" class="yes">确 定</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 <script>
@@ -109,7 +182,7 @@
     trim
   } from "../../lib/utils/validator";
   export default {
-    name: "thirdpart",
+    name: "rechargeLog",
     components: {
       tableBtn,
       DialogUserInfo
@@ -123,23 +196,40 @@
         }
       };
       return {
+        pickerDefaultTime: ['00:00:00', '23:59:59'],
         index1: 0,
         index2: 0,
-        titleName: '棋牌游戏',
+        rechargeLoading: false,
+        titleName: '第三方入款记录',
         routerArr: [{
-            title: '彩票投注',
-            name: 'betsLog',
+            title: '第三方渠道',
+            name: 'thirdpartyManager',
+            checked: false
+          }, {
+            title: '扫码管理',
+            name: 'paymentWx',
             checked: false
           },
           {
-            title: '彩票追号',
-            name: 'chaseLog',
+            title: '银行卡管理',
+            name: 'paymentBank',
             checked: false
-          }, {
-            title: '棋牌游戏',
-            name: 'thirdpart',
+          },
+          {
+            title: 'BWIN入款记录',
+            name: 'rechargeLog',
             checked: false
-          }
+          },
+          {
+            title: '第三方入款记录',
+            name: 'thirdRechargeLog',
+            checked: false
+          },
+          {
+            title: '前端展示',
+            name: 'tradeAccountLog',
+            checked: false
+          },
         ],
         loading: false,
         pageNum: 1,
@@ -150,7 +240,12 @@
         loginname: "",
         username: "",
         searchTime: "",
-        pickerDefaultTime: ['00:00:00', '23:59:59'],
+        card_no: '',
+        incomeRange: {
+          min: "",
+          max: ""
+        },
+        recharge: "",
         pickerOptions: {
           shortcuts: [{
               text: "昨天",
@@ -273,8 +368,27 @@
             }
           ]
         },
-        game: "",
-        platform: "",
+        statusArr: [{
+            value: "1",
+            label: "申请充值"
+          },
+          {
+            value: "2",
+            label: "充值成功"
+          },
+          {
+            value: "3",
+            label: "充值失败"
+          }
+        ],
+        type: {
+          value: "",
+          options: [],
+          loading: false,
+          loadingtext: "正在搜索...",
+        },
+        status: "",
+        order_no: "",
         duration: 1000,
         dialog: false,
         dialogIsShow: false,
@@ -282,7 +396,16 @@
         form: {
           rechargeStatus: "",
           realRecharge: "",
-          shouxufei: ""
+          message: '',
+          bank_no: "",
+          realName: "",
+        },
+        detail: {
+          rechargeStatus: "",
+          realRecharge: "",
+          message: '',
+          bank_no: "",
+          realName: "",
         },
         rules: {
           rechargeStatus: [{
@@ -300,19 +423,19 @@
               validator: validateRecharge
             }
           ],
-          shouxufei: [{
+          message: [{
             required: true,
-            message: "请输入金额",
+            message: "请输入备注",
             trigger: "change"
           }]
         },
-        formLabelWidth: "120px",
+        // formLabelWidth: "120px",
         currId: "",
+        // currentCash: "",
         testUser: [{
             value: "",
             label: "全显示"
-          },
-          {
+          }, {
             value: "0",
             label: "不显示"
           },
@@ -322,6 +445,7 @@
           }
         ],
         is_test: '0',
+        detailVisible: false,
       };
     },
     created() {
@@ -332,7 +456,7 @@
       const menus = JSON.parse(localStorage.getItem('menus'));
       menus[this.index1].child[this.index2].child.filter((v, vi) => {
         let o = new Object();
-        if (v.url === 'thirdpart') {
+        if (v.url === 'thirdRechargeLog') {
           this.titleName = v.menu_name;
         }
         o.title = v.menu_name;
@@ -350,7 +474,20 @@
       this.getRechargeLotList();
     },
     methods: {
+      formatMoney(row, column, cellValue) {
+        if (cellValue) {
+          return Number(cellValue).toFixed(2);
+        }
+        return "--"
+      },
+      incomeWayFocus(event) {
+        if (this.type.options.length != 0) {
+          return;
+        }
+        this.getIncomeWays();
+      },
       handleChangeRouter(name) {
+        console.log(name)
         this.$router.push({
           name: name,
           query: {
@@ -358,7 +495,38 @@
             index2: this.index2
           }
         })
-        // console.log(name)
+      },
+      // 获取入款渠道
+      getIncomeWays() {
+        let vm = this;
+        vm.type.loading = true;
+        let url = "/trade/account/list";
+        request.http(
+          "get",
+          url, {
+            PageSize: 1000,
+            bwin: 2, // 1,bwin 2,第三方
+          },
+          success => {
+            vm.type.loading = false;
+            if (success.returncode) {
+              if (
+                success.returncode == 103 ||
+                success.returncode == 106 ||
+                success.returncode == 101
+              ) {
+                request.loginAgain(vm);
+              } else if (success.returncode == 200) {
+                vm.type.options = success.data;
+              } else {
+                vm.type.loading = false;
+              }
+            }
+          },
+          error => {
+            vm.type.loading = false;
+          }
+        );
       },
       success() {
         const vm = this;
@@ -368,6 +536,15 @@
           duration: vm.duration,
           center: true
         });
+      },
+      message(message, type) {
+        const vm = this;
+        vm.$message({
+          message: message,
+          type: type,
+          duration: vm.duration,
+          center: true
+        })
       },
       error() {
         const vm = this;
@@ -402,6 +579,8 @@
             return "支付宝";
           case 3:
             return "银行卡转账";
+          default:
+            return "--"
         }
       },
       formatTestUser(row, column, cellValue) {
@@ -436,25 +615,39 @@
         this.dialogIsShow = val;
       },
       formatTime(row, column, cellValue) {
-        return moment(cellValue).format("YYYY-MM-DD HH:mm:ss");
+        // console.log("row", row)
+        // console.log("column", column)
+        if (cellValue) {
+          if (row.status === 3 || row.status === 1) {
+            if (column.property === "create_at") {
+              return moment(cellValue).format("YYYY-MM-DD HH:mm:ss");
+            }
+          } else if (row.status === 2) {
+            return moment(cellValue).format("YYYY-MM-DD HH:mm:ss");
+          }
+        }
+        return "--"
         // return moment(cellValue).format('YYYY-MM-DD')
       },
       submitForm(formName) {
         const vm = this;
         this.$refs[formName].validate(valid => {
           if (valid) {
+            vm.rechargeLoading = true;
             request.http(
               "post",
               "/trade/recharge/update", {
                 id: vm.currId,
                 status: vm.form.rechargeStatus,
                 cash_recharged: vm.form.realRecharge,
-                cash_service_fee: vm.form.shouxufei
+                message: vm.form.message
               },
               success => {
+                vm.rechargeLoading = false;
                 let code = success.returncode;
                 if (code === 200) {
                   vm.dialogFormVisible = false;
+                  vm.resetForm("form");
                   vm.getRechargeLotList();
                 } else if (code === 101 || code === 103 || code === 106) {
                   request.loginAgain(vm);
@@ -463,6 +656,7 @@
                 }
               },
               error => {
+                vm.rechargeLoading = false;
                 vm.error();
                 console.log(error);
               }
@@ -473,13 +667,62 @@
           }
         });
       },
+      resetCheck(row) {
+        const vm = this;
+        vm.loading = true;
+        request.http(
+          "post",
+          "/trade/recharge/update", {
+            id: row._id,
+            cash_recharged: row.cash_recharged,
+            status: "1",
+          },
+          success => {
+            vm.loading = false;
+            let code = success.returncode;
+            if (code === 200) {
+              vm.getRechargeLotList();
+            } else if (code === 101 || code === 103 || code === 106) {
+              request.loginAgain(vm);
+            } else {
+              alert(success.returncode);
+            }
+          },
+          error => {
+            vm.loading = false;
+            vm.error();
+            console.log(error);
+          }
+        );
+      },
       resetForm(formName) {
         this.dialogFormVisible = false;
+        this.recharge = "";
         this.$refs[formName].resetFields();
       },
       toRechargeFn(row) {
         this.dialogFormVisible = true;
         this.currId = row._id;
+        // this.currentCash = row.cash_apply;
+        this.recharge = row.cash_apply;
+        this.form.realName = row.realname ? row.realname : "";
+        this.form.bank_no = row.card_no ? row.card_no : "";
+      },
+      getDetail(row) {
+        this.detailVisible = true;
+        this.detail.rechargeStatus = row.status;
+        this.detail.realRecharge = row.cash_recharged ? row.cash_recharged : "";
+        this.detail.message = row.message && row.message;
+        this.detail.realName = row.realname ? row.realname : "";
+        this.detail.bank_no = row.card_no ? row.card_no : "";
+      },
+      closeDetail() {
+        this.detailVisible = false;
+        this.detail.rechargeStatus = "";
+        this.detail.realRecharge = "";
+        this.detail.message = "";
+        this.detail.realName = "";
+        this.detail.bank_no = "";
       },
       getRechargeLotList() {
         const vm = this;
@@ -492,25 +735,27 @@
         vm.loading = true;
         request.http(
           "get",
-          "/thirdpart/game/list", {
-            pageNum: vm.pageNum,
-            pageSize: vm.pageSize,
+          "/trade/recharge/apply/list", {
+            PageNum: vm.pageNum,
+            PageSize: vm.pageSize,
             loginname: trim(vm.username),
             beginTime: beginTime,
             endTime: endTime,
-            game: vm.game,
-            platform: vm.platform,
-            is_test: vm.is_test
+            account: vm.type.value,
+            status: vm.status,
+            order_no: trim(vm.order_no),
+            is_test: vm.is_test,
+            begin_cash_apply: vm.incomeRange.min,
+            end_cash_apply: vm.incomeRange.max
           },
           success => {
             vm.loading = false;
-            // console.log("rechargeLogList--------", success);
             let code = success.returncode;
             if (code === 200) {
-              vm.rechargeListData = success.data.data;
-              vm.pageNum = Number(success.data.page_num);
-              vm.total = success.data.total;
-              vm.success();
+              vm.rechargeListData = success.data;
+              vm.pageNum = Number(success.PageNum);
+              vm.total = success.count;
+              vm.message("请求成功", "success");
             } else if (code === 101 || code === 103 || code === 106) {
               request.loginAgain(vm);
             }
@@ -525,13 +770,19 @@
       handleReset() {
         this.username = "";
         this.searchTime = "";
-        this.game = "";
-        this.platform = "";
-        // this.is_test = '';
+        this.type = "";
+        this.status = "";
+        this.order_no = "";
+        this.is_test = '0';
       },
       handleSearch() {
         this.pageNum = 1;
         this.getRechargeLotList();
+      }
+    },
+    watch: {
+      'form.rechargeStatus'() {
+        this.form.realRecharge = (this.form.rechargeStatus === "2" ? this.recharge : 0);
       }
     }
   };

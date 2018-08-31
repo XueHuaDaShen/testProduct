@@ -29,6 +29,9 @@
             </el-select>
           </div>
           <div class="search-inner-wrap">
+            <el-checkbox v-model="dateChecked" :true-label="0" :false-label="1" size="small">累计显示</el-checkbox>
+          </div>
+          <div class="search-inner-wrap">
             <label>查询时间：</label>
             <el-date-picker v-model="searchTime" type="datetimerange" align="right" unlink-panels range-separator="至"
               start-placeholder="开始日期" end-placeholder="结束日期" :picker-options="pickerOptions" :default-time="pickerDefaultTime">
@@ -56,7 +59,8 @@
       </div>
     </div>
     <div class="data-table" v-loading="loading">
-      <el-table :data="teamColligateListData" header-row-class-name="table-header" stripe border style="width: 100%;font-size:12px;">
+      <el-table :data="teamColligateListData" header-row-class-name="table-header" stripe border style="width: 100%;font-size:12px;"
+        max-height="450">
         <el-table-column align="center" label="代理账号">
           <template slot-scope="scope">
             <el-button type="text" @click="getUserInfoFn(scope.row)">{{scope.row.loginname}}</el-button>
@@ -136,6 +140,7 @@
     },
     data() {
       return {
+        dateChecked: 1,
         index1: 0,
         index2: 0,
         titleName: '代理报表',
@@ -188,8 +193,8 @@
         desc: '',
         loading: false,
         pageNum: 1,
-        pageSize: 10,
-        total: 10,
+        pageSize: 40,
+        total: 0,
         teamColligateListData: [],
         userid: "",
         loginname: "",
@@ -475,7 +480,8 @@
             endTime: endTime,
             is_test: vm.is_test,
             order: vm.order,
-            desc: Number(vm.desc)
+            desc: Number(vm.desc),
+            date: vm.dateChecked
             // status: vm.status,
           },
           success => {
@@ -505,6 +511,7 @@
         this.status = "";
         this.order_no = "";
         this.is_test = "0";
+        this.dateChecked = 1;
       },
       handleSearch() {
         // console.log(

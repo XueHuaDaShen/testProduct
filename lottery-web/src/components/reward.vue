@@ -68,6 +68,10 @@
     },
     mounted() {
       this.getTables();
+    },
+    created() {
+      this.$store.dispatch('setbodyBG', 'no-bg');
+      localStorage.setItem('bodyBG', 'no-bg');
     }
   }
 </script>

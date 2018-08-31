@@ -114,6 +114,8 @@
       }
     },
     created() {
+      this.$store.dispatch('setbodyBG', 'no-bg');
+      localStorage.setItem('bodyBG', 'no-bg');
       let self = this;
       // console.log("title", this.$route.query);
       let id = this.$route.query && this.$route.query.id;
@@ -269,10 +271,12 @@
     font-size: 14px;
     color: #777;
     width: 100%;
+
     .content-photo {
       text-align: center;
       margin-bottom: 20px;
       width: 100%;
+
       >img {
         width: auto;
         height: auto;

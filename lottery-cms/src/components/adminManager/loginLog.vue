@@ -21,8 +21,8 @@
           </div>
           <div class="search-inner-wrap">
             <label>查找时间：</label>
-            <el-date-picker v-model="searchTime" type="datetimerange" align="right" unlink-panels range-separator="至" start-placeholder="开始日期"
-              end-placeholder="结束日期" :picker-options="pickerOptions" :default-time="pickerDefaultTime">
+            <el-date-picker v-model="searchTime" type="datetimerange" align="right" unlink-panels range-separator="至"
+              start-placeholder="开始日期" end-placeholder="结束日期" :picker-options="pickerOptions" :default-time="pickerDefaultTime">
             </el-date-picker>
           </div>
           <!--  <div class="search-inner-wrap">
@@ -46,7 +46,7 @@
       </div>
     </div>
     <div class="data-table" v-loading="loading">
-      <el-table :data="logListData" header-row-class-name="table-header" stripe border style="width: 100%;font-size:12px;">
+      <el-table :data="logListData" header-row-class-name="table-header" stripe border style="width: 100%;font-size:12px;" max-height="450">
         <el-table-column align="center" label="账号" width="126">
           <template slot-scope="scope">
             <span>{{getLoginname(scope.row)}}</span>
@@ -69,8 +69,9 @@
         </el-table-column>
       </el-table>
       <div class="fenye">
-        <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="pageNum" :page-size="pageSize"
-          :page-sizes="[10, 20, 40, 80,160,350,700,1000]" layout="total, sizes, prev, pager, next, jumper" :total="total">
+        <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="pageNum"
+          :page-size="pageSize" :page-sizes="[10, 20, 40, 80,160,350,700,1000]" layout="total, sizes, prev, pager, next, jumper"
+          :total="total">
         </el-pagination>
       </div>
     </div>
@@ -121,8 +122,8 @@
         },
         loading: false,
         pageNum: 1,
-        pageSize: 10,
-        total: 10,
+        pageSize: 40,
+        total: 0,
         logListData: [],
         userid: '',
         loginname: '',

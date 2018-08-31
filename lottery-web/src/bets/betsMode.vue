@@ -142,6 +142,7 @@
     padding-top: 7px;
     background: #f4f4f4;
     border-bottom: none;
+
     span.title {
       width: 94px;
       display: block;
@@ -212,6 +213,7 @@
     font-size: 12px;
     z-index: 88;
     display: none;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
   }
 
   .bets-rule p {
@@ -236,7 +238,7 @@
   .bets-rule-title {
     padding: 5px 0;
     border-bottom: 1px dotted #ccc;
-    color: orange;
+    color: #CFA072;
     font-size: 12px;
   }
 

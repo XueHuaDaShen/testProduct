@@ -35,7 +35,7 @@
             <div class="transform-inner-title">
               <span class="exp">账户总余额：</span>
               <span class="exp2">{{getTotalCash}}元</span>
-              <img src="@/assets/img/refresh.png" style="margin-left:10px;width:18px;height:16px;cursor:pointer;" @click="refreshCash">
+              <img src="@/assets/img/refresh.png" style="margin-left:10px;width:18px;height:16px;cursor:pointer;" @click="refreshUser">
               <!-- <i class="el-icon-refresh" style="margin-left:20px;cursor:pointer;"></i> -->
               <button :disabled="isClick" style="margin-left:10px;cursor:pointer;font-size:16px;width:64px;color:#777;text-decoration: underline;border:none;outline:none;background:none;font-weight:bold;" @click="rebackMoney">
                 一键回收
@@ -198,6 +198,27 @@
         let self = this;
         self.transformTable.loading = true;
         request.http('get', '/user/profile', {},
+          (success) => {
+            self.transformTable.loading = false;
+            if (success.returncode == 200) {
+              let profile = success.data;
+              self.transformTable.cash = Number(profile.cash).toFixed(2);
+              self.transformTable.cash_ky = Number(profile.cash_ky).toFixed(2);
+            } else if (success.returncode == 101 || success.returncode == 103 || success.returncode == 106) {
+              request.loginAgain(self)
+            }
+          },
+          (error) => {
+            self.transformTable.loading = false;
+            console.log('获取用户资金失败', error)
+          }
+        )
+      },
+      // 获取用户资金
+      refreshUser() {
+        let self = this;
+        self.transformTable.loading = true;
+        request.http('get', '/user/refreshThirdCoin', {},
           (success) => {
             self.transformTable.loading = false;
             if (success.returncode == 200) {
@@ -490,6 +511,10 @@
     mounted() {
       this.isSetBankPassword();
       this.refreshCash();
+    },
+    created() {
+      this.$store.dispatch('setbodyBG', 'no-bg');
+      localStorage.setItem('bodyBG', 'no-bg');
     }
   };
 </script>
