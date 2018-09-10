@@ -54,25 +54,12 @@
             <el-button type="danger" @click="handleSearch" size="medium" class="small yes">搜索</el-button>
             <el-button type="info" @click="handleReset" size="medium" class="small no">重置</el-button>
           </div>
-          <!-- <el-switch
-            v-model="lotteryed"
-            :active-value="1"
-            :inactive-value="0"
-            active-text="中奖"
-            active-color="#13ce66">
-          </el-switch> -->
-          <!-- <tableBtn :text="'搜索'" :plain="false" :btnType="'success'" :func="handleSearch"></tableBtn>
-          <tableBtn :text="'重置'" :func="handleReset"></tableBtn> -->
         </div>
       </div>
     </div>
     <div class="data-table" v-loading="loading">
-      <el-table :data="betsLogList" header-row-class-name="table-header" stripe border style="width: 100%;font-size:12px;">
-        <!-- <el-table-column
-          prop="order_no"
-          width="180"
-          label="投注编号">
-        </el-table-column> -->
+      <el-table :data="betsLogList" header-row-class-name="table-header" stripe border style="width: 100%;font-size:12px;"
+        max-height="450" :show-summary="true" sum-text="总计" :summary-method="getSummaries">
         <el-table-column align="center" label="用户名" width="126">
           <template slot-scope="scope">
             <el-button type="text" size="small" @click="getUserInfoFn(scope.row)">{{scope.row.loginname}}</el-button>
@@ -84,15 +71,22 @@
         </el-table-column>
         <el-table-column align="center" prop="start_issue_no" label="开始期号">
         </el-table-column>
-        <el-table-column align="center" prop="vote_no" className="betsNum" fit label="投注内容">
+        <el-table-column align="center" className="betsNum" label="投注内容" width="120">
+          <template slot-scope="scope">
+            <el-popover placement="right" trigger="hover" popper-class="lottery_popover" v-if="scope.row.vote_no.length > 15">
+              <div class="row">
+                <span style="word-break: normal;width: auto;display: block;white-space: pre-wrap;word-wrap: break-word;text-align: left;">{{scope.row.vote_no}}</span>
+              </div>
+              <el-button class="small edit" slot="reference">详细内容</el-button>
+            </el-popover>
+            <div v-else>{{scope.row.vote_no}}</div>
+          </template>
         </el-table-column>
-        <!-- <el-table-column align="center" prop="vote_cash_finished" label="已投金额">
-        </el-table-column> -->
-        <el-table-column align="center" prop="total_vote_cash" label="追号金额">
+        <el-table-column align="center" prop="total_vote_cash" label="追号金额" :formatter="formatMoney">
         </el-table-column>
         <el-table-column align="center" width="80" label="已中金额">
           <template slot-scope="scope">
-            <span style="color:green">￥{{scope.row.award_cash||0}}</span>
+            <span style="color:green">￥{{scope.row.award_cash||0.00}}</span>
           </template>
         </el-table-column>
         <el-table-column align="center" width="80" label="追中即停">
@@ -108,15 +102,6 @@
         </el-table-column>
         <el-table-column align="center" prop="status" :formatter="isStatusFn" label="状态">
         </el-table-column>
-        <!-- <el-table-column align="center" prop="create_at" :formatter="formatTime" label="投注时间">
-        </el-table-column>
-        <el-table-column align="center" width="80" label="中奖/状态">
-          <template slot-scope="scope">
-            <span style="color:green">￥{{scope.row.award_cash||0}}</span>
-          </template>
-        </el-table-column>
-        <el-table-column align="center" prop="is_test" :formatter="formatTestUser" width="80" label="测试用户">
-        </el-table-column> -->
         <el-table-column align="center" label="操作">
           <template slot-scope="scope">
             <el-button size="small" @click="chaseDetail(scope.row)" class="small edit">详情</el-button>
@@ -136,7 +121,6 @@
         <el-table-column align="center" property="luck_no" label="开奖结果" width="150"></el-table-column>
         <el-table-column align="center" property="vote_no" label="投注内容" width="150"></el-table-column>
         <el-table-column align="center" property="vote_cash" label="金额"></el-table-column>
-        <!-- <el-table-column align="center" property="vote_num" label="投注数" width="150"></el-table-column> -->
         <el-table-column align="center" property="times" label="倍数" width="200"></el-table-column>
         <el-table-column align="center" property="status" label="追号状态" :formatter="getItemZHStatus"></el-table-column>
         <el-table-column align="center" property="status" label="中奖状态" :formatter="getStatusText"></el-table-column>
@@ -394,8 +378,49 @@
       this.getLotteryList();
     },
     methods: {
+      formatMoney(row, column, cellValue) {
+        if (cellValue) {
+          return Number(cellValue).toFixed(2);
+        }
+        return "0.00"
+      },
+      getSummaries(param) {
+        const {
+          columns,
+          data
+        } = param;
+        const sums = [];
+        columns.forEach((column, index) => {
+          if (index === 0) {
+            sums[index] = "总计";
+            return;
+          }
+          let values = data.map(item => Number(item[column.property]));
+          if (index === 6) {
+            values = data.map(item => Number(item['award_cash']));
+          }
+          if ((index === 5 || index === 6) && !values.every(value => isNaN(value))) {
+            sums[index] = values.reduce((prev, curr) => {
+              const value = Number(curr);
+              if (!isNaN(value)) {
+                return prev + curr;
+              } else {
+                return prev;
+              }
+            }, 0);
+            sums[index] = parseFloat(sums[index]).toFixed(2);
+            sums[index] += " 元";
+          } else {
+            if (index === 5 || index === 6) {
+              sums[index] = "0.00元";
+            } else
+              sums[index] = "--";
+          }
+        });
+
+        return sums;
+      },
       gameidChange(val) {
-        // console.log('val', val);
         if (val) {
           this.getwanfalist(val);
         } else {
@@ -664,6 +689,12 @@
 
   .mt-30 {
     margin-top: 30px;
+  }
+
+  .lottery_popover {
+    overflow-y: scroll;
+    max-height: 150px;
+    width: 200px;
   }
 
 </style>

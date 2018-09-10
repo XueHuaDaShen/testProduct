@@ -167,6 +167,7 @@
           endtime: '',
           _id: id,
           lotteryid: '',
+          self: 1
         }, (success) => {
           self.loading = false;
           if (success.returncode) {
@@ -562,6 +563,10 @@
     font-family: PingFangSC-Regular;
     font-size: 12px;
     color: #191919;
+    word-break: normal;
+    width: auto;
+    word-wrap: break-word;
+    overflow-y: scroll;
   }
 
   .area .step {

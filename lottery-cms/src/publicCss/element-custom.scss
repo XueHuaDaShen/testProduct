@@ -32,12 +32,16 @@
 
   .el-dialog__body {
     padding: 0;
+    overflow-y: scroll;
+    max-height: 560px;
   }
 
   .el-dialog__footer {
     padding: 0;
     padding-bottom: 30px;
     padding-right: 30px;
+    border-top: 1px solid #E6E6E6;
+    padding-top: 20px;
   }
 
   .el-button {

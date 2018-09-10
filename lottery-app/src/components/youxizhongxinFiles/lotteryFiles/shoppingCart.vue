@@ -87,6 +87,7 @@ export default {
   name: 'shoppingCart',
   data() {
     return {
+      countDownTime: '',
       liClass: 'shouye',
       orderDetail: 'betsDetail',
       isClick: false, // 双击
@@ -114,6 +115,7 @@ export default {
       is_hit_stop: 0,
 
       gameCode: '',
+      gameid: '',
     }
   },
   created() {
@@ -126,7 +128,9 @@ export default {
     this.refundArr = this.$store.state.refundArr;
     // console.log(this.refundArr)
     this.gameCode = this.$route.query.gameCode;
+    this.gameid = this.$route.query.gameid;
     this.getAllBets();
+    this.newIssueInterval();
   },
   mounted() {},
   beforeDestroy() {},
@@ -151,6 +155,68 @@ export default {
     }
   },
   methods: {
+    newIssueInterval() {
+      const vm = this;
+      // console.log(new Date().getSeconds())
+      request.http(
+        'get',
+        '/lottery/refresh', { gameid: vm.gameid },
+        (success) => {
+          // console.log(success);
+          // console.log(new Date().getSeconds())
+          let latestIssue = success.data.latestIssue;
+          let code = success.returncode;
+          if (code === 103 || code === 101 || code === 106) {
+            request.loginAgain(vm)
+          } else if (code === 200) {
+            vm.$store.dispatch('setIssue', latestIssue.issue_no)
+            vm.getCountDownTime(latestIssue.countdown);
+            // localStorage.setItem('blance', success.data.cash);
+          }
+        },
+        (error) => {
+          console.log(error)
+        }
+      )
+
+    },
+
+    // 获取倒计时的开始时间
+    getCountDownTime(s) {
+      // let s = 499;
+      // var t;
+      if (s > -1) {
+        var hour = Math.floor(s / 3600);
+        var min = Math.floor(s / 60) % 60;
+        var sec = s % 60;
+        this.countDownTime = {hour, min, sec}
+      }
+      this.startTime()
+      // return t;
+    },
+    // 开始计时
+    startTime() {
+      const vm = this;
+      let {hour, min, sec} = this.countDownTime;
+      let st = setInterval(() => {
+        sec--;
+        if(sec < 0 && min > 0){
+          min--;
+          sec = 59;
+        }else if(min <= 0 && hour > 0){
+          hour--;
+          min = 59;
+          sec = 59;
+        }
+        if(hour === 0 && min === 0 && sec === 0){
+          clearInterval(st)
+          // clearInterval(vm.myInterval);
+          // vm.getNewIssue();
+          vm.newIssueInterval();
+        }
+        this.countDownTime = {hour, min, sec};
+      }, 1000)
+    },
     // 删除购彩篮中某一条数据
     deleteCurrentItem(index) {
       this.getShoppingCart.splice(index,1)

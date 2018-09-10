@@ -23,6 +23,10 @@
           </tr>
           <!-- <tr>
             <td class="td-title">AG 游戏</td>
+            <td>{{Number(profile.cash_ag).toFixed(2) || 0}}元</td>
+          </tr> -->
+          <!-- <tr>
+            <td class="td-title">AG 游戏</td>
             <td>0元</td>
           </tr>
           <tr>
@@ -40,22 +44,9 @@
     <h2 class="tixian-title-wrap"><em></em>转账</h2>
     <ul>
       <li>
-        <span>转入：</span>
-        <publicSelect
-          v-if="showSelect1"
-          class="select-wrap"
-          :selectList="zhuanruArr"
-          :defaultSelected="zhuanhuanType"
-          placeholder="请选择转入账户"
-          label="title"
-          value="val"
-          :callback="getSelectedZhuanhuanType">
-        </publicSelect>
-      </li>
-      <li>
         <span>转出：</span>
         <publicSelect
-          v-if="showSelect2"
+          v-if="showSelect1"
           class="select-wrap"
           :selectList="zhuanchuArr"
           :defaultSelected="toUser"
@@ -63,6 +54,19 @@
           label="title"
           value="val"
           :callback="getSelectedZhuanchu">
+        </publicSelect>
+      </li>
+      <li>
+        <span>转入：</span>
+        <publicSelect
+          v-if="showSelect2"
+          class="select-wrap"
+          :selectList="zhuanruArr"
+          :defaultSelected="zhuanhuanType"
+          placeholder="请选择转入账户"
+          label="title"
+          value="val"
+          :callback="getSelectedZhuanhuanType">
         </publicSelect>
       </li>
       <li>
@@ -103,7 +107,12 @@ export default {
         // {title: 'PT 游戏', val: 'pt'},
       ],
 
-      zhuanchuArr: [],
+      zhuanchuArr: [
+        {title: '主账户', val: 'main'},
+        {title: 'KY 游戏', val: 'ky'},
+        // {title: 'AG 游戏', val: 'ag'},
+        // {title: 'PT 游戏', val: 'pt'},
+      ],
       zhuanruArr: [
         {title: '主账户', val: 'main'},
         {title: 'KY 游戏', val: 'ky'},
@@ -115,7 +124,7 @@ export default {
       toUser: '',
 
       showSelect1: true,
-      showSelect2: false,
+      showSelect2: true,
 
       zhuanru: '', // 转入
       zhuanchu: '', // 转出
@@ -206,32 +215,51 @@ export default {
       )
     },
     getSelectedZhuanhuanType(item) {
-      const vm = this;
       this.zhuanhuanType = item.val;
-      this.zhuanchuArr = [];
-      if(this.zhuanhuanType!==''){
-        this.showSelect2 = true;
-      }else{
-        this.showSelect2 = false;
-        this.zhuanchuArr = [];
-      }
-      if(this.zhuanhuanType === 'main') {
-        this.showSelect2 = false;
-        setTimeout(() => {
-          vm.showSelect2 = true;
-        }, 10);
-        this.zhuanchuArr = this.zhuanhuanArr2;
-      }else{
-        this.showSelect2 = false;
-        setTimeout(() => {
-          vm.showSelect2 = true;
-        }, 10);
-        this.zhuanchuArr = this.zhuanhuanArr1;
-      }
+      this.setSelectOption(item.val, 'zhuanchuArr', 'showSelect1')
     },
     getSelectedZhuanchu(item) {
-      // console.log(item)
       this.toUser = item.val;
+      this.setSelectOption(item.val, 'zhuanruArr', 'showSelect2')
+    },
+    // 设置select
+    setSelectOption(val, arr, isShow) {
+      const vm = this;
+      this[arr] = [];
+      if (val === ''){
+        this[isShow] = false;
+        setTimeout(() => {
+          vm[isShow] = true;
+        }, 10);
+        this[arr] = [
+          {title: '主账户', val: 'main'},
+          {title: 'KY 游戏', val: 'ky'},
+          // {title: 'AG 游戏', val: 'ag'},
+          // {title: 'PT 游戏', val: 'pt'},
+        ]
+      } else if (val === 'main'){
+        this[isShow] = false;
+        setTimeout(() => {
+          vm[isShow] = true;
+        }, 10);
+        this[arr] = [
+          // {title: '主账户', val: 'main'},
+          {title: 'KY 游戏', val: 'ky'},
+          // {title: 'AG 游戏', val: 'ag'},
+          // {title: 'PT 游戏', val: 'pt'},
+        ]
+      } else {
+        this[isShow] = false;
+        setTimeout(() => {
+          vm[isShow] = true;
+        }, 10);
+        this[arr] = [
+          {title: '主账户', val: 'main'},
+          // {title: 'KY 游戏', val: 'ky'},
+          // {title: 'AG 游戏', val: 'ag'},
+          // {title: 'PT 游戏', val: 'pt'},
+        ]
+      }
     },
     // 确认提现
     confirmWithDraw() {
@@ -247,6 +275,7 @@ export default {
         }, vm.tipTimeOut*1000);
         return false;
       }
+      vm.$store.dispatch('setLoading', true);
       request.login(
         'post',
         '/user/random',
@@ -279,16 +308,19 @@ export default {
                   // })
                   vm.withdrawFn();
                 } else if(code == 305) {
+                  vm.$store.dispatch('setLoading', false);
                   vm.tipText = '密码错误'
                   setTimeout(() => {
                     vm.tipText = '';
                   }, vm.tipTimeOut*1000);
                 } else if(code == 306) {
+                  vm.$store.dispatch('setLoading', false);
                   vm.tipText = '用户被禁'
                   setTimeout(() => {
                     vm.tipText = '';
                   }, vm.tipTimeOut*1000);
                 } else if(code == 304) {
+                  vm.$store.dispatch('setLoading', false);
                   vm.tipText = '用户不存在'
                   setTimeout(() => {
                     vm.tipText = '';
@@ -296,12 +328,17 @@ export default {
                 }
               },
               (error) => {
+                vm.$store.dispatch('setLoading', false);
                 console.log('数据异常', error)
               }
             )
+          }else{
+            vm.$store.dispatch('setLoading', false);
           }
         },
-        (error) => {}
+        (error) => {
+          vm.$store.dispatch('setLoading', false);
+        }
       )
     },
     // 验证通过，转账
@@ -312,12 +349,14 @@ export default {
         channelIn: vm.zhuanhuanType,
         money: vm.jiezhang
       };
+      // console.log(param)
       this.isClick2 = true;
       request.http(
         'post',
         '/user/exchange',
         paramCryptFn(param),
         (success) => {
+          vm.$store.dispatch('setLoading', false);
           // console.log(success)
           let code = success.returncode;
           if (success.returncode == 200){
@@ -332,7 +371,9 @@ export default {
             vm.jiezhang = '';
             vm.zijinPwd = '';
             vm.$store.dispatch('setBlance', success.data.cash);
-            localStorage.setItem('blance', success.data.cash)
+            localStorage.setItem('blance', success.data.cash);
+            vm.setSelectOption('', 'zhuanchuArr', 'showSelect1');
+            vm.setSelectOption('', 'zhuanruArr', 'showSelect2');
             vm.refreshCash();
             vm.tipText = '转账成功'
             setTimeout(() => {
@@ -360,7 +401,9 @@ export default {
             }, vm.tipTimeOut*2000);
           }
         },
-        (error) => {}
+        (error) => {
+          vm.$store.dispatch('setLoading', false);
+        }
       )
     },
   },

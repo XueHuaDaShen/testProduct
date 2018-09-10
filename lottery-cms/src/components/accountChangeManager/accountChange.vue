@@ -51,7 +51,7 @@
     </div>
     <div class="data-table" v-loading="loading">
       <el-table :data="list" header-row-class-name="table-header" stripe border style="width: 100%;font-size:12px;"
-        max-height="450">
+        max-height="450" :show-summary="true" sum-text="总计" :summary-method="getSummaries">
         <el-table-column align="center" label="用户名" width="126">
           <template slot-scope="scope">
             <el-button type="text" size="small" @click="getUserInfoFn(scope.row)">{{scope.row.loginid.loginname}}</el-button>
@@ -103,7 +103,7 @@
     },
     data() {
       return {
-        pickerDefaultTime: ['00:00:00', '23:59:59'],
+        pickerDefaultTime: ["00:00:00", "23:59:59"],
         index1: 0,
         index2: 0,
         loginname: "",
@@ -402,17 +402,17 @@
       let query = this.$route.query;
       this.index1 = Number(query.index1);
       this.index2 = Number(query.index2);
-      const menus = JSON.parse(localStorage.getItem('menus'));
+      const menus = JSON.parse(localStorage.getItem("menus"));
       menus[this.index1].child[this.index2].child.filter((v, vi) => {
         let o = new Object();
-        if (v.url === 'accountChange') {
+        if (v.url === "accountChange") {
           this.titleName = v.menu_name;
         }
         o.title = v.menu_name;
         o.name = v.url;
         o.checked = false;
         this.routerArr.push(o);
-      })
+      });
       this.routerArr.filter(v => {
         if (this.titleName === v.title) {
           v.checked = true;
@@ -426,11 +426,45 @@
       // console.log(query, menus[this.index1].child[this.index2])
     },
     methods: {
+      getSummaries(param) {
+        const {
+          columns,
+          data
+        } = param;
+        const sums = [];
+        columns.forEach((column, index) => {
+          if (index === 0) {
+            sums[index] = "总计";
+            return;
+          }
+          // console.log("column", column);
+          const values = data.map(item => Number(item[column.property]));
+          if (index === 2 && !values.every(value => isNaN(value))) {
+            sums[index] = values.reduce((prev, curr) => {
+              const value = Number(curr);
+              if (!isNaN(value)) {
+                return prev + curr;
+              } else {
+                return prev;
+              }
+            }, 0);
+            sums[index] = parseFloat(sums[index]).toFixed(2);
+            sums[index] += " 元";
+          } else {
+            if (index === 2) {
+              sums[index] = "0.00元";
+            } else
+              sums[index] = "--";
+          }
+        });
+
+        return sums;
+      },
       formatMoney(row, column, cellValue) {
         if (cellValue) {
           return Number(cellValue).toFixed(2);
         }
-        return "--"
+        return "0.00";
       },
       handleCloseDialog(val) {
         this.dialog = val;

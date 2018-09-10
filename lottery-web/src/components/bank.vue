@@ -47,21 +47,21 @@
               <tr>
                 <td align="right" class="exp">开户人姓名：</td>
                 <td align="left">
-                  <el-input class="content" placeholder="请输入内容" v-model="accountName" clearable>
+                  <el-input class="content" placeholder="请输入内容" v-model.trim="accountName" clearable>
                   </el-input>
                 </td>
               </tr>
               <tr>
                 <td align="right" class="exp">银行账号：</td>
                 <td align="left">
-                  <el-input class="content" placeholder="请输入内容" v-model="bankCard" clearable>
+                  <el-input class="content" placeholder="请输入内容" v-model.trim="bankCard" clearable>
                   </el-input>
                 </td>
               </tr>
               <tr>
                 <td align="right" class="exp">确认银行账号：</td>
                 <td align="left">
-                  <el-input class="content" placeholder="请输入内容" v-model="bankCard2" clearable>
+                  <el-input class="content" placeholder="请输入内容" v-model.trim="bankCard2" clearable>
                   </el-input>
                 </td>
               </tr>
@@ -80,42 +80,42 @@
               <tr>
                 <td align="right" class="exp">开户银行：</td>
                 <td align="left">
-                  <el-input class="content" placeholder="请输入内容" v-model="inputBank" :disabled="true">
+                  <el-input class="content" placeholder="请输入内容" v-model.trim="inputBank" :disabled="true">
                   </el-input>
                 </td>
               </tr>
               <tr>
                 <td align="right" class="exp">开户银行区域：</td>
                 <td align="left">
-                  <el-input class="content" placeholder="请输入内容" v-model="inputAccountArea.pro+inputAccountArea.city" :disabled="true">
+                  <el-input class="content" placeholder="请输入内容" v-model.trim="inputAccountArea.pro+inputAccountArea.city" :disabled="true">
                   </el-input>
                 </td>
               </tr>
               <tr>
                 <td align="right" class="exp">支行名称：</td>
                 <td align="left">
-                  <el-input class="content" placeholder="请选择支行名称" v-model="inputSubBranch" :disabled="true">
+                  <el-input class="content" placeholder="请选择支行名称" v-model.trim="inputSubBranch" :disabled="true">
                   </el-input>
                 </td>
               </tr>
               <tr>
                 <td align="right" class="exp">开户人姓名：</td>
                 <td align="left">
-                  <el-input class="content" placeholder="请输入内容" v-model="inputAccountName" :disabled="true">
+                  <el-input class="content" placeholder="请输入内容" v-model.trim="inputAccountName" :disabled="true">
                   </el-input>
                 </td>
               </tr>
               <tr>
                 <td align="right" class="exp">银行账号：</td>
                 <td align="left">
-                  <el-input class="content" placeholder="请输入内容" v-model="inputBankCard" :disabled="true">
+                  <el-input class="content" placeholder="请输入内容" v-model.trim="inputBankCard" :disabled="true">
                   </el-input>
                 </td>
               </tr>
               <tr>
                 <td align="right" class="exp">资金密码：</td>
                 <td align="left">
-                  <el-input class="content" placeholder="请输入内容" v-model="inputCashPsd" type="password">
+                  <el-input class="content" placeholder="请输入内容" v-model.trim="inputCashPsd" type="password">
                   </el-input>
                 </td>
               </tr>
@@ -130,9 +130,9 @@
         </div>
         <div v-show="bindActive === 3" class="step3">
           <p>恭喜你，你的尾号
-            <span>{{bindSuccess.card_no}}</span> 银行卡绑定成功。</p>
+            <span>{{bindSuccess.card_no | filterEnd}}</span> 银行卡绑定成功。</p>
           <div class="bank-info" :class="'b'+getBankBg(bindSuccess.bank)">
-            <span class="info-no">{{bindSuccess.card_no}}</span>
+            <span class="info-no">{{bindSuccess.card_no | filterName}}</span>
           </div>
           <p class="small-tip mt-60">现在您可以进行“银行卡管理”</p>
           <a class="btn-binding mt-20" @click="getUserBankList">银行卡管理</a>
@@ -894,6 +894,25 @@
     mounted() {
       this.getUserBankList();
     },
+    filters: {
+      filterName(str) {
+        if (str) {
+          let strLength = str.split('').length;
+          let starStr = "***********";
+          let final = str.substr(0, 4) + starStr + str.substr(strLength - 4, strLength);
+          return final;
+        }
+        return;
+      },
+      filterEnd(str) {
+        if (str) {
+          let strLength = str.split('').length;
+          let final = str.substr(strLength - 4, strLength);
+          return final;
+        }
+        return;
+      }
+    },
     created() {
       this.$store.dispatch('setbodyBG', 'no-bg');
       localStorage.setItem('bodyBG', 'no-bg');
@@ -907,18 +926,19 @@
     display: inline-block;
     position: relative;
     text-align: center;
-    margin-right: 20px;
+    border-radius: 8px;
+    box-shadow: 0 10px 50px rgba(0, 0, 0, 0.3);
 
     .info-no {
       position: relative;
       display: block;
       margin: 0 auto;
       top: 90px;
+      color: #FFFFFF;
       font-family: PingFangSC-Regular;
       font-weight: 700;
-      font-size: 14px;
-      color: #FFFFFF;
-      width: 190px;
+      font-size: 20px;
+      text-align: center;
     }
   }
 
@@ -1330,6 +1350,7 @@
     font-family: PingFangSC-Regualr;
     font-size: 16px;
     color: #191919;
+    margin-bottom: 20px;
   }
 
   .step3 p.small-tip {

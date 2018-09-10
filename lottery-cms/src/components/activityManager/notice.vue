@@ -413,20 +413,8 @@
         this.forever = false;
       },
       handleCoPhotoChange(file, fileList) {
-        // this.fileList3 = fileList.slice(-3);
         const vm = this;
-        // console.log("file", file);
-        // console.log("fileList", fileList);
         this.form.content_photo.file = fileList[0];
-        // var r = new FileReader(); //本地预览
-        // r.onload = function () {
-        //   vm.form.content_photo.url = r.result;
-        //   // console.log(r.result)
-        // }
-        // r.readAsDataURL(file.raw);
-        // if (fileList.length > 1) {
-
-        // }
       },
       // 获取层级
       getGroupList() {
@@ -666,8 +654,6 @@
         vm.dialogLoading = true;
         let content_photo = this.form.content_photo.file.raw;
         let content_true = JSON.stringify(this.form.content_photo.file) == "{}" && !this.form.content_photo.url;
-        console.log("content_photo", content_photo);
-        console.log("content_true", content_true);
         let formdata = new FormData();
         formdata.append("picture", content_photo);
         let isFile1 = this.form.content_photo.isFile;
@@ -885,7 +871,6 @@
           stop_at = this.form.time[1];
         }
         let content_photo = this.form.content_photo.file.raw;
-        console.log("content_photo", content_photo);
         let formdata = new FormData();
         if (content_photo) {
           formdata.append("picture", content_photo);

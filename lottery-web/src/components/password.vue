@@ -9,7 +9,7 @@
           <div class="table-row">
             <div class="row-item">
               <span class="exp">用户名：</span>
-              <el-input placeholder="请输入用户名" v-model="loginname" class="content" type="text" disabled></el-input>
+              <el-input placeholder="请输入用户名" v-model="loginname" class="content input_disabled" type="text" disabled></el-input>
             </div>
             <div class="row-item">
               <span class="exp">生日：</span>

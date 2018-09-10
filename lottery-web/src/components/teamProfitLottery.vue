@@ -1,20 +1,9 @@
 <!--团队盈亏 - 彩票-->
 <template>
   <div class="lottery-wrap" v-loading="loading">
-    <!-- <div class="record-tabs">
-      <router-link :to="{name:'teamProfitLottery'}" class="tab-item active">彩票
-      </router-link>
-      <router-link :to="{name:'teamProfitLive'}" class="tab-item">真人娱乐</router-link>
-      <router-link :to="{name:'teamProfitRecreation'}" class="tab-item">电子游艺
-      </router-link>
-      <router-link :to="{name:'teamProfitSports'}" class="tab-item">体育竞技</router-link>
-      <router-link :to="{name:'teamProfitChess'}" class="tab-item">棋牌竞技</router-link>
-    </div> -->
     <div class="record-options search-form">
       <div class="option-row mb-20">
         <span class="exp w-60">用户属性：</span>
-        <!-- <el-input placeholder="请输入内容" v-model="form.username.value" clearable>
-        </el-input> -->
         <el-select v-model="form.userRange.value" placeholder="请选择" clearable style="width:114px">
           <el-option v-for="item in form.userRange.options" :key="item.value" :label="item.text" :value="item.value">
           </el-option>
@@ -24,14 +13,12 @@
         <span class="exp w-60">时间：</span>
         <el-date-picker v-model="form.dateFrom.value" type="datetime" prefix-icon="void-icon" placeholder="选择日期时间" value-format="yyyy-MM-dd HH:mm:ss">
         </el-date-picker>
-        <span class="exp">至</span>
+        <span style="margin:0 5px;font-weight:bold;color:#777;font-size:14px;">至</span>
         <el-date-picker v-model="form.dateTo.value" type="datetime" prefix-icon="void-icon" placeholder="选择日期时间" value-format="yyyy-MM-dd HH:mm:ss">
         </el-date-picker>
         <a class="time ml-20" @click="setTimeToday">今日</a>&nbsp;
         <a class="time ml-20" @click="setTimeNowWeek">本周</a>&nbsp;
         <a class="time ml-20" @click="setTimeNowMonth">本月</a>&nbsp;
-        <!-- <a class="time" @click="setTimeRecent3Days(-3)">近三日</a>&nbsp; -->
-        <!-- <a class="time" @click="setTimeRecent3Days(-15)">近半月</a>&nbsp; -->
         <a class="time ml-20" @click="setTimeRecent3Days(-30)">近一月</a>
         <a class="submit ml-20" @click="handleSearch()">搜索</a>
       </div>
@@ -47,11 +34,9 @@
           <th>有效投注</th>
           <th>派奖总额</th>
           <th>投注返点</th>
-          <!-- <th>游戏盈亏</th> -->
           <th>代理返点</th>
-          <!-- <th>促销红利</th> -->
           <th>日奖励</th>
-          <th>净盈亏</th>
+          <th style="border-right: 1px solid #dddddd;">净盈亏</th>
         </tr>
         <tr class="group-item" v-for="(item,index) in list" v-cloak v-if="!noResult" :key="index">
           <td>{{item.loginname ? item.loginname : '--'}}</td>
@@ -61,15 +46,13 @@
           <td>{{item.bid_valid ? formatMoney(item.bid_valid) :'0'}}</td>
           <td>{{item.reward ? formatMoney(item.reward) :'0'}}</td>
           <td>{{item.rebate ? formatMoney(item.rebate) :'0'}}</td>
-          <!-- <td class="failed">{{item.profit}}</td> -->
           <td>{{item.rebate_ex? formatMoney(item.rebate_ex) :'0'}}</td>
           <td>{{item.activity? formatMoney(item.activity) :'0'}}</td>
-          <td class="success">{{item.profit? formatMoney(item.profit) :'0'}}</td>
-          <!-- <td class="success">{{item.profit}}</td> -->
+          <td style="border-right: 1px solid #dddddd;" class="success">{{item.profit? formatMoney(item.profit) :'0'}}</td>
         </tr>
         <tr v-if="noResult" class="no-result group-item">
-          <td colspan="10">
-            <p>没有符合条件的记录，请更改查询条件</p>
+          <td colspan="10" style="border-right: 1px solid #dddddd;">
+            <p style="color:#777;font-weight:bold;margin:35px 0;font-size:14px;">没有符合条件的记录，请更改查询条件</p>
           </td>
         </tr>
       </tbody>
@@ -362,7 +345,7 @@
   }
 
   .w-60 {
-    width: 60px;
+    width: 70px;
   }
 
   .ml-20 {
@@ -386,11 +369,6 @@
     height: 30px;
     line-height: 30px;
     color: #333;
-  }
-
-  .lottery-wrap .record-options .option-row .exp {
-    display: inline-block;
-    font-size: 12px;
   }
 
   .inline {
@@ -450,7 +428,6 @@
 
   .record-options {
     background: #FFFFFF;
-    /* padding-top: 30px; */
   }
 
   .record-options .option-row {
@@ -459,6 +436,9 @@
     font-size: 12px;
     font-family: MicrosoftYaHei;
     color: #333333;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
   }
 
   .record-options .option-row>input[type="text"] {
@@ -480,7 +460,6 @@
 
   .record-options .option-row>a {
     display: inline-block;
-    /* padding: 0 2px; */
     font-size: 12px;
     width: auto;
     height: 25px;
@@ -516,16 +495,6 @@
     padding: 15px 0;
   }
 
-  /* .record-group .group-title>th:after {
-    content: '';
-    height: 16px;
-    background: rgba(222, 222, 222, 1);
-    position: absolute;
-    right: 0;
-    top: 9px;
-    width: 1px;
-  } */
-
   .record-group .group-item {
     height: 50px;
     line-height: 50px;
@@ -546,31 +515,6 @@
     text-overflow: ellipsis;
     padding: 0 5px;
     margin: 0 auto;
-  }
-
-  .record-options .option-row>a.time {
-    display: inline-block;
-    padding: 0 2px;
-    font-size: 12px;
-    width: 64px;
-    height: 30px;
-    line-height: 28px;
-    border-radius: 2px;
-    border: 1px solid #ccc;
-    text-align: center;
-  }
-
-  .record-options .option-row>a.time:hover {
-    background: #C83A4C;
-    color: #fff;
-  }
-
-  .record-group .group-item:nth-child(2n) {
-    /* background: #fff; */
-  }
-
-  .record-group .group-item:nth-child(2n+1) {
-    /* background: #F7F7F7; */
   }
 
   .record-group .record-bottom {
@@ -616,25 +560,5 @@
     font-size: 12px;
     display: inline-block;
     margin-left: 20px;
-  }
-
-  .record-options .option-row>a.submit {
-    position: relative;
-    display: inline-block;
-    width: 80px;
-    height: 30px;
-    line-height: 28px;
-    text-align: center;
-    /* vertical-align: middle; */
-    font-size: 12px;
-    color: #FFF;
-    cursor: pointer;
-    border-radius: 2px;
-    outline: none;
-    font-family: microsoft yahei;
-    background-color: #C83A4C;
-    border: 1px solid #CCC;
-    box-shadow: none;
-    /* margin-left: 20px; */
   }
 </style>

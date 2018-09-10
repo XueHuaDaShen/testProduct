@@ -1,6 +1,6 @@
 /* 充值 */
 <template>
-  <div class="order-detail-wrap search-form content">
+  <div class="order-detail-wrap search-form content top-up-wrap">
     <user-menu></user-menu>
     <div class="main" v-loading="loading">
       <div class="top-bar">
@@ -62,13 +62,14 @@
                     :
                     <span class="content">{{option.realname}}</span>
                   </div>
-                  <!-- <div class="radio-row">
+                  <div class="radio-row">
                     <span class="exp">
                       开户行网点
                     </span>
                     :
-                    <span>{{option.subbranch}}</span>
-                  </div> -->
+                    <!-- <span class="content">温州分行苍南支行</span> -->
+                    <span class="content"></span>
+                  </div>
                   <div class="radio-row">
                     <span class="exp">
                       账号
@@ -138,7 +139,7 @@
               <div class="container-row">
                 <span class="exp">存款人卡号：</span>
                 <el-tooltip effect="dark" :content="form.card_no.value" placement="top">
-                  <el-input placeholder="请输入存款人卡号：" type="text" v-model="form.card_no.value" class="content" clearable :disabled="!entrance.thirdLvList.allowed"></el-input>
+                  <el-input placeholder="请输入存款人卡号" type="text" v-model="form.card_no.value" class="content" clearable :disabled="!entrance.thirdLvList.allowed"></el-input>
                 </el-tooltip>
               </div>
               <div class="container-row mt-20">
@@ -155,20 +156,23 @@
               <div class="container-row flex">
                 <span class="exp">充值银行</span>
                 <ul class="banklist clearfix">
-                  <li @click="jeepayToggle(index+1,item.code)" :class="[{'active':entrance.thirdLvList.active === (index+1)},getBankBg(item.uid)]" v-for="(item,index) in entrance.thirdLvList.options" :key="index"></li>
+                  <li @click="jeepayToggle(index+1,item.code)" :class="[{'active':entrance.thirdLvList.active === (index+1)},getBankBg(item.uid)]" v-for="(item,index) in entrance.thirdLvList.options" :key="index">
+                    <div class="li-inner-border"></div>
+                  </li>
                 </ul>
               </div>
               <div class="container-row mt-40">
                 <span class="exp">充值金额</span>
-                <el-input placeholder="请输入充值金额" type="number" v-model="form.cash_apply.value" class="content" clearable></el-input>
+                <el-input placeholder="请输入充值金额" type="number" v-model="form.cash_apply.value" class="content ml4" clearable :disabled="!entrance.thirdLvList.allowed"></el-input>
                 <span class="unit">元</span>
               </div>
               <div class="container-row mt-20">
                 <span class="exp"></span>
-                <span class="top-up-limit">充值额度限定：最低 {{bankcards.third_min_recharge_every_time}} 元,最高 {{bankcards.third_max_recharge_every_time}} 元，单日充值总额无上限，充值无手续费</span>
+                <span class="top-up-limit ml4">充值额度限定：最低 {{bankcards.third_min_recharge_every_time}} 元,最高 {{bankcards.third_max_recharge_every_time}} 元，单日充值总额无上限，充值无手续费</span>
               </div>
             </div>
-            <el-button class="top-up-submit" @click="onSubmit(2)" style="margin-top:60px;" :class="{'no-allowed':submitDisable.ebank == true}" :disabled="submitDisable.ebank">立即充值</el-button>
+            <el-button class="top-up-submit" @click="onSubmit(2)" style="margin-top:60px;" v-if="entrance.thirdLvList.allowed" :class="{'no-allowed':submitDisable.ebank == true}" :disabled="submitDisable.ebank">立即充值</el-button>
+            <a class="top-up-submit no-allowed" style="margin-top:60px;" v-if="!entrance.thirdLvList.allowed">立即充值</a>
           </div>
           <!-- 网银转账 END-->
           <!-- 银联快捷 Start-->
@@ -185,12 +189,12 @@
               </div>
               <div class="container-row mt-40">
                 <span class="exp">充值金额</span>
-                <el-input placeholder="请输入充值金额" type="number" v-model="form.cash_apply.value" class="content" clearable></el-input>
+                <el-input placeholder="请输入充值金额" type="number" v-model="form.cash_apply.value" class="content ml4" clearable :disabled="!entrance.thirdLvList.allowed"></el-input>
                 <span class="unit">元</span>
               </div>
               <div class="container-row mt-20">
                 <span class="exp"></span>
-                <span class="top-up-limit">充值额度限定：最低 {{bankcards.third_min_recharge_every_time}} 元,最高 {{bankcards.third_max_recharge_every_time}} 元，单日充值总额无上限，充值无手续费</span>
+                <span class="top-up-limit ml4">充值额度限定：最低 {{bankcards.third_min_recharge_every_time}} 元,最高 {{bankcards.third_max_recharge_every_time}} 元，单日充值总额无上限，充值无手续费</span>
               </div>
             </div>
             <!-- <a class="top-up-submit" @click="onSubmit(3)" style="margin-top:60px;">立即充值</a> -->
@@ -217,15 +221,15 @@
               </div>
               <div class="container-row  mt-40">
                 <span class="exp">充值金额</span>
-                <el-input placeholder="请输入充值金额" type="number" class="content" v-model="form.cash_apply.value" clearable :disabled="!entrance.thirdLvList.allowed" />
-                <span class="exp">元</span>
+                <el-input placeholder="请输入充值金额" type="number" class="content ml4" v-model="form.cash_apply.value" clearable :disabled="!entrance.thirdLvList.allowed" />
+                <span class="unit">元</span>
               </div>
               <div class="container-row  mt-20">
                 <span class="exp"></span>
-                <span class="top-up-limit">充值额度限定：最低 {{bankcards.min_recharge_scan}} 元,最高 {{bankcards.max_recharge_scan}} 元，单日充值总额无上限，充值无手续费</span>
+                <span class="top-up-limit ml4">充值额度限定：最低 {{bankcards.min_recharge_scan}} 元,最高 {{bankcards.max_recharge_scan}} 元，单日充值总额无上限，充值无手续费</span>
               </div>
             </div>
-            <a class="top-up-submit" @click="onSubmit(5)" style="margin-top:60px;" v-if="entrance.thirdLvList.allowed" :class="{'no-allowed':submitDisable.alipay_qr == true}" :disabled="submitDisable.alipay_qr">立即充值</a>
+            <el-button class="top-up-submit" @click="onSubmit(5)" style="margin-top:60px;" v-if="entrance.thirdLvList.allowed" :class="{'no-allowed':submitDisable.alipay_qr == true}" :disabled="submitDisable.alipay_qr">立即充值</el-button>
             <a class="top-up-submit no-allowed" style="margin-top:60px;" v-if="!entrance.thirdLvList.allowed">立即充值</a>
           </div>
           <!-- alipay_qr End-->
@@ -248,15 +252,15 @@
               </div>
               <div class="container-row mt-40">
                 <span class="exp">充值金额</span>
-                <el-input placeholder="请输入充值金额" type="number" class="content" v-model="form.cash_apply.value" clearable :disabled="!entrance.thirdLvList.allowed"></el-input>
-                <span class="exp">元</span>
+                <el-input placeholder="请输入充值金额" type="number" class="content ml4" v-model="form.cash_apply.value" clearable :disabled="!entrance.thirdLvList.allowed"></el-input>
+                <span class="unit">元</span>
               </div>
               <div class="container-row mt-20">
                 <span class="exp"></span>
-                <span class="top-up-limit">充值额度限定：最低 {{bankcards.min_recharge_scan}} 元,最高 {{bankcards.max_recharge_scan}} 元，单日充值总额无上限，充值无手续费</span>
+                <span class="top-up-limit ml4">充值额度限定：最低 {{bankcards.min_recharge_scan}} 元,最高 {{bankcards.max_recharge_scan}} 元，单日充值总额无上限，充值无手续费</span>
               </div>
             </div>
-            <a class="top-up-submit" @click="onSubmit(4)" style="margin-top:60px;" v-if="entrance.thirdLvList.allowed" :class="{'no-allowed':submitDisable.wechat_qr == true}" :disabled="submitDisable.wechat_qr">立即充值</a>
+            <el-button class="top-up-submit" @click="onSubmit(4)" style="margin-top:60px;" v-if="entrance.thirdLvList.allowed" :class="{'no-allowed':submitDisable.wechat_qr == true}" :disabled="submitDisable.wechat_qr">立即充值</el-button>
             <a class="top-up-submit no-allowed" style="margin-top:60px;" v-if="!entrance.thirdLvList.allowed">立即充值</a>
           </div>
           <!-- wechat_qr End-->
@@ -276,16 +280,16 @@
               </div>
               <div class="container-row  mt-40">
                 <span class="exp">充值金额</span>
-                <el-input placeholder="请输入充值金额" type="number" class="content" v-model="form.cash_apply.value" clearable></el-input>
-                <span class="exp">元</span>
+                <el-input placeholder="请输入充值金额" type="number" class="content ml4" v-model="form.cash_apply.value" clearable></el-input>
+                <span class="unit">元</span>
               </div>
               <div class="container-row  mt-20">
                 <span class="exp"></span>
-                <span class="top-up-limit">充值额度限定：最低 {{bankcards.third_min_recharge_every_time}} 元,最高 {{bankcards.third_max_recharge_every_time}} 元，单日充值总额无上限，充值无手续费</span>
+                <span class="top-up-limit ml4">充值额度限定：最低 {{bankcards.third_min_recharge_every_time}} 元,最高 {{bankcards.third_max_recharge_every_time}} 元，单日充值总额无上限，充值无手续费</span>
               </div>
             </div>
             <!-- <a class="top-up-submit" @click="onSubmit(6)" style="margin-top:60px;">立即充值</a> -->
-            <a class="top-up-submit" @click="onSubmit(6)" style="margin-top:60px;" v-if="entrance.thirdLvList.allowed" :class="{'no-allowed':submitDisable.unionpay_qr == true}" :disabled="submitDisable.unionpay_qr">立即充值</a>
+            <el-button class="top-up-submit" @click="onSubmit(6)" style="margin-top:60px;" v-if="entrance.thirdLvList.allowed" :class="{'no-allowed':submitDisable.unionpay_qr == true}" :disabled="submitDisable.unionpay_qr">立即充值</el-button>
             <a class="top-up-submit no-allowed" style="margin-top:60px;" v-if="!entrance.thirdLvList.allowed">立即充值</a>
           </div>
           <!-- unionpay_qr End-->
@@ -907,9 +911,12 @@
           }
         }
         if (!validate) {
-          self.$alert(errorMessage, "系统提醒", {
-            confirmButtonText: "确定",
-            center: true
+          self.$alert("<div class='lottery-title'>" + errorMessage + "</div>", "系统提示", {
+            dangerouslyUseHTMLString: true,
+            confirmButtonText: '确定',
+            center: true,
+            customClass: "syxw-wrap-inner",
+            callback: action => {}
           });
           return false;
         } else {
@@ -946,20 +953,18 @@
                     } else if (success.returncode == 200) {
                       self.result = success.data;
                       if (type == 1) {
-                        self.$alert(
-                          "您的存款申请提交成功，我们会尽快审核！",
-                          "系统提示",
-                          {
-                            confirmButtonText: "确定",
-                            callback: action => {
-                              // self.$router.push({ name: "netbank" });
-                              self.form.cash_apply.value = "";
-                              self.form.banks.value = "";
-                              self.form.realname.value = "";
-                              self.form.card_no.value = "";
-                            }
+                        self.$alert("<div class='lottery-title'>您的存款申请提交成功，我们会尽快审核！</div>", "系统提示", {
+                          dangerouslyUseHTMLString: true,
+                          confirmButtonText: '确定',
+                          center: true,
+                          customClass: "syxw-wrap-inner",
+                          callback: action => {
+                            self.form.cash_apply.value = "";
+                            self.form.banks.value = "";
+                            self.form.realname.value = "";
+                            self.form.card_no.value = "";
                           }
-                        );
+                        });
                       } else if (type == 2 || type == 3 || type == 6) {
                         self.form.cash_apply.value = "";
                         // window.open(self.result.url, "_blank");
@@ -976,8 +981,11 @@
                         // newWindow.document.write("<p id=\"win-p\">充值失败，请联系管理员</p>");
                         newWindow.document.getElementById("win-p").innerHTML = "充值失败，请联系管理员";
                       } else {
-                        this.$alert(success.data.msg, "系统提示", {
-                          confirmButtonText: "确定",
+                        self.$alert("<div class='lottery-title'>" + success.data.msg + "</div>", "系统提示", {
+                          dangerouslyUseHTMLString: true,
+                          confirmButtonText: '确定',
+                          center: true,
+                          customClass: "syxw-wrap-inner",
                           callback: action => {
                             self.form.cash_apply.value = "";
                           }
@@ -988,8 +996,11 @@
                 },
                 error => {
                   self.loading = false;
-                  this.$alert("您的存款申请提交失败，请联系客服！", "系统提示", {
-                    confirmButtonText: "确定",
+                  self.$alert("<div class='lottery-title'>您的存款申请提交失败，请联系客服！</div>", "系统提示", {
+                    dangerouslyUseHTMLString: true,
+                    confirmButtonText: '确定',
+                    center: true,
+                    customClass: "syxw-wrap-inner",
                     callback: action => {
                       if (type == 1) {
                         self.form.cash_apply.value = "";
@@ -1215,8 +1226,11 @@
             }
           },
           error => {
-            self.$alert("获取充值通道失败,请联系管理员", "系统提示", {
-              confirmButtonText: "确定",
+            self.$alert("<div class='lottery-title'>获取充值通道失败,请联系管理员</div>", "系统提示", {
+              dangerouslyUseHTMLString: true,
+              confirmButtonText: '确定',
+              center: true,
+              customClass: "syxw-wrap-inner",
               callback: action => {
                 self.loading = false;
               }
@@ -1417,6 +1431,89 @@
     text-align: left;
     margin: 20px 0 0 20px;
   }
+
+  .top-up-wrap {
+    .el-radio__label {
+      padding: 0;
+
+      .radio-row {
+        margin-bottom: 20px;
+        line-height: 17px;
+
+        &:last-child {
+          margin-bottom: 0;
+        }
+      }
+    }
+
+    .el-radio__input {
+      position: absolute;
+      right: 20px;
+      bottom: 20px;
+      display: block;
+      width: 20px;
+      height: 20px;
+
+      &.is-checked {
+        .el-radio__inner {
+          background: url("../assets/img/topUp/CheckBox@3x.png") no-repeat;
+          background-size: cover;
+          border: none;
+        }
+      }
+
+      .el-radio__inner {
+        width: 100%;
+        height: 100%;
+        background: url("../assets/img/topUp/Rectangle9@3x_2.png") no-repeat;
+        background-size: cover;
+        border: none;
+
+        &:after {
+          content: none;
+        }
+      }
+    }
+
+    .el-input__inner {
+      font-family: PingFangSC-Medium;
+      font-size: 14px;
+      color: #191919;
+      font-weight: bold;
+    }
+
+    .el-input__inner::-webkit-input-placeholder {
+      /* WebKit browsers */
+      color: #bcbcbc;
+      font-weight: bold;
+      font-size: 14px;
+    }
+
+    .el-input__inner:-moz-placeholder {
+      /* Mozilla Firefox 4 to 18 */
+      color: #bcbcbc;
+      font-weight: bold;
+      font-size: 14px;
+    }
+
+    .el-input__inner::-moz-placeholder {
+      /* Mozilla Firefox 19+ */
+      color: #bcbcbc;
+      font-weight: bold;
+      font-size: 14px;
+    }
+
+    .el-input__inner:-ms-input-placeholder {
+      /* Internet Explorer 10+ */
+      color: #bcbcbc;
+      font-weight: bold;
+      font-size: 14px;
+    }
+
+    .el-input.ml4 {
+      margin-left: -4px;
+    }
+  }
 </style>
 <style scoped lang="scss">
   .no-allowed {
@@ -1561,7 +1658,6 @@
         width: 128px;
         height: 40px;
         font-family: PingFangSC-Regular;
-        font-size: 14px;
         color: #191919;
         cursor: pointer;
         padding: 10px 20px;
@@ -1569,21 +1665,29 @@
         border: 1px solid #dddddd;
         border-radius: 2px;
         position: relative;
+        font-size: 14px;
+        font-weight: bold;
 
         &:last-child {
           margin-right: 0;
         }
 
         &.active {
-          border: 1px solid #cc3447;
           color: #cc3447;
+          background: #FFFFFF;
+          border: 2px solid #CFA072;
+          border-radius: 2px;
+          font-size: 14px;
+          color: #CFA072;
+          font-weight: bold;
+          line-height: 18px;
         }
 
         &.active:after {
           position: absolute;
           right: 0;
           bottom: 0;
-          background-image: url("../assets/img/topUp/Checkmark.png");
+          background-image: url("../assets/img/topUp/icon_CheckNumber@3x.png");
           background-repeat: no-repeat;
           background-size: cover;
           width: 22px;
@@ -1610,13 +1714,13 @@
     background: #d8d8d8;
     color: #191919;
     margin-right: 20px;
-    border-radius: 4px 4px 0 0;
     text-align: center;
     font-size: 12px;
     font-family: MicrosoftYaHei;
     /* color: rgba(51, 51, 51, 1); */
     cursor: pointer;
     position: relative;
+    border-radius: 2px 2px 0 0;
   }
 
   .tabs .tab-title>a {
@@ -1635,13 +1739,11 @@
   }
 
   .tabs .tab-title.active {
-    /* border-top: 2px solid #A65B06; */
     color: #bd8454;
     box-sizing: border-box;
     background: #fff;
     border: 1px solid #ddd;
-    border-bottom: none;
-    border-radius: 4px 4px 0 0;
+    border-radius: 2px 2px 0 0;
   }
 
   /* .tabs .tab-title:after {
@@ -1721,6 +1823,7 @@
       display: flex;
       flex-direction: row;
       align-items: center;
+      position: relative;
 
       .exp {
         font-family: PingFangSC-Regular;
@@ -1870,28 +1973,30 @@
   .top-up-container .container-row .exp {
     font-size: 14px;
     font-family: MicrosoftYaHei;
-    color: rgba(51, 51, 51, 1);
     line-height: 20px;
     margin-right: 20px;
     display: inline-block;
     text-align: left;
     min-width: 86px;
+    font-weight: bold;
+    color: #191919;
   }
 
   .top-up-submit {
-    width: 115px;
-    height: 40px;
+    width: 180px;
+    height: 48px;
     display: inline-block;
     text-align: center;
     cursor: pointer;
     text-decoration: none;
-    background: #cc3447;
-    border-radius: 2px;
     font-family: PingFangSC-Regular;
-    font-size: 14px;
+    font-size: 16px;
     font-weight: 700;
     color: #ffffff;
     margin: 0 auto;
+    background-image: linear-gradient(-180deg, #CFA072 0%, #B68E66 100%);
+    border: 1px solid #DDDDDD;
+    border-radius: 2px;
 
     &.no-allowed {
       background-color: #f5f7fa;
@@ -1900,20 +2005,30 @@
     }
   }
 
+  a.top-up-submit {
+    line-height: 48px;
+  }
+
   .top-up-container .container-row .unit {
     font-size: 14px;
     font-family: MicrosoftYaHei;
-    color: rgba(51, 51, 51, 1);
+    color: #191919;
     line-height: 20px;
-    margin-left: 16px;
+    margin-left: 5px;
     display: inline-block;
     text-align: center;
+    font-weight: bold;
   }
 
   .top-up-container .container-row .top-up-limit {
     color: #666666;
     font-size: 12px;
     text-align: left;
+    display: inline-block;
+
+    &.ml4 {
+      margin-left: -4px;
+    }
   }
 
   .top-up-container .container-row ul.banklist {
@@ -1926,15 +2041,26 @@
     margin-bottom: 9px;
     width: 160px;
     height: 44px;
-    border: 1px solid #dedede; // background-image: url("../assets/img/topUp/bank.png");
-    cursor: pointer; // background-size: 540%;
-    background-size: 100%;
+    cursor: pointer;
+    background-size: 100% 100%;
     position: relative;
   }
 
   .top-up-container .container-row ul.banklist>li.active {
-    border-color: #cc3447;
-    box-shadow: 5px 3px 6px rgba(103, 66, 2, 0.25);
+    border-radius: 2px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+
+    .li-inner-border {
+      border: 2px solid #CFA072;
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      border-radius: 2px;
+    }
   }
 
   .top-up-container .container-row ul.banklist>li.active:after {
@@ -1942,7 +2068,7 @@
     right: 0;
     bottom: 0;
     background-repeat: no-repeat;
-    background-image: url("../assets/img/topUp/Checkmark.png");
+    background-image: url("../assets/img/topUp/icon_CheckNumber@3x.png");
     background-size: cover;
     width: 24px;
     height: 24px;
@@ -2031,10 +2157,10 @@
   }
 
   .top-up-container .container-row .wxActive {
-    width: 173px;
-    height: 50px;
+    width: 160px;
+    height: 44px;
     margin-right: 20px;
-    line-height: 50px;
+    line-height: 44px;
     cursor: pointer;
     position: relative;
     text-align: center;
@@ -2051,11 +2177,17 @@
       border-color: #e4e7ed;
       color: #c0c4cc;
     }
+
+    &:last-child {
+      margin-right: 0;
+    }
   }
 
   .top-up-container .container-row .wxActive.active {
     border-color: #c83a4c;
-    box-shadow: 5px 3px 6px rgba(103, 66, 2, 0.25);
+    border: 2px solid #CFA072;
+    border-radius: 2px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
   }
 
   .top-up-container .container-row .wxActive>i {
@@ -2087,7 +2219,7 @@
     position: absolute;
     right: 0;
     bottom: 0;
-    background-image: url("../assets/img/topUp/Checkmark.png");
+    background-image: url("../assets/img/topUp/icon_CheckNumber@3x.png");
     background-repeat: no-repeat;
     background-size: cover;
     width: 24px;
@@ -2152,12 +2284,12 @@
     border: 1px solid #dddddd;
     border-radius: 2px;
     font-family: PingFangSC-Regular;
-    font-size: 14px;
     color: #191919;
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: center;
+    font-weight: bold;
 
     .kj {
       background-image: url("../assets/img/topUp/kj.png");
@@ -2172,10 +2304,13 @@
     }
 
     &.active {
-      background: #cc3447;
       font-family: PingFangSC-Regular;
-      font-size: 14px;
       color: #ffffff;
+      background-image: linear-gradient(-180deg, #CFA072 0%, #B68E66 100%);
+      border: 1px solid #DDDDDD;
+      border-radius: 2px;
+      font-weight: bold;
+      font-size: 14px;
 
       .kj {
         background-image: url("../assets/img/topUp/kj_active.png");

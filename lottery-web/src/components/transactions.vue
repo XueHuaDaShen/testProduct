@@ -16,14 +16,14 @@
         <span class="exp w-60">时间：</span>
         <el-date-picker v-model="form.dateFrom.value" type="datetime" prefix-icon="void-icon" placeholder="选择日期时间">
         </el-date-picker>
-        <span class="exp">至</span>
+        <span style="margin:0 5px;font-weight:bold;color:#777;font-size:14px;">至</span>
         <el-date-picker v-model="form.dateTo.value" type="datetime" prefix-icon="void-icon" placeholder="选择日期时间">
         </el-date-picker>
         <a class="time ml-20" @click="setTimeToday">今日</a>
         <a class="time" @click="setTimeNowWeek">本周</a>
         <a class="time" @click="setTimeNowMonth">本月</a>
         <a class="time" @click="setTimeRecent3Days">近一月</a>
-        <a class="search" @click="handleSearch()">查询</a>
+        <a class="submit ml-20" @click="handleSearch()">查询</a>
       </div>
     </form>
     <hr class="user-split-line">
@@ -37,7 +37,7 @@
           <th>奖期</th>
           <th>玩法</th>
           <th>变动金额</th>
-          <th>余额</th>
+          <th style="border-right: 1px solid #dddddd;">余额</th>
         </tr>
       </thead>
       <tbody>
@@ -52,8 +52,8 @@
           <td>{{item.trade_current ? item.trade_current.toFixed(2) :"--"}}</td>
         </tr>
         <tr v-if="noResult" class="no-result">
-          <td colspan="10">
-            <p>没有符合条件的记录，请更改查询条件</p>
+          <td colspan="10" style="border-right: 1px solid #dddddd;">
+            <p style="color:#777;font-weight:bold;margin:35px 0;font-size:14px;">没有符合条件的记录，请更改查询条件</p>
           </td>
         </tr>
       </tbody>
@@ -66,7 +66,7 @@
           <td></td>
           <td>本月资金变动</td>
           <td>{{getCurrentPageAmount}}</td>
-          <td>{{getCurrentPageCurrentTrade}}</td>
+          <td style="border-right: 1px solid #dddddd;">{{getCurrentPageCurrentTrade}}</td>
         </tr>
       </tfoot>
     </table>
@@ -450,7 +450,7 @@
   }
 
   .w-60 {
-    width: 60px;
+    width: 70px;
   }
 
   .ml-20 {
@@ -516,8 +516,9 @@
 
   .transactions-wrap .record-options .option-row .exp {
     display: inline-block;
-    font-size: 12px;
+    font-size: 14px;
     color: #191919;
+    font-weight: bold;
   }
 
   .transactions-wrap .record-options .option-row {
@@ -525,41 +526,13 @@
     font-size: 12px;
     font-family: MicrosoftYaHei;
     color: #333333;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
   }
 
   .mb-20 {
     margin-bottom: 20px;
-  }
-
-  .transactions-wrap .record-options .option-row>a.time {
-    display: inline-block;
-    padding: 0 2px;
-    font-size: 12px;
-    width: 64px;
-    height: 30px;
-    line-height: 28px;
-    border-radius: 2px;
-    border: 1px solid #ccc;
-    text-align: center;
-    cursor: pointer;
-  }
-
-  .transactions-wrap .record-options .option-row>a.time:hover {
-    background: #C83A4C;
-    color: #fff;
-  }
-
-  .search {
-    width: 80px;
-    height: 30px;
-    background: #C83A4C;
-    color: #fff;
-    display: inline-block;
-    line-height: 30px;
-    font-size: 12px;
-    font-family: MicrosoftYaHei;
-    text-align: center;
-    border-radius: 2px;
   }
 
   .transactions-wrap .record-group {
@@ -631,23 +604,6 @@
     background: inherit;
     font-size: 12px;
     font-family: MicrosoftYaHei;
-  }
-
-  .record-options .option-row>a.time {
-    display: inline-block;
-    font-size: 12px;
-    width: 64px;
-    height: 30px;
-    line-height: 28px;
-    border-radius: 2px;
-    border: 1px solid #ccc;
-    text-align: center;
-    margin-right: 20px;
-  }
-
-  .record-options .option-row>a.time:hover {
-    background: #C83A4C;
-    color: #fff;
   }
 
   .success {

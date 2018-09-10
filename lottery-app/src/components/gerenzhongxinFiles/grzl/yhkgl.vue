@@ -106,9 +106,9 @@
         </div>
         <p class="remind-text">连续输错超过 {{maxErrorNum}}次 系统将强制登出并冻结帐号</p>
         <p class="error-text">{{errorText}}</p>
-        <p class="warning-btn-p" v-if="oprateType==='删除'"><button @click="checkInZijinPwdFn($event, '删除')">确定</button></p>
-        <p class="warning-btn-p" v-if="oprateType==='修改'"><button @click="checkInZijinPwdFn($event, '修改')">确定</button></p>
-        <p class="warning-btn-p" v-if="oprateType==='锁定'"><button @click="checkInZijinPwdFn($event, '锁定')">确定</button></p>
+        <p class="warning-btn-p" v-if="oprateType==='删除'"><button :disabled="isClick" @click="checkInZijinPwdFn($event, '删除')">确定</button></p>
+        <p class="warning-btn-p" v-if="oprateType==='修改'"><button :disabled="isClick" @click="checkInZijinPwdFn($event, '修改')">确定</button></p>
+        <p class="warning-btn-p" v-if="oprateType==='锁定'"><button :disabled="isClick" @click="checkInZijinPwdFn($event, '锁定')">确定</button></p>
       </div>
     </div>
   </div>
@@ -120,6 +120,7 @@ export default {
   name: 'yhkgl',
   data() {
     return {
+      isClick: false,
       moment: moment,
       oprateType: '删除',
       isSetPwd: false, // 是否设置密码
@@ -305,7 +306,8 @@ export default {
       this.oprateType = '锁定'
     },
     lockCallback() {
-      alert('锁定')
+      // alert('锁定')
+      this.isClick = false;
       this.showCheckInZIjinPwdDialog = false;
     },
     // 删除银行卡
@@ -332,6 +334,7 @@ export default {
         },
         (success) => {
           // console.log(success)
+          vm.isClick = false;
           if (success.returncode && success.returncode == 200) {
             vm.getBankCardList();
             vm.showCheckInZIjinPwdDialog = false;
@@ -348,6 +351,7 @@ export default {
           }
         },
         (error) => {
+          vm.isClick = false;
           console.log('数据异常', error)
         }
       )
@@ -364,7 +368,8 @@ export default {
       }
     },
     updateCallback() {
-      alert('修改')
+      // alert('修改')
+      this.isClick = false;
       this.showCheckInZIjinPwdDialog = false;
     },
     // 隐藏弹框
@@ -459,6 +464,7 @@ export default {
         },vm.tipTextTime*1000)
         return false;
       } else {
+        vm.isClick = true;
         request.login(
           'post',
           '/user/random',
@@ -481,6 +487,7 @@ export default {
                   let code = success.returncode;
                   if (code == 103 || code == 106 || code == 101) {
                     request.loginAgain(vm);
+                    vm.isClick = false;
                   } else if (code == 200) {
                     // vm.tipText = '用户不存在'
                     // setTimeout(() => {
@@ -494,29 +501,41 @@ export default {
                       vm.updateCallback();
                     }
                   } else if(code == 305) {
+                    vm.isClick = false;
                     vm.tipText = '密码错误'
                     setTimeout(() => {
                       vm.tipText = '';
                     }, vm.tipTimeOut*1000*1000);
                   } else if(code == 306) {
+                    vm.isClick = false;
                     vm.tipText = '用户被禁'
                     setTimeout(() => {
                       vm.tipText = '';
                     }, vm.tipTimeOut*1000);
                   } else if(code == 304) {
+                    vm.isClick = false;
                     vm.tipText = '用户不存在'
                     setTimeout(() => {
                       vm.tipText = '';
                     }, vm.tipTimeOut*1000);
+                  }else{
+                    vm.isClick = false;
                   }
                 },
                 (error) => {
+                  vm.isClick = false;
                   console.log('数据异常', error)
                 }
               )
+            }else if (code == 103 || code == 106 || code == 101) {
+              request.loginAgain(vm);
+            }else{
+              vm.isClick = false;
             }
           },
-          (error) => {}
+          (error) => {
+            vm.isClick = false;
+          }
         )
       }
     },

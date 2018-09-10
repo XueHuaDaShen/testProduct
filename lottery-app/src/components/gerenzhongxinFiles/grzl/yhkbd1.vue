@@ -33,7 +33,7 @@
         <input type="password" v-model="zijinPwd">
       </li>
     </ul>
-    <button class="submit-btn" @click="toNextBindBankStep">下一步</button>
+    <button class="submit-btn" :disabled="isClick" @click="toNextBindBankStep">下一步</button>
     <div class="alert-tip-text" v-if="tipText">{{tipText}}</div>
   </div>
 </template>
@@ -47,6 +47,7 @@ export default {
   },
   data() {
     return {
+      isClick: false,
       bank: '', // 银行卡变量
       showBank: false,
       realname: '', // 开户人
@@ -134,6 +135,7 @@ export default {
         }, vm.tipTimeOut*1000);
         return false;
       }
+      vm.isClick = true;
       request.login(
         'post',
         '/user/random',
@@ -153,6 +155,7 @@ export default {
               },
               (success) => {
                 // console.log(success)
+                vm.isClick = false;
                 let code = success.returncode;
                 if (code == 103 || code == 106 || code == 101) {
                   request.loginAgain(vm);
@@ -182,12 +185,19 @@ export default {
                 }
               },
               (error) => {
+                vm.isClick = false;
                 console.log('数据异常', error)
               }
             )
+          }else if (code == 103 || code == 106 || code == 101) {
+            request.loginAgain(vm);
+          }else{
+            vm.isClick = false;
           }
         },
-        (error) => {}
+        (error) => {
+          vm.isClick = false;
+        }
       )
     }
   },

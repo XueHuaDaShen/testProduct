@@ -19,7 +19,7 @@
       </div>
       <div class="header-right">
         <div class="header-right-l">
-          <!-- <img src="../../img/pks-icon-car.png" class="pks-icon-car"> -->
+          <!-- <img src="../../assets/img/bets-img/pks-icon-car.png" class="pks-icon-car"> -->
           <div class="history-issue" v-if="issueArr.toString()!==''">
             第
             <span style="color:#c83a4c;">{{issueArr[0].issue_no}}</span> 期

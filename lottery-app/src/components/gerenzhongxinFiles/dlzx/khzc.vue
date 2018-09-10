@@ -41,7 +41,8 @@
           <span>返点：{{((userRefund-adjust)/userRefund * 100).toFixed(2)}}%</span>
         </div>
       </div>
-      <button class="submit-btn" @click="confirmKaihu">立即开户</button>
+      <div class="reg-tip" v-if="tipText3">{{tipText3}}</div>
+      <button class="submit-btn" :disabled="isClick" @click="confirmKaihu">立即开户</button>
     </div>
     <div v-if="kaihu==='链接'" style="position:relative">
       <ul>
@@ -79,7 +80,7 @@
           <span>返点：{{((userRefund-adjust)/userRefund * 100).toFixed(2)}}%</span>
         </div>
       </div>
-      <button class="submit-btn" @click="productLink">生成链接</button>
+      <button class="submit-btn" :disabled="isClick" @click="productLink">生成链接</button>
     </div>
     <div class="alert-tip-text" v-if="tipText">{{tipText}}</div>
     <div class="alert-tip-text copy-url-alert-wrap" v-if="tipText2">
@@ -93,6 +94,7 @@ import request from '@/axios/axios.js';
 import MD5 from 'MD5'
 import paramCryptFn from '@/assets/js/cryptData'
 import publicSelect from '@/components/publicModel/select';
+import {regexpInput, regexpPsd} from '@/assets/js/validator.js'
 export default {
   name: 'khzc',
   components: {
@@ -100,6 +102,7 @@ export default {
   },
   data() {
     return {
+      isClick: false,
       kaihu: '人工',
       adjust: 0,
       minRefund: 1800,
@@ -126,8 +129,10 @@ export default {
 
       tipText: '',
       tipText2: '',
+      tipText3: '',
       tipTimeOut: 1.5, // s
       tipTimeOut2: 5, // s
+      tipTimeOut3: 1.5, // s
 
       closeDialogTime: 5, // s
 
@@ -181,20 +186,33 @@ export default {
     confirmKaihu() {
       const vm = this;
       if (vm.userType === '') {
-        vm.tipText = '请选择用户类型';
+        vm.tipText3 = '请选择用户类型';
         setTimeout(() => {
-          vm.tipText = '';
-        }, vm.tipTimeOut*1000);
+          vm.tipText3 = '';
+        }, vm.tipTimeOut3*1000);
       } else if (vm.username === '') {
-        vm.tipText = '请填写用户名'
+        vm.tipText3 = '请填写用户名'
         setTimeout(() => {
-          vm.tipText = '';
-        }, vm.tipTimeOut*1000);
+          vm.tipText3 = '';
+        }, vm.tipTimeOut3*1000);
+      } else if (!regexpInput(vm.username)) {
+        vm.tipText3 = '用户名为3-16位字符，只能包含英文字母或数字'
+        setTimeout(() => {
+          vm.tipText3 = '';
+        }, vm.tipTimeOut3*1000);
+        return false;
       } else if (vm.loginPwd === '') {
-        vm.tipText = '请填写登录密码'
+        vm.tipText3 = '请填写登录密码'
         setTimeout(() => {
-          vm.tipText = '';
-        }, vm.tipTimeOut*1000);
+          vm.tipText3 = '';
+        }, vm.tipTimeOut3*1000);
+        return false;
+      } else if (!regexpPsd(vm.loginPwd)) {
+        vm.tipText3 = '密码为6-16位字符，只能且必须包含英文字母或数字（不允许连续三位相同）'
+        setTimeout(() => {
+          vm.tipText3 = '';
+        }, vm.tipTimeOut3*1000);
+        return false;
       } else {
         let param = {
           type: vm.userType,
@@ -202,11 +220,13 @@ export default {
           password: MD5(vm.loginPwd),
           refund: vm.adjust
         }
+        vm.isClick = true;
         request.http(
           'post',
           '/user/team/manual/create',
           paramCryptFn(param),
           (success) => {
+            vm.isClick = false;
             let code = success.returncode;
             if (code == 103 || code == 106 || code == 101) {
               request.loginAgain(vm);
@@ -229,6 +249,7 @@ export default {
             }
           },
           (error) => {
+            vm.isClick = false;
             console.log(error)
           }
         )
@@ -253,11 +274,13 @@ export default {
           effect_time: vm.linkValidTime,
           refund: vm.adjust
         }
+        vm.isClick = true;
         request.http(
           'post',
           '/user/team/link/create',
           param,
           (success) => {
+            vm.isClick = false;
             let code = success.returncode;
             if (code == 103 || code == 106 || code == 101) {
               request.loginAgain(vm);
@@ -286,6 +309,7 @@ export default {
             }
           },
           (error) => {
+            vm.isClick = false;
             console.log(error)
           }
         )
@@ -360,6 +384,15 @@ export default {
       color:#c7c7c7;
       background:#C83C4A;
     }
+  }
+  .reg-tip{
+    width:100%;
+    position: absolute;
+    text-align:center;
+    color:#C83C4A;
+    left:0;
+    bottom:1.1rem;
+    padding:0 .75rem;
   }
   ul{
     li{

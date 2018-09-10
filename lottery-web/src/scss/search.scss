@@ -1,105 +1,227 @@
 .search-form {
+  &.record-options .el-date-editor .el-input__inner {
+    width: 180px;
+  }
+
+  &.record-options .el-input--suffix .el-input__inner {
+    font-weight: bold;
+  }
+
+  &.record-options .el-input--prefix .el-input__inner {
+    font-weight: bold;
+  }
+
+  &.record-options {
+    .el-input__inner {
+      font-family: PingFangSC-Medium;
+      font-size: 14px;
+      color: #191919;
+      font-weight: bold;
+    }
+
+    .el-input__inner::-webkit-input-placeholder {
+      /* WebKit browsers */
+      color: #bcbcbc;
+      font-weight: bold;
+      font-size: 14px;
+    }
+
+    .el-input__inner:-moz-placeholder {
+      /* Mozilla Firefox 4 to 18 */
+      color: #bcbcbc;
+      font-weight: bold;
+      font-size: 14px;
+    }
+
+    .el-input__inner::-moz-placeholder {
+      /* Mozilla Firefox 19+ */
+      color: #bcbcbc;
+      font-weight: bold;
+      font-size: 14px;
+    }
+
+    .el-input__inner:-ms-input-placeholder {
+      /* Internet Explorer 10+ */
+      color: #bcbcbc;
+      font-weight: bold;
+      font-size: 14px;
+    }
+
+    .option-row>a.time {
+      display: inline-block;
+      font-size: 14px;
+      width: 64px;
+      height: 30px;
+      line-height: 28px;
+      border-radius: 2px;
+      font-weight: bold;
+      color: #CFA072;
+      border: 1px solid #CFA072;
+      text-align: center;
+      margin-left: 20px;
+
+      &:hover {
+        color: #fff;
+        background-image: linear-gradient(-180deg, #CFA072 0%, #B68E66 100%)
+      }
+    }
+
+    .option-row .exp {
+      display: inline-block;
+      font-size: 14px;
+      color: #191919;
+      font-weight: bold;
+    }
+
+    .option-row>a.submit {
+      position: relative;
+      display: inline-block;
+      width: 80px;
+      height: 30px;
+      line-height: 28px;
+      text-align: center;
+      font-size: 14px;
+      font-weight: bold;
+      color: #fff;
+      cursor: pointer;
+      border-radius: 2px;
+      outline: none;
+      font-family: microsoft yahei;
+      box-shadow: none;
+      border: none;
+      background-image: linear-gradient(-180deg, #CFA072 0%, #B68E66 100%);
+    }
+  }
+
   .el-input--prefix .el-input__inner {
     padding: 0 8px;
+    font-size: 14px;
   }
+
   .el-input--suffix .el-input__inner {
     padding: 0 8px;
+    border-radius: 2px;
+    font-size: 14px;
   }
+
   .el-input {
     position: relative;
     display: inline-block;
-    font-size: 12px;
+    font-size: 14px;
+    font-weight: bold;
     font-family: MicrosoftYaHei;
-    color: rgba(51, 51, 51, 1);
+    color: #191919;
     height: 30px;
     line-height: 30px;
     width: auto;
   }
+
   .el-input__inner {
     height: 30px;
     line-height: 30px; // min-width: 143px;
     border: 1px solid #8D8D8D;
     padding: 0 8px;
   }
+
   .el-input.w4 .el-input__inner {
     width: 200px !important;
   }
+
   .el-date-editor.el-input,
   .el-date-editor.el-input__inner {
     width: auto;
-  } //删除左边的图标样式
+  }
+
+  //删除左边的图标样式
   .void-icon {
     height: 0;
     width: 0
   }
+
   .el-step__title {
     font-size: 12px;
     line-height: 20px;
   }
+
   .el-step__title.is-finish {
     color: #CC3447;
   }
+
   .el-step__head.is-finish {
     color: #CC3447;
   }
+
   .el-step__icon {
     width: 32px;
     height: 32px;
     color: #fff;
     background: #777;
   }
+
   .is-finish {
     .el-step__icon {
       background: #CC3447;
     }
   }
+
   .el-step.is-center .el-step__main {
     margin-top: 10px;
     font-family: PingFangSC-Regular;
     font-size: 12px;
     font-weight: 700;
   }
+
   .el-step__icon.is-text {
     border: none;
   }
+
   .el-step.is-horizontal .el-step__line {
     height: 11px;
   }
+
   .el-step__line {
     background: #DBDBDB;
   }
+
   .el-step__line-inner {
     border: none;
     background: #CC3447;
     height: 11px;
   }
+
   .el-step__title.is-wait,
   .el-step__title.is-process {
     color: #777;
   }
+
   .issue-input {
     width: 209px;
   }
+
   .el-radio+.el-radio {
     margin-left: 0;
   }
+
   .dialog-class {
     &.el-dialog__wrapper {
       display: flex;
       justify-content: center;
       align-items: center;
     }
+
     .el-dialog__header {
       padding-bottom: 20px;
       background: transparent;
       padding-left: 0;
       padding-right: 0;
+
       .dialog-header {
         font-size: 24px;
         color: #FFFFFF;
         display: flex;
         justify-content: space-between;
         align-items: center;
+
         .close {
           background: url("../assets/img/icon_Quit@3x.png");
           display: inline-block;
@@ -110,25 +232,32 @@
         }
       }
     }
+
     .el-dialog__footer {
       background: #fff;
       text-align: center;
     }
+
     .el-dialog__headerbtn {
       display: none;
     }
+
     .el-dialog__body {
       padding-top: 20px;
       background: #fff;
     }
+
     .el-dialog {
       background: transparent;
       box-shadow: none;
     }
   }
+
   .el-input__icon {
     line-height: 30px;
-  } // .el-carousel__item--card.is-active {
+  }
+
+  // .el-carousel__item--card.is-active {
   //   width: 1024px !important;
   //   left: -36px;
   // }
@@ -141,56 +270,82 @@
     left: 0;
     right: 0;
   }
+
   .item {
     .content {
       width: 200px;
       margin-bottom: 20px;
     }
+
     .content.el-input {
       height: 40px;
+
       .el-input__inner {
         height: 40px;
         line-height: 40px;
       }
     }
+
+    .content.input_disabled {
+      .el-input__inner {
+        color: #777;
+        font-weight: bold;
+      }
+    }
+
     .con.el-input {
       height: 40px;
+
       .el-input__inner {
         height: 40px;
         line-height: 40px;
       }
     }
+
     .content.date.el-input {
       .el-input__inner {
         padding: 0 25px;
       }
     }
+
     .content.el-select {
       .el-input {
         height: 40px;
+
         .el-input__inner {
           height: 40px;
           line-height: 40px;
         }
       }
     }
+
     .time-row {
       .content {
         margin: 0;
       }
+
       .content.el-input {
         height: 40px;
+
         .el-input__inner {
           font-family: PingFangSC-Regular;
           font-size: 12px;
           color: #191919;
-          background: #FFFFE1;
+          background: #fff;
           border: 1px solid #C8C8C8;
-          border-radius: 4px;
+          border-radius: 2px;
         }
       }
+
+      .content.is-disabled.el-input .el-input__inner {
+        background-color: #f5f7fa;
+        border-color: #e4e7ed;
+        color: #c0c4cc;
+      }
     }
-  } // .el-tooltip__popper.is-light {
+  }
+
+  // .el-tooltip__popper.is-light {
   //   border: none;
   // }
   // .el-tooltip__popper {
@@ -203,30 +358,36 @@
   //   padding: 5px 8px;
   // }
   .el-select {
-    height: 40px;
-    line-height: 40px;
+    height: 30px;
+    line-height: 30px;
+
     &.special {
       height: 30px;
       line-height: 30px;
     }
   }
+
   .placeholder .el-input {
     input::-webkit-input-placeholder {
       color: #CC3447;
     }
+
     input::-moz-placeholder {
       /* Mozilla Firefox 19+ */
       color: #CC3447;
     }
+
     input:-moz-placeholder {
       /* Mozilla Firefox 4 to 18 */
       color: #CC3447;
     }
+
     input:-ms-input-placeholder {
       /* Internet Explorer 10-11 */
       color: #CC3447;
     }
   }
+
   .el-badge__content {
     background-color: #CC3447;
     color: #fff;

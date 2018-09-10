@@ -6,10 +6,12 @@
           <span>AG电子</span>
         </dt>
         <dd>大鱼满屏，惊喜不断</dd>
-        <dd class="beginBtn noActive">即将上线</dd>
+        <button class="beginBtn noActive">即将上线</button>
+        <!-- <button class="beginBtn" :disabled="isClick" @click="getLoginForm">立即开始</button> -->
       </dl>
       <div class="split-bar"></div>
     </div>
+    <!-- <agGame v-if="formData" :formData="formData"></agGame> -->
     <!-- <div class="electronList">
       <dl>
         <dt class="byyxg-dt">
@@ -25,14 +27,40 @@
 export default {
   name: 'electron',
   data() {
-    return {}
+    return {
+      isClick: false,
+      formData: '',
+    }
   },
   created() {},
   mounted() {},
   beforeDestroy() {},
   destroyed() {},
   computed: {},
-  methods: {},
+  methods: {
+    getLoginForm() {
+      const vm = this;
+      vm.isClick = true;
+      let url = "/ag/user/login";
+      request.http(
+        "post",
+        url, {gameType: 500},
+        success => {
+          vm.isClick = false;
+          let code = success.returncode;
+          console.log('form----', success)
+          if (code == 200) {
+            vm.formData = success.data;
+          } else if(code == 101 || code == 103 || code == 106) {
+            request.loginAgain(vm)
+          }
+        },
+        error => {
+          vm.isClick = false;
+        }
+      );
+    }
+  },
 }
 </script>
 <style lang="scss" scoped>
@@ -77,7 +105,7 @@ export default {
       dd{
         margin-top:.2rem;
       }
-      dd.beginBtn{
+      button.beginBtn{
         position: absolute;
         width:1.52rem;
         height:.64rem;
@@ -88,7 +116,7 @@ export default {
         text-align:center;
         line-height:.64rem;
       }
-      dd.noActive{
+      button.noActive{
         background:#ccc;
         color:#646464;
       }

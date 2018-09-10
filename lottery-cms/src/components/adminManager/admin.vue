@@ -43,7 +43,8 @@
       </div>
     </div>
     <div class="data-table" v-loading="loading">
-      <el-table :data="activityLogListData" header-row-class-name="table-header" align="left" stripe border style="width: 100%;font-size:12px;" max-height="450">
+      <el-table :data="activityLogListData" header-row-class-name="table-header" align="left" stripe border style="width: 100%;font-size:12px;"
+        max-height="450">
         <el-table-column width="180" prop="loginname" label="用户名">
         </el-table-column>
         <el-table-column width="180" label="群组">
@@ -166,11 +167,11 @@
             <span class="exp-after">:</span>
             <el-input type="text" v-model="pwdForm.loginname" disabled></el-input>
           </div>
-          <div class="form-row">
+          <!-- <div class="form-row">
             <span class="exp">旧密码</span>
             <span class="exp-after">:</span>
             <el-input type="password" v-model="pwdForm.oldpw" clearable></el-input>
-          </div>
+          </div> -->
           <div class="form-row">
             <span class="exp">新密码</span>
             <span class="exp-after">:</span>
@@ -273,7 +274,7 @@
         pwdForm: {
           loginname: '',
           loginid: '',
-          oldpw: '',
+          // oldpw: '',
           newpw: '',
           checkPass: ''
         },
@@ -397,7 +398,6 @@
         return "--"
       },
       handleChangeRouter(name) {
-        console.log(name)
         this.$router.push({
           name: name,
           query: {
@@ -443,7 +443,6 @@
       handleCurrentChange(val) {
         this.pageNum = val;
         this.getActivityLogList();
-        console.log(`当前页: ${val}`);
       },
       handleChangeStatus(row) {
         // console.log(row)
@@ -486,7 +485,7 @@
         const vm = this;
         this.pwdForm.loginname = row.loginname;
         this.pwdForm.loginid = row._id;
-        this.pwdForm.oldpw = '';
+        // this.pwdForm.oldpw = '';
         this.pwdForm.newpw = '';
         this.pwdForm.checkPass = '';
         this.dialogFormVisible4 = true;
@@ -510,24 +509,24 @@
       },
       editPwdFn(formName) {
         const vm = this;
-        if (!vm.pwdForm.oldpw) {
-          this.$message({
-            message: '请输入旧密码',
-            type: 'error',
-            duration: vm.duration,
-            center: true
-          })
-          return;
-        }
-        if (!regexpPsd(vm.pwdForm.oldpw)) {
-          this.$message({
-            message: '旧密码格式不规范',
-            type: 'error',
-            duration: vm.duration,
-            center: true
-          })
-          return;
-        }
+        // if (!vm.pwdForm.oldpw) {
+        //   this.$message({
+        //     message: '请输入旧密码',
+        //     type: 'error',
+        //     duration: vm.duration,
+        //     center: true
+        //   })
+        //   return;
+        // }
+        // if (!regexpPsd(vm.pwdForm.oldpw)) {
+        //   this.$message({
+        //     message: '旧密码格式不规范',
+        //     type: 'error',
+        //     duration: vm.duration,
+        //     center: true
+        //   })
+        //   return;
+        // }
         if (!vm.pwdForm.newpw) {
           this.$message({
             message: '请输入新密码',
@@ -574,7 +573,7 @@
           return;
         }
         let data = {};
-        data.oldpw = CryptoJS.HmacMD5(CryptoJS.MD5(vm[formName].oldpw).toString(), vm.md5Random).toString()
+        // data.oldpw = CryptoJS.HmacMD5(CryptoJS.MD5(vm[formName].oldpw).toString(), vm.md5Random).toString()
         data.newpw = MD5(vm[formName].newpw);
         data.loginname = vm[formName].loginname;
         data.loginid = vm[formName].loginid;
@@ -814,7 +813,7 @@
               vm.resetForm('form');
             } else if (code === 101 || code === 103 || code === 106) {
               request.loginAgain(vm)
-            } else if (code === 303 || code === 303) {
+            } else if (code === 303 || code === 305) {
               vm.$message({
                 message: '用户名已存在',
                 type: 'error',

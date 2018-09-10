@@ -389,7 +389,7 @@ export default {
     }
     em{
       display:block;
-      width:5rem;
+      width:6rem;
       margin-left:.1rem;
       overflow: hidden;
       text-overflow:ellipse;

@@ -40,7 +40,7 @@
         <input type="text" placeholder="请填写邮箱" v-model="email">
       </li>
     </ul>
-    <button class="submit-btn" @click="editUser">提交修改</button>
+    <button class="submit-btn" :disabled="isClick" @click="editUser">提交修改</button>
     <div class="alert-tip-text" v-if="tipText">{{tipText}}</div>
     <datetime :class="showdatetime?'showdatetime':''" datetimeWrapId='grzx-datetime-wrap' :callback="getBirthday" :datetime="birthday" v-if="showSex"></datetime>
   </div>
@@ -58,6 +58,7 @@ export default {
   },
   data() {
     return {
+      isClick: false,
       moment: moment,
       showdatetime: false,
       loginname: '', // 用户名
@@ -122,6 +123,7 @@ export default {
     // 修改用户资料
     editUser() {
       const vm = this;
+      vm.isClick = true;
       request.http(
         'post',
         '/user/profile/update',
@@ -135,6 +137,7 @@ export default {
           email: vm.email,
         },
         (success) => {
+          vm.isClick = false;
           let code = success.returncode
           if (code) {
             if (code == 103 || code == 106 || code == 101) {
@@ -153,7 +156,9 @@ export default {
             }
           }
         },
-        (error) => {}
+        (error) => {
+          vm.isClick = false;
+        }
       )
     }
   },

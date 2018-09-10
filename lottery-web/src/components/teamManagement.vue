@@ -1,27 +1,12 @@
 <!--团队管理-->
 <template>
   <div class="team-manage-wrap search-form" v-loading="loading">
-    <div class="record-options">
+    <div class="record-options search-form">
       <div class="option-row mb-30">
-        <!-- <span class="exp w-60">奖金组：</span>
-        <input v-model="form.refund.value" class="username-input" style="width:114px" /> -->
         <span class="exp w-60">下级用户名：</span>
         <input v-model="form.username.value" class="username-input" style="width:114px" />
         <span class="tip">（仅限查询当前用户的下级）</span>
       </div>
-      <!-- <div class="option-row mb-30">
-        <span class="exp w-60">时间：</span>
-        <el-date-picker v-model="form.dateFrom.value" type="datetime" prefix-icon="void-icon" placeholder="选择日期时间" value-format="yyyy-MM-dd HH:mm:ss">
-        </el-date-picker>
-        <span class="exp">至</span>
-        <el-date-picker v-model="form.dateTo.value" type="datetime" prefix-icon="void-icon" placeholder="选择日期时间" value-format="yyyy-MM-dd HH:mm:ss">
-        </el-date-picker> &nbsp;&nbsp;
-        <a class="time ml-20" @click="setTimeToday">今日</a>&nbsp;
-        <a class="time ml-20" @click="setTimeNowWeek">本周</a>&nbsp;
-        <a class="time ml-20" @click="setTimeNowMonth">本月</a>&nbsp;
-        <a class="time ml-20" @click="setTimeRecent3Days">近一月</a>
-        <a class="submit ml-20" @click="handleSearch()">查询</a>
-      </div> -->
     </div>
     <hr class="user-split-line">
     <div class="btn-line">
@@ -32,34 +17,30 @@
         <tr class="group-title">
           <th>用户名</th>
           <th>奖金组</th>
-          <!-- <th>临时奖金组</th> -->
-          <!-- <th>下级</th> -->
           <th>团队人数</th>
           <th>注册日期</th>
           <th>最新登陆</th>
           <th>当前余额</th>
           <th>在线</th>
-          <th>操作</th>
+          <th style="border-right: 1px solid #dddddd;">操作</th>
         </tr>
         <tr class="group-item" v-for="(item,index) in list" v-cloak v-if="!noResult" :key="index">
           <td>{{item.loginname}}</td>
           <td>{{item.refund}}</td>
-          <!-- <td>{{item.refund}}</td> -->
-          <!-- <td>{{item.totalCharge}}</td> -->
           <td>{{item.inferior_num ? item.inferior_num : 1}}</td>
           <td>{{getTime(item.create_at)}}</td>
           <td>{{item.log ? getTime(item.log):'--'}}</td>
           <td>{{formatMoney(item.cash)}}</td>
           <td>{{getOnline(item.is_online)}}</td>
-          <td>
+          <td style="border-right: 1px solid #dddddd;">
             <!-- <router-link :to="{name:'salaryGroupSet',query:{loginname:item.loginname}}">奖金组/返点</router-link> -->
             <!-- <router-link :to="{name:'withdraw',query:{id:2,loginname:item.loginname}}">转账</router-link> -->
             <!-- <router-link :to="{name:'transactions',query:{loginname:item.loginname}}">帐变</router-link> -->
           </td>
         </tr>
         <tr v-if="noResult" class="no-result group-item">
-          <td colspan="10">
-            <p>没有符合条件的记录，请更改查询条件</p>
+          <td colspan="10" style="border-right: 1px solid #dddddd;">
+            <p style="color:#777;font-weight:bold;margin:35px 0;font-size:14px;">没有符合条件的记录，请更改查询条件</p>
           </td>
         </tr>
       </tbody>
@@ -663,7 +644,7 @@
   }
 
   .w-60 {
-    width: 80px;
+    width: 88px;
   }
 
   .ml-20 {
@@ -680,11 +661,6 @@
     height: 1px;
     border: none;
     margin-bottom: 30px;
-  }
-
-  .team-manage-wrap .record-options .option-row .exp {
-    display: inline-block;
-    font-size: 12px;
   }
 
   .tip {

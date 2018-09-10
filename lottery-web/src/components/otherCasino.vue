@@ -8,7 +8,35 @@
     </div>
     <div class="main">
       <el-row type="flex" justify="space-between">
-        <div class="item">
+        <router-link class="item" :to="{path:'/liveCasino'}" target='_blank'>
+          <div class="m1">
+            <div class="media">
+              <a class="recent-link">立即参加</a>
+            </div>
+          </div>
+          <div class="footer clearfix">
+            <div class="title fl">
+              <span>真人娱乐</span>
+              <span class="item-vline"></span>
+              <span>Live Casino</span>
+            </div>
+          </div>
+        </router-link>
+        <router-link class="item" :to="{path:'/slots'}" target='_blank'>
+          <div class="m2">
+            <div class="media">
+              <a class="recent-link">立即参加</a>
+            </div>
+          </div>
+          <div class="footer clearfix">
+            <div class="title fl">
+              <span>电子游戏</span>
+              <span class="item-vline"></span>
+              <span>Slots</span>
+            </div>
+          </div>
+        </router-link>
+        <!-- <div class="item">
           <div class="m1">
             <div class="media">
               <a class="recent-link">近期上线</a>
@@ -35,7 +63,7 @@
               <span>Slots</span>
             </div>
           </div>
-        </div>
+        </div> -->
         <div class="item">
           <div class="m3">
             <div class="media">
@@ -247,6 +275,7 @@
   .item .media:hover {
     opacity: 0.8;
     background: #000000;
+
     .recent-link {
       display: inline-block;
     }

@@ -107,6 +107,8 @@ const plw = r => require.ensure([], () => r(require('@/components/lotteryMode/pl
 const dataCharts = r => require.ensure([], () => r(require('../bets/dataCharts')), 'chunkname5')
 
 const chessBoard = r => require.ensure([], () => r(require('@/components/chessBoard')), 'chunkname8-1')
+const liveCasino = r => require.ensure([], () => r(require('@/components/liveCasino')), 'chunkname8-2')
+const slots = r => require.ensure([], () => r(require('@/components/slots')), 'chunkname8-3')
 
 const help = r => require.ensure([], () => r(require('@/components/help/help')), 'chunkname9-1')
 const hdefault = r => require.ensure([], () => r(require('@/components/help/hdefault')), 'chunkname9-2')
@@ -233,6 +235,22 @@ const router = new Router({
     component: chessBoard,
     meta: {
       title: '棋牌竞技'
+    }
+  },
+  {
+    path: '/liveCasino',
+    name: 'liveCasino',
+    component: liveCasino,
+    meta: {
+      title: '真人娱乐'
+    }
+  },
+  {
+    path: '/slots',
+    name: 'slots',
+    component: slots,
+    meta: {
+      title: '电子游戏'
     }
   },
   {

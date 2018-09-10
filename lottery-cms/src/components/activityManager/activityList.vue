@@ -401,13 +401,11 @@
           this.form.content = html;
         };
         this.editor.create();
-        console.log(this.form.content);
       },
       mouseOver(row, column, cell, event) {
         this.rowKey = row._id;
       },
       enableChange(value) {
-        console.log("value", value);
         this.modifiedEnabled("enabled", value.toString(), this.rowKey);
       },
       //是否开启
@@ -478,8 +476,6 @@
       },
       handleAcPhotoChange(file, fileList) {
         const vm = this;
-        console.log("file", file);
-        console.log("fileList", fileList);
         this.form.activity_photo.file = fileList[0];
         // var r = new FileReader(); //本地预览
         // r.onload = function() {
@@ -490,8 +486,6 @@
         // }
       },
       handleRemoveAc(file, fileList) {
-        console.log("file", file);
-        console.log("fileList", fileList);
         if (fileList.length == 0) {
           this.form.activity_photo.file = {};
           this.form.activity_photo.url = "";
@@ -499,8 +493,6 @@
         }
       },
       handleRemoveCo(file, fileList) {
-        console.log("file", file);
-        console.log("fileList", fileList);
         if (fileList.length == 0) {
           this.form.content_photo.file = {};
           this.form.content_photo.url = "";
@@ -509,10 +501,7 @@
       },
       handleCoPhotoChange(file, fileList) {
         const vm = this;
-        console.log("file", file);
-        console.log("fileList", fileList);
         this.form.content_photo.file = fileList[0];
-        console.log("form.content_photo.file", this.form.content_photo.file);
         // var r = new FileReader(); //本地预览
         // r.onload = function() {
         //   vm.form.content_photo.url = r.result;
@@ -632,7 +621,6 @@
       handleCurrentChange(val) {
         this.pageNum = val;
         this.getActivityLogList();
-        console.log(`当前页: ${val}`);
       },
       handlecloseEditor(val) {
         this.showEditor = val;
@@ -709,7 +697,6 @@
               continue;
             }
             if (i == "activity_photo" || i == "content_photo") {
-              console.log('i', row[i])
               if (row[i]) {
                 this.form[i].isFile = false;
                 this.form[i].filterList = [{
@@ -811,9 +798,6 @@
         let activity_photo = this.form.activity_photo.file.raw;
         let content_photo = this.form.content_photo.file.raw;
         let content_true = JSON.stringify(this.form.content_photo.file) == "{}" && !this.form.content_photo.url;
-        console.log("activity_photo", activity_photo);
-        console.log("content_photo", content_photo);
-        console.log("content_true", content_true);
         let formdata = new FormData();
         formdata.append("picture", activity_photo);
         let formdata2 = new FormData();
@@ -822,7 +806,6 @@
         let isFile2 = this.form.content_photo.isFile;
         if (isFile1 && isFile2) {
           if (!content_true) {
-            console.log("INDEX", 11);
             request.upload(
               "post",
               "/uploadFile",
@@ -881,7 +864,6 @@
               }
             );
           } else {
-            console.log("INDEX", 12);
             request.upload(
               "post",
               "/uploadFile",
@@ -930,7 +912,6 @@
           }
         } else if (isFile1 && !isFile2) {
           if (!content_true) {
-            console.log("INDEX", 21);
             request.upload(
               "post",
               "/uploadFile",
@@ -1022,7 +1003,6 @@
               }
             );
           } else {
-            console.log("INDEX", 22);
             request.upload(
               "post",
               "/uploadFile",
@@ -1071,7 +1051,6 @@
           }
         } else if (!isFile1 && isFile2) {
           if (!content_true) {
-            console.log("INDEX", 31);
             request.upload(
               "post",
               "/uploadFile",
@@ -1118,7 +1097,6 @@
               }
             );
           } else {
-            console.log("INDEX", 32);
             request.http(
               "post",
               "/activity/update", {
@@ -1155,7 +1133,6 @@
           }
         } else if (!isFile1 && !isFile2) {
           if (!content_true) {
-            console.log("INDEX", 41);
             request.http(
               "post",
               "/activity/update", {
@@ -1190,7 +1167,6 @@
               }
             );
           } else {
-            console.log("INDEX", 42);
             request.http(
               "post",
               "/activity/update", {
@@ -1305,8 +1281,6 @@
         }
         let activity_photo = this.form.activity_photo.file.raw;
         let content_photo = this.form.content_photo.file.raw;
-        console.log("activity_photo", activity_photo);
-        console.log("content_photo", content_photo);
         let formdata = new FormData();
         formdata.append("picture", activity_photo);
         let formdata2 = new FormData();

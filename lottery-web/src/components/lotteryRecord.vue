@@ -1,40 +1,35 @@
 <template>
   <div class="lottery-wrap" v-loading="loading">
-    <!-- <div class="record-tabs">
-      <router-link :to="{name:'lotteryRecord'}" class="tab-item active">游戏记录
-      </router-link>
-      <router-link :to="{name:'trackRecord'}" class="tab-item">追号记录</router-link>
-    </div> -->
     <div class="record-options search-form">
       <div class="option-row mb-20">
         <span class="exp w-60">游戏名称：</span>
-        <el-select style="width:114px;" v-model="form.gametypes.value" placeholder="请选择" @change="changeGameItem" clearable :loading="form.gametypes.loading" :loading-text="form.gametypes.loadingtext">
+        <el-select style="width:124px;" v-model="form.gametypes.value" placeholder="请选择" @change="changeGameItem" clearable :loading="form.gametypes.loading" :loading-text="form.gametypes.loadingtext">
           <el-option v-for="item in form.gametypes.options" :key="item._id" :label="item.name" :value="item._id">
           </el-option>
         </el-select>
         <span class="exp ml-20">玩法群：</span>
-        <el-select style="width:114px;" v-model="form.playgroups.value" placeholder="请选择" @change="changePlayItem" clearable :loading="form.playgroups.loading" :loading-text="form.playgroups.loadingtext">
+        <el-select style="width:124px;" v-model="form.playgroups.value" placeholder="请选择" @change="changePlayItem" clearable :loading="form.playgroups.loading" :loading-text="form.playgroups.loadingtext">
           <el-option v-for="item in form.playgroups.options" :key="item._id" :label="item.name" :value="item._id">
           </el-option>
         </el-select>
         <span class="exp ml-20">玩法：</span>
-        <el-select style="width:114px;" v-model="form.playtypes.value" placeholder="请选择" clearable>
+        <el-select style="width:124px;" v-model="form.playtypes.value" placeholder="请选择" clearable>
           <el-option v-for="item in form.playtypes.options" :key="item._id" :label="item.name" :value="item._id">
           </el-option>
         </el-select>
         <span class="exp ml-20">注单编号：</span>
-        <el-input style="width:114px;" placeholder="请输入内容" v-model="form.zdbh.value" clearable>
+        <el-input style="width:124px;" placeholder="请输入内容" v-model="form.zdbh.value" clearable>
         </el-input>
       </div>
       <div class="option-row mb-20">
-        <span class="exp">用户名：</span>
-        <el-input style="width:114px;" placeholder="请输入内容" v-model="form.username.value" clearable>
-        </el-input>
-        <span class="exp w-60 ml-20">用户属性：</span>
-        <el-select v-model="form.userTypes.value" placeholder="请选择" clearable style="width:114px">
+        <span class="exp">用户属性：</span>
+        <el-select v-model="form.userTypes.value" placeholder="请选择" clearable style="width:124px">
           <el-option v-for="item in form.userTypes.options" :key="item.value" :label="item.text" :value="item.value">
           </el-option>
         </el-select>
+        <span class="exp ml-20">用户名：</span>
+        <el-input style="width:124px;" placeholder="请输入内容" v-model="form.username.value" clearable>
+        </el-input>
       </div>
       <div class="option-row mb-20">
         <span class="exp w-60">状态：</span>
@@ -48,13 +43,13 @@
         <span class="exp w-60">游戏时间：</span>
         <el-date-picker v-model="form.dateFrom.value" type="datetime" prefix-icon="void-icon" placeholder="选择日期时间" value-format="yyyy-MM-dd HH:mm:ss">
         </el-date-picker>
-        <span>至</span>
+        <span style="margin:0 5px;font-weight:bold;color:#777;font-size:14px;">至</span>
         <el-date-picker v-model="form.dateTo.value" type="datetime" prefix-icon="void-icon" placeholder="选择日期时间" value-format="yyyy-MM-dd HH:mm:ss">
         </el-date-picker>
-        <a class="time ml-20" @click="setTimeToday">今日</a>
-        <a class="time ml-20" @click="setTimeNowWeek">本周</a>
-        <a class="time ml-20" @click="setTimeNowMonth">本月</a>
-        <a class="time ml-20" @click="setTimeRecent3Days(-30)">近一月</a>
+        <a class="time" @click="setTimeToday">今日</a>
+        <a class="time" @click="setTimeNowWeek">本周</a>
+        <a class="time" @click="setTimeNowMonth">本月</a>
+        <a class="time" @click="setTimeRecent3Days(-30)">近一月</a>
         <a class="submit ml-20" @click="handleSearch()">查询</a>
       </div>
     </div>
@@ -91,7 +86,7 @@
           <th>投注额</th>
           <th>奖金</th>
           <th>奖金组-返点</th>
-          <th>状态</th>
+          <th style="border-right: 1px solid #dddddd;">状态</th>
         </tr>
       </thead>
       <tbody>
@@ -103,22 +98,19 @@
             </router-link>
           </td>
           <td>{{item.issue_no}}</td>
-          <td>{{item.lottery3name + item.lotteryname}}</td>
+          <td>{{item.lotteryname}}</td>
           <td>
-            <el-popover placement="right" title="投注内容" trigger="click">
+            <el-popover placement="right" title="投注内容" trigger="click" popper-class="lottery_popover">
               <div>
-                <div class="row">
-                  <label>投注号码：</label>
-                  <span>{{item.vote_no}}</span>
+                <div class="row" style="width: 240px;float: left;">
+                  <span style="word-break: normal;width: auto;display: block;white-space: pre-wrap;word-wrap: break-word;text-align: left;">投注号码：{{item.vote_no}}</span>
                 </div>
                 <div class="row">
-                  <label>中奖号码：</label>
-                  <span>{{item.luck_no}}</span>
+                  <span style="word-break: normal;width: auto;display: block;white-space: pre-wrap;word-wrap: break-word;text-align: left;">中奖号码：{{item.luck_no}}</span>
                 </div>
               </div>
               <a slot="reference" @click="getDetail()">详细内容</a>
             </el-popover>
-            <!-- <router-link :to="{name:'lotteryDetail',query:{id:item._id}}"></router-link> -->
           </td>
           <td>{{item.vote_cash | formatMoney}}</td>
           <td>{{item.award_cash | formatMoney}}</td>
@@ -126,9 +118,10 @@
           <td>{{getStatus(item.status)}}</td>
         </tr>
         <tr v-if="noResult" class="no-result">
-          <td colspan="10">
-            <p>没有符合条件的记录，请更改查询条件</p>
+          <td colspan="10" style="border-right: 1px solid #dddddd;">
+            <p style="color:#777;font-weight:bold;margin:35px 0;font-size:14px;">没有符合条件的记录，请更改查询条件</p>
           </td>
+          <!-- <td></td> -->
         </tr>
       </tbody>
       <tfoot class="record-bottom">
@@ -143,7 +136,7 @@
           <td>{{getCurrentPageAward}}</td>
           <td></td>
           <td></td>
-          <td></td>
+          <td style="border-right: 1px solid #dddddd;"></td>
         </tr>
       </tfoot>
     </table>
@@ -154,8 +147,8 @@
   </div>
 </template>
 <script>
-  import request from '../axios/axios'
-  import { getStatusDesc } from '../common/lotteryStatus';
+  import request from "../axios/axios";
+  import { getStatusDesc } from "../common/lotteryStatus";
 
   export default {
     data() {
@@ -165,20 +158,20 @@
           //form Start
           //开始结束时间
           dateFrom: {
-            key: 'begintime',
-            value: '',
+            key: "begintime",
+            value: "",
             getValue() {
               if (this.value) {
                 return this.value;
               }
-              return '';
+              return "";
             },
             reset() {
               this.value = null;
             },
             error: {
               visible: false,
-              message: ''
+              message: ""
             },
             verify: function(value) {
               if (!value) {
@@ -189,20 +182,20 @@
             }
           },
           dateTo: {
-            key: 'endtime',
-            value: '',
+            key: "endtime",
+            value: "",
             getValue() {
               if (this.value) {
                 return this.value;
               }
-              return '';
+              return "";
             },
             reset() {
               this.value = null;
             },
             error: {
               visible: false,
-              message: ''
+              message: ""
             },
             verify: function(value) {
               if (!value) {
@@ -214,23 +207,23 @@
           },
           //游戏名称
           gametypes: {
-            key: 'gameid',
-            value: '',
+            key: "gameid",
+            value: "",
             loading: false,
-            loadingtext: '正在搜索...',
+            loadingtext: "正在搜索...",
             options: [],
             getValue() {
               if (this.value) {
                 return this.value;
               }
-              return '';
+              return "";
             },
             reset() {
               this.value = null;
             },
             error: {
               visible: false,
-              message: ''
+              message: ""
             },
             verify: function(value) {
               if (!value) {
@@ -242,21 +235,21 @@
           },
           //玩法
           playtypes: {
-            key: 'lotteryid',
-            value: '',
+            key: "lotteryid",
+            value: "",
             options: [],
             getValue() {
               if (this.value) {
                 return this.value;
               }
-              return '';
+              return "";
             },
             reset() {
               this.value = null;
             },
             error: {
               visible: false,
-              message: ''
+              message: ""
             },
             verify: function(value) {
               if (!value) {
@@ -268,23 +261,23 @@
           },
           //玩法群
           playgroups: {
-            key: 'lottery3id',
-            value: '',
+            key: "lottery3id",
+            value: "",
             loading: false,
-            loadingtext: '正在搜索...',
+            loadingtext: "正在搜索...",
             options: [],
             getValue() {
               if (this.value) {
                 return this.value;
               }
-              return '';
+              return "";
             },
             reset() {
               this.value = null;
             },
             error: {
               visible: false,
-              message: ''
+              message: ""
             },
             verify: function(value) {
               if (!value) {
@@ -296,14 +289,14 @@
           },
           //状态
           checkList: {
-            key: 'status',
+            key: "status",
             value: [],
             options: [
-              { text: '待开奖', value: 1 },
-              { text: '等待中', value: 2 },
-              { text: '已撤销', value: 3 },
-              { text: '未中奖', value: 4 },
-              { text: '中奖', value: 5 },
+              { text: "待开奖", value: 1 },
+              { text: "等待中", value: 2 },
+              { text: "已撤销", value: 3 },
+              { text: "未中奖", value: 4 },
+              { text: "中奖", value: 5 }
             ],
             getValue() {
               if (this.value) {
@@ -316,7 +309,7 @@
             },
             error: {
               visible: false,
-              message: ''
+              message: ""
             },
             verify: function(value) {
               if (!value) {
@@ -328,50 +321,50 @@
           },
           //注单编号
           zdbh: {
-            value: '',
-            key: 'order_no',
+            value: "",
+            key: "order_no",
             getValue() {
               if (this.value) {
                 return this.value;
               }
-              return '';
+              return "";
             },
             reset() {
               this.value = null;
             },
             error: {
               visible: false,
-              message: ''
+              message: ""
             },
             verify: function(value) {
               if (!value) {
                 value = this.value;
               }
               /*if (!value) {
-                this.error.message = '该信息必填';
-                this.error.visible = true;
-                return false;
-              }*/
+                  this.error.message = '该信息必填';
+                  this.error.visible = true;
+                  return false;
+                }*/
               this.error.visible = false;
               return true;
             }
           },
           //用户名
           username: {
-            key: 'loginname',
-            value: '',
+            key: "loginname",
+            value: "",
             getValue() {
               if (this.value) {
                 return this.value;
               }
-              return '';
+              return "";
             },
             reset() {
               this.value = null;
             },
             error: {
               visible: false,
-              message: ''
+              message: ""
             },
             verify: function(value) {
               if (!value) {
@@ -383,9 +376,13 @@
           },
           //用户属性
           userTypes: {
-            key: 'self',
+            key: "self",
             value: 1,
-            options: [{ text: '全部', value: 2 }, { text: '自己', value: 1 }, { text: '下级', value: 0 }],
+            options: [
+              { text: "全部", value: 2 },
+              { text: "自己", value: 1 },
+              { text: "下级", value: 0 }
+            ],
             getValue() {
               if (this.value || this.value == 0) {
                 return this.value;
@@ -397,7 +394,7 @@
             },
             error: {
               visible: false,
-              message: ''
+              message: ""
             },
             verify: function(value) {
               if (!value) {
@@ -406,10 +403,10 @@
               this.error.visible = false;
               return true;
             }
-          },
+          }
           //form End
         },
-        username2: '',
+        username2: "",
         list: [],
         noResult: true,
         totalPageNum: 0, //总页数
@@ -417,7 +414,7 @@
         pageIndex: 1, //当前页
         pageSize: 15, //单页条数
         agg: [] //投注统计
-      }
+      };
     },
     methods: {
       getDetail() {},
@@ -429,8 +426,8 @@
       setTimeToday() {
         let date = new Date();
         let ymd = this.formatDate(date);
-        this.form.dateTo.value = ymd + ' 23:59:59';
-        this.form.dateFrom.value = ymd + ' 00:00:00';
+        this.form.dateTo.value = ymd + " 23:59:59";
+        this.form.dateFrom.value = ymd + " 00:00:00";
       },
       //本周
       setTimeNowWeek() {
@@ -442,11 +439,15 @@
         //获得本周的开始日期
         let getWeekStartDate = new Date(nowYear, nowMonth, nowDay - nowDayOfWeek);
         getWeekStartDate = this.formatDate(getWeekStartDate);
-        this.form.dateFrom.value = getWeekStartDate + ' 00:00:00';
+        this.form.dateFrom.value = getWeekStartDate + " 00:00:00";
         //获得本周的结束日期
-        let getWeekEndDate = new Date(nowYear, nowMonth, nowDay + (6 - nowDayOfWeek));
+        let getWeekEndDate = new Date(
+          nowYear,
+          nowMonth,
+          nowDay + (6 - nowDayOfWeek)
+        );
         getWeekEndDate = this.formatDate(getWeekEndDate);
-        this.form.dateTo.value = getWeekEndDate + ' 23:59:59';
+        this.form.dateTo.value = getWeekEndDate + " 23:59:59";
       },
       //本月
       setTimeNowMonth() {
@@ -456,20 +457,24 @@
         //获得本月的开始日期
         let getMonthStartDate = new Date(nowYear, nowMonth, 1);
         getMonthStartDate = this.formatDate(getMonthStartDate);
-        this.form.dateFrom.value = getMonthStartDate + ' 00:00:00';
+        this.form.dateFrom.value = getMonthStartDate + " 00:00:00";
 
         //获得本月的结束日期
-        let getMonthEndDate = new Date(nowYear, nowMonth, this.getMonthDays(nowYear, nowMonth));
+        let getMonthEndDate = new Date(
+          nowYear,
+          nowMonth,
+          this.getMonthDays(nowYear, nowMonth)
+        );
         getMonthEndDate = this.formatDate(getMonthEndDate);
-        this.form.dateTo.value = getMonthEndDate + ' 23:59:59';
+        this.form.dateTo.value = getMonthEndDate + " 23:59:59";
       },
       //设置近几日
       setTimeRecent3Days(day) {
         let now = new Date();
         let previous = this.getDay(day);
-        this.form.dateFrom.value = previous + ' 00:00:00';
+        this.form.dateFrom.value = previous + " 00:00:00";
         let ymd = this.formatDate(now);
-        this.form.dateTo.value = ymd + ' 23:59:59';
+        this.form.dateTo.value = ymd + " 23:59:59";
       },
       getDay(day) {
         var today = new Date();
@@ -508,7 +513,7 @@
         if (myweekday < 10) {
           myweekday = "0" + myweekday;
         }
-        return (myyear + "-" + mymonth + "-" + myweekday);
+        return myyear + "-" + mymonth + "-" + myweekday;
       },
       handleSizeChange(val) {
         // console.log(`每页 ${val} 条`);
@@ -522,7 +527,7 @@
           data = {},
           self = this;
         if (this.form.userTypes.value == 1) {
-          this.form.username.value = localStorage.getItem('loginname');
+          this.form.username.value = localStorage.getItem("loginname");
         }
         // let username = this.form.username.value;
         // this.username2 = username;
@@ -532,9 +537,9 @@
         //   this.form.username.value = localStorage.getItem('loginname');
         //   this.username2 = localStorage.getItem('loginname');
         // }
-        data['page_size'] = this.pageSize;
-        data['page_num'] = this.pageIndex;
-        let errorMessage = '查询错误';
+        data["page_size"] = this.pageSize;
+        data["page_num"] = this.pageIndex;
+        let errorMessage = "查询错误";
         for (let v in this.form) {
           if (this.form.hasOwnProperty(v)) {
             let obj = this.form[v];
@@ -554,44 +559,94 @@
           }
         }
         if (!validate) {
-          self.$alert(errorMessage, '系统提醒', {
-            confirmButtonText: '确定',
+          self.$alert(errorMessage, "系统提醒", {
+            confirmButtonText: "确定",
             center: true
           });
           return false;
         } else {
           this.loading = true;
-          let url = '/lottery/issue/vote/list';
-          request.http('get', url, data, (success) => {
-            self.loading = false;
-            if (success.returncode) {
-              if (success.returncode == 103 || success.returncode == 106 || success.returncode == 101) {
-                request.loginAgain(self);
-              } else if (success.returncode == 200) {
-                self.total = success.data.total;
-                if (self.total) {
-                  self.noResult = false;
-                  self.totalPageNum = success.data.total_page_num;
-                  self.list = success.data.data;
-                  self.getAgg(data);
+          let url = "/lottery/issue/vote/list";
+          request.http(
+            "get",
+            url,
+            data,
+            success => {
+              self.loading = false;
+              if (success.returncode) {
+                if (
+                  success.returncode == 103 ||
+                  success.returncode == 106 ||
+                  success.returncode == 101
+                ) {
+                  request.loginAgain(self);
+                } else if (success.returncode == 200) {
+                  self.total = success.data.total;
+                  if (self.total) {
+                    self.noResult = false;
+                    self.totalPageNum = success.data.total_page_num;
+                    self.list = success.data.data;
+                    self.getAgg(data);
+                  } else {
+                    self.noResult = true;
+                    self.list = [];
+                    self.agg = [];
+                  }
+                } else if (success.returncode == 303) {
+                  self.noResult = true;
+                  self.list = [];
+                  self.agg = [];
+                  self.$message({
+                    showClose: true,
+                    message: "查询错误",
+                    type: "error"
+                  });
                 } else {
                   self.noResult = true;
                   self.list = [];
                   self.agg = [];
+                  self.$message({
+                    showClose: true,
+                    message: success.returncode,
+                    type: "error"
+                  });
                 }
-              } else if (success.returncode == 303) {
-                self.noResult = true;
-                self.list = [];
-                self.agg = [];
-                self.$message({
-                  showClose: true,
-                  message: '查询错误',
-                  type: "error"
-                });
+              }
+            },
+            error => {
+              self.loading = false;
+              self.list = [];
+              self.agg = [];
+              self.noResult = true;
+              console.log("error", error);
+            }
+          );
+          return true;
+        }
+      },
+      //获取下注统计
+      getAgg(data) {
+        let self = this;
+        let url = "/lottery/issue/vote/agg";
+        this.loading = true;
+        request.http(
+          "get",
+          url,
+          data,
+          success => {
+            this.loading = false;
+            if (success.returncode) {
+              if (
+                success.returncode == 103 ||
+                success.returncode == 106 ||
+                success.returncode == 101
+              ) {
+                request.loginAgain(self);
+              } else if (success.returncode == 200) {
+                if (success.agg.length != 0) {
+                  this.agg = success.agg;
+                }
               } else {
-                self.noResult = true;
-                self.list = [];
-                self.agg = [];
                 self.$message({
                   showClose: true,
                   message: success.returncode,
@@ -599,135 +654,123 @@
                 });
               }
             }
-          }, (error) => {
-            self.loading = false;
-            self.list = [];
-            self.agg = [];
-            self.noResult = true;
-            console.log('error', error);
-          })
-          return true;
-        }
-      },
-      //获取下注统计
-      getAgg(data) {
-        let self = this;
-        let url = '/lottery/issue/vote/agg';
-        this.loading = true;
-        request.http('get', url, data, (success) => {
-          this.loading = false;
-          if (success.returncode) {
-            if (success.returncode == 103 || success.returncode == 106 || success.returncode == 101) {
-              request.loginAgain(self);
-            } else if (success.returncode == 200) {
-              if (success.agg.length != 0) {
-                this.agg = success.agg;
-              }
-            } else {
-              self.$message({
-                showClose: true,
-                message: success.returncode,
-                type: "error"
-              });
-            }
+          },
+          error => {
+            this.loading = false;
+            console.log("error", error);
           }
-        }, (error) => {
-          this.loading = false;
-          console.log('error', error);
-        })
+        );
       },
       //游戏名称列表
       getGameList() {
         let self = this;
-        let url = '/lottery/game/list';
+        let url = "/lottery/game/list";
         let gamelist = [];
         this.form.gametypes.loading = true;
-        request.http('get', url, {}, (success) => {
-          self.form.gametypes.loading = false;
-          if (success.returncode) {
-            if (success.returncode == 103 || success.returncode == 106 || success.returncode == 101) {
-              request.loginAgain(self);
-            } else if (success.returncode == 200) {
-              for (let i = 0; i < success.data.length; i++) {
-                let item = success.data[i].children;
-                gamelist = gamelist.concat(item);
+        request.http(
+          "get",
+          url, {},
+          success => {
+            self.form.gametypes.loading = false;
+            if (success.returncode) {
+              if (
+                success.returncode == 103 ||
+                success.returncode == 106 ||
+                success.returncode == 101
+              ) {
+                request.loginAgain(self);
+              } else if (success.returncode == 200) {
+                for (let i = 0; i < success.data.length; i++) {
+                  let item = success.data[i].children;
+                  gamelist = gamelist.concat(item);
+                }
+                self.form.gametypes.options = gamelist;
+              } else {
+                self.$message({
+                  showClose: true,
+                  message: success.returncode,
+                  type: "error"
+                });
               }
-              self.form.gametypes.options = gamelist;
-            } else {
-              self.$message({
-                showClose: true,
-                message: success.returncode,
-                type: "error"
-              });
             }
+          },
+          error => {
+            self.form.gametypes.loading = false;
+            console.log("error", error);
           }
-        }, (error) => {
-          self.form.gametypes.loading = false;
-          console.log('error', error);
-        })
+        );
       },
       //游戏名称选中值更改
       changeGameItem(value) {
         if (value) {
           let obj = {};
-          obj = this.form.gametypes.options.find((item) => {
+          obj = this.form.gametypes.options.find(item => {
             return item._id === value;
           });
           this.form.playgroups.options = [];
-          this.form.playgroups.value = '';
+          this.form.playgroups.value = "";
           this.form.playtypes.options = [];
-          this.form.playtypes.value = '';
+          this.form.playtypes.value = "";
           this.getPlayGroups(obj._id);
         } else {
           this.form.playgroups.options = [];
-          this.form.playgroups.value = '';
+          this.form.playgroups.value = "";
           this.form.playtypes.options = [];
-          this.form.playtypes.value = '';
+          this.form.playtypes.value = "";
         }
       },
       //玩法群
       getPlayGroups(gameid) {
         let self = this;
-        let url = '/lottery/game/detail';
+        let url = "/lottery/game/detail";
         let groups = [];
         this.form.playgroups.loading = true;
-        request.http('get', url, { gameid: gameid }, (success) => {
-          self.form.playgroups.loading = false;
-          if (success.returncode) {
-            if (success.returncode == 103 || success.returncode == 106 || success.returncode == 101) {
-              request.loginAgain(self);
-            } else if (success.returncode == 200) {
-              let children = success.data.children;
-              for (let i = 0; i < children.length; i++) {
-                groups = groups.concat(children[i]);
+        request.http(
+          "get",
+          url, { gameid: gameid },
+          success => {
+            self.form.playgroups.loading = false;
+            if (success.returncode) {
+              if (
+                success.returncode == 103 ||
+                success.returncode == 106 ||
+                success.returncode == 101
+              ) {
+                request.loginAgain(self);
+              } else if (success.returncode == 200) {
+                let children = success.data.children;
+                for (let i = 0; i < children.length; i++) {
+                  groups = groups.concat(children[i]);
+                }
+                self.form.playgroups.options = groups;
+              } else {
+                self.$message({
+                  showClose: true,
+                  message: success.returncode,
+                  type: "error"
+                });
               }
-              self.form.playgroups.options = groups;
-            } else {
-              self.$message({
-                showClose: true,
-                message: success.returncode,
-                type: "error"
-              });
             }
+          },
+          error => {
+            self.form.playgroups.loading = false;
+            console.log("error", error);
           }
-        }, (error) => {
-          self.form.playgroups.loading = false;
-          console.log('error', error);
-        })
+        );
       },
       //玩法群选中值更改
       changePlayItem(value) {
         if (value) {
           let obj = {};
-          obj = this.form.playgroups.options.find((item) => {
+          obj = this.form.playgroups.options.find(item => {
             return item._id === value;
           });
           this.form.playtypes.options = [];
-          this.form.playtypes.value = '';
+          this.form.playtypes.value = "";
           this.getPlayTypeList(obj._id);
         } else {
           this.form.playtypes.options = [];
-          this.form.playtypes.value = '';
+          this.form.playtypes.value = "";
         }
       },
       getPlayTypeList(groupid) {
@@ -750,7 +793,7 @@
       checkId() {
         let id = this.$route.query.id;
         if (id) {
-          this.$router.push({ name: 'lotteryDetail', query: { id: id } });
+          this.$router.push({ name: "lotteryDetail", query: { id: id } });
         } else {
           this.onSubmit();
           this.getGameList();
@@ -762,7 +805,7 @@
     },
     computed: {
       getCurrentPageVote() {
-        let vote = 0.00;
+        let vote = 0.0;
         if (this.list.length != 0) {
           for (let i = 0; i < this.list.length; i++) {
             vote += this.list[i].vote_cash;
@@ -771,7 +814,7 @@
         return vote.toFixed(2);
       },
       getCurrentPageAward() {
-        let award = 0.00;
+        let award = 0.0;
         if (this.list.length != 0) {
           for (let i = 0; i < this.list.length; i++) {
             if (this.list[i].award_cash) {
@@ -788,44 +831,38 @@
           return parseFloat(value).toFixed(2);
         }
         return 0;
-      },
+      }
     },
     mounted() {
       this.setTimeToday();
-      this.form.username.value = localStorage.getItem('loginname');
+      this.form.username.value = localStorage.getItem("loginname");
       this.checkId();
     },
     created() {
-      this.$store.dispatch('setbodyBG', 'no-bg');
-      localStorage.setItem('bodyBG', 'no-bg');
+      this.$store.dispatch("setbodyBG", "no-bg");
+      localStorage.setItem("bodyBG", "no-bg");
     }
-  }
+  };
 </script>
 <style>
-  /* .lottery-wrap .el-checkbox__input.is-checked .el-checkbox__inner {
-    background-color: #3997fa;
-    border-color: #3997fa;
-  } */
-
   .lottery-wrap .el-checkbox__input.is-checked+.el-checkbox__label {
-    color: #191919;
+    color: #CFA072;
   }
 
-  /* .lottery-wrap .el-checkbox__inner:hover {
-    border-color: #3997fa;
+  .lottery-wrap .el-checkbox-group .el-checkbox {
+    color: #777777;
+    font-weight: bold;
+    font-size: 14px;
   }
 
-  .lottery-wrap .el-checkbox__inner:visited {
-    border-color: #3997fa;
+  .lottery_popover {
+    max-height: 150px;
+    overflow-y: scroll;
   }
-
-  .lottery-wrap .el-checkbox__input.is-focus .el-checkbox__inner {
-    border-color: #3997fa;
-  } */
 </style>
 <style scoped>
   .w-60 {
-    width: 60px
+    width: 70px;
   }
 
   .user-split-line {
@@ -834,7 +871,6 @@
     height: 1px;
     border: none;
     margin-bottom: 30px;
-    /* margin-left: 20px; */
   }
 
   .no-result p {
@@ -864,8 +900,9 @@
 
   .lottery-wrap .record-options .option-row .exp {
     display: inline-block;
-    font-size: 12px;
+    font-size: 14px;
     color: #191919;
+    font-weight: bold;
   }
 
   .ml-20 {
@@ -899,7 +936,7 @@
   }
 
   .record-tabs .tab-item.active {
-    background: #F9EFEF;
+    background: #f9efef;
     border-radius: 4px;
     color: #333;
   }
@@ -917,7 +954,7 @@
 
   .record-options {
     padding-bottom: 30px;
-    background: #FFFFFF;
+    background: #ffffff;
   }
 
   .record-options .option-row {
@@ -925,6 +962,9 @@
     font-size: 12px;
     font-family: MicrosoftYaHei;
     color: #333333;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
   }
 
   .record-options .option-row>input[type="text"] {
@@ -933,14 +973,14 @@
     height: 30px;
     line-height: 30px;
     padding: 4px 5px;
-    border: 1px solid #8D8D8D;
+    border: 1px solid #8d8d8d;
     vertical-align: middle;
     font-size: 12px;
     color: #535471;
-    background: #FFFFFF;
+    background: #ffffff;
     border-radius: 2px;
     box-sizing: border-box;
-    transition: all .2s;
+    transition: all 0.2s;
     margin: 0 14px;
   }
 
@@ -952,12 +992,11 @@
     height: 25px;
     line-height: 25px;
     border-radius: 5px;
-    border: 1px solid #D4914D;
-    margin-right: 3px;
+    border: 1px solid #d4914d;
   }
 
   .record-options .option-row>a:hover {
-    background: #D4914D;
+    background: #d4914d;
     color: #fff;
   }
 
@@ -965,7 +1004,7 @@
     width: 100%;
     /* margin: 0 auto; */
     border-collapse: collapse;
-    border: 1px solid #DDDDDD;
+    border: 1px solid #dddddd;
     background: #fff;
   }
 
@@ -995,14 +1034,14 @@
   .record-group .group-item {
     height: 50px;
     line-height: 50px;
-    border-bottom: 1px solid #DDDDDD;
+    border-bottom: 1px solid #dddddd;
     font-size: 12px;
   }
 
   .record-group .group-item a {
     width: 69px;
     height: 32px;
-    background: #C83A4C;
+    background: #c83a4c;
     color: #fff;
     display: block;
     line-height: 32px;
@@ -1016,13 +1055,16 @@
 
   .record-options .option-row>a.time {
     display: inline-block;
-    font-size: 12px;
+    font-size: 14px;
     width: 64px;
     height: 30px;
     line-height: 28px;
     border-radius: 2px;
-    border: 1px solid #ccc;
+    font-weight: bold;
+    color: #CFA072;
+    border: 1px solid #CFA072;
     text-align: center;
+    margin-left: 20px;
   }
 
   .ml-20 {
@@ -1030,15 +1072,15 @@
   }
 
   .record-options .option-row>a.time:hover {
-    background: #C83A4C;
     color: #fff;
+    background-image: linear-gradient(-180deg, #CFA072 0%, #B68E66 100%)
   }
 
   .record-group .group-item:nth-child(2n) {
     /* background: #fff; */
   }
 
-  .record-group .group-item:nth-child(2n+1) {
+  .record-group .group-item:nth-child(2n + 1) {
     /* background: #F7F7F7; */
   }
 
@@ -1057,7 +1099,7 @@
   }
 
   .success {
-    color: #099F4C;
+    color: #099f4c;
   }
 
   .record-pagination {
@@ -1072,7 +1114,7 @@
     height: 18px;
     line-height: 18px;
     text-align: center;
-    background: #E9E9E9;
+    background: #e9e9e9;
     margin-left: 11px;
     font-size: 12px;
   }
@@ -1090,17 +1132,15 @@
     height: 30px;
     line-height: 28px;
     text-align: center;
-    /* vertical-align: middle; */
-    font-size: 12px;
-    color: #FFF;
+    font-size: 14px;
+    font-weight: bold;
+    color: #fff;
     cursor: pointer;
     border-radius: 2px;
     outline: none;
     font-family: microsoft yahei;
-    background-color: #C83A4C;
-    /* border: 1px solid #CCC; */
     box-shadow: none;
     border: none;
-    /* margin-left: 20px; */
+    background-image: linear-gradient(-180deg, #CFA072 0%, #B68E66 100%);
   }
 </style>

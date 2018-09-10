@@ -62,6 +62,9 @@
         return newArr;
       },
       getIssue() {
+        if(this.issue === '' || this.issue === undefined || this.issue === null){
+          return '';
+        }
         let luck_no = this.issue.split(',');
         return luck_no;
       }
@@ -83,7 +86,17 @@
           (success) => {
             self.loading = false;
             if (success.returncode && success.returncode == 200) {
-              self.$store.dispatch('setLotteryArr', success.data)
+              self.$store.dispatch('setLotteryArr', success.data);
+              for (let i = 0; i < success.data.length; i++) {
+                let obj = success.data[i].children;
+                for (let j = 0; j < obj.length; j++) {
+                  let o_ = obj[j];
+                  if (o_.code === 'cqssc') {
+                    self.getIssueList(o_._id);
+                    break;
+                  }
+                }
+              }
             } else if (success.returncode == 101 || success.returncode == 103 || success.returncode == 106) {
               request.loginAgain(self)
             }
@@ -94,19 +107,19 @@
           })
       },
       //往期开奖结果
-      getIssueList() {
+      getIssueList(gameid) {
         let self = this;
-        let url = "/lottery/issue/list";
+        let url = "/lottery/refresh";
         self.loading = true;
         request.http(
           "get",
-          url, { gameid: '5b03b1911279962a87186abc', page_num: 1, page_size: 100 },
+          url, { gameid: gameid },
           success => {
             self.loading = false;
             if (success.returncode && success.returncode == 200) {
               if (success.data) {
-                if (success.data.data.length != 0) {
-                  let data = success.data.data[0].luck_no;
+                if (success.data && success.data.issues.length != 0) {
+                  let data = success.data.issues[0].luck_no;
                   self.issue = data;
                 } else {
                   self.$message({
@@ -135,7 +148,6 @@
       if (this.$store.state.lotteryArr.length == 0) {
         this.getLotteryList();
       }
-      this.getIssueList();
     }
   }
 </script>
@@ -204,6 +216,7 @@
     color: #BD8454;
     vertical-align: middle;
     margin-right: 5px;
+    font-weight:700;
   }
 
   .j-t-num {
@@ -239,6 +252,7 @@
     color: #FFFFFF;
     background: #BD8454;
     border-radius: 2px;
+    font-weight: 700;
   }
 
   .lottery-wrap .main {

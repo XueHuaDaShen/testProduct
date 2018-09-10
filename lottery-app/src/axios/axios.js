@@ -1,6 +1,7 @@
 import request from 'axios'
 import Config from '@/config/config.js'
 
+// request.defaults.withCredentials = true
 request.defaults.baseURL = Config.login
 const loginReq = request.create({
   baseURL: Config.login

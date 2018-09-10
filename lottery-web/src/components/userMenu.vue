@@ -11,7 +11,7 @@
           <em>{{data_.title}}</em>
         </a>
         <div class="second-menu" v-show="menuActivated === (index+1)">
-          <div style="background:#fff;border-radius:2px;box-shadow: 1px 2px 4px 0 rgba(0, 0, 0, 0.1);">
+          <div style="background:#fff;border-radius:2px;box-shadow:rgba(0, 0, 0, 0.1) 0 2px 50px 0px;">
             <!-- <div class="title">{{data_.title}}</div> -->
             <ul>
               <li v-for="item in data_.desc" :key="item.key">
@@ -159,6 +159,7 @@
     font-style: normal;
     font-size: 12px;
     margin-top: 5px;
+    font-weight: bold;
   }
 
   li {
@@ -211,7 +212,7 @@
   }
 
   .left-menu dt:hover {
-    background: #CC3447;
+    background: #BD8454;
   }
 
   .left-menu dt:hover a>em {
@@ -251,6 +252,7 @@
     cursor: pointer;
     padding: 0 10px;
     margin-bottom: 10px;
+    font-weight: bold;
   }
 
   .left-menu dt .second-menu li:last-child {
@@ -259,7 +261,7 @@
 
   .left-menu dt .second-menu li:hover {
     /* background: #fff; */
-    background: #CC3447;
+    background: #BD8454;
   }
 
   .left-menu dt .second-menu li:hover a {
@@ -273,6 +275,7 @@
     display: block;
     font-size: 14px;
     text-align: center;
+    font-weight: bold;
   }
 
   .left-menu dt a span {

@@ -83,6 +83,10 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss">
+  .el-loading-spinner .path {
+    stroke: #777;
+  }
+
   /* alert html弹框样式 加上.syxw-wrap-inner 即可 */
   .el-message-box.syxw-wrap-inner {
     background: #F4F4F4;
@@ -148,10 +152,10 @@
     width: 100%;
     color: #fff;
     background: #2d3236;
-    background: url('../img/default-bj.png') no-repeat;
+    background: url('../assets/img/bets-img/default-bj.png') no-repeat;
     background-size: 100% 100%;
     padding: 20px 0;
-    padding-top: 28px;
+    // padding-top: 28px;
   }
 
   .content {
@@ -166,35 +170,35 @@
   .wrap-lhc {
     width: 100%;
     color: #fff;
-    background: url('../img/liuhecai-bj.png') no-repeat;
+    background: url('../assets/img/bets-img/liuhecai-bj.png') no-repeat;
     background-size: cover;
   }
 
   .wrap-syxw {
     width: 100%;
     color: #fff;
-    background: url('../img/shiyixuanwu-bj.png') no-repeat;
+    background: url('../assets/img/bets-img/shiyixuanwu-bj.png') no-repeat;
     background-size: cover;
   }
 
   .wrap-ks {
     width: 100%;
     color: #fff;
-    background: url('../img/ks-bj.png') no-repeat;
+    background: url('../assets/img/bets-img/ks-bj.png') no-repeat;
     background-size: cover;
   }
 
   .wrap-pks {
     width: 100%;
     color: #fff;
-    background: url('../img/pks-bj.png') no-repeat;
+    background: url('../assets/img/bets-img/pks-bj.png') no-repeat;
     background-size: cover;
   }
 
   /* .wrap-pks {
     width: 100%;
     color: #fff;
-    background: url('../img/pks-bj.png');
+    background: url('../assets/img/bets-img/pks-bj.png');
   } */
 
   .wrap-dataCharts {

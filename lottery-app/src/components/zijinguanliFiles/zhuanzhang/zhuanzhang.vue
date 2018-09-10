@@ -138,6 +138,7 @@ export default {
         this.countError = this.maxErrorNum;
         return false;
       } else {
+        vm.isClick = true;
         request.http(
           'post',
           '/user/bankcard/safe/question/certify',
@@ -154,11 +155,13 @@ export default {
             } else if (code == 103 || code == 106 || code == 101) {
               request.loginAgain(vm);
             } else if (code == 301 || code == 303) {
+              vm.isClick = false;
               vm.tipText = '对不起，参数错误'
               setTimeout(() => {
                 vm.tipText = '';
               }, vm.tipTimeOut*1000);
             } else if (code == 302) {
+              vm.isClick = false;
               vm.countError += 1;
               vm.tipText = '答案错误，还有${vm.maxErrorNum-vm.countError}次机会'
               setTimeout(() => {
@@ -167,6 +170,7 @@ export default {
             }
           },
           (error) => {
+            vm.isClick = false;
             console.log('数据异常', error)
           }
         )
@@ -207,16 +211,19 @@ export default {
                 } else if (code == 200) {
                   vm.withdrawFn();
                 } else if(code == 305) {
+                  vm.isClick = false;
                   vm.tipText = '密码错误'
                   setTimeout(() => {
                     vm.tipText = '';
                   }, vm.tipTimeOut*1000);
                 } else if(code == 306) {
+                  vm.isClick = false;
                   vm.tipText = '用户被禁'
                   setTimeout(() => {
                     vm.tipText = '';
                   }, vm.tipTimeOut*1000);
                 } else if(code == 304) {
+                  vm.isClick = false;
                   vm.tipText = '用户不存在'
                   setTimeout(() => {
                     vm.tipText = '';
@@ -227,9 +234,15 @@ export default {
                 console.log('数据异常', error)
               }
             )
+          }else if (code == 103 || code == 106 || code == 101) {
+            request.loginAgain(vm);
+          }else{
+            vm.isClick = false;
           }
         },
-        (error) => {}
+        (error) => {
+          vm.isClick = false;
+        }
       )
     },
     // 验证通过，转账
@@ -239,13 +252,13 @@ export default {
         transfer_loginname: vm.toName,
         transfer_cash: vm.toCash
       };
-      this.isClick = true;
       request.http(
         'post',
         '/user/trade/transfer',
         paramCryptFn(param),
         (success) => {
           // console.log(success)
+          vm.isClick = false;
           let code = success.returncode;
           if (success.returncode == 200){
             vm.tipText = '转账成功'
@@ -278,7 +291,9 @@ export default {
             }, vm.tipTimeOut*2000);
           }
         },
-        (error) => {}
+        (error) => {
+          vm.isClick = false;
+        }
       )
     },
   },

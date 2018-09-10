@@ -17,7 +17,8 @@
           <tr v-for="(item,index) in msg" class="group-item" v-cloak :key="index">
             <td>
               <router-link :to="{name:'mailDetail',query:{id:item._id}}">{{item.topic}}
-                <span class="status-tip" v-if="item.status && item.status === '2'">已读</span>
+                <span class="status-tip non" v-if="item.status && item.status === 1">未读</span>
+                <span class="status-tip" v-if="item.status && item.status === 2">已读</span>
               </router-link>
             </td>
             <td>系统</td>
@@ -159,7 +160,7 @@
     }
   }
 </script>
-<style scoped>
+<style scoped lang="scss">
   .status-tip {
     background: #D8D8D8;
     border-radius: 4px;
@@ -172,6 +173,10 @@
     font-weight: 700;
     font-size: 12px;
     color: #777777;
+
+    &.non {
+      color: #099F4C;
+    }
   }
 
   .main {

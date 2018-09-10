@@ -14,6 +14,14 @@
           <span class="lock-icon"><img src="@/assets/img/lock.png"></span>
           <input type="password" placeholder="请输入密码" v-model="loginPwd">
         </div>
+        <div class="captcha-wrap" v-if="captcha">
+          <span class="icon-captcha">
+            <img src="@/assets/img/icon-captcha.png">
+          </span>
+          <span class="captcha-svg" @click="getCaptcha" v-html="captcha">
+          </span>
+          <input type="text" autocomplete="off" v-model.trim="loginCaptcha" placeholder="请输入验证码">
+        </div>
         <div class="habit">
           <label for="" class="rem-label">
             <input type="checkbox" class="remember" :checked="isMomery" v-model="isMomery">
@@ -42,16 +50,20 @@ export default {
   data() {
     return {
       enabled_jiami_ceshi: true,
-
+      
       isLoading: false,
       loginName: '',
       loginPwd: '',
+      loginCaptcha: '',
       tip: '', // 登录文字提示
       tipTime: 2, // s
       isMomeryed: false,
       isMomery: true,
       momery_username: '',
       momery_pwd: '',
+
+      guid: '',
+      captcha: '',
     }
   },
   created() {
@@ -95,6 +107,7 @@ export default {
     }
     this.loginName = this.momery_username;
     this.loginPwd = this.momery_pwd;
+    this.getCaptcha();
   },
   watch: {
     loginPwd(n, o) {
@@ -129,17 +142,48 @@ export default {
         this.loginPwd = this.momery_pwd;
       }
     },
+    // 生成 UUID
+    getGuid() {
+      // xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx
+      return 'xxxxxxxxxxxx4xxxyxxxxxxxxxxxxxxx'.replace(/[xy]/g, function(c) { 
+        var r = Math.random()*16|0, v = c == 'x' ? r : (r&0x3|0x8); 
+        return v.toString(16);
+      })
+    },
+    getCaptcha() {
+      const vm = this;
+      vm.guid = vm.getGuid();
+      // console.log(vm.guid);
+      request.http(
+        'get',
+        '/user/captcha', {id: vm.guid},
+        (success) => {
+          // console.log(success);
+          vm.captcha = success;
+        },
+        (error) => {
+          console.log(error)
+        }
+      )
+    },
     loginFn() {
       const vm = this;
       // alert('1234')
+      //  else if(!regexpInput(this.loginName)) {
+      //   this.tip = '用户名为6-16位字符，只能包含英文字母或数字'
+      //   setTimeout(() => {
+      //     vm.tip = '';
+      //   }, vm.tipTime*1000);
+      //   return false;
+      // } else if(!vm.isMomeryed && !regexpPsd(this.loginPwd)) {
+      //   this.tip = '密码为6-16位字符，只能且必须包含英文字母或数字（不允许连续三位相同）'
+      //   setTimeout(() => {
+      //     vm.tip = '';
+      //   }, vm.tipTime*1000);
+      //   return false;
+      // }
       if (this.loginName === '') {
         this.tip = '请输入用户名'
-        setTimeout(() => {
-          vm.tip = '';
-        }, vm.tipTime*1000);
-        return false;
-      } else if(!regexpInput(this.loginName)) {
-        this.tip = '用户名为6-16位字符，只能包含英文字母或数字'
         setTimeout(() => {
           vm.tip = '';
         }, vm.tipTime*1000);
@@ -150,12 +194,11 @@ export default {
           vm.tip = '';
         }, vm.tipTime*1000);
         return false;
-      } else if(!vm.isMomeryed && !regexpPsd(this.loginPwd)) {
-        this.tip = '密码为6-16位字符，只能且必须包含英文字母或数字（不允许连续三位相同）'
+      } else if (this.loginCaptcha === '') {
+        this.tip = '请输入验证码'
         setTimeout(() => {
           vm.tip = '';
         }, vm.tipTime*1000);
-        return false;
       } else {
         this.$store.dispatch('setLoading', true)
         request.login(
@@ -173,7 +216,8 @@ export default {
               }else{
                 new_password = CryptoJS.HmacMD5(CryptoJS.MD5(vm.loginPwd).toString(), random).toString()
               }
-              var data = { loginname: vm.loginName, password: new_password }
+              // var data = { loginname: vm.loginName, password: new_password }
+              var data = { loginname: vm.loginName, password: new_password, captcha: vm.loginCaptcha, id: vm.guid };
               request.login(
                 'post',
                 '/user/login',
@@ -194,6 +238,18 @@ export default {
                     setTimeout(function() {
                       vm.tip = '';
                     }, vm.tipTime*1000)
+                  } else if (code == '302') {
+                    vm.tip = '验证码错误';
+                    vm.getCaptcha();
+                    setTimeout(function() {
+                      vm.tip = '';
+                    }, 2000)
+                  } else if (code == '307') {
+                    vm.tip = '验证码过期';
+                    vm.getCaptcha();
+                    setTimeout(function() {
+                      vm.tip = '';
+                    }, 2000)
                   } else if (code == '200') {
                     try{
                       vm.$router.push({ path: '/wrap' })
@@ -323,7 +379,7 @@ export default {
         left:0;
         bottom:3.7rem;
       }
-    .user-wrap{
+    .user-wrap, .captcha-wrap{
       width:100%;
       height:.75rem;
       border-bottom:.01rem solid #3C3C3C;
@@ -345,7 +401,33 @@ export default {
       }
       span{
         z-index:2;
+        // left:.1rem;
+      }
+    }
+    .captcha-wrap{
+      position: relative;
+      z-index:3;
+      span{
+        position: absolute;
+        display: block;
+        z-index:3;
+      }
+      span.icon-captcha{
+        width: .34rem;
+        height: .42rem;
+        bottom:.16rem;
         left:.1rem;
+        img{
+          width:100%;
+          height:100%;
+        }
+      }
+      span.captcha-svg{
+        width: 3rem;
+        height: 1rem;
+        right:-.35rem;
+        bottom:0;
+        transform: scale(.7);
       }
     }
     .username{
@@ -354,7 +436,7 @@ export default {
         width:.34rem;
         height:.43rem;
         position: absolute;
-        // left:0;
+        left:.1rem;
         bottom:.16rem;
       }
     }
@@ -364,7 +446,7 @@ export default {
         width:.35rem;
         height:.41rem;
         position: absolute;
-        // left:0;
+        left:.1rem;
         bottom:.17rem;
       }
     }

@@ -1163,7 +1163,7 @@
     display: inline-block;
     vertical-align: middle;
     margin-right: 5px;
-    background: url("../img/user.png") no-repeat;
+    background: url("../assets/img/bets-img/user.png") no-repeat;
     background-size: cover;
     height: 16px;
   }

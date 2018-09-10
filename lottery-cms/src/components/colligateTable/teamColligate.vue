@@ -60,7 +60,7 @@
     </div>
     <div class="data-table" v-loading="loading">
       <el-table :data="teamColligateListData" header-row-class-name="table-header" stripe border style="width: 100%;font-size:12px;"
-        max-height="450">
+        max-height="450" :show-summary="true" sum-text="总计" :summary-method="getSummaries">
         <el-table-column align="center" label="代理账号">
           <template slot-scope="scope">
             <el-button type="text" @click="getUserInfoFn(scope.row)">{{scope.row.loginname}}</el-button>
@@ -179,6 +179,10 @@
             title: '游戏盈利',
             code: 'game_profit'
           },
+          {
+            title: "时间",
+            code: "day"
+          }
         ],
         descArr: [{
             title: '升序',
@@ -189,8 +193,8 @@
             val: '-1'
           }
         ],
-        order: '',
-        desc: '',
+        order: 'day',
+        desc: '-1',
         loading: false,
         pageNum: 1,
         pageSize: 40,
@@ -377,9 +381,49 @@
           v.checked = false
         }
       })
+      const end = new Date();
+      const start = new Date(new Date(new Date().toLocaleDateString()).getTime());
+      end.setTime(
+        new Date(
+          new Date(new Date().toLocaleDateString()).getTime() +
+          24 * 60 * 60 * 1000 -
+          1
+        )
+      );
+      this.searchTime = [start, end];
       this.getTeamColligateList();
     },
     methods: {
+      getSummaries(param) {
+        const {
+          columns,
+          data
+        } = param;
+        const sums = [];
+        columns.forEach((column, index) => {
+          if (index === 0) {
+            sums[index] = "总计";
+            return;
+          }
+          let values = data.map(item => Number(item[column.property]));
+          if (!values.every(value => isNaN(value))) {
+            sums[index] = values.reduce((prev, curr) => {
+              const value = Number(curr);
+              if (!isNaN(value)) {
+                return prev + curr;
+              } else {
+                return prev;
+              }
+            }, 0);
+            sums[index] = parseFloat(sums[index]).toFixed(2);
+            sums[index] += " 元";
+          } else {
+            sums[index] = "--";
+          }
+        });
+
+        return sums;
+      },
       formatMoney(row, column, cellValue) {
         if (!cellValue) {
           return 0.00;
@@ -445,9 +489,15 @@
         // console.log(`当前页: ${val}`);
       },
       getUserInfoFn(row) {
-        this.dialog = true;
-        this.userid = row.loginid;
-        this.loginname = row.loginname;
+        // this.dialog = true;
+        // this.userid = row.loginid;
+        // this.loginname = row.loginname;
+        this.username = row.loginname;
+        if (this.searchTime) {
+          if (this.searchTime.toString() !== "") {
+            this.getTeamColligateList();
+          }
+        }
       },
       handleCloseDialog(val) {
         this.dialog = val;
@@ -465,9 +515,11 @@
         const vm = this;
         let beginTime = "",
           endTime = "";
-        if (vm.searchTime.toString() !== "") {
-          beginTime = new Date(vm.searchTime[0]);
-          endTime = new Date(vm.searchTime[1]);
+        if (vm.searchTime) {
+          if (vm.searchTime.toString() !== "") {
+            beginTime = new Date(vm.searchTime[0]);
+            endTime = new Date(vm.searchTime[1]);
+          }
         }
         vm.loading = true;
         request.http(

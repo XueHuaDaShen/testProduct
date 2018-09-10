@@ -78,7 +78,7 @@
           <span v-for="(n, ni) in setBetsNumber(detailData.vote_no)" :key="ni">{{renderNumber(n)}}<em v-if="ni<setBetsNumber(detailData.vote_no).length-1"></em></span>
         </p>
       </div>
-      <button class="cancel-order" v-if="detailData.status == 1" @click="cancelChaseOrderFn">终止追号</button>
+      <button class="cancel-order" v-if="detailData.status == 1" :disabled="isClick" @click="cancelChaseOrderFn">终止追号</button>
       <h2 class="chase-title-wrap"><em></em>追号奖期（{{detailList.length}}条）</h2>
       <ol class="chase-list" v-if="detailList.length>0">
         <li v-for="(item, i) in detailList" :key="i">
@@ -129,6 +129,7 @@ export default {
   name: 'chaseDetail',
   data() {
     return {
+      isClick: false,
       detailID: '5b597e89c887c2bd7ab35f7f', // 注单id
       code: '',
       detailData: null, // 注单详情
@@ -248,6 +249,7 @@ export default {
     //取消追号
     cancelChaseOrderFn() {
       const vm = this;
+      vm.isClick = true;
       request.http(
         'get',
         '/lottery/chase/cancel',
@@ -255,6 +257,7 @@ export default {
           chaseid: vm.detailID
         },
         (success) => {
+          vm.isClick = false;
           let code = success.returncode;
           if (code == 103 || code == 101 || code == 106) {
             request.loginAgain(vm)
@@ -279,6 +282,7 @@ export default {
           // console.log(success)
         },
         (error) => {
+          vm.isClick = false;
           console.log('数据异常', error)
         }
       )

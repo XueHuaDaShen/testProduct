@@ -11,8 +11,15 @@
         </div>
         <div class="search-content">
           <div class="search-inner-wrap">
-            <label>用户名：</label>
-            <el-input clearable v-model="username" placeholder="姓名" style="width:114px"></el-input>
+            <el-select v-model="searchType.value" placeholder="选择" class="small" @change="searchTypeChange">
+              <el-option v-for="option in searchType.options" :key="option.value" :label="option.label" :value="option.value">
+              </el-option>
+            </el-select>
+          </div>
+          <div class="search-inner-wrap">
+            <el-input clearable v-model="username" placeholder="用户名" style="width:114px" v-show="searchType.value == 1"></el-input>
+            <el-input clearable v-model="realname" placeholder="真实姓名" style="width:114px" v-show="searchType.value == 2"></el-input>
+            <el-input clearable v-model="phone" placeholder="手机号" style="width:114px" v-show="searchType.value == 3"></el-input>
           </div>
           <div class="search-inner-wrap">
             <label>状态：</label>
@@ -56,7 +63,8 @@
     </div>
     <!-- table START -->
     <div class="data-table" v-loading="loading">
-      <el-table :data="userListData" align="center" header-row-class-name="table-header" stripe border style="width: 100%;font-size:12px;" max-height="450">
+      <el-table :data="userListData" align="center" header-row-class-name="table-header" stripe border style="width: 100%;font-size:12px;"
+        max-height="450">
         <el-table-column align="center" label="用户名" width="126">
           <template slot-scope="scope">
             <el-button type="text" size="small" @click="getUserInfoFn(scope.row)">{{scope.row.loginname}}</el-button>
@@ -66,7 +74,7 @@
         </el-table-column>
         <el-table-column align="center" label="级别" prop="level">
         </el-table-column>
-        <el-table-column align="center" label="层级" prop="groupid.name">
+        <el-table-column align="center" label="层级" prop="groupid.name" :formatter="formatGroup">
         </el-table-column>
         <el-table-column align="center" label="主钱包">
           <template slot-scope="scope">
@@ -255,6 +263,8 @@
         userid: '',
         loginname: '',
         username: '',
+        realname: '',
+        phone: '',
         isForbid: 0,
         onLine: 0,
         minBlance: '',
@@ -302,6 +312,22 @@
           psd_sure: "",
           is_test: "",
           refund: "",
+        },
+        searchType: {
+          value: 1,
+          options: [{
+              label: "用户名",
+              value: 1
+            },
+            {
+              label: "真实姓名",
+              value: 2
+            },
+            {
+              label: "手机号",
+              value: 3
+            },
+          ]
         },
         rules: {
           loginname: [{
@@ -351,11 +377,23 @@
         }
       })
       if (query.param) {
+        this.searchType.value = 1;
         this.username = query.param;
       }
       this.getUserList();
     },
     methods: {
+      searchTypeChange() {
+        this.username = "";
+        this.realname = "";
+        this.phone = "";
+      },
+      formatGroup(row, column, cellValue) {
+        if (cellValue) {
+          return cellValue;
+        }
+        return "--"
+      },
       send() {
         const vm = this;
         if (!this.msgForm.topic) {
@@ -566,7 +604,7 @@
         let menus = localStorage.getItem('menus');
         let menusjson = JSON.parse(menus);
         const vm = this;
-        console.log('menusjson', menusjson);
+        // console.log('menusjson', menusjson);
         let index1, index2;
         let selected = false;
         for (let i = 0; i < menusjson.length; i++) {
@@ -600,7 +638,7 @@
             index2: index2
           }
         })
-        console.log('href', href);
+        // console.log('href', href);
         window.open(href, '_blank')
       },
       createUsercount() {
@@ -825,7 +863,9 @@
             // is_forbid: vm.isForbid,
             // is_online: vm.onLine,
             status: vm.status,
-            is_test: vm.is_test
+            is_test: vm.is_test,
+            realname: vm.realname,
+            phone: vm.phone
           },
           (success) => {
             vm.loading = false;
@@ -853,6 +893,8 @@
         this.group.value = "";
         this.superLoginname = "";
         this.is_test = '0';
+        this.realname = "";
+        this.phone = "";
       },
       handleSearch() {
         this.pageNum = 1;

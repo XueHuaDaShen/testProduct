@@ -5,8 +5,8 @@
         <router-link class="nav-left" :to="{name: 'home'}">
           <img src="../assets/img/Logo@3x.png">
         </router-link>
-        <router-link class="download" :to="{name: 'download'}">下载中心</router-link>
-        <a @click="open" class="server">联系客服</a>
+        <router-link :to="{name:'download'}" class="download"><img src="@/assets/img/bets-img/xiazai-icon.png" class="xiazai-icon">下载中心</router-link>
+        <a @click="open" class="server"><img src="@/assets/img/bets-img/kefu-icon.png" class="kefu-icon">联系客服</a>
       </div>
     </header>
     <div class="introduce-content">
@@ -281,9 +281,24 @@
 
   .header>div a {
     font-size: 16px;
-    color: #777777;
+    color: #fff;
     letter-spacing: 1px;
     text-decoration: none;
+    position: relative;
+    .xiazai-icon{
+      width:16px;
+      height:18px;
+      position: absolute;
+      left:-21px;
+      top:0;
+    }
+    .kefu-icon{
+      width:20px;
+      height:21px;
+      position: absolute;
+      left:-25px;
+      top:-2px;
+    }
   }
 
   .nav-left {
@@ -299,7 +314,7 @@
   }
 
   .server {
-    margin-left: 35px;
+    margin-left: 65px;
   }
 
   .introduce-content {

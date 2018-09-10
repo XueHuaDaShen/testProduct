@@ -4,7 +4,7 @@
       <h2 class="recharge-title-wrap"><em></em>{{recharge.name}}</h2>
       <ul>
         <router-link v-for="(kind, ki) in recharge.list" :key="ki.toString()" :to="{name: recharge.url, query:{kindCode: kind.code, id: kind.id}}">
-          <li>{{kind.name}}</li>
+          <li v-if="kind.show">{{kind.name}}</li>
         </router-link>
       </ul>
     </div>
@@ -23,18 +23,18 @@ export default {
           name: '快捷支付',
           url: 'bankCard',
           list: [
-            {name: '银行卡转账', url: 'bankCard', code: 'yhkzz'},
-            {name: '网银快捷', url: 'bankCard', code: 'wykj'},
-            {name: '银联快捷', url: 'qrCode', code: 'ylzz'}
+            {name: '银行卡转账', url: 'bankCard', code: 'yhkzz', show: false},
+            {name: '网银快捷', url: 'bankCard', code: 'wykj', show: false},
+            {name: '银联快捷', url: 'qrCode', code: 'ylzz', show: false}
           ]
         },
         {
           name: '扫码支付',
           url: 'qrCode',
           list: [
-            {name: '支付宝扫码', url: 'qrCode', code: 'zfbsm'},
-            {name: '微信扫码', url: 'qrCode', code: 'wxsm'},
-            {name: '银联扫码', url: 'qrCode', code: 'ylsm'}
+            {name: '支付宝扫码', url: 'qrCode', code: 'zfbsm', show: false},
+            {name: '微信扫码', url: 'qrCode', code: 'wxsm', show: false},
+            {name: '银联扫码', url: 'qrCode', code: 'ylsm', show: false}
           ]
         }
       ]
@@ -56,6 +56,7 @@ export default {
     // 获取充值渠道
     getRechargeType() {
       const vm = this;
+      vm.$store.dispatch('setLoading', true);
       request.http(
         'get',
         '/user/trade/recharge/account',
@@ -63,6 +64,7 @@ export default {
           platform: 'app'
         },
         (success) => {
+          vm.$store.dispatch('setLoading', false);
           // console.log(success)
           if(success.returncode === 200){
             // vm.tableData = success.data.data
@@ -70,7 +72,9 @@ export default {
             // vm.showSelect = true;
           }
         },
-        (error) => {}
+        (error) => {
+          vm.$store.dispatch('setLoading', false);
+        }
       )
     },
     // 格式化数据
@@ -97,6 +101,7 @@ export default {
       data.filter((v, vi) => {
         vm.rechargeList[index].list[vi].name = v.name;
         vm.rechargeList[index].list[vi].id = v._id;
+        vm.rechargeList[index].list[vi].show = true;
       })
     }
   },

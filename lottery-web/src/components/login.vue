@@ -3,10 +3,10 @@
     <header class="header">
       <div>
         <a class="nav-left" href="/">
-          <img src="../assets/img/Logo@3x.png">
+          <img src="@/assets/img/Logo@3x.png">
         </a>
-        <router-link :to="{name:'download'}" class="download">下载中心</router-link>
-        <a @click="open" class="server">联系客服</a>
+        <router-link :to="{name:'download'}" class="download"><img src="@/assets/img/bets-img/xiazai-icon.png" class="xiazai-icon">下载中心</router-link>
+        <a @click="open" class="server"><img src="@/assets/img/bets-img/kefu-icon.png" class="kefu-icon">联系客服</a>
       </div>
     </header>
     <!-- <div class="content-wrap" v-loading="loading">
@@ -17,19 +17,19 @@
           </div>
           <div class="user-info" v-if="showInput">
             <span class="icon-user">
-              <img src="../img/icon-user.png">
+              <img src="@/assets/img/bets-img/icon-user.png">
             </span>
             <input type="text" v-model="loginName" placeholder="请输入您的用户名">
           </div>
           <div class="user-info" v-if="showInput">
             <span class="icon-pwd">
-              <img src="../img/icon-pwd.png">
+              <img src="@/assets/img/bets-img/icon-pwd.png">
             </span>
             <input type="password" name="pwd" autocomplete="off" v-model="loginPwd" placeholder="请输入您的密码">
           </div>
           <div class="user-info" v-if="showInput&&loginArr[1].checked">
             <span class="icon-pwd">
-              <img src="../img/icon-pwd.png">
+              <img src="@/assets/img/bets-img/icon-pwd.png">
             </span>
             <input type="password" name="pwd" autocomplete="off" v-model="repeatPwd" placeholder="请确认您的密码">
           </div>
@@ -44,25 +44,41 @@
     <div class="content-wrap" v-loading="loading">
       <div class="content">
         <div class="login-wrap animated" :class="animated?'bounceOutLeft':''">
+          <div class="login-bj"></div>
           <div class="login-title">
-            <span>登录</span>
+            <span><img src="@/assets/img/bets-img/login-logo.png"></span>
           </div>
+          <div class="alert-tip" v-if="tip"><span>{{tip}}</span></div>
           <div class="user-info">
             <span class="icon-user">
-              <img src="../img/icon-user.png">
+              <img src="@/assets/img/bets-img/icon-user.png">
             </span>
             <input type="text" v-model.trim="loginName" placeholder="请输入您的用户名">
           </div>
           <div class="user-info">
             <span class="icon-pwd">
-              <img src="../img/icon-pwd.png">
+              <img src="@/assets/img/bets-img/icon-pwd.png">
             </span>
             <input type="password" name="pwd" autocomplete="off" v-model.trim="loginPwd" placeholder="请输入您的密码">
           </div>
+          <div class="captcha-info" v-if="captcha">
+            <span class="icon-captcha">
+              <img src="@/assets/img/bets-img/icon-captcha.png">
+            </span>
+            <span class="captcha-svg" @click="getCaptcha" v-html="captcha">
+            </span>
+            <input type="text" autocomplete="off" v-model.trim="loginCaptcha" placeholder="请输入验证码">
+          </div>
           <div class="login-btn-wrap">
-            <span>{{tip}}</span>
-            <button class="login-btn" @click="handleLogin" :disabled="isClick">登录</button>
-            <button style="margin-top:30px;background:#fff;color:#191919;border:1px solid #979797" class="login-btn" @click="toReg" :disabled="isClick">注册</button>
+            <!-- <span class="tip-text">{{tip}}</span> -->
+            <button class="login-btn" @click="handleLogin" :disabled="isClick">
+              <span class="btn-text">立即登录</span>
+              <i></i>
+            </button>
+            <button class="reg-btn" @click="toReg" :disabled="isClick">
+              <span class="btn-text">立即注册</span>
+              <i></i>
+            </button>
           </div>
         </div>
       </div>
@@ -100,22 +116,28 @@
       //   vm.animated = false;
       // }, 1000);
       this.handleKeyup();
+      this.getCaptcha();
     },
     data() {
       return {
         showInput: false,
         loading: false,
         tip: '',
+        tipTime: 2, //s
         loginArr: [
           { title: '登录', checked: true },
           { title: '注册', checked: false }
         ],
         loginName: '',
         loginPwd: '',
+        loginCaptcha: '',
         repeatPwd: '',
         isClick: false,
         animated: false,
         duration: 1000,
+
+        guid: '',
+        captcha: '',
       }
     },
     methods: {
@@ -144,28 +166,62 @@
       //     vm.showInput = true;
       //   }, 20);
       // },
-      handleLogin() {
+      // 生成 UUID
+      getGuid() {
+        // xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx
+        return 'xxxxxxxxxxxx4xxxyxxxxxxxxxxxxxxx'.replace(/[xy]/g, function(c) { 
+          var r = Math.random()*16|0, v = c == 'x' ? r : (r&0x3|0x8); 
+          return v.toString(16);
+        })
+      },
+      getCaptcha() {
         const vm = this;
+        vm.guid = vm.getGuid();
+        // console.log(vm.guid);
+        request.http(
+          'get',
+          '/user/captcha', {id: vm.guid},
+          (success) => {
+            // console.log(success);
+            vm.captcha = success;
+          },
+          (error) => {
+            console.log(error)
+          }
+        )
+      },
+      handleLogin() { 
+        // else if (!validator.regexpInput(this.loginName)) {
+        //   this.tip = '用户名需3-16位字符，只能包含英文字母或数字'
+        //   setTimeout(() => {
+        //     vm.tip = '';
+        //   }, vm.tipTime*1000);
+        // }
+        // else if (!validator.regexpPsd(this.loginPwd)) {
+        //   this.tip = '密码需6-16位字符，只能且必须同时包含数字和字母，不允许连续三位相同'
+        //   setTimeout(() => {
+        //     vm.tip = '';
+        //   }, vm.tipTime*1000);
+        // }
+        const vm = this;
+        if(this.tip !== ''){
+          return false;
+        } 
         if (this.loginName === '') {
           this.tip = '请输入您的用户名'
           setTimeout(() => {
             vm.tip = '';
-          }, 1000);
-        } else if (!validator.regexpInput(this.loginName)) {
-          this.tip = '用户名需3-16位字符，只能包含英文字母或数字'
-          setTimeout(() => {
-            vm.tip = '';
-          }, 1000);
+          }, vm.tipTime*1000);
         } else if (this.loginPwd === '') {
           this.tip = '请输入您的密码'
           setTimeout(() => {
             vm.tip = '';
-          }, 1000);
-        } else if (!validator.regexpPsd(this.loginPwd)) {
-          this.tip = '密码需6-16位字符，只能且必须同时包含数字和字母，不允许连续三位相同'
+          }, vm.tipTime*1000);
+        } else if (this.loginCaptcha === '') {
+          this.tip = '请输入验证码'
           setTimeout(() => {
             vm.tip = '';
-          }, 1000);
+          }, vm.tipTime*1000);
         } else {
           this.loading = true;
           request.login(
@@ -178,7 +234,9 @@
               if (success.returncode == '200') {
                 let random = success.data.random;
                 let new_password = CryptoJS.HmacMD5(CryptoJS.MD5(vm.loginPwd).toString(), random).toString();
-                var data = { loginname: vm.loginName, password: new_password }
+                // var data = { loginname: vm.loginName, password: new_password };
+                var data = { loginname: vm.loginName, password: new_password, captcha: vm.loginCaptcha, id: vm.guid };
+                // console.log(data)
                 request.login(
                   'post',
                   '/user/login',
@@ -193,6 +251,18 @@
                       }, 2000)
                     } else if (code == '305') {
                       vm.tip = '密码错误';
+                      setTimeout(function() {
+                        vm.tip = '';
+                      }, 2000)
+                    } else if (code == '302') {
+                      vm.tip = '验证码错误';
+                      vm.getCaptcha();
+                      setTimeout(function() {
+                        vm.tip = '';
+                      }, 2000)
+                    } else if (code == '307') {
+                      vm.tip = '验证码过期';
+                      vm.getCaptcha();
                       setTimeout(function() {
                         vm.tip = '';
                       }, 2000)
@@ -262,11 +332,11 @@
         }
       },
       toReg() {
-        // let reg = 'http://www.8bw.vip/#/reg/0qug9eawf7';
-        // location.href = reg;
-        this.$router.push({
-          name: 'reg'
-        })
+        let reg = 'http://www.8bw.vip/#/reg/0qug9eawf7';
+        location.href = reg;
+        // this.$router.push({
+        //   name: 'reg'
+        // })
       },
       open() {
         window.open('https://ytpfx.livechatvalue.com/chat/chatClient/chatbox.jsp?companyID=1027559&configID=43463&jid=8295678173&s=1', 'newwindow',
@@ -330,33 +400,79 @@
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
+<style scoped lang="scss">
+
   .content-wrap {
     width: 100%;
     color: #fff;
-    background: #2d3236;
+    /* background: #2d3236; */
+    background: url("../assets/img/bets-img/login-bj.png") no-repeat;
+    background-size: cover;
   }
 
   .content {
-    width: 100%;
+    width: 1024px;
     height: 940px;
-    padding-top: 287px;
-    background: url("../img/bj.png") no-repeat;
-    background-size: cover;
     position: relative;
+    margin:0 auto;
   }
 
   .login-wrap {
     margin: auto;
-    width: 540px;
-    min-height: 400px;
-    background: #FFFFFF;
-    border: 6px solid #979797;
-    padding: 39px 50px;
+    width: 400px;
+    height: 500px;
+    /* background: #FFFFFF; */
+    /* border: 6px solid #979797; */
+    border-radius: 4px;
+    // padding: 39px 50px;
+    padding:30px;
     display: -webkit-box;
+    position: absolute;
+    overflow: hidden;
+    // top:210px;
+    // right:88px;
+    left:0;
+    right:0;
+    top:0;
+    bottom:0;
+    margin:auto;
     /* autoprefixer: off */
     -webkit-box-orient: vertical;
     /* autoprefixer: on */
+    // box-shadow: 0 2px 50px 0 rgba(0,0,0,0.50);
+    .login-bj{
+      position: absolute;
+      left:0;
+      top:0;
+      z-index:1;
+      opacity: 0;
+      background: #191919;
+      width:100%;
+      height:100%;
+    }
+    .alert-tip{
+      display:-webkit-box;
+      -webkit-box-align:center;
+      -webkit-box-pack:center;
+      background: rgba(0,0,0,0.90);
+      border-radius: 2px;
+      position: absolute;
+      left:30px;
+      top: 42px;
+      width:340px;
+      height:60px;
+      text-align:center;
+      // line-height:46px;
+      color:#dcdcdc;
+      font-size:14px;
+      z-index:3;
+      font-weight:700;
+      padding:0 20px;
+      span{
+        display:block;
+        width:100%;
+      }
+    }
   }
 
   .login-wrap input,
@@ -368,11 +484,24 @@
   .login-title {
     width: 100%;
     display: -webkit-box;
+    -webkit-box-pack:center;
+    font-size: 20px;
+    color: #BCBCBC;
+    position: relative;
+    z-index:3;
+    margin-bottom:20px;
   }
 
   .login-title span {
-    color: #D4914D;
-    font-size: 26px;
+    display: block;
+    width:210px;
+    height:52px;
+    img{
+      display:block;
+      width:100%;
+      height:100%;
+    }
+    // color: #D4914D;
   }
 
   /* .login-title span {
@@ -395,23 +524,50 @@
 
   .user-info {
     width: 100%;
-    height: 50px;
-    border: 1px solid #979797;
+    height: 46px;
+    border-radius: 2px;
     position: relative;
-    margin-top: 30px;
+    margin-top: 10px;
+    z-index:3;
   }
 
-  .user-info input {
+  .user-info input, .captcha-info input {
     width: 100%;
     height: 100%;
     display: block;
-    font-size: 14px;
-    padding-left: 38px;
+    font-size: 16px;
+    padding-left: 57px;
+    position: relative;
+    background: none;
+    border-radius: 2px;
+    color:#BD8454;
+    font-weight:700;
+    border: 2px solid #777777;
+    &::-webkit-input-placeholder{
+      font-size:14px;
+      color:#777;
+    }
+    &:-moz-placeholder{
+      font-size:14px;
+      color:#777;
+    }
+    &::-moz-placeholder{
+      font-size:14px;
+      color:#777;
+    }
+    &:-ms-input-placeholder{
+      font-size:14px;
+      color:#777;
+    }
+    &:focus{
+      background-color: rgba(0, 0, 0, 0.25);
+    }
   }
 
   .user-info span {
     position: absolute;
     display: block;
+    z-index:3;
   }
 
   .user-info span img {
@@ -420,25 +576,86 @@
   }
 
   .user-info .icon-user {
-    width: 13px;
-    height: 16px;
-    left: 15px;
-    top: 17px;
+    width: 17px;
+    height: 18px;
+    left: 21px;
+    top: 13px;
   }
 
   .user-info .icon-pwd {
-    width: 15px;
-    height: 20px;
-    left: 14px;
-    top: 15px;
+    width: 17px;
+    height: 21px;
+    left: 21px;
+    top: 11px;
+  }
+  .captcha-info{
+    height: 46px;
+    border-radius: 2px;
+    position: relative;
+    margin-top: 10px;
+    z-index:3;
+    span{
+      position: absolute;
+      display: block;
+      z-index:3;
+    }
+    .icon-captcha{
+      width: 17px;
+      height: 21px;
+      left: 21px;
+      top: 11px;
+      img{
+        width:100%;
+        height:100%;
+      }
+    }
+    .captcha-svg{
+      width: 150px;
+      height: 50px;
+      right: -17px;
+      top: -2px;
+      transform: scale(.7);
+      cursor: pointer;
+    }
   }
 
   .login-btn-wrap {
-    padding-top: 40px;
+    padding-top: 30px;
     position: relative;
+    z-index:3;
+    button{
+      width: 100%;
+      height: 50px;
+      font-size: 16px;
+      border-radius:2px;
+      letter-spacing: 1.12px;
+      cursor: pointer;
+      background:none;
+      font-weight:600;
+      position: relative;
+      .btn-text{
+        position: relative;
+        z-index: 1;
+      }
+      i{
+        position: absolute;
+        z-index: 0;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        -webkit-transition: all .3s;
+        transition: all .3s;
+        -webkit-transform: scale(0.8, 0.7);
+        -moz-transform: scale(0.8, 0.7);
+        -ms-transform: scale(0.8, 0.7);
+        -o-transform: scale(0.8, 0.7);
+        transform: scale(0.8, 0.7);
+      }
+    }
   }
 
-  .login-btn-wrap span {
+  .login-btn-wrap .tip-text {
     position: absolute;
     color: #F56C6C;
     font-size: 12px;
@@ -448,14 +665,40 @@
     left: 0;
   }
 
-  .login-btn {
-    width: 100%;
-    height: 60px;
-    background: #1B1B1B;
-    font-size: 18px;
-    color: #FFFFFF;
-    letter-spacing: 1.12px;
-    cursor: pointer;
+  button.login-btn {
+    border: 2px solid #BD8454;
+    color: #BD8454;
+    &:hover{
+      .btn-text{
+        color:#DCDCDC;
+      }
+      i{
+        background: #BD8454;
+        -webkit-transform: scale(1);
+        -moz-transform: scale(1);
+        -ms-transform: scale(1);
+        -o-transform: scale(1);
+        transform: scale(1);
+      }
+    }
+  }
+  button.reg-btn{
+    border: 2px solid #DCDCDC;
+    color: #DCDCDC;
+    margin-top:10px;
+    &:hover{
+      .btn-text{
+        color:#191919;
+      }
+      i{
+        background: #DCDCDC;
+        -webkit-transform: scale(1);
+        -moz-transform: scale(1);
+        -ms-transform: scale(1);
+        -o-transform: scale(1);
+        transform: scale(1);
+      }
+    }
   }
 
   .header {
@@ -474,11 +717,26 @@
   }
 
   .header>div a {
-    font-size: 16px;
-    color: #777777;
+    font-size: 14px;
+    color: #fff;
     letter-spacing: 1px;
     text-decoration: none;
     cursor: pointer;
+    position: relative;
+    .xiazai-icon{
+      width:16px;
+      height:18px;
+      position: absolute;
+      left:-21px;
+      top:0;
+    }
+    .kefu-icon{
+      width:20px;
+      height:21px;
+      position: absolute;
+      left:-25px;
+      top:-2px;
+    }
   }
 
   .nav-left {
@@ -491,10 +749,10 @@
 
   .nav-left>img {
     width: 100%;
-    height: 39px;
+    // height: 39px;
   }
 
   .server {
-    margin-left: 35px;
+    margin-left: 65px;
   }
 </style>

@@ -16,6 +16,20 @@
             <el-input clearable v-model="username" placeholder="姓名" style="width:114px;"></el-input>
           </div>
           <div class="search-inner-wrap">
+            <label>排序栏：</label>
+            <el-select clearable v-model="order" placeholder="请选择" class="small">
+              <el-option v-for="item in orderArr" :key="item.value" :label="item.label" :value="item.value">
+              </el-option>
+            </el-select>
+          </div>
+          <div class="search-inner-wrap">
+            <label>顺序</label>
+            <el-select clearable v-model="desc" placeholder="请选择" class="small">
+              <el-option v-for="item in descArr" :key="item.val" :label="item.title" :value="item.val">
+              </el-option>
+            </el-select>
+          </div>
+          <div class="search-inner-wrap">
             <el-button type="danger" @click="handleSearch" size="medium" class="small yes">搜索</el-button>
             <el-button type="info" @click="handleReset" size="medium" class="small no">重置</el-button>
           </div>
@@ -29,12 +43,17 @@
             <el-button type="text" @click="getUserInfoFn(scope.row)">{{scope.row.loginname}}</el-button>
           </template>
         </el-table-column>
-        <el-table-column align="center" prop="cash_ky" label="KY">
+        <el-table-column align="center" prop="cash" label="主钱包" :formatter="formatMoney">
+        </el-table-column>
+        <el-table-column align="center" prop="cash_ky" label="KY" :formatter="formatMoney">
+        </el-table-column>
+        <el-table-column align="center" prop="cash_ag" label="AG" :formatter="formatMoney">
         </el-table-column>
       </el-table>
       <div class="fenye">
         <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="pageNum"
-          :page-size="pageSize" layout="total, prev, pager, next, jumper" :total="total">
+          :page-size="pageSize" :page-sizes="[10, 20, 40, 80,160,350,700,1000]" layout="total, sizes, prev, pager, next, jumper"
+          :total="total">
         </el-pagination>
       </div>
     </div>
@@ -71,6 +90,30 @@
             checked: false
           }
         ],
+        orderArr: [{
+            value: "cash",
+            label: "主钱包"
+          },
+          {
+            value: "cash_ky",
+            label: "KY"
+          },
+          {
+            value: "cash_ag",
+            label: "AG"
+          }
+        ],
+        order: "",
+        descArr: [{
+            title: '升序',
+            val: '1'
+          },
+          {
+            title: '降序',
+            val: '-1'
+          }
+        ],
+        desc: '-1',
         loading: false,
         pageNum: 1,
         pageSize: 40,
@@ -79,19 +122,6 @@
         userid: "",
         loginname: "",
         username: "",
-        platformArr: [{
-            value: "ky",
-            label: "ky"
-          },
-          {
-            value: "ag",
-            label: "ag"
-          },
-          {
-            value: "pt",
-            label: "pt"
-          }
-        ],
         typeArr: [{
             value: "0",
             label: "默认"
@@ -134,9 +164,15 @@
           v.checked = false
         }
       })
-      // this.getRechargeLotList();
+      this.getRechargeLotList();
     },
     methods: {
+      formatMoney(row, column, cellValue) {
+        if (cellValue) {
+          return Number(cellValue).toFixed(2);
+        }
+        return "0.00";
+      },
       handleChangeRouter(name) {
         this.$router.push({
           name: name,
@@ -167,6 +203,8 @@
       },
       handleSizeChange(val) {
         // console.log(`每页 ${val} 条`);
+        this.pageSize = val;
+        this.getRechargeLotList();
       },
       handleCurrentChange(val) {
         this.pageNum = val;
@@ -193,14 +231,16 @@
             PageNum: vm.pageNum,
             PageSize: vm.pageSize,
             loginname: trim(vm.username),
+            order: vm.order,
+            desc: vm.desc
           },
           success => {
             vm.loading = false;
             let code = success.returncode;
             if (code === 200) {
-              vm.rechargeListData.push(success.data);
-              // vm.pageNum = Number(success.data.page_num);
-              // vm.total = success.data.total;
+              vm.rechargeListData = success.data.data;
+              vm.pageNum = Number(success.data.page_num);
+              vm.total = success.data.total;
               vm.success();
             } else if (code === 101 || code === 103 || code === 106) {
               request.loginAgain(vm);

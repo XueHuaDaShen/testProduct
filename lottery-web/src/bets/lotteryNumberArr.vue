@@ -1153,7 +1153,7 @@
   .pks-car {
     width: 100%;
     height: 120px;
-    background: url("../img/pks-car.png") no-repeat;
+    background: url("../assets/img/bets-img/pks-car.png") no-repeat;
     background-size: 100% 100%;
     margin-bottom: 7px;
     position: relative;
@@ -1197,27 +1197,27 @@
           }
         }
         .dice1 {
-          background: url('../img/dice1.png') no-repeat;
+          background: url('../assets/img/bets-img/dice1.png') no-repeat;
           background-size: 100% 100%;
         }
         .dice2 {
-          background: url('../img/dice2.png') no-repeat;
+          background: url('../assets/img/bets-img/dice2.png') no-repeat;
           background-size: 100% 100%;
         }
         .dice3 {
-          background: url('../img/dice3.png') no-repeat;
+          background: url('../assets/img/bets-img/dice3.png') no-repeat;
           background-size: 100% 100%;
         }
         .dice4 {
-          background: url('../img/dice4.png') no-repeat;
+          background: url('../assets/img/bets-img/dice4.png') no-repeat;
           background-size: 100% 100%;
         }
         .dice5 {
-          background: url('../img/dice5.png') no-repeat;
+          background: url('../assets/img/bets-img/dice5.png') no-repeat;
           background-size: 100% 100%;
         }
         .dice6 {
-          background: url('../img/dice6.png') no-repeat;
+          background: url('../assets/img/bets-img/dice6.png') no-repeat;
           background-size: 100% 100%;
         }
         tbody td {

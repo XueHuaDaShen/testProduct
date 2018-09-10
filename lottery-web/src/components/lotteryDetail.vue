@@ -28,7 +28,7 @@
                   <td>注单编号：{{result.order_no}}</td>
                 </tr>
                 <tr class="group-row">
-                  <td>玩法：{{result.lotteryname}}</td>
+                  <td>玩法：{{result.lottery3name}}{{result.lotteryname}}</td>
                   <td>投注时间：{{getTime(result.create_at)}}</td>
                 </tr>
                 <tr class="group-row">
@@ -89,7 +89,7 @@
     },
     methods: {
       getTime(time) {
-        return moment(time).format("YYYY-MM-DD , HH:mm:ss");
+        return moment(time).format("YYYY-MM-DD HH:mm:ss");
       },
       previous() {
         this.$router.push({
@@ -326,6 +326,10 @@
     font-family: PingFangSC-Regular;
     font-size: 12px;
     color: #191919;
+    word-break: normal;
+    width: auto;
+    word-wrap: break-word;
+    overflow-y: scroll;
   }
 
   .area .step {

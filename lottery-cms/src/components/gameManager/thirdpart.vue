@@ -46,44 +46,25 @@
       </div>
     </div>
     <div class="data-table" v-loading="loading">
-      <el-table :data="rechargeListData" header-row-class-name="table-header" stripe border style="width: 100%;font-size:12px;">
+      <el-table :data="rechargeListData" header-row-class-name="table-header" stripe border style="width: 100%;font-size:12px;"
+        max-height="450" :show-summary="true" sum-text="总计" :summary-method="getSummaries">
         <el-table-column align="center" label="用户名" width="126">
           <template slot-scope="scope">
             <el-button type="text" @click="getUserInfoFn(scope.row)">{{scope.row.loginname}}</el-button>
           </template>
         </el-table-column>
-        <!-- <el-table-column align="center" prop="account" label="第三方游戏用户名">
-        </el-table-column> -->
         <el-table-column align="center" prop="platform" label="平台名">
         </el-table-column>
-        <!-- <el-table-column align="center" prop="channel" label="代理渠道">
-        </el-table-column> -->
         <el-table-column align="center" prop="game" label="游戏名">
         </el-table-column>
-        <!-- <el-table-column align="center" prop="room" :formatter="isTypeFn" label="房间号">
-        </el-table-column>
-        <el-table-column align="center" prop="table" label="桌号">
-        </el-table-column>
-        <el-table-column align="center" prop="chair" label="椅号">
-        </el-table-column> -->
         <el-table-column align="center" prop="vote" label="投注额">
         </el-table-column>
         <el-table-column align="center" prop="profit" label="盈利额">
         </el-table-column>
-        <!-- <el-table-column align="center" prop="revenue" label="平台抽水额">
+        <el-table-column align="center" prop="end_at" :formatter="formatTime" label="游戏时间">
         </el-table-column>
-        <el-table-column align="center" prop="current_cash" label="当前金额">
-        </el-table-column> -->
-        <!-- <el-table-column align="center" prop="start_at" :formatter="formatTime" label="游戏开始时间">
+        <el-table-column align="center" prop="create_at" :formatter="formatTime" label="同步时间">
         </el-table-column>
-        <el-table-column align="center" prop="end_at" :formatter="formatTime" label="游戏结束时间">
-        </el-table-column> -->
-        <el-table-column align="center" prop="create_at" :formatter="formatTime" label="游戏时间">
-        </el-table-column>
-        <el-table-column align="center" prop="update_at" :formatter="formatTime" label="同步时间">
-        </el-table-column>
-        <!-- <el-table-column align="center" prop="is_test" :formatter="formatTestUser" width="80" label="测试用户">
-        </el-table-column> -->
         <el-table-column align="center" label="操作">
           <template slot-scope="scope">
             <el-button class="small edit">原始数据</el-button>
@@ -350,6 +331,39 @@
       this.getRechargeLotList();
     },
     methods: {
+      getSummaries(param) {
+        const {
+          columns,
+          data
+        } = param;
+        const sums = [];
+        columns.forEach((column, index) => {
+          if (index === 0) {
+            sums[index] = "总计";
+            return;
+          }
+          let values = data.map(item => Number(item[column.property]));
+          if ((index === 3 || index === 4) && !values.every(value => isNaN(value))) {
+            sums[index] = values.reduce((prev, curr) => {
+              const value = Number(curr);
+              if (!isNaN(value)) {
+                return prev + curr;
+              } else {
+                return prev;
+              }
+            }, 0);
+            sums[index] = parseFloat(sums[index]).toFixed(2);
+            sums[index] += " 元";
+          } else {
+            if (index === 3 || index === 4) {
+              sums[index] = "0.00元";
+            } else
+              sums[index] = "--";
+          }
+        });
+
+        return sums;
+      },
       handleChangeRouter(name) {
         this.$router.push({
           name: name,
@@ -436,8 +450,10 @@
         this.dialogIsShow = val;
       },
       formatTime(row, column, cellValue) {
-        return moment(cellValue).format("YYYY-MM-DD HH:mm:ss");
-        // return moment(cellValue).format('YYYY-MM-DD')
+        if (cellValue) {
+          return moment(cellValue).format("YYYY-MM-DD HH:mm:ss");
+        }
+        return '--';
       },
       submitForm(formName) {
         const vm = this;

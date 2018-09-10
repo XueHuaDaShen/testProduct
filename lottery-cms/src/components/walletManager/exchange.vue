@@ -52,8 +52,6 @@
             <el-button type="danger" @click="handleSearch" size="medium" class="small yes">搜索</el-button>
             <el-button type="info" @click="handleReset" size="medium" class="small no">重置</el-button>
           </div>
-          <!-- <tableBtn :text="'搜索'" :plain="false" :btnType="'success'" :func="handleSearch"></tableBtn>
-          <tableBtn :text="'重置'" :func="handleReset"></tableBtn> -->
         </div>
       </div>
     </div>

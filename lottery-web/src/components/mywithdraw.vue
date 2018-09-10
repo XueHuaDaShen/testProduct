@@ -13,14 +13,14 @@
         <span class="exp w-60">时间：</span>
         <el-date-picker v-model="form.dateFrom.value" type="datetime" prefix-icon="void-icon" placeholder="选择日期时间">
         </el-date-picker>
-        <span class="exp">至</span>
+        <span style="margin:0 5px;font-weight:bold;color:#777;font-size:14px;">至</span>
         <el-date-picker v-model="form.dateTo.value" type="datetime" prefix-icon="void-icon" placeholder="选择日期时间">
         </el-date-picker>
         <a class="time ml-20" @click="setTimeToday">今日</a>
         <a class="time ml-20" @click="setTimeNowWeek">本周</a>
         <a class="time ml-20" @click="setTimeNowMonth">本月</a>
         <a class="time ml-20" @click="setTimeRecent3Days">近一月</a>
-        <a class="search ml-20" @click="handleSearch">查询</a>
+        <a class="submit ml-20" @click="handleSearch">查询</a>
       </div>
     </form>
     <hr class="user-split-line">
@@ -30,30 +30,28 @@
           <tr class="group-title">
             <th>订单号</th>
             <th>时间</th>
-            <!-- <th>账户</th> -->
             <th>申请金额</th>
             <th>手续费</th>
             <th>到账金额</th>
             <th>状态</th>
-            <th>备注</th>
+            <th style="border-right: 1px solid #dddddd;">备注</th>
           </tr>
         </thead>
         <tbody>
           <tr class="group-item" v-for="item in list" :key="item.order_no" v-if="!noResult">
             <td>{{item.order_no}}</td>
             <td>{{getTime(item.create_at)}}</td>
-            <!-- <td>{{item.card_no}}</td> -->
             <td>{{item.cash_apply}}</td>
             <td>{{item.cash_service_fee?item.cash_service_fee:0}}</td>
             <td>{{item.cash_withdrawed?item.cash_withdrawed:0 }}</td>
             <td>
               <a :class="getStatus(item.status).class">{{getStatus(item.status).text}}</a>
             </td>
-            <td>{{item.message ? item.message:"--"}}</td>
+            <td style="border-right: 1px solid #dddddd;">{{item.message ? item.message:"--"}}</td>
           </tr>
           <tr v-if="noResult" class="no-result">
-            <td colspan="10">
-              <p>没有符合条件的记录，请更改查询条件</p>
+            <td colspan="10" style="border-right: 1px solid #dddddd;">
+              <p style="color:#777;font-weight:bold;margin:35px 0;font-size:14px;">没有符合条件的记录，请更改查询条件</p>
             </td>
           </tr>
         </tbody>
@@ -65,7 +63,7 @@
             <td>{{getCurrentPageFee}}</td>
             <td>{{getCurrentPageReal}}</td>
             <td></td>
-            <td></td>
+            <td style="border-right: 1px solid #dddddd;"></td>
           </tr>
         </tfoot>
       </table>
@@ -423,7 +421,7 @@
   }
 
   .w-60 {
-    width: 60px;
+    width: 70px;
   }
 
   .ml-20 {
@@ -473,47 +471,14 @@
     background: #ffffff;
   }
 
-  .mywithdraw-wrap .record-options .option-row .exp {
-    display: inline-block;
-    font-size: 12px;
-    color: #191919;
-  }
-
   .mywithdraw-wrap .record-options .option-row {
     text-align: left;
     font-size: 12px;
     font-family: MicrosoftYaHei;
     color: #333333;
-  }
-
-  .mywithdraw-wrap .record-options .option-row>a.time {
-    display: inline-block;
-    padding: 0 2px;
-    font-size: 12px;
-    width: 64px;
-    height: 30px;
-    line-height: 28px;
-    border-radius: 2px;
-    border: 1px solid #ccc;
-    text-align: center;
-  }
-
-  .mywithdraw-wrap .record-options .option-row>a.time:hover {
-    background: #C83A4C;
-    color: #fff;
-  }
-
-  .search {
-    width: 80px;
-    height: 30px;
-    background: #C83A4C;
-    color: #fff;
-    display: inline-block;
-    line-height: 30px;
-    font-size: 12px;
-    font-family: MicrosoftYaHei;
-    text-align: center;
-    border-radius: 2px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
   }
 
   .user-split-line {

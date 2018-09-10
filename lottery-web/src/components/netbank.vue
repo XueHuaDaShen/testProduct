@@ -19,11 +19,8 @@
         <a class="time ml-20" @click="setTimeToday">今日</a>
         <a class="time ml-20" @click="setTimeNowWeek">本周</a>
         <a class="time ml-20" @click="setTimeNowMonth">本月</a>
-        <!-- <a class="time" @click="setTimeRecent3Days(-3)">近三日</a>
-        <a class="time" @click="setTimeRecent3Days(-15)">近半月</a> -->
         <a class="time ml-20" @click="setTimeRecent3Days">近一月</a>
-        &nbsp;
-        <a class="search ml-20" @click="handleSearch">查询</a>
+        <a class="submit ml-20" @click="handleSearch">查询</a>
       </div>
     </form>
     <hr class="user-split-line">
@@ -36,8 +33,7 @@
           <th>申请金额</th>
           <th>实际充值</th>
           <th>手续费</th>
-          <th>状态</th>
-          <!-- <th>操作</th> -->
+          <th style="border-right: 1px solid #dddddd;">状态</th>
         </tr>
       </thead>
       <tbody>
@@ -56,8 +52,8 @@
           </td> -->
         </tr>
         <tr v-if="noResult" class="no-result">
-          <td colspan="10">
-            <p>没有符合条件的记录，请更改查询条件</p>
+          <td colspan="10" style="border-right: 1px solid #dddddd;">
+            <p style="color:#777;font-weight:bold;margin:35px 0;font-size:14px;">没有符合条件的记录，请更改查询条件</p>
           </td>
         </tr>
       </tbody>
@@ -69,7 +65,7 @@
           <td>{{getCurrentPageApply}}</td>
           <td>{{getCurrentPageRecharged}}</td>
           <td></td>
-          <td></td>
+          <td style="border-right: 1px solid #dddddd;"></td>
         </tr>
       </tfoot>
     </table>
@@ -145,9 +141,9 @@
               { key: "微信", value: '1' },
               { key: "支付宝", value: '2' },
               { key: "银行卡转账", value: '3' },
-              { key: "银联转账", value: '4' },
-              { key: "网银快捷", value: '5' },
-              { key: "银联扫码", value: '6' }
+              { key: "银联转账", value: '101' },
+              { key: "网银快捷", value: '113' },
+              { key: "银联扫码", value: '111' }
             ],
             value: "",
             getValue() {
@@ -351,13 +347,13 @@
           case 3:
             status = "银行卡转账";
             break;
-          case 4:
+          case 101:
             status = "银联转账";
             break;
-          case 5:
+          case 113:
             status = "网银快捷";
             break;
-          case 6:
+          case 111:
             status = "银联扫码";
             break;
         }
@@ -404,7 +400,7 @@
   }
 
   .w-60 {
-    width: 60px;
+    width: 70px;
   }
 
   .ml-20 {
@@ -461,49 +457,11 @@
     background: #ffffff;
   }
 
-  .mydeposit-wrap .record-options .option-row .exp {
-    display: inline-block;
-    font-size: 12px;
-    color: #191919;
-  }
-
   .mydeposit-wrap .record-options .option-row {
     text-align: left;
     font-size: 12px;
     font-family: MicrosoftYaHei;
     color: #333333;
-  }
-
-  .mydeposit-wrap .record-options .option-row>a.time {
-    display: inline-block;
-    padding: 0 2px;
-    font-size: 12px;
-    width: 64px;
-    height: 30px;
-    line-height: 28px;
-    border-radius: 2px;
-    border: 1px solid #ccc;
-    text-align: center;
-    cursor: pointer;
-  }
-
-  .mydeposit-wrap .record-options .option-row>a.time:hover {
-    background: #C83A4C;
-    color: #fff;
-  }
-
-  .search {
-    width: 80px;
-    height: 30px;
-    background: #C83A4C;
-    color: #fff;
-    display: inline-block;
-    line-height: 30px;
-    font-size: 12px;
-    font-family: MicrosoftYaHei;
-    text-align: center;
-    border-radius: 2px;
-    cursor: pointer;
   }
 
   .mydeposit-wrap .record-group {

@@ -38,7 +38,7 @@
       <div class="dialog-content">
         <em class="close-em" @click="showDeleteDialog = false">×</em>
         <p>确认删除这条推广链接吗？</p>
-        <button @click="confirmDelete">确定</button>
+        <button :disabled="isClick" @click="confirmDelete">确定</button>
       </div>
     </div>
     <div class="alert-tip-text copy-url-alert-wrap" v-if="tipText">
@@ -56,6 +56,7 @@ export default {
   data() {
     return {
       moment: moment,
+      isClick: false,
       tableHead: ['账户类型', '奖金组', '创建时间', '有效期', '注册人数', '操作'],
       tableData: [],
       emptyText: '暂无数据',
@@ -112,6 +113,7 @@ export default {
     // 确定删除
     confirmDelete() {
       const vm = this;
+      vm.isClick = true;
       request.http(
         'post',
         '/user/team/link/delete',
@@ -119,6 +121,7 @@ export default {
           id: vm.deleteItemId,
         },
         (success) => {
+          vm.isClick = false;
           // console.log(success)
           if(success.returncode === 200){
             vm.getTableData();
@@ -129,7 +132,9 @@ export default {
             }, vm.tipTimeOut2*1000);
           }
         },
-        (error) => {}
+        (error) => {
+          vm.isClick = false;
+        }
       )
     },
     // 设置状态/类型的文字

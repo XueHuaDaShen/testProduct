@@ -41,7 +41,8 @@
                       {{item.value}}
                       <el-badge :value="announcement.num" :hidden="announcement.hidden" :max="announcement.max" v-if="item.component === 'notice'" class="badge">
                       </el-badge>
-                      <span v-if="item.component === 'mail'">({{mail.num}})</span>
+                      <el-badge :value="mail.num" v-if="item.component === 'mail'" :hidden="mail.hidden" :max="mail.max" class="badge">
+                      </el-badge>
                     </router-link>
                   </li>
                 </ul>
@@ -56,7 +57,7 @@
             <div class="user-wrap" v-show="this.headerActivited === 3" v-loading="profile.loading">
               你好，
               <span>{{profile.nickName}}</span>
-              <br/>
+              <br />
               <p>
                 <router-link :to="{name:'topUp'}" class="chongzhi">立即充值</router-link>
               </p>
@@ -131,7 +132,8 @@
                 <span>AG娱乐</span>
               </div>
               <img alt="AG娱乐" class="logo0" src="../assets/img/Logo_0.png">
-              <a class="item-link noallowed">即将上线</a>
+              <!-- <button class="item-link noallowed">即将上线</button> -->
+              <router-link class="item-link" :to="{name:'liveCasino'}" target='_blank'>立即参加</router-link>
             </div>
           </li>
           <li @mouseleave="navToggle(0)">
@@ -143,7 +145,8 @@
                 <span>AG电子</span>
               </div>
               <img alt="AG电子" class="logo0" src="../assets/img/Logo_0.png">
-              <a class="item-link noallowed">即将上线</a>
+              <!-- <button class="item-link noallowed">即将上线</button> -->
+              <router-link class="item-link" :to="{name:'slots'}" target='_blank'>立即参加</router-link>
             </div>
           </li>
           <li @mouseleave="navToggle(0)">
@@ -177,16 +180,23 @@
         </ul>
       </div>
     </div>
+    <!-- <agGame v-if="formData" :formData="formData"></agGame> -->
   </div>
 </template>
 <script>
   import * as manage from '../assets/json/manage.json'
   import request from '../axios/axios'
   import moment from 'moment'
+  // import agGame from './agGame'
 
   export default {
+    // components: {
+    //   agGame
+    // },
     data() {
       return {
+        // formData: '',
+        isClick: false,
         blance: "0.00",
         navActivited: 0 /*当前选中的导航栏*/ ,
         headerActivited: 0 /*当前选中的header*/ ,
@@ -223,9 +233,33 @@
       };
     },
     methods: {
+      // //去往ag游戏
+      // getLoginForm(type) {
+      //   const vm = this;
+      //   vm.isClick = true;
+      //   let url = "/ag/user/login";
+      //   request.http(
+      //     "post",
+      //     url, { gameType: type },
+      //     success => {
+      //       vm.isClick = false;
+      //       let code = success.returncode;
+      //       console.log('form----', success)
+      //       if (code == 200) {
+      //         vm.formData = success.data;
+      //       } else if (code == 101 || code == 103 || code == 106) {
+      //         request.loginAgain(vm)
+      //       }
+      //     },
+      //     error => {
+      //       vm.isClick = false;
+      //     }
+      //   );
+      // },
       // 打开客服
       openKf() {
-        window.open('https://ytpfx.livechatvalue.com/chat/chatClient/chatbox.jsp?companyID=1027559&configID=43463&jid=8295678173&s=1', 'newwindow', 'height=700, width=900, top=0, left=0, toolbar=no, menubar=no, scrollbars=no, resizable=no,location=n o, status=no')
+        window.open('https://ytpfx.livechatvalue.com/chat/chatClient/chatbox.jsp?companyID=1027559&configID=43463&jid=8295678173&s=1', 'newwindow',
+          'height=700, width=900, top=0, left=0, toolbar=no, menubar=no, scrollbars=no, resizable=no,location=n o, status=no')
       },
       // 定时获取公告列表
       getNewAnnouncement() {
@@ -367,11 +401,23 @@
               if (success.returncode == 103 || success.returncode == 106 || success.returncode == 101) {
                 request.loginAgain(self);
               } else if (success.returncode == 200) {
-                self.announcement.num = success.data.daynotice;
-                if (self.announcement.num) {
+                if (success.data.total) {
                   self.announcement.hidden = false;
                   self.announcement.data = success.data.data;
+                  for (let i = 0; i < self.announcement.data.length; i++) {
+                    let dateNow = new Date(new Date(self.announcement.data[i].start_at).toLocaleDateString()).getTime();
+                    const end = new Date(new Date(new Date().toLocaleDateString()).getTime() + 24 * 60 * 60 * 1000 - 1);
+                    const start = new Date(new Date(new Date().toLocaleDateString()).getTime() - 3600 * 1000 * 24 * 7);
+                    if (dateNow > start && dateNow < end) {
+                      self.announcement.num += 1;
+                    }
+                  }
+                  if (!self.announcement.num) {
+                    self.announcement.num = 0;
+                    self.announcement.hidden = true;
+                  }
                 } else {
+                  self.announcement.num = 0;
                   self.announcement.hidden = true;
                 }
               }
@@ -450,6 +496,7 @@
       clearInterval(this.myMailInterval);
     },
     mounted() {
+      // this.formData = '';
       this.getNewAnnouncement();
       this.getNewMail();
       this.blance = Number(localStorage.getItem('blance'));
@@ -462,11 +509,17 @@
     list-style: none;
   }
 
+  button {
+    border: none;
+    outline: none;
+  }
+
   .icon-refresh {
     background: url('../assets/img/icon_Refresh@3x.png') no-repeat;
     background-size: cover;
     width: 18px;
     height: 18px;
+
     &.active {
       animation: rotating 1.2s linear infinite;
     }
@@ -476,6 +529,7 @@
     from {
       transform: rotate(0)
     }
+
     to {
       transform: rotate(360deg)
     }
@@ -792,6 +846,7 @@
     position: relative;
     list-style: none;
     padding: 0 20px;
+
     &:hover {
       .nav-wrap {
         transform: translateY(0) translateZ(0);
@@ -1044,9 +1099,10 @@
   .live .item-link {
     display: block;
     margin: 0 auto;
-    background: #e1c79b;
+    // background: #e1c79b;
+    background: #BD8454;
     font-size: 14px;
-    color: #000000;
+    color: #fff;
     letter-spacing: 0.88px;
     width: 208px;
     height: 34px;

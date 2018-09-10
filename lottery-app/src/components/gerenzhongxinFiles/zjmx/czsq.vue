@@ -97,9 +97,9 @@ export default {
         {name: '微信', type: '1'},
         {name: '支付宝', type: '2'},
         {name: '银行卡转账', type: '3'},
-        {name: '银联转账', type: '4'},
-        {name: '网银快捷', type: '5'},
-        {name: '银联扫码', type: '6'}
+        {name: '银联转账', type: '101'},
+        {name: '网银快捷', type: '113'},
+        {name: '银联扫码', type: '111'}
       ],
       statusList: [
         {name: '申请充值', val: '1'},

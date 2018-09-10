@@ -70,7 +70,7 @@
     </div>
     <div class="data-table" v-loading="loading">
       <el-table :data="lotteryColligateListData" header-row-class-name="table-header" stripe border style="width: 100%;font-size:12px;"
-        max-height="450">
+        max-height="450" :show-summary="true" sum-text="总计" :summary-method="getSummaries">
         <!-- <el-table-column align="center" label="用户名">
           <template slot-scope="scope">
             <el-button type="text" @click="getUserInfoFn(scope.row)">{{scope.row.loginname}}</el-button>
@@ -87,7 +87,7 @@
         </el-table-column> -->
         <el-table-column align="center" prop="vote" label="投注额" :formatter="formatMoney">
         </el-table-column>
-        <el-table-column align="center" prop="rebate" label="返点">
+        <el-table-column align="center" prop="rebate" label="返点" :formatter="formatMoney">
         </el-table-column>
         <el-table-column align="center" prop="user_count" label="玩家人数">
         </el-table-column>
@@ -196,8 +196,8 @@
             val: '-1'
           }
         ],
-        order: '',
-        desc: '',
+        order: '_id.day',
+        desc: '-1',
         loading: false,
         pageNum: 1,
         pageSize: 40,
@@ -384,22 +384,61 @@
           v.checked = false
         }
       })
-      // const end = new Date();
-      // const start = new Date(new Date(new Date().toLocaleDateString()).getTime());
-      // end.setTime(new Date(new Date(new Date().toLocaleDateString()).getTime() + 24 * 60 * 60 * 1000 - 1));
-      // this.searchTime = [start, end];
+      const end = new Date();
+      const start = new Date(new Date(new Date().toLocaleDateString()).getTime());
+      end.setTime(
+        new Date(
+          new Date(new Date().toLocaleDateString()).getTime() +
+          24 * 60 * 60 * 1000 -
+          1
+        )
+      );
+      this.searchTime = [start, end];
       this.getLotteryColligateList();
     },
     methods: {
+      getSummaries(param) {
+        const {
+          columns,
+          data
+        } = param;
+        const sums = [];
+        columns.forEach((column, index) => {
+          if (index === 0) {
+            sums[index] = "总计";
+            return;
+          }
+          let values = data.map(item => Number(item[column.property]));
+          if ((index === 2 || index === 3 || index === 5) && !values.every(value => isNaN(value))) {
+            sums[index] = values.reduce((prev, curr) => {
+              const value = Number(curr);
+              if (!isNaN(value)) {
+                return prev + curr;
+              } else {
+                return prev;
+              }
+            }, 0);
+            sums[index] = parseFloat(sums[index]).toFixed(2);
+            sums[index] += " 元";
+          } else {
+            if ((index === 2 || index === 3 || index === 5)) {
+              sums[index] = "0.00元";
+            } else
+              sums[index] = "--";
+          }
+        });
+
+        return sums;
+      },
       formatMoney(row, column, cellValue) {
         if (cellValue) {
           return Number(cellValue).toFixed(2);
         }
-        return "--"
+        return "0.00"
       },
       formatTime2(row) {
         if (row._id && row._id.day) {
-          return moment(row._id.day).utcOffset(8).format("YYYY-MM-DD HH:MM:SS");
+          return moment(row._id.day).utcOffset(8).format("YYYY-MM-DD");
         }
         return '--'
       },
@@ -411,7 +450,6 @@
             index2: this.index2
           }
         })
-        // console.log(name)
       },
       succee() {
         const vm = this;
@@ -479,19 +517,22 @@
         const vm = this;
         let beginTime = "",
           endTime = "";
-        if (vm.searchTime.toString() !== "") {
-          beginTime = new Date(vm.searchTime[0]);
-          endTime = new Date(vm.searchTime[1]);
+        if (vm.searchTime) {
+          if (vm.searchTime.toString() !== "") {
+            beginTime = new Date(vm.searchTime[0]);
+            endTime = new Date(vm.searchTime[1]);
+          }
         }
         let data = {
           pageNum: vm.pageNum,
           pageSize: vm.pageSize,
-          beginTime: beginTime,
+          startTime: beginTime,
           endTime: endTime,
           is_test: vm.is_test,
           order: vm.order,
           platform: vm.platform,
-          date: vm.dateChecked
+          date: vm.dateChecked,
+          desc: vm.desc
         };
         if (vm.desc) {
           data['desc'] = Number(vm.desc);

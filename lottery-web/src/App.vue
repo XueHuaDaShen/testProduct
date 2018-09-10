@@ -19,6 +19,10 @@
     color: #2c3e50;
     width: 100%;
     height: 100%;
+    -webkit-user-select:auto;
+    -moz-user-select:auto;
+    -ms-user-select:auto;
+    user-select:auto;
   }
 
   /* .order-detail-wrap{

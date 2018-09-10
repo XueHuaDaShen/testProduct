@@ -67,7 +67,7 @@
         <input type="number" placeholder="请输入旧的银行卡号" v-model="confirmBankNum">
       </li> -->
     </ul>
-    <button class="submit-btn" @click="toNextBindBankStep">下一步</button>
+    <button class="submit-btn" :disabled="isClick" @click="toNextBindBankStep">下一步</button>
     <div class="alert-tip-text" v-if="tipText">{{tipText}}</div>
   </div>
 </template>
@@ -83,6 +83,7 @@ export default {
   },
   data() {
     return {
+      isClick: false,
       selectTxt: 'bank_name', // 选项值的 字段
       selectVal: '_id', // 选项文本 字段
 
@@ -143,6 +144,7 @@ export default {
         //     realname: vm.realname,
         //     card_no: vm.bankNum,
         //   })
+        vm.isClick = true;
         request.http(
           'post',
           '/user/bankcard/bind',
@@ -156,6 +158,7 @@ export default {
           }),
           (success) => {
             // console.log(success)
+            vm.isClick = false;
             let code = success.returncode;
             if (code == 103 || code == 106 || code == 101) {
               request.loginAgain(vm);
@@ -188,6 +191,7 @@ export default {
             // }
           },
           (error) => {
+            vm.isClick = false;
             console.log('数据异常', error)
           }
         )

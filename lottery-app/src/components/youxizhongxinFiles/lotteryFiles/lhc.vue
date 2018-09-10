@@ -144,7 +144,7 @@
         </div>
         <div class="split-line"></div>
         <strong>共计：<em>￥{{setMoneyFn()}} / {{getBetsFn()}}注</em>，您确定下注吗？</strong>
-        <button class="confirm-to-bets" @click="toBetsFn('showConfirmDialog1')">确定</button>
+        <button class="confirm-to-bets" :disabled="isClick" @click="toBetsFn('showConfirmDialog1')">确定</button>
       </div>
     </div>
     <div class="dialog-bj" v-if="showConfirmDialog1"></div>
@@ -158,7 +158,7 @@
         <strong><p>组合共<span></span></p>：<em>{{getBetsFn()}}组</em></strong>
         <strong><p>单注金额<span></span></p>：<em>{{multiple}}元</em></strong>
         <strong><p>总下注金额<span></span></p>：<em>{{setMoneyFn()}}元</em></strong>
-        <button class="confirm-to-bets" @click="toBetsFn('showConfirmDialog2')">确定</button>
+        <button class="confirm-to-bets" :disabled="isClick" @click="toBetsFn('showConfirmDialog2')">确定</button>
       </div>
     </div>
     <div class="dialog-bj" v-if="showConfirmDialog2"></div>
@@ -188,6 +188,7 @@ export default {
   components: {},
   data() {
     return {
+      isClick: false,
       betsId: '',
       showModel: false,
       betsOk: false,
@@ -1025,6 +1026,7 @@ export default {
     toBetsFn(val) {
       const vm = this;
       let voteList = this.voteList;
+      this.isClick = true;
       // console.log(voteList)
       // return false;
       request.http(
@@ -1033,6 +1035,7 @@ export default {
         paramCryptFn({voteList}),
         (success) => {
           // console.log(success);
+          vm.isClick = false;
           let code = success.returncode;
           if(code === 103 || code === 101 || code === 106){
             request.loginAgain(vm)
@@ -1055,6 +1058,7 @@ export default {
           }
         },
         (error) => {
+          vm.isClick = false;
           console.log(error)
         }
       )

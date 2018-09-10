@@ -53,7 +53,7 @@
     </div>
     <div class="data-table" v-loading="loading">
       <el-table :data="monthProfitListData" header-row-class-name="table-header" stripe border style="width: 100%;font-size:12px;"
-        @selection-change="handleSelectionChange">
+        @selection-change="handleSelectionChange" max-height="450" :show-summary="true" sum-text="总计" :summary-method="getSummaries">
         <el-table-column type="selection" width="55" :selectable='checkboxInit'>
         </el-table-column>
         <el-table-column align="center" label="用户名" width="126">
@@ -63,8 +63,6 @@
         </el-table-column>
         <el-table-column align="center" prop="ancestor" label="上级代理">
         </el-table-column>
-        <!-- <el-table-column align="center" prop="proxy" label="代理层级关系">
-        </el-table-column> -->
         <el-table-column align="center" prop="personal_commission" label="个人分红">
         </el-table-column>
         <el-table-column align="center" prop="team_profit" label="团队盈亏">
@@ -81,8 +79,6 @@
         </el-table-column>
         <el-table-column align="center" prop="status" :formatter="isStatusFn" label="发放状态">
         </el-table-column>
-        <!-- <el-table-column align="center" prop="is_test" :formatter="formatTestUser" width="80" label="测试用户">
-        </el-table-column> -->
       </el-table>
       <div class="fenye">
         <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="pageNum"
@@ -340,6 +336,36 @@
       this.getMonthProfitList();
     },
     methods: {
+      getSummaries(param) {
+        const {
+          columns,
+          data
+        } = param;
+        const sums = [];
+        columns.forEach((column, index) => {
+          if (index === 0) {
+            sums[index] = "总计";
+            return;
+          }
+          let values = data.map(item => Number(item[column.property]));
+          if ((index === 3 || index === 4 || index === 5) && !values.every(value => isNaN(value))) {
+            sums[index] = values.reduce((prev, curr) => {
+              const value = Number(curr);
+              if (!isNaN(value)) {
+                return prev + curr;
+              } else {
+                return prev;
+              }
+            }, 0);
+            sums[index] = parseFloat(sums[index]).toFixed(2);
+            sums[index] += " 元";
+          } else {
+            sums[index] = "--";
+          }
+        });
+
+        return sums;
+      },
       closeOneKeyForm() {
         this.onekeyVisible = false;
         this.resetForm();
@@ -455,7 +481,7 @@
         if (cellValue) {
           return Number(cellValue).toFixed(2);
         }
-        return "--"
+        return "0.00"
       },
       handleSelectionChange(val) {
         // this.multipleSelection = val;

@@ -25,10 +25,6 @@
               start-placeholder="开始日期" end-placeholder="结束日期" :picker-options="pickerOptions" :default-time="pickerDefaultTime">
             </el-date-picker>
           </div>
-          <!--  <div class="search-inner-wrap">
-            <label>关键词：</label>
-            <el-input clearable v-model="keywords" placeholder="关键词" style="width:114px;"></el-input>
-          </div> -->
           <div class="search-inner-wrap">
             <label>测试用户：</label>
             <el-select clearable v-model="is_test" placeholder="测试用户" class="small">
@@ -40,8 +36,6 @@
             <el-button type="danger" @click="handleSearch" size="medium" class="small yes">搜索</el-button>
             <el-button type="info" @click="handleReset" size="medium" class="small no">重置</el-button>
           </div>
-          <!-- <tableBtn :text="'搜索'" :plain="false" :btnType="'success'" :func="handleSearch"></tableBtn>
-          <tableBtn :text="'重置'" :func="handleReset"></tableBtn> -->
         </div>
       </div>
     </div>
@@ -64,8 +58,6 @@
         </el-table-column>
         <el-table-column align="center" label="地区" prop="region">
         </el-table-column>
-        <!-- <el-table-column align="center" prop="is_test" :formatter="formatTestUser" width="80" label="测试用户">
-        </el-table-column> -->
         <el-table-column align="center" prop="message" label="其他">
         </el-table-column>
       </el-table>

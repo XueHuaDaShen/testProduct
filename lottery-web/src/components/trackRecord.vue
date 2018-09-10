@@ -26,14 +26,14 @@
         </el-input>
       </div>
       <div class="option-row mb-20">
-        <span class="exp">用户名：</span>
-        <el-input style="width:114px;" placeholder="请输入内容" v-model="form.username.value" clearable>
-        </el-input>
-        <span class="exp w-60 ml-20">用户属性：</span>
+        <span class="exp">用户属性：</span>
         <el-select v-model="form.userTypes.value" placeholder="请选择" clearable style="width:114px">
           <el-option v-for="item in form.userTypes.options" :key="item.value" :label="item.text" :value="item.value">
           </el-option>
         </el-select>
+        <span class="exp ml-20">用户名：</span>
+        <el-input style="width:114px;" placeholder="请输入内容" v-model="form.username.value" clearable>
+        </el-input>
       </div>
       <div class="option-row mb-20">
         <span class="exp w-60">状态：</span>
@@ -47,7 +47,7 @@
         <span class="exp w-60">游戏时间：</span>
         <el-date-picker v-model="form.dateFrom.value" type="datetime" prefix-icon="void-icon" placeholder="选择日期时间" @change="getTimeStart" value-format="yyyy-MM-dd HH:mm:ss">
         </el-date-picker>
-        <span>至</span>
+        <span style="margin:0 5px;font-weight:bold;color:#777;font-size:14px;">至</span>
         <el-date-picker v-model="form.dateTo.value" type="datetime" prefix-icon="void-icon" placeholder="选择日期时间" @change="getTimeEnd" value-format="yyyy-MM-dd HH:mm:ss">
         </el-date-picker>
         <a class="time ml-20" @click="setTimeToday">今日</a>
@@ -92,7 +92,7 @@
           <th>已中奖金额</th>
           <th>追中即停</th>
           <th>状态</th>
-          <th>操作</th>
+          <th style="border-right: 1px solid #dddddd;">操作</th>
         </tr>
       </thead>
       <tbody>
@@ -117,8 +117,8 @@
           </td>
         </tr>
         <tr v-if="noResult" class="no-result">
-          <td colspan="10">
-            <p>没有符合条件的记录，请更改查询条件</p>
+          <td colspan="10" style="border-right: 1px solid #dddddd;">
+            <p style="color:#777;font-weight:bold;margin:35px 0;font-size:14px;">没有符合条件的记录，请更改查询条件</p>
           </td>
         </tr>
       </tbody>
@@ -146,7 +146,7 @@
 </template>
 <script>
   import request from "../axios/axios";
-  import { getStatusDesc } from '../common/trackStatus';
+  import { getStatusDesc } from "../common/trackStatus";
 
   export default {
     data() {
@@ -206,7 +206,7 @@
           },
           //游戏名称
           gametypes: {
-            key: 'gameid',
+            key: "gameid",
             value: "",
             options: [],
             getValue() {
@@ -260,7 +260,7 @@
           },
           //玩法群
           playgroups: {
-            key: 'lottery3id',
+            key: "lottery3id",
             value: "",
             loading: false,
             loadingtext: "正在搜索...",
@@ -294,7 +294,7 @@
               { text: "进行中", value: 1 },
               { text: "已结束", value: 2 },
               { text: "系统取消", value: 3 },
-              { text: "用户取消", value: 4 },
+              { text: "用户取消", value: 4 }
               // { text: "中奖", value: 5 }
             ],
             getValue() {
@@ -340,30 +340,30 @@
                 value = this.value;
               }
               /*if (!value) {
-                  this.error.message = '该信息必填';
-                  this.error.visible = true;
-                  return false;
-                }*/
+                    this.error.message = '该信息必填';
+                    this.error.visible = true;
+                    return false;
+                  }*/
               this.error.visible = false;
               return true;
             }
           },
           //用户名
           username: {
-            key: 'loginname',
-            value: '',
+            key: "loginname",
+            value: "",
             getValue() {
               if (this.value) {
                 return this.value;
               }
-              return '';
+              return "";
             },
             reset() {
               this.value = null;
             },
             error: {
               visible: false,
-              message: ''
+              message: ""
             },
             verify: function(value) {
               if (!value) {
@@ -375,9 +375,13 @@
           },
           //用户属性
           userTypes: {
-            key: 'self',
+            key: "self",
             value: 1,
-            options: [{ text: '全部', value: 2 }, { text: '自己', value: 1 }, { text: '下级', value: 0 }],
+            options: [
+              { text: "全部", value: 2 },
+              { text: "自己", value: 1 },
+              { text: "下级", value: 0 }
+            ],
             getValue() {
               if (this.value || this.value == 0) {
                 return this.value;
@@ -389,7 +393,7 @@
             },
             error: {
               visible: false,
-              message: ''
+              message: ""
             },
             verify: function(value) {
               if (!value) {
@@ -398,7 +402,7 @@
               this.error.visible = false;
               return true;
             }
-          },
+          }
           //form End
         },
         list: [],
@@ -408,29 +412,39 @@
         pageIndex: 1, //当前页
         pageSize: 15, //单页条数
         agg: {} //投注统计
-      }
+      };
     },
     methods: {
       //获取下注统计
       getAgg(data) {
         let self = this;
-        let url = '/lottery/issue/chase/agg';
+        let url = "/lottery/issue/chase/agg";
         this.loading = true;
-        request.http('get', url, data, (success) => {
-          this.loading = false;
-          if (success.returncode) {
-            if (success.returncode == 103 || success.returncode == 106 || success.returncode == 101) {
-              request.loginAgain(self);
-            } else if (success.returncode == 200) {
-              if (success.agg.length != 0 && success.agg[0] != null) {
-                this.agg = success.agg[0];
+        request.http(
+          "get",
+          url,
+          data,
+          success => {
+            this.loading = false;
+            if (success.returncode) {
+              if (
+                success.returncode == 103 ||
+                success.returncode == 106 ||
+                success.returncode == 101
+              ) {
+                request.loginAgain(self);
+              } else if (success.returncode == 200) {
+                if (success.agg.length != 0 && success.agg[0] != null) {
+                  this.agg = success.agg[0];
+                }
               }
             }
+          },
+          error => {
+            this.loading = false;
+            console.log("error", error);
           }
-        }, (error) => {
-          this.loading = false;
-          console.log('error', error);
-        })
+        );
       },
       handleSearch() {
         this.pageIndex = 1;
@@ -564,7 +578,7 @@
         data["page_size"] = this.pageSize;
         data["page_num"] = this.pageIndex;
         if (this.form.userTypes.value == 1) {
-          this.form.username.value = localStorage.getItem('loginname');
+          this.form.username.value = localStorage.getItem("loginname");
         }
         let errorMessage = "查询错误";
         for (let v in this.form) {
@@ -601,7 +615,11 @@
             success => {
               self.loading = false;
               if (success.returncode) {
-                if (success.returncode == 103 || success.returncode == 106 || success.returncode == 101) {
+                if (
+                  success.returncode == 103 ||
+                  success.returncode == 106 ||
+                  success.returncode == 101
+                ) {
                   request.loginAgain(self);
                 } else if (success.returncode == 200) {
                   self.total = success.data.total;
@@ -639,7 +657,11 @@
           success => {
             self.form.gametypes.loading = false;
             if (success.returncode) {
-              if (success.returncode == 103 || success.returncode == 106 || success.returncode == 101) {
+              if (
+                success.returncode == 103 ||
+                success.returncode == 106 ||
+                success.returncode == 101
+              ) {
                 request.loginAgain(self);
               } else if (success.returncode == 200) {
                 for (let i = 0; i < success.data.length; i++) {
@@ -687,7 +709,11 @@
           success => {
             self.form.playgroups.loading = false;
             if (success.returncode) {
-              if (success.returncode == 103 || success.returncode == 106 || success.returncode == 101) {
+              if (
+                success.returncode == 103 ||
+                success.returncode == 106 ||
+                success.returncode == 101
+              ) {
                 request.loginAgain(self);
               } else if (success.returncode == 200) {
                 let children = success.data.children;
@@ -748,7 +774,7 @@
     },
     computed: {
       getCurrentPageVote() {
-        let vote = 0.00;
+        let vote = 0.0;
         if (this.list.length != 0) {
           for (let i = 0; i < this.list.length; i++) {
             vote += this.list[i].total_vote_cash;
@@ -757,7 +783,7 @@
         return vote;
       },
       getCurrentPageAward() {
-        let award = 0.00;
+        let award = 0.0;
         if (this.list.length != 0) {
           for (let i = 0; i < this.list.length; i++) {
             if (this.list[i].award_cash) {
@@ -770,18 +796,18 @@
     },
     mounted() {
       this.setTimeToday();
-      this.form.username.value = localStorage.getItem('loginname');
+      this.form.username.value = localStorage.getItem("loginname");
       this.checkId();
     },
     created() {
-      this.$store.dispatch('setbodyBG', 'no-bg');
-      localStorage.setItem('bodyBG', 'no-bg');
+      this.$store.dispatch("setbodyBG", "no-bg");
+      localStorage.setItem("bodyBG", "no-bg");
     }
   };
 </script>
 <style scoped>
   .w-60 {
-    width: 60px
+    width: 70px;
   }
 
   .user-split-line {
@@ -802,8 +828,9 @@
 
   .lottery-wrap .record-options .option-row .exp {
     display: inline-block;
-    font-size: 12px;
+    font-size: 14px;
     color: #191919;
+    font-weight: bold;
   }
 
   .inline {
@@ -865,7 +892,7 @@
 
   .record-options {
     padding-bottom: 30px;
-    background: #FFFFFF;
+    background: #ffffff;
   }
 
   .mb-20 {
@@ -877,6 +904,9 @@
     font-size: 12px;
     font-family: MicrosoftYaHei;
     color: #333333;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
   }
 
   .record-options .option-row>input[type="text"] {
@@ -905,7 +935,6 @@
     line-height: 25px;
     border-radius: 5px;
     border: 1px solid #d4914d;
-    margin-right: 3px;
   }
 
   .record-options .option-row>a:hover {
@@ -916,7 +945,7 @@
   .record-group {
     width: 100%;
     border-collapse: collapse;
-    border: 1px solid #DDDDDD;
+    border: 1px solid #dddddd;
     background: #fff;
   }
 
@@ -935,14 +964,14 @@
   .record-group .group-item {
     height: 50px;
     line-height: 50px;
-    border-bottom: 1px solid #DDDDDD;
+    border-bottom: 1px solid #dddddd;
     font-size: 12px;
   }
 
   .record-group .group-item a {
     width: 69px;
     height: 32px;
-    background: #C83A4C;
+    background: #c83a4c;
     color: #fff;
     display: block;
     line-height: 32px;
@@ -956,13 +985,16 @@
 
   .record-options .option-row>a.time {
     display: inline-block;
-    font-size: 12px;
+    font-size: 14px;
     width: 64px;
     height: 30px;
     line-height: 28px;
     border-radius: 2px;
-    border: 1px solid #ccc;
+    font-weight: bold;
+    color: #CFA072;
+    border: 1px solid #CFA072;
     text-align: center;
+    margin-left: 20px;
   }
 
   .ml-20 {
@@ -970,8 +1002,8 @@
   }
 
   .record-options .option-row>a.time:hover {
-    background: #C83A4C;
     color: #fff;
+    background-image: linear-gradient(-180deg, #CFA072 0%, #B68E66 100%)
   }
 
   .record-group .group-item:nth-child(2n) {
@@ -1030,14 +1062,15 @@
     height: 30px;
     line-height: 28px;
     text-align: center;
-    font-size: 12px;
-    color: #FFF;
+    font-size: 14px;
+    font-weight: bold;
+    color: #fff;
     cursor: pointer;
     border-radius: 2px;
     outline: none;
     font-family: microsoft yahei;
-    background-color: #C83A4C;
     box-shadow: none;
     border: none;
+    background-image: linear-gradient(-180deg, #CFA072 0%, #B68E66 100%);
   }
 </style>

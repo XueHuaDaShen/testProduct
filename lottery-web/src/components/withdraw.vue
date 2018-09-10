@@ -1,6 +1,6 @@
 /* 提现 */
 <template>
-  <div class="order-detail-wrap content search-form">
+  <div class="order-detail-wrap content search-form withdraw-wrap">
     <user-menu></user-menu>
     <div class="main" v-loading="loading">
       <div class="top-bar">
@@ -34,16 +34,16 @@
             </p>
             <p class="tip-row">
               每天限制提款
-              <span class="red">{{bankcards.max_withdraw_times_daily}}次</span>,您今天已经提款
+              <span class="red">{{bankcards.max_withdraw_times_daily}}次</span>，您今天已经提款
               <span class="red">{{bankcards.times}}次</span>
             </p>
             <p class="tip-row">
               最小提款额：
               <span class="red">{{bankcards.min_withdraw_every_time}}元</span>
-              ,最大提款额:
+              ，最大提款额:
               <span class="red">{{bankcards.max_withdraw_every_time}}元</span>
             </p>
-            <p class="tip-row">
+            <p class="tip-row" style="font-weight:bold">
               需完成所有打码量要求方可提现
             </p>
           </div>
@@ -54,21 +54,18 @@
               <span class="last-exp">用户名：</span>
               <span class="last-exp">{{getUserName}}</span>
             </div>
-            <div class="time-row mb-20">
+            <div class="time-row mb-20 clearfix" style="position:relative">
               <span class="last-exp">可提现余额：</span>
-              <el-popover placement="right" :disabled="dml == 0" v-model="tooltipVisible">
-                <div class="flex-tip">
-                  <i class="el-icon-warning"></i>
-                  <span class="tooltip" style="margin-left:5px;">您尚未完成打码量</span>
-                  <el-button @click="goDML()" size="mini" type="primary" style="margin-left:5px;">查看</el-button>
-                </div>
-                <p class="cash" slot="reference">{{getBlance}}元</p>
-              </el-popover>
+              <p class="cash" slot="reference">{{getBlance}}元</p>
+              <div class="flex-tip" v-show="tooltipVisible" @click="goDML()">
+                <img src="../assets/img/icon_Note@3x.png" width="14px" height="14px" style="vertical-align: middle;line-height: 14px;" />
+                <span class="tooltip" style="margin-left:5px;">您尚未完成打码量</span>
+                <a size="mini" type="primary" style="margin-left:5px;" class="btn-check">查看</a>
+              </div>
             </div>
             <div class="time-row mb-30">
-              <span class="last-exp">提现余额：</span>
-              <el-input placeholder="请输入提现金额" v-model="form.cash_apply" class="content" type="number" clearable></el-input>
-              <!-- <input placeholder="请输入提现金额" v-model="form.cash_apply" class="content" type="number" onkeypress="return(/[\d]/.test(String.fromCharCode(event.keyCode))"/> -->
+              <span class="last-exp">提现金额：</span>
+              <el-input placeholder="请输入提现金额" v-model="form.cash_apply" class="content" type="number" clearable :disabled="dml != 0"></el-input>
             </div>
             <div class="inner-pay-title mb-20">
               可提现银行卡
@@ -76,7 +73,8 @@
             <div class="time-row">
               <ul class="withdraw-banks">
                 <li class="bank-item" v-for="(item,index) in bankcards.data" :key="item._id" :class="['b'+item.bank[0].bank_id,{'active':bankcards.active === index+1}]" @click="bankActiveToggle(index+1,item._id)">
-                  <span class="bank-no">{{item.card_no}}</span>
+                  <p class="bank-no">{{item.card_no}}</p>
+                  <div class="item-inner-border"></div>
                 </li>
               </ul>
             </div>
@@ -125,7 +123,7 @@
               </div>
               <div class="time-row mb-20">
                 <span class="exp">确认资金密码：</span>
-                <el-input placeholder="输入资金密码" v-model="nextStep.input_cash_psd" type="password" class="con" clearable />
+                <el-input placeholder="输入资金密码" v-model="nextStep.input_cash_psd" type="password" class="con inner-input" clearable />
               </div>
             </div>
             <div class="submit-line">
@@ -203,46 +201,77 @@
         let active = this.bankcards.active;
         let self = this;
         if (this.dml != 0) {
-          this.$alert("您尚未完成打码量", "系统提示", {
-            confirmButtonText: "确定",
-            callback: action => {}
+          this.$alert("<div class='lottery-title'>您尚未完成打码量</div>", "系统提示", {
+            dangerouslyUseHTMLString: true,
+            confirmButtonText: '确定',
+            center: true,
+            customClass: "syxw-wrap-inner",
+            callback: action => {
+              self.form.cash_apply = "";
+              return;
+            }
           });
           return;
         }
         if (active === 0) {
-          this.$alert("请选择提款的银行卡", "系统提示", {
-            confirmButtonText: "确定",
-            callback: action => {}
+          this.$alert("<div class='lottery-title'>请选择提款的银行卡</div>", "系统提示", {
+            dangerouslyUseHTMLString: true,
+            confirmButtonText: '确定',
+            center: true,
+            customClass: "syxw-wrap-inner",
+            callback: action => {
+              self.form.cash_apply = "";
+              return;
+            }
           });
           return;
         }
         if (!cash_apply || cash_apply == 0) {
-          this.$alert("提现失败：提款金额不能小于0", "系统提示", {
-            confirmButtonText: "确定",
+          this.$alert("<div class='lottery-title'>提现失败：提款金额不能小于0</div>", "系统提示", {
+            dangerouslyUseHTMLString: true,
+            confirmButtonText: '确定',
+            center: true,
+            customClass: "syxw-wrap-inner",
             callback: action => {
               self.form.cash_apply = "";
+              return;
+            }
+          });
+          return;
+        }
+        let blance = parseFloat(localStorage.getItem("blance").toString());
+        if (parseFloat(cash_apply) > blance) {
+          this.$alert("<div class='lottery-title'>提现失败：提现金额不能大于可提现余额</div>", "系统提示", {
+            dangerouslyUseHTMLString: true,
+            confirmButtonText: '确定',
+            center: true,
+            customClass: "syxw-wrap-inner",
+            callback: action => {
+              self.form.cash_apply = "";
+              return;
             }
           });
           return;
         }
         if (
-          cash_apply < self.bankcards.min_withdraw_every_time ||
-          cash_apply > self.bankcards.max_withdraw_every_time
+          parseFloat(cash_apply) < self.bankcards.min_withdraw_every_time ||
+          parseFloat(cash_apply) > self.bankcards.max_withdraw_every_time
         ) {
-          this.$alert(
-            "提现金额应在[" +
+          let title = "<div class='lottery-title'>提现金额应在[" +
             self.bankcards.min_withdraw_every_time +
             "元]至[" +
             self.bankcards.max_withdraw_every_time +
-            "元]之间",
-            "系统提示",
-            {
-              confirmButtonText: "确定",
-              callback: action => {
-                self.form.cash_apply = "";
-              }
+            "元]之间" + "</div>"
+          this.$alert(title, "系统提示", {
+            dangerouslyUseHTMLString: true,
+            confirmButtonText: '确定',
+            center: true,
+            customClass: "syxw-wrap-inner",
+            callback: action => {
+              self.form.cash_apply = "";
+              return;
             }
-          );
+          });
           return;
         }
         this.$router.push({
@@ -281,24 +310,26 @@
                 request.loginAgain(self);
               } else if (success.returncode == 200) {
                 self.result = success.data;
-                self.$alert(
-                  "您的提现申请提交成功，我们会尽快审核！",
-                  "系统提示",
-                  {
-                    confirmButtonText: "确定",
-                    callback: action => {
-                      localStorage.setItem("blance", success.data.cash);
-                      self.$store.dispatch("setBlance", success.data.cash);
-                      self.$router.push({
-                        name: "mywithdraw"
-                      });
-                    }
+                self.$alert("<div class='lottery-title'>您的提现申请提交成功，我们会尽快审核！</div>", "系统提示", {
+                  dangerouslyUseHTMLString: true,
+                  confirmButtonText: '确定',
+                  center: true,
+                  customClass: "syxw-wrap-inner",
+                  callback: action => {
+                    localStorage.setItem("blance", success.data);
+                    self.$store.dispatch("setBlance", success.data);
+                    self.$router.push({
+                      name: "mywithdraw"
+                    });
                   }
-                );
+                });
               } else if (success.returncode == 301) {
                 self.result = success.data;
-                self.$alert(self.result.message, "系统提示", {
-                  confirmButtonText: "确定",
+                self.$alert("<div class='lottery-title'>" + self.result.message + "</div>", "系统提示", {
+                  dangerouslyUseHTMLString: true,
+                  confirmButtonText: '确定',
+                  center: true,
+                  customClass: "syxw-wrap-inner",
                   callback: action => {
                     self.$router.push({
                       name: "withdraw"
@@ -316,8 +347,11 @@
           },
           error => {
             self.loading = false;
-            self.$alert(self.result.message, "系统提示", {
-              confirmButtonText: "确定",
+            self.$alert("<div class='lottery-title'>" + self.result.message + "</div>", "系统提示", {
+              dangerouslyUseHTMLString: true,
+              confirmButtonText: '确定',
+              center: true,
+              customClass: "syxw-wrap-inner",
               callback: action => {
                 self.$router.push({
                   name: "withdraw"
@@ -349,8 +383,11 @@
                   self.bankcards.data = success.data.bankcards;
                   self.getWithdrawLimit();
                 } else {
-                  self.$alert("您未绑定银行卡，请绑定银行卡", "系统提示", {
-                    confirmButtonText: "确定",
+                  self.$alert("<div class='lottery-title'>您未绑定银行卡，请绑定银行卡</div>", "系统提示", {
+                    dangerouslyUseHTMLString: true,
+                    confirmButtonText: '确定',
+                    center: true,
+                    customClass: "syxw-wrap-inner",
                     callback: action => {
                       self.$router.push({ name: "bank" });
                     }
@@ -559,9 +596,11 @@
                       success.returncode == 301 ||
                       success.returncode == 305
                     ) {
-                      self.$alert("资金密码不正确", "系统提醒", {
-                        confirmButtonText: "确定",
+                      self.$alert("<div class='lottery-title'>资金密码不正确</div>", "系统提示", {
+                        dangerouslyUseHTMLString: true,
+                        confirmButtonText: '确定',
                         center: true,
+                        customClass: "syxw-wrap-inner",
                         callback: action => {
                           self.nextStep.input_cash_psd = "";
                         }
@@ -766,7 +805,58 @@
   };
 </script>
 
+<style lang="scss">
+  .withdraw-wrap {
+    input:-webkit-autofill {
+      -webkit-box-shadow: 0 0 0px 1000px white inset !important;
+    }
+
+    .binding-inner {
+      .inner-input.el-input {
+        .el-input__inner {
+          font-size: 20px;
+        }
+
+        .el-input__inner::-webkit-input-placeholder {
+          /* WebKit browsers */
+          color: #bcbcbc;
+          font-weight: bold;
+          font-size: 14px;
+        }
+
+        .el-input__inner:-moz-placeholder {
+          /* Mozilla Firefox 4 to 18 */
+          color: #bcbcbc;
+          font-weight: bold;
+          font-size: 14px;
+        }
+
+        .el-input__inner::-moz-placeholder {
+          /* Mozilla Firefox 19+ */
+          color: #bcbcbc;
+          font-weight: bold;
+          font-size: 14px;
+        }
+
+        .el-input__inner:-ms-input-placeholder {
+          /* Internet Explorer 10+ */
+          color: #bcbcbc;
+          font-weight: bold;
+          font-size: 14px;
+        }
+      }
+    }
+  }
+</style>
+
 <style scoped lang="scss">
+  .btn-check {
+    font-family: PingFangSC-Medium;
+    font-size: 12px;
+    color: #BD8454;
+    font-weight: bold;
+  }
+
   .table-xinxi {
     width: 100%;
 
@@ -776,12 +866,13 @@
       align-items: center;
 
       .exp {
+        font-size: 14px;
+        color: #191919;
+        display: inline-block;
+        width: 120px;
         text-align: left;
         font-family: PingFangSC-Regular;
-        font-size: 12px;
-        color: #191919;
-        width: 120px;
-        display: inline-block;
+        font-weight: bold;
       }
     }
   }
@@ -797,51 +888,56 @@
   }
 
   .flex-tip {
+    color: #606266;
+    font-size: 14px;
+    margin-left: 30px;
     display: flex;
-    justify-content: space-around;
     align-items: center;
+    cursor: pointer;
   }
 
   a.submit {
-    width: 115px;
-    height: 40px;
-    line-height: 40px;
+    width: 180px;
+    height: 48px;
     display: inline-block;
     text-align: center;
     cursor: pointer;
     text-decoration: none;
-    background: #cc3447;
-    border-radius: 2px;
     font-family: PingFangSC-Regular;
-    font-size: 14px;
-    font-weight: 700;
+    font-size: 16px;
+    font-weight: bold;
     color: #ffffff;
     margin: 0 auto;
+    background-image: linear-gradient(-180deg, #CFA072 0%, #B68E66 100%);
+    border: 1px solid #DDDDDD;
+    border-radius: 2px;
+    line-height: 48px;
 
     &.no-allowed {
-      background-color: #f5f7fa;
-      color: #c0c4cc;
+      background: #f5f7fa;
+      color: #bcbcbc;
       border: 1px solid #e4e7ed;
     }
   }
 
   .submit {
-    width: 115px;
-    height: 40px;
+    width: 180px;
+    height: 48px;
     display: inline-block;
     text-align: center;
     cursor: pointer;
     text-decoration: none;
-    background: #cc3447;
-    border-radius: 2px;
     font-family: PingFangSC-Regular;
-    font-size: 14px;
-    font-weight: 700;
+    font-size: 16px;
+    font-weight: bold;
     color: #ffffff;
     margin: 0 auto;
+    background-image: linear-gradient(-180deg, #CFA072 0%, #B68E66 100%);
+    border: 1px solid #DDDDDD;
+    border-radius: 2px;
 
     &.no-allowed {
-      background-color: #f5f7fa;
+      background: #f5f7fa;
       color: #c0c4cc;
       border: 1px solid #e4e7ed;
     }
@@ -849,6 +945,8 @@
 
   .time-row {
     text-align: left; // position: relative;
+    display: flex;
+    align-items: center;
 
     .last-login-time {
       width: 200px;
@@ -866,12 +964,13 @@
     }
 
     .last-exp {
-      font-size: 12px;
+      font-size: 14px;
       color: #191919;
       display: inline-block;
       width: 120px;
       text-align: left;
       font-family: PingFangSC-Regular;
+      font-weight: bold;
     }
 
     .last-tip {
@@ -882,11 +981,10 @@
   }
 
   .tooltip {
-    font-family: PingFangSC-Regular;
-    font-size: 14px;
-    color: #191919;
-    line-height: 20px;
-    display: inline-block;
+    font-family: PingFangSC-Medium;
+    font-size: 12px;
+    color: #777777;
+    font-weight: bold;
   }
 
   .user-split-line {
@@ -954,9 +1052,13 @@
   }
 
   .binding-inner .con {
-    font-size: 12px;
+    font-size: 14px;
     color: #191919;
+    display: inline-block;
+    width: 200px;
+    text-align: left;
     font-family: PingFangSC-Regular;
+    font-weight: bold;
 
     &.error {
       color: #cc3447;
@@ -966,10 +1068,9 @@
   .cash {
     font-family: PingFangSC-Regular;
     font-weight: 700;
-    font-size: 12px;
+    font-size: 14px;
     color: #cc3447;
     display: inline-block;
-    min-width: 100px;
   }
 
   .mt-40 {
@@ -1091,7 +1192,8 @@
       text-align: left;
 
       .red {
-        color: #cc3447;
+        color: rgb(200, 58, 76);
+        font-weight: bold;
       }
 
       &:last-child {
@@ -1148,9 +1250,26 @@
     position: relative;
     text-align: center;
     margin-right: 20px;
+    box-shadow: 0 10px 50px rgba(0, 0, 0, 0.3);
+    border-radius: 8px;
+    margin-bottom: 20px;
 
     &:last-child {
       margin-right: 0;
+    }
+  }
+
+  .withdraw-container .withdraw-banks .bank-item.active {
+    .item-inner-border {
+      border: 4px solid #CFA072;
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      border-radius: 8px;
     }
   }
 
@@ -1161,9 +1280,9 @@
     top: 90px;
     font-family: PingFangSC-Regular;
     font-weight: 700;
-    font-size: 14px;
+    font-size: 20px;
     color: #ffffff;
-    width: 190px;
+    text-align: center;
   }
 
   .withdraw-container .withdraw-banks .bank-item.b1002 {
@@ -1292,23 +1411,23 @@
   }
 
   .withdraw-container .withdraw-banks .bank-item.active {
-    border: 1px solid #cc3447;
-    box-shadow: 5px 3px 6px rgba(103, 66, 2, 0.25);
-    border-radius: 12px;
+    box-shadow: 0 10px 50px rgba(0, 0, 0, 0.3);
+    border-radius: 8px;
+    background-size: 100%;
   }
 
   .withdraw-container .withdraw-banks .bank-item.active:after {
     position: absolute;
-    right: 0;
-    bottom: 0;
-    background-image: url("../assets/img/topUp/Checkmark.png");
+    right: 4px;
+    bottom: 4px;
+    background-image: url("../assets/img/topUp/icon_CheckNumber@3x.png");
     background-repeat: no-repeat;
     background-size: cover;
     width: 24px;
     height: 24px;
     display: block;
     content: "";
-    border-bottom-right-radius: 12px;
+    // border-bottom-right-radius: 8px;
   }
 
   .withdraw-next {
@@ -1619,7 +1738,7 @@
     background: #d8d8d8;
     color: #191919;
     margin-right: 20px;
-    border-radius: 4px 4px 0 0;
+    border-radius: 2px 2px 0 0;
     text-align: center;
     font-size: 12px;
     font-family: MicrosoftYaHei;
@@ -1650,7 +1769,7 @@
     background: #fff;
     border: 1px solid #ddd;
     border-bottom: none;
-    border-radius: 4px 4px 0 0;
+    border-radius: 2px 2px 0 0;
   }
 
   /* .tabs .tab-title:after {

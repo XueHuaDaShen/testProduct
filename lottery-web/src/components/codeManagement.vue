@@ -3,18 +3,12 @@
   <div class="transactions-wrap" v-loading="loading">
     <form class="record-options search-form" action="">
       <div class="option-row mb-30">
-        <!-- <span class="exp w-60">时间：</span>
-        <el-date-picker v-model="form.dateFrom.value" type="datetime" prefix-icon="void-icon" placeholder="选择日期时间">
-        </el-date-picker>
-        <span class="exp">至</span>
-        <el-date-picker v-model="form.dateTo.value" type="datetime" prefix-icon="void-icon" placeholder="选择日期时间">
-        </el-date-picker> -->
         <span class="exp w-60">状态：</span>
         <el-select v-model="form.status.value" placeholder="请选择" clearable style="width:114px">
           <el-option v-for="(item,index) in form.status.options" :key="index" :label="item.key" :value="item.value">
           </el-option>
         </el-select>
-        <a class="search ml-20" @click="handleSearch()">搜索</a>
+        <a class="submit ml-20" @click="handleSearch()">搜索</a>
       </div>
     </form>
     <hr class="user-split-line">
@@ -28,7 +22,7 @@
           <th>打码量要求</th>
           <th>有效投注</th>
           <th>核算至</th>
-          <th>状态</th>
+          <th style="border-right: 1px solid #dddddd;">状态</th>
         </tr>
       </thead>
       <tbody>
@@ -40,26 +34,14 @@
           <td>{{item.load}}</td>
           <td>{{item.stake}}</td>
           <td>{{getTime(item.update_at)}}</td>
-          <td>{{getStatus(item.status)}}</td>
+          <td style="border-right: 1px solid #dddddd;">{{getStatus(item.status)}}</td>
         </tr>
         <tr v-if="noResult" class="no-result">
-          <td colspan="10">
-            <p>没有符合条件的记录，请更改查询条件</p>
+          <td colspan="10" style="border-right: 1px solid #dddddd;">
+            <p style="color:#777;font-weight:bold;margin:35px 0;font-size:14px;">没有符合条件的记录，请更改查询条件</p>
           </td>
         </tr>
       </tbody>
-      <!-- <tfoot class="record-bottom">
-        <tr class="group-item">
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td>本月资金变动</td>
-          <td>{{getCurrentPageAmount}}</td>
-          <td>{{getCurrentPageCurrentTrade}}</td>
-        </tr>
-      </tfoot> -->
     </table>
     <div class="record-pagination clearfix">
       <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page.sync="pageIndex" :page-size="pageSize" layout="total, prev, pager, next" :total="total">
@@ -341,7 +323,7 @@
   }
 
   .w-60 {
-    width: 60px;
+    width: 70px;
   }
 
   .ml-20 {
@@ -399,49 +381,11 @@
     background: #ffffff;
   }
 
-  .transactions-wrap .record-options .option-row .exp {
-    display: inline-block;
-    font-size: 12px;
-    color: #191919;
-  }
-
   .transactions-wrap .record-options .option-row {
     text-align: left;
     font-size: 12px;
     font-family: MicrosoftYaHei;
     color: #333333;
-  }
-
-  .transactions-wrap .record-options .option-row>a.time {
-    display: inline-block;
-    padding: 0 2px;
-    font-size: 12px;
-    width: 64px;
-    height: 30px;
-    line-height: 28px;
-    border-radius: 2px;
-    border: 1px solid #ccc;
-    text-align: center;
-    cursor: pointer;
-  }
-
-  .transactions-wrap .record-options .option-row>a.time:hover {
-    background: #C83A4C;
-    color: #fff;
-  }
-
-  .search {
-    width: 80px;
-    height: 30px;
-    background: #C83A4C;
-    color: #fff;
-    display: inline-block;
-    line-height: 30px;
-    font-size: 12px;
-    font-family: MicrosoftYaHei;
-    text-align: center;
-    border-radius: 2px;
-    cursor: pointer;
   }
 
   .transactions-wrap .record-group {

@@ -25,7 +25,7 @@
         <input type="password" autocomplete="off" v-model="zijinPwd">
       </li>
     </ul>
-    <button class="submit-btn" @click="confirmWithDraw">确认提现</button>
+    <button class="submit-btn" :disabled="isClick" @click="confirmWithDraw">确认提现</button>
     <div class="alert-tip-text" v-if="tipText">{{tipText}}</div>
     <div class="yhk-warning-dialog" v-if="showWarningQueAlert">
       <div class="dialog-bj"></div>
@@ -51,6 +51,7 @@ export default {
   },
   data() {
     return {
+      isClick: false,
       showWarningQueAlert: false,
       questionArr: [], // 所有问题
       question: '', // 需要回答的问题
@@ -149,6 +150,8 @@ export default {
         this.countError = this.maxErrorNum;
         return false;
       } else {
+        vm.$store.dispatch('setLoading', true);
+        vm.isClick = true;
         request.http(
           'post',
           '/user/bankcard/safe/question/certify',
@@ -164,12 +167,17 @@ export default {
               vm.checkInZijinPwd();
             } else if (code == 103 || code == 106 || code == 101) {
               request.loginAgain(vm);
+              vm.$store.dispatch('setLoading', false);
             } else if (code == 301 || code == 303) {
+              vm.isClick = false;
+              vm.$store.dispatch('setLoading', false);
               vm.tipText = '对不起，参数错误'
               setTimeout(() => {
                 vm.tipText = '';
               }, vm.tipTimeOut*1000);
             } else if (code == 302) {
+              vm.isClick = false;
+              vm.$store.dispatch('setLoading', false);
               vm.countError += 1;
               vm.tipText = `答案错误，还有${vm.maxErrorNum-vm.countError}次机会`;
               setTimeout(() => {
@@ -178,6 +186,8 @@ export default {
             }
           },
           (error) => {
+            vm.$store.dispatch('setLoading', false);
+            vm.isClick = false;
             console.log('数据异常', error)
           }
         )
@@ -215,19 +225,26 @@ export default {
                 let code = success.returncode;
                 if (code == 103 || code == 106 || code == 101) {
                   request.loginAgain(vm);
+                  vm.$store.dispatch('setLoading', false);
                 } else if (code == 200) {
                   vm.withdrawFn();
                 } else if(code == 305) {
+                  vm.isClick = false;
+                  vm.$store.dispatch('setLoading', false);
                   vm.tipText = '密码错误'
                   setTimeout(() => {
                     vm.tipText = '';
                   }, vm.tipTimeOut*1000);
                 } else if(code == 306) {
+                  vm.$store.dispatch('setLoading', false);
+                  vm.isClick = false;
                   vm.tipText = '用户被禁'
                   setTimeout(() => {
                     vm.tipText = '';
                   }, vm.tipTimeOut*1000);
                 } else if(code == 304) {
+                  vm.$store.dispatch('setLoading', false);
+                  vm.isClick = false;
                   vm.tipText = '用户不存在'
                   setTimeout(() => {
                     vm.tipText = '';
@@ -235,12 +252,22 @@ export default {
                 }
               },
               (error) => {
+                vm.$store.dispatch('setLoading', false);
                 console.log('数据异常', error)
               }
             )
+          }else if (code == 103 || code == 106 || code == 101) {
+            request.loginAgain(vm);
+            vm.$store.dispatch('setLoading', false);
+          }else{
+            vm.isClick = false;
+            vm.$store.dispatch('setLoading', false);
           }
         },
-        (error) => {}
+        (error) => {
+          vm.$store.dispatch('setLoading', false);
+          vm.isClick = false;
+        }
       )
     },
     // 验证通过，提现函数
@@ -257,8 +284,10 @@ export default {
           status: '0'
         },
         (success) => {
+          vm.$store.dispatch('setLoading', false);
           // console.log(success)
-          if(success.returncode === 200){
+          let code = success.returncode;
+          if(code == 200){
             if(success.data.length === 0){
               request.http(
                 'post',
@@ -266,12 +295,15 @@ export default {
                 paramCryptFn(param),
                 (success) => {
                   // console.log(success)
+                  vm.isClick = false;
                   if(success.returncode === 200){
                     vm.tipText = '提现成功'
                     setTimeout(() => {
                       vm.tipText = '';
                       vm.$router.back(-1);
                     }, vm.tipTimeOut*1000);
+                  }else if (success.returncode == 103 || success.returncode == 106 || success.returncode == 101) {
+                    request.loginAgain(vm);
                   }else{
                     vm.tipText = success.data.message;
                     setTimeout(() => {
@@ -287,9 +319,16 @@ export default {
                 vm.tipText = '';
               }, vm.tipTimeOut*1000);
             }
+          }else if (code == 103 || code == 106 || code == 101) {
+            request.loginAgain(vm);
+          }else{
+            vm.isClick = false;
           }
         },
-        (error) => {}
+        (error) => {
+          vm.$store.dispatch('setLoading', false);
+          vm.isClick = false;
+        }
       )
     },
     // 阻止事件捕获

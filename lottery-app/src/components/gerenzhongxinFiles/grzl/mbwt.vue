@@ -57,7 +57,7 @@
         </div>
       </li>
     </ul>
-    <button class="submit-btn" @click="setQuestion">提交</button>
+    <button class="submit-btn" :disabled="isClick" @click="setQuestion">提交</button>
     <div class="alert-tip-text" v-if="tipText">{{tipText}}</div>
     
     <div class="edit-success-dialog" v-if="showDialog">
@@ -80,6 +80,7 @@ export default {
   },
   data() {
     return {
+      isClick: false,
       selectVal: '_id', // 选项值的 字段
       selectTxt: 'content', // 选项文本 字段
 
@@ -219,6 +220,7 @@ export default {
         return false;
 
       } else {
+        vm.isClick = true;
         request.http(
           'post',
           '/user/bankcard/safe/question/create',
@@ -230,6 +232,7 @@ export default {
             ]
           },
           (success) => {
+            vm.isClick = false;
             // console.log(success)
             let code = success.returncode;
             if (code) {
@@ -243,7 +246,9 @@ export default {
               }
             }
           },
-          (error) => {}
+          (error) => {
+            vm.isClick = false;
+          }
         )
       }
     },

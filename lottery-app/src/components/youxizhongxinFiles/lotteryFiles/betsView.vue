@@ -1561,7 +1561,10 @@ export default {
         }else{
           this.$router.push({
             name: 'shoppingCart',
-            code: this.gameCode
+            query: {
+              code: this.gameCode,
+              gameid: this.gameid
+            }
           })
         }
       }else{
@@ -1584,7 +1587,10 @@ export default {
           this.$store.dispatch('setShoppingCartData', shopping)
           this.$router.push({
             name: 'shoppingCart',
-            code: this.gameCode
+            query: {
+              code: this.gameCode,
+              gameid: this.gameid
+            }
           })
         }else{
           let isSame = false;
@@ -1605,7 +1611,10 @@ export default {
             }else{
               this.$router.push({
                 name: 'shoppingCart',
-                code: this.gameCode
+                query: {
+                  code: this.gameCode,
+                  gameid: this.gameid
+                }
               })
             }
           }else{
@@ -1613,7 +1622,10 @@ export default {
             this.$store.dispatch('setShoppingCartData', shopping)
             this.$router.push({
               name: 'shoppingCart',
-              code: this.gameCode
+              query: {
+                code: this.gameCode,
+                gameid: this.gameid
+              }
             })
           }
         }

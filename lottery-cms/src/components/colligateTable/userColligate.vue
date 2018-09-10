@@ -28,13 +28,6 @@
               </el-option>
             </el-select>
           </div>
-          <!-- <div class="search-inner-wrap">
-            <label>状态：</label>
-            <el-select clearable v-model="status" placeholder="状态">
-              <el-option v-for="item in statusArr" :key="item.value" :label="item.label" :value="item.value">
-              </el-option>
-            </el-select>
-          </div> -->
           <div class="search-inner-wrap">
             <el-checkbox v-model="dateChecked" :true-label="0" :false-label="1">累计显示</el-checkbox>
           </div>
@@ -55,14 +48,12 @@
             <el-button type="danger" @click="handleSearch" size="medium" class="small yes">搜索</el-button>
             <el-button type="info" @click="handleReset" size="medium" class="small no">重置</el-button>
           </div>
-          <!-- <tableBtn :text="'搜索'" :plain="false" :btnType="'success'" :func="handleSearch"></tableBtn>
-          <tableBtn :text="'重置'" :func="handleReset"></tableBtn> -->
         </div>
       </div>
     </div>
     <div class="data-table" v-loading="loading">
       <el-table :data="userColligateListData" header-row-class-name="table-header" stripe border style="width: 100%;font-size:12px;"
-        max-height="450">
+        max-height="450" :show-summary="true" sum-text="总计" :summary-method="getSummaries">
         <el-table-column align="center" label="用户名" width="126">
           <template slot-scope="scope">
             <el-button type="text" @click="getUserInfoFn(scope.row)">{{scope.row.loginname}}</el-button>
@@ -409,6 +400,10 @@
           {
             title: "游戏盈利",
             code: "game_profit"
+          },
+          {
+            title: "时间",
+            code: "day"
           }
         ],
         descArr: [{
@@ -420,8 +415,8 @@
             val: "-1"
           }
         ],
-        order: "",
-        desc: "",
+        order: "day",
+        desc: "-1",
         is_test: "0",
         status: "",
         order_no: "",
@@ -457,9 +452,52 @@
       if (this.$route.query && this.$route.query.param) {
         this.username = this.$route.query.param;
       }
+      const end = new Date();
+      const start = new Date(new Date(new Date().toLocaleDateString()).getTime());
+      end.setTime(
+        new Date(
+          new Date(new Date().toLocaleDateString()).getTime() +
+          24 * 60 * 60 * 1000 -
+          1
+        )
+      );
+      this.searchTime = [start, end];
       this.getUserColligateList();
     },
     methods: {
+      getSummaries(param) {
+        const {
+          columns,
+          data
+        } = param;
+        const sums = [];
+        columns.forEach((column, index) => {
+          if (index === 0) {
+            sums[index] = "总计";
+            return;
+          }
+          let values = data.map(item => Number(item[column.property]));
+          // if (index === 6) {
+          //   values = data.map(item => Number(item['vote_cash']));
+          // }
+          if (!values.every(value => isNaN(value))) {
+            sums[index] = values.reduce((prev, curr) => {
+              const value = Number(curr);
+              if (!isNaN(value)) {
+                return prev + curr;
+              } else {
+                return prev;
+              }
+            }, 0);
+            sums[index] = parseFloat(sums[index]).toFixed(2);
+            sums[index] += " 元";
+          } else {
+            sums[index] = "--";
+          }
+        });
+
+        return sums;
+      },
       handleChangeRouter(name) {
         this.$router.push({
           name: name,
@@ -511,7 +549,7 @@
         if (cellValue) {
           return Number(cellValue).toFixed(2);
         }
-        return "--";
+        return "0.00";
       },
       handleSizeChange(val) {
         // console.log(`每页 ${val} 条`);
@@ -528,7 +566,11 @@
         // this.userid = row.loginid;
         // this.loginname = row.loginname;
         this.username = row.loginname;
-        this.getUserColligateList();
+        if (this.searchTime) {
+          if (this.searchTime.toString() !== "") {
+            this.getUserColligateList();
+          }
+        }
       },
       handleCloseDialog(val) {
         this.dialog = val;
@@ -548,9 +590,11 @@
         const vm = this;
         let beginTime = "",
           endTime = "";
-        if (vm.searchTime.toString() !== "") {
-          beginTime = new Date(vm.searchTime[0]);
-          endTime = new Date(vm.searchTime[1]);
+        if (vm.searchTime) {
+          if (vm.searchTime.toString() !== "") {
+            beginTime = new Date(vm.searchTime[0]);
+            endTime = new Date(vm.searchTime[1]);
+          }
         }
         vm.loading = true;
         request.http(

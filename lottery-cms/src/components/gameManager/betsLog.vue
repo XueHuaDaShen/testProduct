@@ -72,13 +72,8 @@
       </div>
     </div>
     <div class="data-table" v-loading="loading">
-      <el-table :data="betsLogList" header-row-class-name="table-header" stripe border style="width: 100%;font-size:12px;">
-        <!-- <el-table-column
-          align="center"
-          prop="order_no"
-          width="180"
-          label="投注编号">
-        </el-table-column> -->
+      <el-table :data="betsLogList" header-row-class-name="table-header" stripe border style="width: 100%;font-size:12px;"
+        max-height="450" :show-summary="true" sum-text="总计" :summary-method="getSummaries">
         <el-table-column align="center" label="用户名" width="126">
           <template slot-scope="scope">
             <el-button type="text" size="small" @click="getUserInfoFn(scope.row)">{{scope.row.loginname}}</el-button>
@@ -97,7 +92,16 @@
         </el-table-column>
         <el-table-column align="center" label="开奖号码" prop="luck_no">
         </el-table-column>
-        <el-table-column align="center" prop="vote_no" className="betsNum" fit label="投注内容">
+        <el-table-column align="center" className="betsNum" label="投注内容" width="120">
+          <template slot-scope="scope">
+            <el-popover placement="right" trigger="hover" popper-class="lottery_popover" v-if="scope.row.vote_no.length > 40">
+              <div class="row">
+                <span style="word-break: normal;width: auto;display: block;white-space: pre-wrap;word-wrap: break-word;text-align: left;">{{scope.row.vote_no}}</span>
+              </div>
+              <el-button class="small edit" slot="reference">详细内容</el-button>
+            </el-popover>
+            <div v-else>{{scope.row.vote_no}}</div>
+          </template>
         </el-table-column>
         <el-table-column align="center" min-width="80" label="金额">
           <template slot-scope="scope">
@@ -136,37 +140,38 @@
   </div>
 </template>
 <script>
-  import request from '../../axios/axios.js'
-  import DialogUserInfo from '../dialog-user-info/DialogUserInfo';
-  import tableBtn from '../littleStyle/tableBtn.vue';
-  import moment from 'moment'
+  import request from "../../axios/axios.js";
+  import DialogUserInfo from "../dialog-user-info/DialogUserInfo";
+  import tableBtn from "../littleStyle/tableBtn.vue";
+  import moment from "moment";
   import {
     trim
-  } from '../../lib/utils/validator';
+  } from "../../lib/utils/validator";
   export default {
-    name: 'betsLog',
+    name: "betsLog",
     components: {
       tableBtn,
       DialogUserInfo
     },
     data() {
       return {
-        pickerDefaultTime: ['00:00:00', '23:59:59'],
+        pickerDefaultTime: ["00:00:00", "23:59:59"],
         index1: 0,
         index2: 0,
-        titleName: '彩票投注',
+        titleName: "彩票投注",
         routerArr: [{
-            title: '彩票投注',
-            name: 'betsLog',
+            title: "彩票投注",
+            name: "betsLog",
             checked: false
           },
           {
-            title: '彩票追号',
-            name: 'chaseLog',
+            title: "彩票追号",
+            name: "chaseLog",
             checked: false
-          }, {
-            title: '棋牌游戏',
-            name: 'thirdpart',
+          },
+          {
+            title: "棋牌游戏",
+            name: "thirdpart",
             checked: false
           }
         ],
@@ -176,29 +181,47 @@
         pageSize: 40,
         total: 0,
         betsLogList: [],
-        userid: '',
-        loginname: '',
-        username: '',
-        searchTime: '',
+        userid: "",
+        loginname: "",
+        username: "",
+        searchTime: "",
         pickerOptions: {
           shortcuts: [{
               text: "昨天",
               onClick(picker) {
                 const end = new Date();
                 const start = new Date();
-                start.setTime(new Date(new Date(new Date().toLocaleDateString()).getTime()) - 3600 * 1000 * 24 * 1);
-                end.setTime(new Date(new Date(new Date().toLocaleDateString()).getTime() + 24 * 60 * 60 * 1000 - 1) -
-                  3600 * 1000 * 24 * 1);
+                start.setTime(
+                  new Date(new Date(new Date().toLocaleDateString()).getTime()) -
+                  3600 * 1000 * 24 * 1
+                );
+                end.setTime(
+                  new Date(
+                    new Date(new Date().toLocaleDateString()).getTime() +
+                    24 * 60 * 60 * 1000 -
+                    1
+                  ) -
+                  3600 * 1000 * 24 * 1
+                );
                 // console.log("start", start.toLocaleString());
                 // console.log("end", end.toLocaleString());
                 picker.$emit("pick", [start, end]);
               }
-            }, {
+            },
+            {
               text: "今天",
               onClick(picker) {
                 const end = new Date();
-                const start = new Date(new Date(new Date().toLocaleDateString()).getTime());
-                end.setTime(new Date(new Date(new Date().toLocaleDateString()).getTime() + 24 * 60 * 60 * 1000 - 1));
+                const start = new Date(
+                  new Date(new Date().toLocaleDateString()).getTime()
+                );
+                end.setTime(
+                  new Date(
+                    new Date(new Date().toLocaleDateString()).getTime() +
+                    24 * 60 * 60 * 1000 -
+                    1
+                  )
+                );
                 // console.log("start", start.toLocaleString());
                 // console.log("end", end.toLocaleString());
                 picker.$emit("pick", [start, end]);
@@ -212,14 +235,28 @@
                 let nowDay = now.getDate(); //当前日
                 let nowMonth = now.getMonth(); //当前月
                 let nowYear = now.getFullYear(); //当前年
-                let getWeekStartDate = new Date(nowYear, nowMonth, nowDay - nowDayOfWeek);
-                let getWeekEndDate = new Date(new Date(new Date(nowYear, nowMonth, nowDay + (6 - nowDayOfWeek)).toLocaleDateString())
-                  .getTime() + 24 * 60 * 60 * 1000 - 1);
+                let getWeekStartDate = new Date(
+                  nowYear,
+                  nowMonth,
+                  nowDay - nowDayOfWeek
+                );
+                let getWeekEndDate = new Date(
+                  new Date(
+                    new Date(
+                      nowYear,
+                      nowMonth,
+                      nowDay + (6 - nowDayOfWeek)
+                    ).toLocaleDateString()
+                  ).getTime() +
+                  24 * 60 * 60 * 1000 -
+                  1
+                );
                 // console.log("start", getWeekStartDate.toLocaleString());
                 // console.log("end", getWeekEndDate.toLocaleString());
                 picker.$emit("pick", [getWeekStartDate, getWeekEndDate]);
               }
-            }, {
+            },
+            {
               text: "上周",
               onClick(picker) {
                 let now = new Date();
@@ -227,15 +264,31 @@
                 let nowDay = now.getDate(); //当前日
                 let nowMonth = now.getMonth(); //当前月
                 let nowYear = now.getFullYear(); //当前年
-                let getWeekStartDate = new Date(new Date(new Date(nowYear, nowMonth, nowDay - nowDayOfWeek).toLocaleDateString())
-                  .getTime() -
-                  3600 * 1000 * 24 * 7);
-                let getWeekEndDate = new Date(new Date(new Date(nowYear, nowMonth, nowDay + (6 - nowDayOfWeek)).toLocaleDateString())
-                  .getTime() + 24 * 60 * 60 * 1000 - 1 - 3600 * 1000 * 24 * 7);
+                let getWeekStartDate = new Date(
+                  new Date(
+                    new Date(
+                      nowYear,
+                      nowMonth,
+                      nowDay - nowDayOfWeek
+                    ).toLocaleDateString()
+                  ).getTime() -
+                  3600 * 1000 * 24 * 7
+                );
+                let getWeekEndDate = new Date(
+                  new Date(
+                    new Date(
+                      nowYear,
+                      nowMonth,
+                      nowDay + (6 - nowDayOfWeek)
+                    ).toLocaleDateString()
+                  ).getTime() +
+                  24 * 60 * 60 * 1000 -
+                  1 -
+                  3600 * 1000 * 24 * 7
+                );
                 // console.log("start", getWeekStartDate.toLocaleString());
                 // console.log("end", getWeekEndDate.toLocaleString());
-                picker
-                  .$emit("pick", [getWeekStartDate, getWeekEndDate]);
+                picker.$emit("pick", [getWeekStartDate, getWeekEndDate]);
               }
             },
             {
@@ -248,10 +301,16 @@
                 let getMonthStartDate = new Date(nowYear, nowMonth, 1);
                 var monthStartDate = new Date(nowYear, nowMonth, 1);
                 var monthEndDate = new Date(nowYear, nowMonth + 1, 1);
-                var days = (monthEndDate - monthStartDate) / (1000 * 60 * 60 * 24);
+                var days =
+                  (monthEndDate - monthStartDate) / (1000 * 60 * 60 * 24);
                 //获得本月的结束日期
-                let getMonthEndDate = new Date(new Date(new Date(nowYear, nowMonth, days).toLocaleDateString()).getTime() +
-                  24 * 60 * 60 * 1000 - 1);
+                let getMonthEndDate = new Date(
+                  new Date(
+                    new Date(nowYear, nowMonth, days).toLocaleDateString()
+                  ).getTime() +
+                  24 * 60 * 60 * 1000 -
+                  1
+                );
                 // console.log("start", getMonthStartDate.toLocaleString());
                 // console.log("end", getMonthEndDate.toLocaleString());
                 picker.$emit("pick", [getMonthStartDate, getMonthEndDate]);
@@ -260,11 +319,28 @@
             {
               text: "上月",
               onClick(picker) {
-                var firstdate = new Date(new Date().getFullYear(), new Date().getMonth() - 1, 1);
+                var firstdate = new Date(
+                  new Date().getFullYear(),
+                  new Date().getMonth() - 1,
+                  1
+                );
                 var date = new Date();
-                var day = new Date(date.getFullYear(), date.getMonth(), 0).getDate();
-                var enddate = new Date(new Date(new Date(new Date().getFullYear(), new Date().getMonth() - 1, day).toLocaleDateString())
-                  .getTime() + 24 * 60 * 60 * 1000 - 1);
+                var day = new Date(
+                  date.getFullYear(),
+                  date.getMonth(),
+                  0
+                ).getDate();
+                var enddate = new Date(
+                  new Date(
+                    new Date(
+                      new Date().getFullYear(),
+                      new Date().getMonth() - 1,
+                      day
+                    ).toLocaleDateString()
+                  ).getTime() +
+                  24 * 60 * 60 * 1000 -
+                  1
+                );
                 // console.log("start", firstdate.toLocaleString());
                 // console.log("end", enddate.toLocaleString());
                 picker.$emit("pick", [firstdate, enddate]);
@@ -273,8 +349,15 @@
             {
               text: "最近一周",
               onClick(picker) {
-                const end = new Date(new Date(new Date().toLocaleDateString()).getTime() + 24 * 60 * 60 * 1000 - 1);
-                const start = new Date(new Date(new Date().toLocaleDateString()).getTime() - 3600 * 1000 * 24 * 7);
+                const end = new Date(
+                  new Date(new Date().toLocaleDateString()).getTime() +
+                  24 * 60 * 60 * 1000 -
+                  1
+                );
+                const start = new Date(
+                  new Date(new Date().toLocaleDateString()).getTime() -
+                  3600 * 1000 * 24 * 7
+                );
                 // console.log("start", start.toLocaleString());
                 // console.log("end", end.toLocaleString());
                 picker.$emit("pick", [start, end]);
@@ -283,8 +366,15 @@
             {
               text: "最近一个月",
               onClick(picker) {
-                const end = new Date(new Date(new Date().toLocaleDateString()).getTime() + 24 * 60 * 60 * 1000 - 1);
-                const start = new Date(new Date(new Date().toLocaleDateString()).getTime() - 3600 * 1000 * 24 * 30);
+                const end = new Date(
+                  new Date(new Date().toLocaleDateString()).getTime() +
+                  24 * 60 * 60 * 1000 -
+                  1
+                );
+                const start = new Date(
+                  new Date(new Date().toLocaleDateString()).getTime() -
+                  3600 * 1000 * 24 * 30
+                );
                 // console.log("start", start.toLocaleString());
                 // console.log("end", end.toLocaleString());
                 picker.$emit("pick", [start, end]);
@@ -293,8 +383,15 @@
             {
               text: "最近三个月",
               onClick(picker) {
-                const end = new Date(new Date(new Date().toLocaleDateString()).getTime() + 24 * 60 * 60 * 1000 - 1);
-                const start = new Date(new Date(new Date().toLocaleDateString()).getTime() - 3600 * 1000 * 24 * 90);
+                const end = new Date(
+                  new Date(new Date().toLocaleDateString()).getTime() +
+                  24 * 60 * 60 * 1000 -
+                  1
+                );
+                const start = new Date(
+                  new Date(new Date().toLocaleDateString()).getTime() -
+                  3600 * 1000 * 24 * 90
+                );
                 // console.log("start", start.toLocaleString());
                 // console.log("end", end.toLocaleString());
                 picker.$emit("pick", [start, end]);
@@ -302,36 +399,36 @@
             }
           ]
         },
-        issue: '',
-        betsMin: '',
-        betsMax: '',
-        betsNum: '',
+        issue: "",
+        betsMin: "",
+        betsMax: "",
+        betsNum: "",
         duration: 1000,
         dialog: false,
         dialogIsShow: false,
         lotteryList: [],
-        gameid: '',
-        lotteryed: '',
+        gameid: "",
+        lotteryed: "",
         statusArr: [{
-            label: '待开奖',
-            val: '1'
+            label: "待开奖",
+            val: "1"
           },
           {
-            label: '未开始',
-            val: '2'
+            label: "未开始",
+            val: "2"
           },
           {
-            label: '已撤销',
-            val: '3'
+            label: "已撤销",
+            val: "3"
           },
           {
-            label: '未中奖',
-            val: '4'
+            label: "未中奖",
+            val: "4"
           },
           {
-            label: '已中奖',
-            val: '5'
-          },
+            label: "已中奖",
+            val: "5"
+          }
         ],
         testUser: [{
             value: "",
@@ -346,35 +443,35 @@
             label: "仅显示"
           }
         ],
-        is_test: '0',
+        is_test: "0",
         wanfalist: {
-          options: [],
+          options: []
         }
-      }
+      };
     },
     created() {
       this.routerArr = [];
       let query = this.$route.query;
       this.index1 = Number(query.index1);
       this.index2 = Number(query.index2);
-      const menus = JSON.parse(localStorage.getItem('menus'));
+      const menus = JSON.parse(localStorage.getItem("menus"));
       menus[this.index1].child[this.index2].child.filter((v, vi) => {
         let o = new Object();
-        if (v.url === 'betsLog') {
+        if (v.url === "betsLog") {
           this.titleName = v.menu_name;
         }
         o.title = v.menu_name;
         o.name = v.url;
         o.checked = false;
         this.routerArr.push(o);
-      })
+      });
       this.routerArr.filter(v => {
         if (this.titleName === v.title) {
-          v.checked = true
+          v.checked = true;
         } else {
-          v.checked = false
+          v.checked = false;
         }
-      })
+      });
       if (query.param) {
         this.username = query.param;
       }
@@ -382,57 +479,98 @@
       this.getLotteryList();
     },
     methods: {
+      getSummaries(param) {
+        const {
+          columns,
+          data
+        } = param;
+        const sums = [];
+        columns.forEach((column, index) => {
+          if (index === 0) {
+            sums[index] = "总计";
+            return;
+          }
+          let values = data.map(item => Number(item[column.property]));
+          if (index === 6) {
+            values = data.map(item => Number(item["vote_cash"]));
+          }
+          if (index === 9) {
+            values = data.map(item => Number(item["award_cash"]));
+          }
+          if (
+            (index === 6 || index === 9) &&
+            !values.every(value => isNaN(value))
+          ) {
+            sums[index] = values.reduce((prev, curr) => {
+              const value = Number(curr);
+              if (!isNaN(value)) {
+                return prev + curr;
+              } else {
+                return prev;
+              }
+            }, 0);
+            sums[index] = parseFloat(sums[index]).toFixed(2);
+            sums[index] += " 元";
+          } else {
+            if (index === 6 || index === 9) {
+              sums[index] = "0.00元";
+            } else sums[index] = "--";
+          }
+        });
+
+        return sums;
+      },
       gameidChange(val) {
         // console.log('val', val);
         if (val) {
           this.getwanfalist(val);
         } else {
           this.wanfalist.options = [];
-          this.lotteryid = ""
+          this.lotteryid = "";
         }
       },
       getwanfalist(id) {
         let vm = this;
         vm.loading = true;
         request.http(
-          'get',
-          '/lottery/list', {
+          "get",
+          "/lottery/list", {
             id: id
           },
-          (success) => {
+          success => {
             vm.loading = false;
             let code = success.returncode;
             if (code === 200) {
               vm.wanfalist.options = success.data;
               vm.success();
             } else if (code === 101 || code === 103 || code === 106) {
-              request.loginAgain(vm)
+              request.loginAgain(vm);
             }
           },
-          (error) => {
+          error => {
             vm.loading = false;
             vm.error();
-            console.log(error)
+            console.log(error);
           }
-        )
+        );
       },
       success() {
         const vm = this;
         this.$message({
-          message: '加载成功',
-          type: 'success',
+          message: "加载成功",
+          type: "success",
           duration: vm.duration,
           center: true
-        })
+        });
       },
       error() {
         const vm = this;
         this.$message({
-          message: '加载失败',
-          type: 'error',
+          message: "加载失败",
+          type: "error",
           duration: vm.duration,
           center: true
-        })
+        });
       },
       handleChangeRouter(name) {
         this.$router.push({
@@ -441,40 +579,42 @@
             index1: this.index1,
             index2: this.index2
           }
-        })
+        });
         // console.log(name)
       },
       isStatusFn(cellValue) {
         switch (cellValue) {
           case 0:
-            return '默认';
+            return "默认";
           case 1:
-            return '待开奖';
+            return "待开奖";
           case 2:
-            return '未开始';
+            return "未开始";
           case 3:
-            return '已撤销';
+            return "已撤销";
           case 4:
-            return '未中奖';
+            return "未中奖";
           case 5:
-            return '已中奖';
+            return "已中奖";
         }
       },
       formatTestUser(row, column, cellValue) {
-        let t = '';
+        let t = "";
         if (cellValue === 1) {
-          t = '是'
+          t = "是";
         } else {
-          t = '否'
+          t = "否";
         }
         return t;
         // return moment(cellValue).format('YYYY-MM-DD')
       },
       formatMoney(value) {
         if (value) {
-          return parseFloat(value).toFixed(2).toString();
+          return parseFloat(value)
+            .toFixed(2)
+            .toString();
         }
-        return "0.00"
+        return "0.00";
       },
       handleSizeChange(val) {
         // console.log(`每页 ${val} 条`);
@@ -498,21 +638,21 @@
         this.dialogIsShow = val;
       },
       formatTime(row, column, cellValue) {
-        return moment(cellValue).format('YYYY-MM-DD HH:mm:ss')
+        return moment(cellValue).format("YYYY-MM-DD HH:mm:ss");
         // return moment(cellValue).format('YYYY-MM-DD')
       },
       getBetsLotList() {
         const vm = this;
-        let beginTime = '',
-          endTime = '';
-        if (vm.searchTime.toString() !== '') {
+        let beginTime = "",
+          endTime = "";
+        if (vm.searchTime.toString() !== "") {
           beginTime = new Date(vm.searchTime[0]);
           endTime = new Date(vm.searchTime[1]);
         }
         vm.loading = true;
         request.http(
-          'get',
-          '/lottery/vote/list', {
+          "get",
+          "/lottery/vote/list", {
             PageNum: vm.pageNum,
             PageSize: vm.pageSize,
             beginTime: beginTime,
@@ -527,7 +667,7 @@
             is_test: vm.is_test,
             lotteryid: vm.lotteryid
           },
-          (success) => {
+          success => {
             vm.loading = false;
             // console.log('betsLogList--------', success);
             let code = success.returncode;
@@ -537,54 +677,54 @@
               vm.total = success.data.total;
               vm.success();
             } else if (code === 101 || code === 103 || code === 106) {
-              request.loginAgain(vm)
+              request.loginAgain(vm);
             }
           },
-          (error) => {
+          error => {
             vm.loading = false;
             vm.error();
-            console.log(error)
+            console.log(error);
           }
-        )
+        );
       },
       getLotteryList() {
         const vm = this;
         request.http(
-          'get',
-          '/lottery/game/list', {},
-          (success) => {
+          "get",
+          "/lottery/game/list", {},
+          success => {
             // console.log('lotteryList--------', success);
             let code = success.returncode;
             if (code === 200) {
               vm.lotteryList = success.data;
             } else if (code === 101 || code === 103 || code === 106) {
-              request.loginAgain(vm)
+              request.loginAgain(vm);
             }
           },
-          (error) => {
+          error => {
             vm.error();
-            console.log(error)
+            console.log(error);
           }
-        )
+        );
       },
       handleReset() {
-        this.username = '';
-        this.issue = '';
-        this.betsMax = '';
-        this.betsMin = '';
-        this.gameid = '';
-        this.lotteryid = '';
+        this.username = "";
+        this.issue = "";
+        this.betsMax = "";
+        this.betsMin = "";
+        this.gameid = "";
+        this.lotteryid = "";
         this.wanfalist.options = [];
-        this.betsNum = '';
-        this.searchTime = '';
-        this.is_test = '0';
+        this.betsNum = "";
+        this.searchTime = "";
+        this.is_test = "0";
       },
       handleSearch() {
         this.getBetsLotList();
         // console.log(this.username, this.issue, this.betsMax, this.betsMin, this.gameid, this.lotteryed, this.betsNum, this.searchTime)
-      },
+      }
     }
-  }
+  };
 
 </script>
 <style>
@@ -594,6 +734,12 @@
     word-break: normal;
     overflow: hidden;
     text-overflow: ellipsis;
+  }
+
+  .lottery_popover {
+    overflow-y: scroll;
+    max-height: 150px;
+    width: 200px;
   }
 
 </style>

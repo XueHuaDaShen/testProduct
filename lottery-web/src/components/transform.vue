@@ -1,6 +1,6 @@
 /* 额度转换 */
 <template>
-  <div class="order-detail-wrap content search-form">
+  <div class="order-detail-wrap content search-form transform-wrap">
     <user-menu></user-menu>
     <div class="main" v-loading="loading">
       <div class="top-bar">
@@ -37,19 +37,23 @@
               <span class="exp2">{{getTotalCash}}元</span>
               <img src="@/assets/img/refresh.png" style="margin-left:10px;width:18px;height:16px;cursor:pointer;" @click="refreshUser">
               <!-- <i class="el-icon-refresh" style="margin-left:20px;cursor:pointer;"></i> -->
-              <button :disabled="isClick" style="margin-left:10px;cursor:pointer;font-size:16px;width:64px;color:#777;text-decoration: underline;border:none;outline:none;background:none;font-weight:bold;" @click="rebackMoney">
+              <button :disabled="isClick" style="margin-left:10px;cursor:pointer;font-size:16px;width:64px;color:#BD8454;border:none;outline:none;background:none;font-weight:bold;" @click="rebackMoney">
                 一键回收
               </button>
             </div>
             <div class="account-all">
               <div class="all-row">
-                <label>主账户</label>
-                <span class="cash" v-loading='transformTable.loading'>{{transformTable.cash}}元</span>
+                <label>主账户：</label>
+                <span v-loading='transformTable.loading'>{{transformTable.cash}}元</span>
               </div>
               <div class="all-row">
-                <label>KY</label>
-                <span class="cash" v-loading='transformTable.loading'>{{transformTable.cash_ky}}元</span>
+                <label>KY：</label>
+                <span v-loading='transformTable.loading'>{{transformTable.cash_ky}}元</span>
               </div>
+              <!-- <div class="all-row">
+                <label>AG：</label>
+                <span v-loading='transformTable.loading'>{{transformTable.cash_ag}}元</span>
+              </div> -->
               <!-- <div class="all-row">
                 <label>AG</label>
                 <span class="cash">0元</span>
@@ -122,11 +126,19 @@
         transform: {
           from: {
             value: '',
-            options: [{ name: '主账户', _id: 'main' }, { name: "KY", _id: 'ky' }]
+            options: [
+              { name: '主账户', _id: 'main' },
+              { name: "KY", _id: 'ky' },
+              // { name: "AG", _id: 'ag' }
+            ]
           }, // 转出平台
           to: {
             value: '',
-            options: [{ name: '主账户', _id: 'main' }, { name: "KY", _id: 'ky' }]
+            options: [
+              { name: '主账户', _id: 'main' },
+              { name: "KY", _id: 'ky' },
+              // { name: "AG", _id: 'ag' }
+            ]
           }, // 转入平台
           cash: '', // 转账金额
           cashPsd: '', // 资金密码
@@ -134,6 +146,7 @@
         transformTable: {
           cash: '', // 总现金
           cash_ky: '', // 开元资金
+          cash_ag: '', // ag资金
           loading: false
         },
         isSetBankPsd: 0,
@@ -148,8 +161,11 @@
             if (success.returncode == 200) {
               self.isSetBankPsd = success.data.isSet;
               if (!self.isSetBankPsd) {
-                self.$alert("您未设置资金密码，请设置资金密码", "系统提示", {
-                  confirmButtonText: "确定",
+                self.$alert("<div class='lottery-title'>您未设置资金密码，请设置资金密码</div>", "系统提示", {
+                  dangerouslyUseHTMLString: true,
+                  confirmButtonText: '确定',
+                  center: true,
+                  customClass: "syxw-wrap-inner",
                   callback: action => {
                     self.$router.push({ name: "password" });
                   }
@@ -204,6 +220,7 @@
               let profile = success.data;
               self.transformTable.cash = Number(profile.cash).toFixed(2);
               self.transformTable.cash_ky = Number(profile.cash_ky).toFixed(2);
+              self.transformTable.cash_ag = Number(profile.cash_ag).toFixed(2);
             } else if (success.returncode == 101 || success.returncode == 103 || success.returncode == 106) {
               request.loginAgain(self)
             }
@@ -225,6 +242,7 @@
               let profile = success.data;
               self.transformTable.cash = Number(profile.cash).toFixed(2);
               self.transformTable.cash_ky = Number(profile.cash_ky).toFixed(2);
+              self.transformTable.cash_ag = Number(profile.cash_ag).toFixed(2);
             } else if (success.returncode == 101 || success.returncode == 103 || success.returncode == 106) {
               request.loginAgain(self)
             }
@@ -282,25 +300,31 @@
                     if (code == 200) {
                       self.transformSubmit();
                     } else if (code == 301 || code == 305) {
-                      self.$alert("资金密码不正确", "系统提醒", {
-                        confirmButtonText: "确定",
+                      self.$alert("<div class='lottery-title'>资金密码不正确</div>", "系统提示", {
+                        dangerouslyUseHTMLString: true,
+                        confirmButtonText: '确定',
                         center: true,
+                        customClass: "syxw-wrap-inner",
                         callback: action => {
                           self.transform.cashPsd = "";
                         }
                       });
                     } else if (code == 304) {
-                      self.$alert("账户无法进行额度转换", "系统提醒", {
-                        confirmButtonText: "确定",
+                      self.$alert("<div class='lottery-title'>账户无法进行额度转换</div>", "系统提示", {
+                        dangerouslyUseHTMLString: true,
+                        confirmButtonText: '确定',
                         center: true,
+                        customClass: "syxw-wrap-inner",
                         callback: action => {
                           self.transform.cashPsd = "";
                         }
                       });
                     } else if (code == 302) {
-                      self.$alert("账户余额不足", "系统提醒", {
-                        confirmButtonText: "确定",
+                      self.$alert("<div class='lottery-title'>账户余额不足</div>", "系统提示", {
+                        dangerouslyUseHTMLString: true,
+                        confirmButtonText: '确定',
                         center: true,
+                        customClass: "syxw-wrap-inner",
                         callback: action => {
                           self.transform.cashPsd = "";
                         }
@@ -383,7 +407,7 @@
           channelIn: self.transform.to.value,
           money: self.transform.cash
         };
-        // console.log(data)
+        console.log(data)
         // return false;
         self.loading = true;
         // console.log('123')
@@ -397,8 +421,12 @@
               if (success.data) {
                 self.transformTable.cash = Number(success.data.cash).toFixed(2);
                 self.transformTable.cash_ky = Number(success.data.cash_ky).toFixed(2);
-                self.$alert("额度转换成功", "系统提示", {
-                  confirmButtonText: "确定",
+                self.transformTable.cash_ag = Number(success.data.cash_ag).toFixed(2);
+                self.$alert("<div class='lottery-title'>额度转换成功</div>", "系统提示", {
+                  dangerouslyUseHTMLString: true,
+                  confirmButtonText: '确定',
+                  center: true,
+                  customClass: "syxw-wrap-inner",
                   callback: action => {
                     self.resetTransform();
                     localStorage.setItem("blance", success.data.cash);
@@ -406,40 +434,52 @@
                   }
                 });
               } else {
-                self.$alert("额度转换失败，请联系管理员", "系统提示", {
-                  confirmButtonText: "确定",
+                self.$alert("<div class='lottery-title'>额度转换失败，请联系管理员</div>", "系统提示", {
+                  dangerouslyUseHTMLString: true,
+                  confirmButtonText: '确定',
+                  center: true,
+                  customClass: "syxw-wrap-inner",
                   callback: action => {}
                 });
               }
             } else if (success.returncode == 101 || success.returncode == 103 || success.returncode == 106) {
               request.loginAgain(self)
             } else if (success.returncode == 301 || success.returncode == 305) {
-              self.$alert("资金密码不正确", "系统提醒", {
-                confirmButtonText: "确定",
+              self.$alert("<div class='lottery-title'>资金密码不正确</div>", "系统提示", {
+                dangerouslyUseHTMLString: true,
+                confirmButtonText: '确定',
                 center: true,
+                customClass: "syxw-wrap-inner",
                 callback: action => {
                   self.transform.cashPsd = "";
                 }
               });
             } else if (success.returncode == 304) {
-              self.$alert("账户无法进行额度转换", "系统提醒", {
-                confirmButtonText: "确定",
+              self.$alert("<div class='lottery-title'>账户无法进行额度转换</div>", "系统提示", {
+                dangerouslyUseHTMLString: true,
+                confirmButtonText: '确定',
                 center: true,
+                customClass: "syxw-wrap-inner",
                 callback: action => {
                   self.transform.cashPsd = "";
                 }
               });
             } else if (success.returncode == 302) {
-              self.$alert("账户余额不足", "系统提醒", {
-                confirmButtonText: "确定",
+              self.$alert("<div class='lottery-title'>账户余额不足</div>", "系统提示", {
+                dangerouslyUseHTMLString: true,
+                confirmButtonText: '确定',
                 center: true,
+                customClass: "syxw-wrap-inner",
                 callback: action => {
                   self.transform.cashPsd = "";
                 }
               });
             } else {
-              self.$alert(success.returncode, "系统提示", {
-                confirmButtonText: "确定",
+              self.$alert("<div class='lottery-title'>" + success.returncode + "</div>", "系统提示", {
+                dangerouslyUseHTMLString: true,
+                confirmButtonText: '确定',
+                center: true,
+                customClass: "syxw-wrap-inner",
                 callback: action => {}
               });
             }
@@ -466,12 +506,19 @@
         if (newValue !== oldValue) {
           if (newValue) {
             if (newValue == 'main') {
-              this.transform.to.options = [{ name: "KY", _id: 'ky' }];
+              this.transform.to.options = [
+                { name: "KY", _id: 'ky' },
+                // { name: "AG", _id: 'ag' }
+              ];
             } else {
               this.transform.to.options = [{ name: "主账户", _id: 'main' }];
             }
           } else {
-            this.transform.to.options = [{ name: '主账户', _id: 'main' }, { name: "KY", _id: 'ky' }];
+            this.transform.to.options = [
+              { name: '主账户', _id: 'main' },
+              { name: "KY", _id: 'ky' },
+              // { name: "AG", _id: 'ag' }
+            ];
             this.transform.to.value = '';
           }
         }
@@ -480,12 +527,19 @@
         if (newValue !== oldValue) {
           if (newValue) {
             if (newValue == 'main') {
-              this.transform.from.options = [{ name: "KY", _id: 'ky' }];
+              this.transform.from.options = [
+                { name: "KY", _id: 'ky' },
+                // { name: "AG", _id: 'ag' }
+              ];
             } else {
               this.transform.from.options = [{ name: "主账户", _id: 'main' }];
             }
           } else {
-            this.transform.from.options = [{ name: '主账户', _id: 'main' }, { name: "KY", _id: 'ky' }];
+            this.transform.from.options = [
+              { name: '主账户', _id: 'main' },
+              { name: "KY", _id: 'ky' },
+              // { name: "AG", _id: 'ag' }
+            ];
             this.transform.from.value = '';
           }
         }
@@ -519,6 +573,59 @@
   };
 </script>
 
+
+<style lang="scss">
+  .transform-wrap {
+
+    .item .done-row .content.el-select .el-input .el-input__inner,
+    .item .done-row .content.el-input .el-input__inner {
+      font-size: 14px;
+      font-weight: bold;
+      color: #191919;
+
+      &::-webkit-input-placeholder {
+        /* WebKit browsers */
+        color: #bcbcbc;
+        font-weight: bold;
+        font-size: 14px;
+      }
+
+      &:-moz-placeholder {
+        /* Mozilla Firefox 4 to 18 */
+        color: #bcbcbc;
+        font-weight: bold;
+        font-size: 14px;
+      }
+
+      &::-moz-placeholder {
+        /* Mozilla Firefox 19+ */
+        color: #bcbcbc;
+        font-weight: bold;
+        font-size: 14px;
+      }
+
+      &:-ms-input-placeholder {
+        /* Internet Explorer 10+ */
+        color: #bcbcbc;
+        font-weight: bold;
+        font-size: 14px;
+      }
+
+    }
+
+    .item .done-row .content.el-input .el-input__inner[type=password] {
+      font-size: 20px;
+    }
+
+    .all-row {
+      svg {
+        height: 20px;
+        width: 20px;
+        vertical-align: middle;
+      }
+    }
+  }
+</style>
 <style scoped lang="scss">
   .table-xinxi {
     width: 100%;
@@ -558,19 +665,26 @@
   }
 
   .submit {
-    width: 115px;
-    height: 40px;
+    width: 180px;
+    height: 48px;
     display: inline-block;
     text-align: center;
     cursor: pointer;
     text-decoration: none;
-    background: #CC3447;
-    border-radius: 2px;
     font-family: PingFangSC-Regular;
-    font-size: 14px;
-    font-weight: 700;
-    color: #FFFFFF;
+    font-size: 16px;
+    font-weight: bold;
+    color: #ffffff;
     margin: 0 auto;
+    background-image: linear-gradient(-180deg, #CFA072 0%, #B68E66 100%);
+    border: 1px solid #DDDDDD;
+    border-radius: 2px;
+
+    &.no-allowed {
+      background: #f5f7fa;
+      color: #c0c4cc;
+      border: 1px solid #e4e7ed;
+    }
   }
 
   .wrap-inner {
@@ -1187,19 +1301,26 @@
   }
 
   .submit {
-    width: 115px;
-    height: 40px;
+    width: 180px;
+    height: 48px;
     display: inline-block;
     text-align: center;
     cursor: pointer;
     text-decoration: none;
-    background: #CC3447;
-    border-radius: 2px;
     font-family: PingFangSC-Regular;
-    font-size: 14px;
-    font-weight: 700;
-    color: #FFFFFF;
+    font-size: 16px;
+    font-weight: bold;
+    color: #ffffff;
     margin: 0 auto;
+    background-image: linear-gradient(-180deg, #CFA072 0%, #B68E66 100%);
+    border: 1px solid #DDDDDD;
+    border-radius: 2px;
+
+    &.no-allowed {
+      background: #f5f7fa;
+      color: #c0c4cc;
+      border: 1px solid #e4e7ed;
+    }
   }
 
   .tl {
@@ -1218,12 +1339,20 @@
       width: 310px;
       height: 40px;
       margin-bottom: 20px;
-      padding: 12px 20px;
+      padding: 0 20px;
       font-family: PingFangSC-Regular;
-      font-size: 12px;
+      font-size: 14px;
       color: #191919;
       display: flex;
-      justify-content: space-between;
+      justify-content: flex-start;
+      font-weight: bold;
+      line-height: 40px;
+
+      >label {
+        display: inline-block;
+        min-width: 60px;
+        text-align: left;
+      }
 
       .cash {
         font-weight: 700;
@@ -1251,7 +1380,7 @@
     background: #D8D8D8;
     color: #191919;
     margin-right: 20px;
-    border-radius: 4px 4px 0 0;
+    border-radius: 2px 2px 0 0;
     text-align: center;
     font-size: 12px;
     font-family: MicrosoftYaHei;
@@ -1282,7 +1411,7 @@
     background: #fff;
     border: 1px solid #ddd;
     border-bottom: none;
-    border-radius: 4px 4px 0 0;
+    border-radius: 2px 2px 0 0;
   }
 
   /* .tabs .tab-title:after {
@@ -1305,10 +1434,14 @@
 
     .done-row {
       text-align: left;
+      font-size: 14px;
+      color: #191919;
+      font-family: PingFangSC-Regular;
+      font-weight: bold;
 
       .exp {
         width: 120px;
-        font-size: 12px;
+        font-size: 14px;
         color: #191919;
         display: inline-block;
       }
@@ -1322,6 +1455,8 @@
     font-family: PingFangSC-Regular;
     font-weight: 700;
     color: #191919;
+    display: flex;
+    align-items: center;
 
     .exp {
       font-size: 16px;

@@ -70,7 +70,7 @@
     </div>
     <div class="data-table" v-loading="loading">
       <el-table :data="lotteryColligateListData" header-row-class-name="table-header" stripe border style="width: 100%;font-size:12px;"
-        max-height="450">
+        max-height="450" :show-summary="true" sum-text="总计" :summary-method="getSummaries">
         <el-table-column align="center" prop="gamename" label="彩种">
         </el-table-column>
         <el-table-column align="center" label="时间">
@@ -163,8 +163,8 @@
             val: '-1'
           }
         ],
-        order: '',
-        desc: '',
+        order: '_id.day',
+        desc: '-1',
         total: 0,
         gameid: '',
         lotteryList: [],
@@ -349,15 +349,55 @@
           v.checked = false
         }
       })
+      const end = new Date();
+      const start = new Date(new Date(new Date().toLocaleDateString()).getTime());
+      end.setTime(
+        new Date(
+          new Date(new Date().toLocaleDateString()).getTime() +
+          24 * 60 * 60 * 1000 -
+          1
+        )
+      );
+      this.searchTime = [start, end];
       this.getLotteryColligateList();
       this.getLotteryList();
     },
     methods: {
+      getSummaries(param) {
+        const {
+          columns,
+          data
+        } = param;
+        const sums = [];
+        columns.forEach((column, index) => {
+          if (index === 0) {
+            sums[index] = "总计";
+            return;
+          }
+          let values = data.map(item => Number(item[column.property]));
+          if (!values.every(value => isNaN(value))) {
+            sums[index] = values.reduce((prev, curr) => {
+              const value = Number(curr);
+              if (!isNaN(value)) {
+                return prev + curr;
+              } else {
+                return prev;
+              }
+            }, 0);
+            sums[index] = parseFloat(sums[index]).toFixed(2);
+            sums[index] += " 元";
+          } else {
+            sums[index] = "--";
+          }
+        });
+
+        return sums;
+      },
       formatMoney(row, column, cellValue) {
         if (cellValue) {
           return Number(cellValue).toFixed(2);
         }
-        return "--"
+        return "0.00"
       },
       getLotteryList() {
         const vm = this;
@@ -365,7 +405,6 @@
           'get',
           '/lottery/game/list', {},
           (success) => {
-            // console.log('lotteryList--------', success);
             let code = success.returncode;
             if (code === 200) {
               vm.lotteryList = success.data;
@@ -443,7 +482,7 @@
       },
       formatTime2(row) {
         if (row._id && row._id.day) {
-          return moment(row._id.day).utcOffset(8).format("YYYY-MM-DD HH:MM:SS");
+          return moment(row._id.day).utcOffset(8).format("YYYY-MM-DD");
         }
         return '--'
       },
@@ -461,19 +500,22 @@
         const vm = this;
         let beginTime = "",
           endTime = "";
-        if (vm.searchTime.toString() !== "") {
-          beginTime = new Date(vm.searchTime[0]);
-          endTime = new Date(vm.searchTime[1]);
+        if (vm.searchTime) {
+          if (vm.searchTime.toString() !== "") {
+            beginTime = new Date(vm.searchTime[0]);
+            endTime = new Date(vm.searchTime[1]);
+          }
         }
         let data = {
           pageNum: vm.pageNum,
           pageSize: vm.pageSize,
-          beginTime: beginTime,
+          startTime: beginTime,
           endTime: endTime,
           is_test: vm.is_test,
           order: vm.order,
           gameid: vm.gameid,
-          date: vm.dateChecked
+          date: vm.dateChecked,
+          desc: vm.desc
         };
         if (vm.desc) {
           data['desc'] = Number(vm.desc);

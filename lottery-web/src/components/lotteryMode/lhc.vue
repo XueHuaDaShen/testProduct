@@ -206,7 +206,7 @@
                     <li class="animated bbws-ws" :class="item.checked?(item.animated?'curr pulse':'curr'):''" v-for="(item, index) in wsArr" :key="index">
                       <h5>{{item.title}}</h5>
                       <em class="bs">x
-                        <span class="animated" :class="animatedMoney?'jello':''">{{item.multiple = betsMultiple}}</span>
+                        <span class="animated" :class="animatedMoney?'jello':''">{{item.multiple}}</span>
                       </em>
                       <div>
                         <b class="balls-num" v-for="(k, i) in item.data" :key="i.toString()" :class="setBallsClass(k)">{{k.num}}</b>
@@ -234,7 +234,7 @@
                     <li class="animated" :class="item.checked?(item.animated?'curr pulse':'curr'):''" v-for="(item, index) in zfArr" :key="index">
                       <h5>{{item.title}}</h5>
                       <em class="bs">x
-                        <span class="animated" :class="animatedMoney?'jello':''">{{item.multiple = betsMultiple}}</span>
+                        <span class="animated" :class="animatedMoney?'jello':''">{{item.multiple}}</span>
                       </em>
                       <div>{{item.ruler}}</div>
                       <input type="text" @blur="handleLeaveSingleInput(item)" @input="handleInputSingleMoney(item, $event)" :value="item.money" class="money">
@@ -394,7 +394,7 @@
                       <el-radio style="color:#939DB8" :label="'大'">大</el-radio>
                     </div>
                     <div>
-                      <el-radio :label="'小'">小</el-radio>
+                      <el-radio style="color:#939DB8" :label="'小'">小</el-radio>
                     </div>
                   </div>
                   <div class="bbws">
@@ -604,14 +604,14 @@
         bbArr: [],
         wsArr: [],
         zfArr: [
-          { title: '大', ruler: '总分大于等于175的，即视为中奖。', multiple: '1.95', money: '' },
-          { title: '小', ruler: '总分小于等于175的，即视为中奖。', multiple: '1.95', money: '' },
-          { title: '单', ruler: '总分是单数的，即视为中奖。', multiple: '1.95', money: '' },
-          { title: '双', ruler: '总分是双数的，即视为中奖。', multiple: '1.95', money: '' },
-          { title: '大单', ruler: '总分大于等于175且为单数的，即视为中奖。', multiple: '3.90', money: '' },
-          { title: '大双', ruler: '总分大于等于175且为双数的，即视为中奖。', multiple: '3.90', money: '' },
-          { title: '小单', ruler: '总分小于等于175且为单数的，即视为中奖。', multiple: '3.90', money: '' },
-          { title: '小双', ruler: '总分小于等于175且为双数的，即视为中奖。', multiple: '3.90', money: '' }
+          { title: '大', ruler: '总分大于等于175的，即视为中奖。', multiple: '', money: '' },
+          { title: '小', ruler: '总分小于等于175的，即视为中奖。', multiple: '', money: '' },
+          { title: '单', ruler: '总分是单数的，即视为中奖。', multiple: '', money: '' },
+          { title: '双', ruler: '总分是双数的，即视为中奖。', multiple: '', money: '' },
+          { title: '大单', ruler: '总分大于等于175且为单数的，即视为中奖。', multiple: '', money: '' },
+          { title: '大双', ruler: '总分大于等于175且为双数的，即视为中奖。', multiple: '', money: '' },
+          { title: '小单', ruler: '总分小于等于175且为单数的，即视为中奖。', multiple: '', money: '' },
+          { title: '小双', ruler: '总分小于等于175且为双数的，即视为中奖。', multiple: '', money: '' }
         ],
         bzArr: [],
         checkLen: 5, // 不中 状态下，需要选择几个号码
@@ -946,7 +946,7 @@
           vm.filterBallsArr(arr, i)
         }
         // vm.bbNumbersArr();
-        vm.wsNumbersArr();
+        // vm.wsNumbersArr();
         vm.bzNumbersArr();
         // vm.animalNumberArr();
       },
@@ -955,7 +955,6 @@
         this.lhcNav.filter(v => {
           v.checked = false;
         })
-        // console.log(item)
         this.lottery3id = item.lottery3id;
         this.lotteryid = item.lotteryMode.children[0]._id;
         this.probability = item.lotteryMode.children[0].probability;
@@ -984,6 +983,12 @@
         }
         if (item.title === '半波') {
           this.bbNumbersArr();
+        }
+        if(item.title === '尾数'){
+          this.wsNumbersArr(item.lotteryMode.children[0].extra);
+        }
+        if(item.title === '总分'){
+          this.zfNumberArr(item.lotteryMode.children[0].extra);
         }
         // 重置 数据
         this.handleResetAllBalls()
@@ -1559,7 +1564,7 @@
 
 
       // 尾数 投注 操作 函数   开始--------------
-      wsNumbersArr() {
+      wsNumbersArr(extra) {
         const vm = this;
         let arr = [];
         for (let i = 0; i < 10; i++) {
@@ -1576,7 +1581,7 @@
             }
           })
           o.title = i + '尾'
-          o.multiple = '';
+          o.multiple = (extra[i] * vm.defaultRefund).toFixed(2);
           arr.push(o)
         }
         let halfLen = Math.floor(arr.length / 2);
@@ -1644,7 +1649,13 @@
 
 
       // 总分 投注 操作 函数   开始--------------
-
+      zfNumberArr(extra) {
+        const vm = this;
+        // console.log(extra)
+        this.zfArr.filter(v => {
+          v.multiple = (extra[v.title] * vm.defaultRefund).toFixed(2);
+        })
+      },
       // 总分 投注 操作 函数   结束--------------
 
 
@@ -2674,12 +2685,12 @@
                     display: block;
                     width: 26px;
                     height: 26px; // border-radius:50%;
-                    background: url('../../img/check.png') no-repeat left;
+                    background: url('../../assets/img/bets-img/check.png') no-repeat left;
                     background-size: 100% 100%;
                     cursor: pointer;
                   }
                   span.checked {
-                    background: url('../../img/checked.png') no-repeat left;
+                    background: url('../../assets/img/bets-img/checked.png') no-repeat left;
                     background-size: 100% 100%;
                   }
                 }
@@ -2709,12 +2720,12 @@
                     display: block;
                     width: 26px;
                     height: 26px; // border-radius:50%;
-                    background: url('../../img/check.png') no-repeat left;
+                    background: url('../../assets/img/bets-img/check.png') no-repeat left;
                     background-size: 100% 100%;
                     cursor: pointer;
                   }
                   span.checked {
-                    background: url('../../img/checked.png') no-repeat left;
+                    background: url('../../assets/img/bets-img/checked.png') no-repeat left;
                     background-size: 100% 100%;
                   }
                 }
@@ -2739,46 +2750,46 @@
               .animal-icon {
                 width: 30px;
                 display: inline-block;
-                height: 100%; // background: url('../../img/dog.png') no-repeat left;
+                height: 100%; // background: url('../../assets/img/bets-img/dog.png') no-repeat left;
                 // background-size:100% 100%;
                 // float: left;
                 // margin-left: 29px;
               }
               .mouse {
-                background: url('../../img/animal-sprite.png') -73px -124px no-repeat;
+                background: url('../../assets/img/bets-img/animal-sprite.png') -73px -124px no-repeat;
               }
               .bulls {
-                background: url('../../img/animal-sprite.png') -17px -6px no-repeat;
+                background: url('../../assets/img/bets-img/animal-sprite.png') -17px -6px no-repeat;
               }
               .tiger {
-                background: url('../../img/animal-sprite.png') -138px -176px no-repeat;
+                background: url('../../assets/img/bets-img/animal-sprite.png') -138px -176px no-repeat;
               }
               .rabbit {
-                background: url('../../img/animal-sprite.png') -189px -8px no-repeat;
+                background: url('../../assets/img/bets-img/animal-sprite.png') -189px -8px no-repeat;
               }
               .dragon {
-                background: url('../../img/animal-sprite.png') -10px -60px no-repeat;
+                background: url('../../assets/img/bets-img/animal-sprite.png') -10px -60px no-repeat;
               }
               .snake {
-                background: url('../../img/animal-sprite.png') -198px -124px no-repeat;
+                background: url('../../assets/img/bets-img/animal-sprite.png') -198px -124px no-repeat;
               }
               .horse {
-                background: url('../../img/animal-sprite.png') -131px -64px no-repeat;
+                background: url('../../assets/img/bets-img/animal-sprite.png') -131px -64px no-repeat;
               }
               .sheep {
-                background: url('../../img/animal-sprite.png') -198px -68px no-repeat;
+                background: url('../../assets/img/bets-img/animal-sprite.png') -198px -68px no-repeat;
               }
               .monkey {
-                background: url('../../img/animal-sprite.png') -15px -126px no-repeat;
+                background: url('../../assets/img/bets-img/animal-sprite.png') -15px -126px no-repeat;
               }
               .chicken {
-                background: url('../../img/animal-sprite.png') -71px -9px no-repeat;
+                background: url('../../assets/img/bets-img/animal-sprite.png') -71px -9px no-repeat;
               }
               .dog {
-                background: url('../../img/animal-sprite.png') -133px -6px no-repeat;
+                background: url('../../assets/img/bets-img/animal-sprite.png') -133px -6px no-repeat;
               }
               .pig {
-                background: url('../../img/animal-sprite.png') -135px -123px no-repeat;
+                background: url('../../assets/img/bets-img/animal-sprite.png') -135px -123px no-repeat;
               }
             }
           }

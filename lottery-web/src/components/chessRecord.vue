@@ -1,12 +1,7 @@
 <!--棋牌竞技-->
 <template>
   <div class="lottery-wrap search-form" v-loading="loading">
-    <!-- <div class="record-tabs">
-      <router-link :to="{name:'lotteryRecord'}" class="tab-item active">游戏记录
-      </router-link>
-      <router-link :to="{name:'trackRecord'}" class="tab-item">追号记录</router-link>
-    </div> -->
-    <div class="record-options">
+    <div class="record-options search-form">
       <div class="option-row">
         <span class="exp">游戏平台：</span>
         <el-select v-model="form.gameplatform.value" style="width:114px;" clearable>
@@ -16,29 +11,27 @@
         <el-input v-model="form.ganmename" placeholder="请输入游戏名" style="width:114px;"></el-input>
       </div>
       <div class="option-row mb-20">
-        <span class="exp">用户名：</span>
-        <el-input style="width:114px;" placeholder="请输入内容" v-model="form.username.value" clearable>
-        </el-input>
-        <span class="exp w-60 ml-20">用户属性：</span>
+        <span class="exp">用户属性：</span>
         <el-select v-model="form.userTypes.value" placeholder="请选择" clearable style="width:114px">
           <el-option v-for="item in form.userTypes.options" :key="item.value" :label="item.text" :value="item.value">
           </el-option>
         </el-select>
+        <span class="exp ml-20">用户名：</span>
+        <el-input style="width:114px;" placeholder="请输入内容" v-model="form.username.value" clearable>
+        </el-input>
       </div>
       <div class="option-row">
         <span class="exp">游戏时间：</span>
         <el-date-picker v-model="form.dateFrom.value" type="datetime" prefix-icon="void-icon" placeholder="选择日期时间" value-format="yyyy-MM-dd HH:mm:ss">
         </el-date-picker>
-        至
+        <span style="margin:0 5px;font-weight:bold;color:#777;font-size:14px;">至</span>
         <el-date-picker v-model="form.dateTo.value" type="datetime" prefix-icon="void-icon" placeholder="选择日期时间" value-format="yyyy-MM-dd HH:mm:ss">
         </el-date-picker>
         <a class="time ml-20" @click="setTimeToday">今日</a>
         <a class="time" @click="setTimeNowWeek">本周</a>
         <a class="time" @click="setTimeNowMonth">本月</a>
-        <!-- <a class="time" @click="setTimeRecent3Days(-3)">近三日</a>&nbsp; -->
-        <!-- <a class="time" @click="setTimeRecent3Days(-15)">近半月</a>&nbsp; -->
         <a class="time" @click="setTimeRecent3Days(-30)">近一月</a>
-        <a class="submit" @click="handleSearch()">查询</a>
+        <a class="submit ml-20" @click="handleSearch()">查询</a>
       </div>
     </div>
     <hr class="user-split-line">
@@ -49,7 +42,7 @@
           <th>游戏名</th>
           <th>投注额</th>
           <th>盈利额</th>
-          <th>游戏时间</th>
+          <th style="border-right: 1px solid #dddddd;">游戏时间</th>
         </tr>
       </thead>
       <tbody>
@@ -61,8 +54,8 @@
           <td>{{getTime(item.start_at)}}</td>
         </tr>
         <tr v-if="noResult" class="no-result">
-          <td colspan="10">
-            <p>没有符合条件的记录，请更改查询条件</p>
+          <td colspan="10" style="border-right: 1px solid #dddddd;">
+            <p style="color:#777;font-weight:bold;margin:35px 0;font-size:14px;">没有符合条件的记录，请更改查询条件</p>
           </td>
         </tr>
       </tbody>
@@ -569,8 +562,9 @@
 
   .lottery-wrap .record-options .option-row .exp {
     display: inline-block;
-    font-size: 12px;
+    font-size: 14px;
     color: #191919;
+    font-weight: bold;
   }
 
   .lottery-wrap {
@@ -622,6 +616,9 @@
     font-size: 12px;
     font-family: MicrosoftYaHei;
     color: #333333;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
   }
 
   .record-options .option-row>input[type="text"] {
@@ -649,7 +646,6 @@
     line-height: 25px;
     border-radius: 2px;
     border: 1px solid #ccc;
-    margin-right: 3px;
   }
 
   .record-options .option-row>a:hover {
@@ -712,27 +708,21 @@
 
   .record-options .option-row>a.time {
     display: inline-block;
-    font-size: 12px;
+    font-size: 14px;
     width: 64px;
     height: 30px;
     line-height: 28px;
     border-radius: 2px;
-    border: 1px solid #ccc;
+    font-weight: bold;
+    color: #CFA072;
+    border: 1px solid #CFA072;
     text-align: center;
-    margin-right: 20px;
+    margin-left: 20px;
   }
 
   .record-options .option-row>a.time:hover {
-    background: #C83A4C;
     color: #fff;
-  }
-
-  .record-group .group-item:nth-child(2n) {
-    /* background: #fff; */
-  }
-
-  .record-group .group-item:nth-child(2n + 1) {
-    /* background: #f7f7f7; */
+    background-image: linear-gradient(-180deg, #CFA072 0%, #B68E66 100%)
   }
 
   .record-group .record-bottom {
@@ -779,20 +769,20 @@
   .record-options .option-row>a.submit {
     position: relative;
     display: inline-block;
+    width: 80px;
     height: 30px;
     line-height: 28px;
     text-align: center;
-    /* vertical-align: middle; */
-    font-size: 12px;
+    font-size: 14px;
+    font-weight: bold;
     color: #fff;
     cursor: pointer;
     border-radius: 2px;
     outline: none;
     font-family: microsoft yahei;
-    background-color: #C83A4C;
-    border: 1px solid #ccc;
     box-shadow: none;
-    /* margin-left: 20px; */
+    border: none;
+    background-image: linear-gradient(-180deg, #CFA072 0%, #B68E66 100%);
   }
 
   .ml-20 {

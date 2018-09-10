@@ -53,7 +53,7 @@
     </div>
     <div class="data-table" v-loading="loading">
       <el-table :data="daySalaryListData" header-row-class-name="table-header" stripe border style="width: 100%;font-size:12px;"
-        @selection-change="handleSelectionChange">
+        @selection-change="handleSelectionChange" max-height="450" :show-summary="true" sum-text="总计" :summary-method="getSummaries">
         <el-table-column type="selection" width="55" :selectable='checkboxInit'>
         </el-table-column>
         <el-table-column align="center" label="用户名" width="126">
@@ -63,8 +63,6 @@
         </el-table-column>
         <el-table-column align="center" prop="parent.name" label="上级代理">
         </el-table-column>
-        <!-- <el-table-column align="center" prop="proxy" width="110" label="代理层级关系">
-        </el-table-column> -->
         <el-table-column align="center" prop="personal_salary" width="110" label="个人实发工资" :formatter="formatMoney">
         </el-table-column>
         <el-table-column align="center" prop="team_flow" label="团队流水" :formatter="formatMoney">
@@ -75,8 +73,6 @@
         </el-table-column>
         <el-table-column align="center" prop="pay_at" :formatter="formatTime" width="110" label="实发工资日期">
         </el-table-column>
-        <!-- <el-table-column align="center" prop="pay_at" width="80" :formatter="formatTestUser" label="测试用户">
-        </el-table-column> -->
         <el-table-column align="center" prop="status" :formatter="isStatusFn" label="发放状态">
         </el-table-column>
       </el-table>
@@ -336,6 +332,36 @@
       this.getDaySalaryList();
     },
     methods: {
+      getSummaries(param) {
+        const {
+          columns,
+          data
+        } = param;
+        const sums = [];
+        columns.forEach((column, index) => {
+          if (index === 0) {
+            sums[index] = "总计";
+            return;
+          }
+          let values = data.map(item => Number(item[column.property]));
+          if ((index === 3 || index === 4 || index === 5) && !values.every(value => isNaN(value))) {
+            sums[index] = values.reduce((prev, curr) => {
+              const value = Number(curr);
+              if (!isNaN(value)) {
+                return prev + curr;
+              } else {
+                return prev;
+              }
+            }, 0);
+            sums[index] = parseFloat(sums[index]).toFixed(2);
+            sums[index] += " 元";
+          } else {
+            sums[index] = "--";
+          }
+        });
+
+        return sums;
+      },
       closeOneKeyForm() {
         this.onekeyVisible = false;
         this.resetForm();
@@ -451,11 +477,9 @@
         if (cellValue) {
           return Number(cellValue).toFixed(2);
         }
-        return "--"
+        return "0.00"
       },
       handleSelectionChange(val) {
-        // this.multipleSelection = val;
-        // console.log("val", val);
         if (val.length != 0) {
           for (let i = 0; i < val.length; i++) {
             let o = val[i];

@@ -1043,7 +1043,7 @@
     background: #D8D8D8;
     color: #191919;
     margin-right: 20px;
-    border-radius: 4px 4px 0 0;
+    border-radius: 2px 2px 0 0;
     text-align: center;
     font-size: 12px;
     font-family: MicrosoftYaHei;
@@ -1074,18 +1074,8 @@
     background: #fff;
     border: 1px solid #ddd;
     border-bottom: none;
-    border-radius: 4px 4px 0 0;
+    border-radius: 2px 2px 0 0;
   }
-
-  /* .tabs .tab-title:after {
-    content: '';
-    height: 8px;
-    background: rgba(222, 222, 222, 1);
-    position: absolute;
-    right: 0;
-    top: 17px;
-    width: 1px;
-  } */
 
   .tabs .tab-title a {
     display: block;

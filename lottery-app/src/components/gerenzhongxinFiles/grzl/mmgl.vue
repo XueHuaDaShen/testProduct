@@ -38,7 +38,7 @@
         </li>
       </ul>
       <div class="edit-pwd-tip" v-if="tip">{{tip}}</div>
-      <button class="submit-btn" @click="editZijinPwd">提交修改</button>
+      <button class="submit-btn" :disabled="isClick" @click="editZijinPwd">提交修改</button>
     </div>
     <div class="edit-success-dialog" v-if="showDialog">
       <div class="dialog-bj"></div>
@@ -60,6 +60,7 @@ export default {
   name: 'mmgl',
   data() {
     return {
+      isClick: false,
       pwdSet: '登录',
       tip: '',
       tipTimeout: 2, // 提示文字持续时间 s
@@ -124,14 +125,15 @@ export default {
     // 修改登录密码
     editLoginPwd() {
       const vm = this;
+      //  else if (!regexpPsd(vm.loginOldPwd)) {
+      //   vm.tip = '旧密码不符合规范';
+      //   setTimeout(() => {
+      //     vm.tip = '';
+      //   }, vm.tipTimeout*1000);
+      //   return false;
+      // }
       if (vm.loginOldPwd === '') {
         vm.tip = '旧密码不能为空';
-        setTimeout(() => {
-          vm.tip = '';
-        }, vm.tipTimeout*1000);
-        return false;
-      } else if (!regexpPsd(vm.loginOldPwd)) {
-        vm.tip = '旧密码不符合规范';
         setTimeout(() => {
           vm.tip = '';
         }, vm.tipTimeout*1000);
@@ -166,19 +168,7 @@ export default {
           vm.tip = '';
         }, vm.tipTimeout*1000);
         return false;
-      } else if (!vm.regexpPsd(vm.loginNewPwd)) {
-        vm.tip = '新密码不符合要求';
-        setTimeout(() => {
-          vm.tip = '';
-        }, vm.tipTimeout*1000);
-        return false;
-      } else if (!vm.regexpPsd(vm.confirmLoginNewPwd)) {
-        vm.tip = '确认新密码不符合要求';
-        setTimeout(() => {
-          vm.tip = '';
-        }, vm.tipTimeout*1000);
-        return false;
-      }else{
+      } else{
         let url = '/user/password/change';
         request.login(
           'post',
@@ -250,12 +240,6 @@ export default {
           vm.tip = '';
         }, vm.tipTimeout*1000);
         return false;
-      } else if (!regexpPsd(vm.zijinOldPwd)) {
-        vm.tip = '旧密码不符合规范';
-        setTimeout(() => {
-          vm.tip = '';
-        }, vm.tipTimeout*1000);
-        return false;
       } else if (vm.zijinNewPwd === '') {
         vm.tip = '新密码不能为空';
         setTimeout(() => {
@@ -286,19 +270,8 @@ export default {
           vm.tip = '';
         }, vm.tipTimeout*1000);
         return false;
-      } else if (!vm.regexpPsd(vm.zijinNewPwd)) {
-        vm.tip = '新密码不符合要求';
-        setTimeout(() => {
-          vm.tip = '';
-        }, vm.tipTimeout*1000);
-        return false;
-      } else if (!vm.regexpPsd(vm.confirmZijinNewPwd)) {
-        vm.tip = '确认新密码不符合要求';
-        setTimeout(() => {
-          vm.tip = '';
-        }, vm.tipTimeout*1000);
-        return false;
-      }else{
+      } else{
+        vm.isClick = true;
         let url = '/user/bankcard/password/update';
         request.login(
           'post',
@@ -307,6 +280,7 @@ export default {
             loginname: localStorage.getItem('loginname')
           },
           (success) => {
+            vm.isClick = false;
             if (success.returncode == '200') {
               let random = success.data.random;
               // console.log('old', CryptoJS.MD5(vm.zijinOldPwd).toString());
@@ -356,6 +330,7 @@ export default {
           },
           (error) => {
             // vm.loading = false;
+            vm.isClick = false;
             console.log('/user/random---error', error)
           }
         )
@@ -367,15 +342,14 @@ export default {
       this.zijinOldPwd = '';
       this.zijinNewPwd = '';
       this.confirmZijinNewPwd = '';
+      this.$store.dispatch('setHeader', true);
       if(this.from === 'yhkgl'){
         this.$router.back(-1)
       }
     },
     // 去登录页
     toLogin() {
-      this.$router.push({
-        name: 'login'
-      })
+      request.loginAgain(this);
     }
   },
   beforeDestroy() {},

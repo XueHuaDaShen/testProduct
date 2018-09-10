@@ -604,7 +604,7 @@
 
 <script>
   import request from "../axios/axios";
-  import moment,{ months } from 'moment';
+  import moment, { months } from 'moment';
   export default {
     name: 'dataCharts',
     data() {
@@ -641,7 +641,7 @@
             options: [
               { text: '近30期', value: 30 },
               { text: '近50期', value: 50 },
-              { text: '今日数据', value: 'day'},
+              { text: '今日数据', value: 'day' },
             ],
             selected: '',
             active: 0
@@ -687,8 +687,8 @@
           var refArr2 = [];
           // numIndex += 1;
           // c_numIndex += 1;
-          if(index>0){
-            var prevArr = this.tableList[index-1].luck_no.toString().split(',');
+          if (index > 0) {
+            var prevArr = this.tableList[index - 1].luck_no.toString().split(',');
           }
           str += '<tr>';
           let arr = [];
@@ -767,16 +767,17 @@
           str += '<td class="ball-none"></td></tr>';
         })
         this.html = str;
-        this.$nextTick(()=>{
+        this.$nextTick(() => {
           this.randerCanvas(refArr1);
         })
       },
       randerCanvas(arr) {
         const vm = this;
-        let dw = 16/2, dh = 16/2; // 数字宽高
+        let dw = 16 / 2,
+          dh = 16 / 2; // 数字宽高
         const canvasWrap = document.getElementById('table-canvas-warp');
         let data = [];
-        for(let i=0; i<5; i++){
+        for (let i = 0; i < 5; i++) {
           let a = [];
           arr.filter(v => {
             a.push(v[i])
@@ -784,50 +785,54 @@
           data.push(a);
         }
         // console.log(data)
-        var strokeLine = function(ctx,x1,y1,x2,y2) {
-          ctx.strokeStyle="#FD4E5A";
+        var strokeLine = function(ctx, x1, y1, x2, y2) {
+          ctx.strokeStyle = "#FD4E5A";
           ctx.beginPath();
-          ctx.moveTo(x1,y1);
-          ctx.lineTo(x2,y2)
+          ctx.moveTo(x1, y1);
+          ctx.lineTo(x2, y2)
           ctx.closePath();
           ctx.stroke();
         }
         // console.log(document.getElementsByClassName(data[0][0]))
         data.filter(v => {
-          for(let i=0; i<v.length; i++){
-            if(i>0){
-              let p = v[i-1], c = v[i];
+          for (let i = 0; i < v.length; i++) {
+            if (i > 0) {
+              let p = v[i - 1],
+                c = v[i];
               // console.log(p)
               // console.log(c)
               let prevEl = document.getElementById(p); // 上一个元素
               let currEl = document.getElementById(c); // 当前元素
-              let pl = prevEl.offsetLeft, pt = prevEl.offsetTop; // 元素距离 左、上的距离
-              let cl = currEl.offsetLeft, ct = currEl.offsetTop;
+              let pl = prevEl.offsetLeft,
+                pt = prevEl.offsetTop; // 元素距离 左、上的距离
+              let cl = currEl.offsetLeft,
+                ct = currEl.offsetTop;
               // console.log(prevEl)
               // console.log(currEl)
               // console.log(pl,pt)
               // console.log(cl,ct)
-              let w = Math.abs(cl - pl), h = Math.abs(ct - pt); // 计算 canvas 的宽高
+              let w = Math.abs(cl - pl),
+                h = Math.abs(ct - pt); // 计算 canvas 的宽高
               let canvas = document.createElement('canvas');
               canvas.setAttribute('class', 'chart-canvas')
               canvas.width = w;
               canvas.height = h;
               canvas.style.position = 'absolute';
               var ctx = canvas.getContext('2d');
-              if(cl < pl){
-                canvas.style.left = (cl+dw) + 'px';
-                canvas.style.top = (pt+dh) + 'px';
-                strokeLine(ctx,w,0,0,h)
-              }else if(cl == pl){
+              if (cl < pl) {
+                canvas.style.left = (cl + dw) + 'px';
+                canvas.style.top = (pt + dh) + 'px';
+                strokeLine(ctx, w, 0, 0, h)
+              } else if (cl == pl) {
                 canvas.width = dw;
                 canvas.height = h;
-                canvas.style.left = (cl+dw/3) + 'px';
-                canvas.style.top = (pt+dh) + 'px';
-                strokeLine(ctx,dw/2,0,dw/2,h)
-              }else{
-                canvas.style.left = (pl+dw) + 'px';
-                canvas.style.top = (ct-dh*3) + 'px';
-                strokeLine(ctx,0,0,w,h)
+                canvas.style.left = (cl + dw / 3) + 'px';
+                canvas.style.top = (pt + dh) + 'px';
+                strokeLine(ctx, dw / 2, 0, dw / 2, h)
+              } else {
+                canvas.style.left = (pl + dw) + 'px';
+                canvas.style.top = (ct - dh * 3) + 'px';
+                strokeLine(ctx, 0, 0, w, h)
               }
               canvasWrap.appendChild(canvas);
             }
@@ -840,14 +845,14 @@
         console.log(ele) */
         let time = new Date();
         let y = time.getFullYear(),
-            m = time.getMonth(),
-            d = time.getDate();
+          m = time.getMonth(),
+          d = time.getDate();
         let begintime, endtime;
         this.form.timeOptions.active = index;
         // console.log(index, item)
-        if(index == 2){
+        if (index == 2) {
           begintime = moment(time).format('YYYY-MM-DD 00:00:00');
-          endtime = moment(new Date(y,m,d+1)).format('YYYY-MM-DD 00:00:00');
+          endtime = moment(new Date(y, m, d + 1)).format('YYYY-MM-DD 00:00:00');
           this.param = {
             page_num: this.page_num,
             page_size: 999,
@@ -856,7 +861,7 @@
             gameid: this.gameid
           }
           this.getChartDatalist(this.param);
-        }else{
+        } else {
           this.page_size = item.value;
           this.param = {
             page_num: this.page_num,
@@ -935,7 +940,7 @@
         let param = {};
         let begintime = vm.form.dateFrom.value;
         let endtime = vm.form.dateTo.value;
-        if(begintime !== '' && endtime !== ''){
+        if (begintime !== '' && endtime !== '') {
           param = {
             page_num: vm.page_num,
             page_size: 999,
@@ -943,7 +948,7 @@
             endtime: endtime,
             gameid: vm.gameid
           }
-        }else{
+        } else {
           param = vm.param;
         }
         vm.getChartDatalist(param);
@@ -952,8 +957,8 @@
       getChartDatalist(param) {
         const vm = this;
         let canvasArr = document.getElementsByClassName('chart-canvas');
-        if(canvasArr.length !== 0){
-          for(let i=canvasArr.length-1; i>=0; i--){
+        if (canvasArr.length !== 0) {
+          for (let i = canvasArr.length - 1; i >= 0; i--) {
             canvasArr[i].parentNode.removeChild(canvasArr[i])
           }
         }
@@ -995,9 +1000,9 @@
 
       setMemoryData() {
         this.memoryNumArr = [];
-        for(let i=0; i<6; i++){
+        for (let i = 0; i < 6; i++) {
           let arr = [];
-          for(let j=0; j<10; j++){
+          for (let j = 0; j < 10; j++) {
             arr.push({
               num: 0,
               allcount: 0,
@@ -1018,20 +1023,20 @@
         list.filter((val, index) => {
           var prevArr = [];
           let refArr2 = [];
-          if(index>0){
-            prevArr = list[index-1].luck_no.toString().split(','); // 上一个中奖号码 数组形式
+          if (index > 0) {
+            prevArr = list[index - 1].luck_no.toString().split(','); // 上一个中奖号码 数组形式
           }
           let obj1 = new Object(); // 第一层级对象
           let luckArr = val.luck_no.split(','); // 中奖号码 数组形式
           obj1.issue_no = val.issue_no; // 期号
           obj1.luck_no = luckArr.join(''); // 中奖号码
           obj1.data = []; // 万-个位 以及 号码分布
-          for(let i=0; i<5; i++){
+          for (let i = 0; i < 5; i++) {
             let wei = {}; // 万-个
             wei.num = [];
             wei.class = 'ball-noraml';
-            for(let j=0; j<10; j++){
-              if(j == Number(luckArr[i])){
+            for (let j = 0; j < 10; j++) {
+              if (j == Number(luckArr[i])) {
                 let allcount = Number(vm.memoryNumArr[i][j].allcount) + 1
                 vm.memoryNumArr[i][j].allcount = allcount;
                 let continueVal = Number(vm.memoryNumArr[i][j].continueVal) + 1
@@ -1039,21 +1044,20 @@
                 vm.memoryNumArr[i][j].continueArr.push(vm.memoryNumArr[i][j].continueVal)
                 vm.memoryNumArr[i][j].lostArr.push(vm.memoryNumArr[i][j].num)
                 vm.memoryNumArr[i][j].num = j;
-                let ref = 'ref'+index+i+j;
+                let ref = 'ref' + index + i + j;
                 wei.num.push(
-                  {
-                    num: j,
-                    lottery: j,
-                    id: ref,
-                    class: 'ball-noraml lotNumI',
-                    lost: ''
-                  }
-                );
+                {
+                  num: j,
+                  lottery: j,
+                  id: ref,
+                  class: 'ball-noraml lotNumI',
+                  lost: ''
+                });
                 refArr2.push(ref)
-              }else{
-                if(j == prevArr[i]){
+              } else {
+                if (j == prevArr[i]) {
                   vm.memoryNumArr[i][j].num = 1;
-                }else{
+                } else {
                   let c_num = Number(vm.memoryNumArr[i][j].num) + 1;
                   vm.memoryNumArr[i][j].num = c_num;
                   vm.memoryNumArr[i][j].continueVal = 0;
@@ -1108,9 +1112,9 @@
             } else {
               vm.memoryNumArr[5][j].continueVal = 0;
               vm.memoryNumArr[5][j].continueArr.push(vm.memoryNumArr[5][j].continueVal);
-              if(prevArr.indexOf(j.toString()) > -1){
+              if (prevArr.indexOf(j.toString()) > -1) {
                 vm.memoryNumArr[5][j].num = 1;
-              }else{
+              } else {
                 let c_num = Number(vm.memoryNumArr[5][j].num) + 1;
                 vm.memoryNumArr[5][j].num = c_num;
                 // Number(vm.memoryNumArr[5][j].num) += 1
@@ -1120,14 +1124,14 @@
                 class: 'ball-noraml'
               });
             }
-            
+
           }
           refArr1.push(refArr2)
           obj1.data.push(statusNumObj);
           data.push(obj1);
         })
         vm.countArr = [];
-        for(let i=0; i<4; i++){
+        for (let i = 0; i < 4; i++) {
           let countObj = new Object();
           countObj.title = vm.countArrText[i];
           countObj.data = [];
@@ -1135,26 +1139,26 @@
             // if(vi>4) return false;
             let arr = [];
             v.filter(k => {
-              if(i === 0){
+              if (i === 0) {
                 arr.push(k.allcount);
-              }else if(i === 1){
-                if(k.allcount == 0){
+              } else if (i === 1) {
+                if (k.allcount == 0) {
                   arr.push(list.length);
-                }else{
-                  arr.push(Math.floor(list.length/k.allcount));
+                } else {
+                  arr.push(Math.floor(list.length / k.allcount));
                 }
-              }else if(i === 2){
-                if(k.lostArr.length === 0){
+              } else if (i === 2) {
+                if (k.lostArr.length === 0) {
                   arr.push(30);
-                }else{
-                  let maxVal = Math.max.apply(null,k.lostArr)
+                } else {
+                  let maxVal = Math.max.apply(null, k.lostArr)
                   arr.push(maxVal);
                 }
-              }else if(i === 3){
-                if(k.continueArr.length === 0){
+              } else if (i === 3) {
+                if (k.continueArr.length === 0) {
                   arr.push(0);
-                }else{
-                  let maxVal = Math.max.apply(null,k.continueArr)
+                } else {
+                  let maxVal = Math.max.apply(null, k.continueArr)
                   arr.push(maxVal);
                 }
               }
@@ -1170,13 +1174,13 @@
         this.setMemoryData();
         data.reverse().filter(val1 => {
           val1.data.filter((val2, val2Index) => {
-            if(val2Index>4)return false;
-            for(let i in val2.num){
+            if (val2Index > 4) return false;
+            for (let i in val2.num) {
               let n = val2.num[i];
-              if(vm.memoryNumArr[val2Index][i].num)continue;
-              if(n.num != n.lottery){
+              if (vm.memoryNumArr[val2Index][i].num) continue;
+              if (n.num != n.lottery) {
                 n.lost = 'lost-post'
-              }else{
+              } else {
                 vm.memoryNumArr[val2Index][i].num = 1
               }
             }
@@ -1184,13 +1188,13 @@
         })
         vm.tableList = data.reverse();
         // console.log(data);
-        this.$nextTick(()=>{
+        this.$nextTick(() => {
           this.randerCanvas(refArr1);
         })
       },
     },
     watch: {
-      "form.gameName.selected" (newVal, oldVal) {
+      "form.gameName.selected"(newVal, oldVal) {
         if (newVal != oldVal) {
           if (newVal) {
             this.getGameDetail(newVal);
@@ -1226,21 +1230,24 @@
     // width: 1200px;
     // margin: 0 auto;
   }
-  .showCanvas .data-charts-table-wrap canvas{
-    display:block
+
+  .showCanvas .data-charts-table-wrap canvas {
+    display: block
   }
 
   .dataCharts-wrap {
     // width: 100%;
-    width:1204px;
-    margin:0 auto;
+    width: 1204px;
+    margin: 0 auto;
     padding: 20px 0;
     color: #333;
     font-size: 12px;
-    canvas{
-      z-index:98;
-      display:none;
+
+    canvas {
+      z-index: 98;
+      display: none;
     }
+
     .charts-oprate-title {
       width: 100%;
       display: -webkit-box;
@@ -1248,6 +1255,7 @@
       height: 52px;
       line-height: 52px;
       margin: 10px 0;
+
       // padding-left: 22px;
       .title-check-box {
         margin-right: 20px;
@@ -1258,9 +1266,11 @@
         height: 35px;
         line-height: 35px;
       }
+
       .time-options {
         line-height: 28px;
         margin: 0 32px 0 12px;
+
         >li {
           padding: 0 10px;
           cursor: pointer;
@@ -1271,19 +1281,24 @@
           float: left;
           line-height: 28px;
         }
+
         >li.active {
           color: #847B5F;
           background-color: #FFF;
         }
       }
+
       .time-picker {
+
         .el-date-editor.el-input,
         .el-date-editor.el-input__inner {
           width: 143px;
         }
+
         .el-input--prefix .el-input__inner {
           padding: 0 13px;
         }
+
         .el-input__inner {
           padding: 0;
           font-size: 12px;
@@ -1291,6 +1306,7 @@
           border-radius: 0;
         }
       }
+
       .search-link {
         width: 68px;
         height: 28px;
@@ -1304,68 +1320,87 @@
         text-align: center;
       }
     }
-    .table-lost-post .lost-post{
+
+    .table-lost-post .lost-post {
       background-color: #DADAE5;
       border: none;
     }
+
     .table-lost-post .lost-post .ball-noraml {
       color: #B7B7B7;
     }
+
     .data-charts-table-wrap {
       width: 100%;
       position: relative;
       margin-top: 20px;
       border: 1px solid #CCC;
+
       .ball-noraml {
         color: #666;
       }
-      .table-lost .ball-noraml{
-        color:#fff;
+
+      .table-lost .ball-noraml {
+        color: #fff;
       }
+
       table {
         width: 100%;
         color: #fff;
         border-collapse: collapse;
         border-spacing: 0;
-        background:#fff;
-        thead{
+        background: #fff;
+
+        thead {
           padding: 5px 0;
         }
-        .tbody{
-          color:#fff;
+
+        .tbody {
+          color: #fff;
         }
-        thead, .tbody {
+
+        thead,
+        .tbody {
           background: #515368;
         }
+
         tbody {
           color: #333;
         }
-        tbody.table-guides{
-          tr{
-              &:nth-child(5n){
-                border-bottom:1px solid #ccc;
-              }
-              &:last-child{
-                border-bottom:none;
-              }
+
+        tbody.table-guides {
+          tr {
+            &:nth-child(5n) {
+              border-bottom: 1px solid #ccc;
             }
+
+            &:last-child {
+              border-bottom: none;
+            }
+          }
         }
+
         .lot-nums {
           color: #F26432;
           white-space: nowrap;
         }
+
         .table-title-issue {
           width: 86px;
         }
+
         .table-title-lottery {
           width: 69px;
         }
+
         .border-bottom {
           border-bottom: 1px solid #757575;
         }
+
         th,
         td {
-          padding:10px 0;
+          padding: 10px 0;
+
           i {
             font-style: normal;
             display: inline-block;
@@ -1377,35 +1412,42 @@
             line-height: 16px;
             font-weight: normal;
           }
+
           .lotNumI {
             border-radius: 50%;
             background: #FD4E5A;
             color: #fff;
             position: relative;
-            z-index:99;
+            z-index: 99;
           }
+
           .lot-less {
             border-radius: 50%;
             background: #34BC0F;
             color: #fff;
           }
+
           .lot-more {
             border-radius: 50%;
             background: #BD3ED4;
             color: #fff;
           }
         }
+
         .ball-none {
           width: 4px;
         }
+
         .border-right {
           border-right: 1px solid rgba(155, 155, 155, 0.28);
         }
+
         .td-bg {
           background: #3A3B50;
         }
       }
     }
+
     .charts-oprate-header {
       height: 46px;
       width: 100%;
@@ -1416,9 +1458,11 @@
       color: #191919;
       text-align: left;
       padding-left: 22px;
+
       .header-select {
         width: 132px;
         float: left;
+
         .el-input__inner {
           -webkit-appearance: none;
           background: #DBDBDB;
@@ -1434,21 +1478,25 @@
           border: none;
           border-radius: 0;
           color: #191919;
+
           .el-select .el-input .el-select__caret {
             color: #191919 !important;
           }
         }
       }
+
       .header-types {
         display: flex;
         justify-content: flex-start;
         padding-left: 65px;
+
         >li {
           width: 104px;
           height: 46px;
           line-height: 46px;
           list-style: none;
           text-align: center;
+
           >a {
             display: inline-block;
             cursor: pointer;
@@ -1459,6 +1507,7 @@
             width: 100%;
           }
         }
+
         >li.active {
           // background: rgba(166, 91, 6, 1);
           border-top: 2px solid #BD8454;

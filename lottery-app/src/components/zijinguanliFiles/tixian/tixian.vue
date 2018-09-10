@@ -77,15 +77,41 @@ export default {
     this.$store.dispatch('setFooterStatus', false);
     this.$store.dispatch('setBackStatus', true);
     this.$store.dispatch('setTitle', '提现');
-    this.userBlance = Number(localStorage.getItem('blance')).toFixed(2);
+    // console.log(Number(localStorage.getItem('blance')).toFixed(2))
+    // this.userBlance = Number(localStorage.getItem('blance')).toFixed(2);
     this.username = localStorage.getItem('loginname');
+    this.getUserProfile();
     this.getWithdrawRule();
     this.getUseWithDrawCard();
   },
   mounted() {},
   watch: {},
-  computed: {},
+  computed: {
+    getUserBlance() {
+      return this.$store.state.blance;
+    }
+  },
   methods: {
+    //获取个人资料
+    getUserProfile() {
+      const vm = this;
+      request.http(
+        'get',
+        '/user/profile',
+        {},
+        (success) => {
+          if(success.returncode && success.returncode == 200){
+            let blance = success.data.cash;
+            vm.userBlance = Number(blance).toFixed(2);
+            localStorage.setItem('blance', blance);
+            vm.$store.dispatch('setBlance', blance)
+          }
+        },
+        (error) => {
+          console.log('数据异常', error)
+        }
+      )
+    },
     getBankSelectedOption(item) {
       // console.log(item)
       this.banknum = item.card_no;

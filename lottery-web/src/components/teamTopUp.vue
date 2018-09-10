@@ -3,9 +3,6 @@
   <div class="top-up-wrap" v-loading="loading">
     <div class="record-options search-form">
       <div class="option-row mb-20">
-        <!-- 用户名：&nbsp;&nbsp;
-        <el-input placeholder="请输入内容" v-model="form.username.value" clearable>
-        </el-input> -->
         <span class="exp w-60">用户属性：</span>
         <el-select v-model="form.userTypes.value" placeholder="请选择" clearable style="width:114px">
           <el-option v-for="item in form.userTypes.options" :key="item.value" :label="item.text" :value="item.value">
@@ -16,7 +13,7 @@
         <span class="exp w-60">时间：</span>
         <el-date-picker v-model="form.dateFrom.value" type="datetime" prefix-icon="void-icon" placeholder="选择日期时间" value-format="yyyy-MM-dd HH:mm:ss">
         </el-date-picker>
-        <span class="exp">至</span>
+        <span style="margin:0 5px;font-weight:bold;color:#777;font-size:14px;">至</span>
         <el-date-picker v-model="form.dateTo.value" type="datetime" prefix-icon="void-icon" placeholder="选择日期时间" value-format="yyyy-MM-dd HH:mm:ss">
         </el-date-picker>
         <a class="time ml-20" @click="setTimeToday">今日</a>
@@ -25,10 +22,6 @@
         <a class="time ml-20" @click="setTimeRecent3Days">近一月</a>
         <a class="submit ml-20" @click="handleSearch()">查询</a>
       </div>
-      <!-- <div class="option-row">
-        {{getCurrentUserName}}&nbsp;
-        <a class="submit">当前用户</a>
-      </div> -->
     </div>
     <hr class="user-split-line">
     <table class="record-group">
@@ -39,7 +32,7 @@
           <th>团队人数</th>
           <th>充值总额</th>
           <th>提现总额</th>
-          <th>可用余额</th>
+          <th style="border-right: 1px solid #dddddd;">可用余额</th>
         </tr>
         <tr class="group-item" v-for="(item,index) in list" v-cloak v-if="!noResult" :key="index">
           <td>{{item.loginname?item.loginname:"--"}}</td>
@@ -47,11 +40,11 @@
           <td>{{item.username[0].inferior_num ? item.username[0].inferior_num +1 :1}}</td>
           <td>{{item.recharge?formatMoney(item.recharge):0}}</td>
           <td>{{item.withdrawal?formatMoney(item.withdrawal):0}}</td>
-          <td>{{item.username[0].cash?formatMoney(item.username[0].cash):0}}</td>
+          <td style="border-right: 1px solid #dddddd;">{{item.username[0].cash?formatMoney(item.username[0].cash):0}}</td>
         </tr>
         <tr v-if="noResult" class="no-result group-item">
-          <td colspan="10">
-            <p>没有符合条件的记录，请更改查询条件</p>
+          <td colspan="10" style="border-right: 1px solid #dddddd;">
+            <p style="color:#777;font-weight:bold;margin:35px 0;font-size:14px;">没有符合条件的记录，请更改查询条件</p>
           </td>
         </tr>
       </tbody>
@@ -60,7 +53,7 @@
           <td colspan="3">所在区间统计：</td>
           <td>{{getCurrentPageCZ}}</td>
           <td>{{getCurrentPageTX}}</td>
-          <td>{{getCurrentPageCash}}</td>
+          <td style="border-right: 1px solid #dddddd;">{{getCurrentPageCash}}</td>
         </tr>
       </tfoot>
     </table>
@@ -398,7 +391,7 @@
   }
 
   .w-60 {
-    width: 60px;
+    width: 70px;
   }
 
   .ml-20 {
@@ -422,12 +415,6 @@
     height: 30px;
     line-height: 30px;
     color: #333;
-  }
-
-  .top-up-wrap .record-options .option-row .exp {
-    display: inline-block;
-    font-size: 12px;
-    color: #191919;
   }
 
   .inline {
@@ -494,6 +481,9 @@
     font-size: 12px;
     font-family: MicrosoftYaHei;
     color: #333333;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
   }
 
   .record-options .option-row>input[type="text"] {
@@ -584,31 +574,6 @@
     margin: 0 auto;
   }
 
-  .record-options .option-row>a.time {
-    display: inline-block;
-    /* padding: 0 2px; */
-    font-size: 12px;
-    width: 64px;
-    height: 30px;
-    line-height: 28px;
-    border-radius: 2px;
-    border: 1px solid #ccc;
-    text-align: center;
-  }
-
-  .record-options .option-row>a.time:hover {
-    background: #C83A4C;
-    color: #fff;
-  }
-
-  .record-group .group-item:nth-child(2n) {
-    /* background: #fff; */
-  }
-
-  .record-group .group-item:nth-child(2n+1) {
-    /* background: #F7F7F7; */
-  }
-
   .record-group .record-bottom {
     width: 100%;
     background: #f6f6f6;
@@ -651,27 +616,6 @@
   .record-pagination>span {
     font-size: 12px;
     display: inline-block;
-    margin-left: 20px;
-  }
-
-  .record-options .option-row>a.submit {
-    position: relative;
-    display: inline-block;
-    width: 80px;
-    height: 30px;
-    line-height: 28px;
-    text-align: center;
-    /* vertical-align: middle; */
-    font-size: 12px;
-    color: #FFF;
-    cursor: pointer;
-    border-radius: 2px;
-    outline: none;
-    /* padding-bottom: 2px; */
-    font-family: microsoft yahei;
-    background-color: #C83A4C;
-    border: none;
-    box-shadow: none;
     margin-left: 20px;
   }
 </style>

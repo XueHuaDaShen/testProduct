@@ -66,7 +66,8 @@
       </div>
     </div>
     <div class="data-table" v-loading="loading">
-      <el-table :data="rechargeListData" header-row-class-name="table-header" stripe border style="width: 100%;font-size:12px;">
+      <el-table :data="rechargeListData" header-row-class-name="table-header" stripe border style="width: 100%;font-size:12px;"
+        max-height="450" :show-summary="true" sum-text="总计" :summary-method="getSummaries">
         <el-table-column align="center" prop="order_no" label="流水号" width="145">
         </el-table-column>
         <el-table-column align="center" label="用户名" width="126">
@@ -90,7 +91,7 @@
         </el-table-column>
         <el-table-column align="center" prop="status" :formatter="isStatusFn" label="状态">
         </el-table-column>
-        <el-table-column align="center" prop="message" width="80" label="备注">
+        <el-table-column align="center" prop="message" width="80" label="备注" :formatter="formatMessage">
         </el-table-column>
         <el-table-column align="center" prop="status" fixed="right" label="操作" width="150">
           <template slot-scope="scope">
@@ -474,9 +475,48 @@
       this.getRechargeLotList();
     },
     methods: {
+      getSummaries(param) {
+        const {
+          columns,
+          data
+        } = param;
+        const sums = [];
+        columns.forEach((column, index) => {
+          if (index === 0) {
+            sums[index] = "总计";
+            return;
+          }
+          const values = data.map(item => Number(item[column.property]));
+          if (index === 4 && !values.every(value => isNaN(value))) {
+            sums[index] = values.reduce((prev, curr) => {
+              const value = Number(curr);
+              if (!isNaN(value)) {
+                return prev + curr;
+              } else {
+                return prev;
+              }
+            }, 0);
+            sums[index] = parseFloat(sums[index]).toFixed(2);
+            sums[index] += " 元";
+          } else {
+            if (index === 4) {
+              sums[index] = "0.00元";
+            } else
+              sums[index] = "--";
+          }
+        });
+
+        return sums;
+      },
       formatMoney(row, column, cellValue) {
         if (cellValue) {
           return Number(cellValue).toFixed(2);
+        }
+        return "0.00"
+      },
+      formatMessage(row, column, cellValue) {
+        if (cellValue) {
+          return cellValue;
         }
         return "--"
       },
@@ -735,6 +775,7 @@
         request.http(
           "get",
           "/trade/recharge/apply/list", {
+            bwin: 1, // 1,bwin; 2,第三方;
             PageNum: vm.pageNum,
             PageSize: vm.pageSize,
             loginname: trim(vm.username),

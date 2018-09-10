@@ -100,7 +100,7 @@
                   </td>
                   <td>
                     <label>AG钱包：</label>
-                    <span>{{formatcash(data.cash_ag)}}</span>
+                    <span>{{formatcash(cash_ag)}}</span>
                   </td>
                 </tr>
               </tbody>
@@ -165,6 +165,7 @@
         isClick: false,
         cash: 0,
         cash_ky: 0,
+        cash_ag: 0,
         data: null,
         ziliao: false,
         xinxi: false,
@@ -294,6 +295,7 @@
             // console.log(success)
             if (code == 200) {
               self.cash_ky = success.data.cash_ky;
+              self.cash_ag = success.data.cash_ag;
               self.cash = success.data.cash;
             } else if(code == 101 || code == 103 || code == 106) {
               request.loginAgain(self)
@@ -457,6 +459,7 @@
             if (code === 200) {
               vm.data = success.data;
               vm.cash_ky = vm.data.cash_ky;
+              vm.cash_ag = vm.data.cash_ag;
               vm.cash = vm.data.cash;
               vm.hasSetCashPsd = vm.data.cash_password ? true : false;
               vm.hasSetPsd = vm.data.password ? true : false;

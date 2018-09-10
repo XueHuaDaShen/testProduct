@@ -7,14 +7,14 @@
             <tr>
               <td align="right" class="exp">卡号：</td>
               <td align="left">
-                <el-input placeholder="请输入内容" v-model="validateForm.bankText" clearable :disabled="true" class="content">
+                <el-input placeholder="请输入内容" v-model.trim="validateForm.bankText" clearable :disabled="true" class="content">
                 </el-input>
               </td>
             </tr>
             <tr>
               <td align="right" class="exp">银行账号：</td>
               <td align="left">
-                <el-input placeholder="请输入内容" v-model="validateForm.inputBankNo" clearable class="content">
+                <el-input placeholder="请输入内容" v-model.trim="validateForm.inputBankNo" clearable class="content">
                 </el-input>
               </td>
             </tr>

@@ -54,7 +54,8 @@
       </div>
     </div>
     <div class="data-table" v-loading="loading">
-      <el-table :data="withdrawListData" header-row-class-name="table-header" stripe border style="width: 100%;font-size:12px;">
+      <el-table :data="withdrawListData" header-row-class-name="table-header" stripe border style="width: 100%;font-size:12px;"
+        max-height="450" :show-summary="true" sum-text="总计" :summary-method="getSummaries">
         <el-table-column align="center" prop="order_no" label="流水号">
         </el-table-column>
         <el-table-column align="center" label="用户名" width="126">
@@ -345,8 +346,6 @@
                 start.setTime(new Date(new Date(new Date().toLocaleDateString()).getTime()) - 3600 * 1000 * 24 * 1);
                 end.setTime(new Date(new Date(new Date().toLocaleDateString()).getTime() + 24 * 60 * 60 * 1000 - 1) -
                   3600 * 1000 * 24 * 1);
-                // console.log("start", start.toLocaleString());
-                // console.log("end", end.toLocaleString());
                 picker.$emit("pick", [start, end]);
               }
             }, {
@@ -355,8 +354,6 @@
                 const end = new Date();
                 const start = new Date(new Date(new Date().toLocaleDateString()).getTime());
                 end.setTime(new Date(new Date(new Date().toLocaleDateString()).getTime() + 24 * 60 * 60 * 1000 - 1));
-                // console.log("start", start.toLocaleString());
-                // console.log("end", end.toLocaleString());
                 picker.$emit("pick", [start, end]);
               }
             },
@@ -371,8 +368,6 @@
                 let getWeekStartDate = new Date(nowYear, nowMonth, nowDay - nowDayOfWeek);
                 let getWeekEndDate = new Date(new Date(new Date(nowYear, nowMonth, nowDay + (6 - nowDayOfWeek)).toLocaleDateString())
                   .getTime() + 24 * 60 * 60 * 1000 - 1);
-                // console.log("start", getWeekStartDate.toLocaleString());
-                // console.log("end", getWeekEndDate.toLocaleString());
                 picker.$emit("pick", [getWeekStartDate, getWeekEndDate]);
               }
             }, {
@@ -388,8 +383,6 @@
                   3600 * 1000 * 24 * 7);
                 let getWeekEndDate = new Date(new Date(new Date(nowYear, nowMonth, nowDay + (6 - nowDayOfWeek)).toLocaleDateString())
                   .getTime() + 24 * 60 * 60 * 1000 - 1 - 3600 * 1000 * 24 * 7);
-                // console.log("start", getWeekStartDate.toLocaleString());
-                // console.log("end", getWeekEndDate.toLocaleString());
                 picker
                   .$emit("pick", [getWeekStartDate, getWeekEndDate]);
               }
@@ -408,8 +401,6 @@
                 //获得本月的结束日期
                 let getMonthEndDate = new Date(new Date(new Date(nowYear, nowMonth, days).toLocaleDateString()).getTime() +
                   24 * 60 * 60 * 1000 - 1);
-                // console.log("start", getMonthStartDate.toLocaleString());
-                // console.log("end", getMonthEndDate.toLocaleString());
                 picker.$emit("pick", [getMonthStartDate, getMonthEndDate]);
               }
             },
@@ -421,8 +412,6 @@
                 var day = new Date(date.getFullYear(), date.getMonth(), 0).getDate();
                 var enddate = new Date(new Date(new Date(new Date().getFullYear(), new Date().getMonth() - 1, day).toLocaleDateString())
                   .getTime() + 24 * 60 * 60 * 1000 - 1);
-                // console.log("start", firstdate.toLocaleString());
-                // console.log("end", enddate.toLocaleString());
                 picker.$emit("pick", [firstdate, enddate]);
               }
             },
@@ -431,8 +420,6 @@
               onClick(picker) {
                 const end = new Date(new Date(new Date().toLocaleDateString()).getTime() + 24 * 60 * 60 * 1000 - 1);
                 const start = new Date(new Date(new Date().toLocaleDateString()).getTime() - 3600 * 1000 * 24 * 7);
-                // console.log("start", start.toLocaleString());
-                // console.log("end", end.toLocaleString());
                 picker.$emit("pick", [start, end]);
               }
             },
@@ -441,8 +428,6 @@
               onClick(picker) {
                 const end = new Date(new Date(new Date().toLocaleDateString()).getTime() + 24 * 60 * 60 * 1000 - 1);
                 const start = new Date(new Date(new Date().toLocaleDateString()).getTime() - 3600 * 1000 * 24 * 30);
-                // console.log("start", start.toLocaleString());
-                // console.log("end", end.toLocaleString());
                 picker.$emit("pick", [start, end]);
               }
             },
@@ -451,8 +436,6 @@
               onClick(picker) {
                 const end = new Date(new Date(new Date().toLocaleDateString()).getTime() + 24 * 60 * 60 * 1000 - 1);
                 const start = new Date(new Date(new Date().toLocaleDateString()).getTime() - 3600 * 1000 * 24 * 90);
-                // console.log("start", start.toLocaleString());
-                // console.log("end", end.toLocaleString());
                 picker.$emit("pick", [start, end]);
               }
             }
@@ -582,17 +565,49 @@
       this.getWithdrawLotList();
     },
     methods: {
+      getSummaries(param) {
+        const {
+          columns,
+          data
+        } = param;
+        const sums = [];
+        columns.forEach((column, index) => {
+          if (index === 0) {
+            sums[index] = "总计";
+            return;
+          }
+          const values = data.map(item => Number(item[column.property]));
+          if (index === 2 && !values.every(value => isNaN(value))) {
+            sums[index] = values.reduce((prev, curr) => {
+              const value = Number(curr);
+              if (!isNaN(value)) {
+                return prev + curr;
+              } else {
+                return prev;
+              }
+            }, 0);
+            sums[index] = parseFloat(sums[index]).toFixed(2);
+            sums[index] += " 元";
+          } else {
+            if (index === 2) {
+              sums[index] = "0.00元";
+            } else
+              sums[index] = "--";
+          }
+        });
+
+        return sums;
+      },
       formatMoney(row, column, cellValue) {
         if (cellValue) {
           return Number(cellValue).toFixed(2);
         }
-        return "--"
+        return "0.00"
       },
       handleSkip(name) {
         let menus = localStorage.getItem('menus');
         let menusjson = JSON.parse(menus);
         const vm = this;
-        console.log('menusjson', menusjson);
         let index1, index2;
         let selected = false;
         for (let i = 0; i < menusjson.length; i++) {
@@ -626,7 +641,6 @@
             index2: index2
           }
         })
-        console.log('href', href);
         window.open(href, '_blank')
       },
       handleChangeRouter(name) {
@@ -676,8 +690,8 @@
             return '银行退单';
           case 7:
             return '审核失败';
-            // case 8:
-            //   return '到账';
+          default:
+            return '--';
         }
       },
       getStatus(status) {
