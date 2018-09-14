@@ -13,7 +13,7 @@
         <div class="search-content">
           <div class="search-inner-wrap">
             <label>用户名：</label>
-            <el-input clearable v-model="username" placeholder="姓名"></el-input>
+            <el-input clearable v-model.trim="username" placeholder="姓名"></el-input>
           </div>
           <div class="search-inner-wrap">
             <label>查找时间：</label>
@@ -30,7 +30,7 @@
           </div>
           <div class="search-inner-wrap">
             <label>订单号：</label>
-            <el-input clearable v-model="order_no" placeholder="订单号"></el-input>
+            <el-input clearable v-model.trim="order_no" placeholder="订单号"></el-input>
           </div>
           <div class="search-inner-wrap">
             <label>测试用户：</label>
@@ -119,35 +119,35 @@
         <el-form-item label="一审：" :label-width="formLabelWidth" v-if="detailForm.message1" label-position="top">
           <div>审核人： {{detailForm.auditor1}}</div>
           <div>备注:
-            <el-input type="textarea" autosize v-model="detailForm.message1" :disabled="true">
+            <el-input type="textarea" autosize v-model.trim="detailForm.message1" :disabled="true">
             </el-input>
           </div>
         </el-form-item>
         <el-form-item label="二审：" :label-width="formLabelWidth" v-if="detailForm.message2" label-position="top">
           <div>审核人： {{detailForm.auditor2}}</div>
           <div>备注:
-            <el-input type="textarea" autosize v-model="detailForm.message2" :disabled="true">
+            <el-input type="textarea" autosize v-model.trim="detailForm.message2" :disabled="true">
             </el-input>
           </div>
         </el-form-item>
         <el-form-item label="终审：" :label-width="formLabelWidth" v-if="detailForm.message3" label-position="top">
           <div>审核人： {{detailForm.auditor3}}</div>
           <div>备注:
-            <el-input type="textarea" autosize v-model="detailForm.message3" :disabled="true">
+            <el-input type="textarea" autosize v-model.trim="detailForm.message3" :disabled="true">
             </el-input>
           </div>
         </el-form-item>
         <el-form-item label="出账：" :label-width="formLabelWidth" v-if="detailForm.message4" label-position="top">
           <div>审核人： {{detailForm.auditor4}}</div>
           <div>备注:
-            <el-input type="textarea" autosize v-model="detailForm.message4" :disabled="true">
+            <el-input type="textarea" autosize v-model.trim="detailForm.message4" :disabled="true">
             </el-input>
           </div>
         </el-form-item>
         <el-form-item label="银行：" :label-width="formLabelWidth" v-if="detailForm.message5" label-position="top">
           <div>审核人： {{detailForm.auditor5}}</div>
           <div>备注:
-            <el-input type="textarea" autosize v-model="detailForm.message5" :disabled="true">
+            <el-input type="textarea" autosize v-model.trim="detailForm.message5" :disabled="true">
             </el-input>
           </div>
         </el-form-item>

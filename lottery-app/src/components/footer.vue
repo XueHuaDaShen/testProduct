@@ -105,25 +105,25 @@ export default {
     .shouye-icon{
       width:.46rem;
       height:.46rem;
-      background:url('/static/img/home.png') no-repeat;
+      background:url('../assets/h5-img/home.png') no-repeat;
       background-size:100% 100%;
     }
     .youxi-icon{
       width:.55rem;
       height:.42rem;
-      background:url('/static/img/youxi.png') no-repeat;
+      background:url('../assets/h5-img/youxi.png') no-repeat;
       background-size:100% 100%;
     }
     .zijin-icon{
       width:.44rem;
       height:.46rem;
-      background:url('/static/img/zijin.png') no-repeat;
+      background:url('../assets/h5-img/zijin.png') no-repeat;
       background-size:100% 100%;
     }
     .geren-icon{
       width:.44rem;
       height:.46rem;
-      background:url('/static/img/geren.png') no-repeat;
+      background:url('../assets/h5-img/geren.png') no-repeat;
       background-size:100% 100%;
     }
     em{
@@ -141,19 +141,19 @@ export default {
       background:#CC3447;
     }
     .shouye-icon{
-      background:url('/@/assets/img/user.png') no-repeat;
+      background:url('../assets/h5-img/homed.png') no-repeat;
       background-size:100% 100%;
     }
     .youxi-icon{
-      background:url('/static/img/youxied.png') no-repeat;
+      background:url('../assets/h5-img/youxied.png') no-repeat;
       background-size:100% 100%;
     }
     .zijin-icon{
-      background:url('/static/img/zijined.png') no-repeat;
+      background:url('../assets/h5-img/zijined.png') no-repeat;
       background-size:100% 100%;
     }
     .geren-icon{
-      background:url('/static/img/gerened.png') no-repeat;
+      background:url('../assets/h5-img/gerened.png') no-repeat;
       background-size:100% 100%;
     }
   }

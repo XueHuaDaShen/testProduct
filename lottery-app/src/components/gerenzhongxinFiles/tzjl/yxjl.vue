@@ -27,7 +27,21 @@
           :defaultSelected="platform"
           label="platform"
           value="_id"
-          :callback="selectStatus">
+          :callback="selectPlatform">
+        </publicSelect>
+      </li>
+      <li>
+        <span>游戏类型：</span>
+        <publicSelect
+          class="select-wrap"
+          v-if="showSelect"
+          placeholder="请选择游戏类型"
+          optionHeight='1'
+          :selectList="gameTypeList"
+          :defaultSelected="gameType"
+          label="text"
+          value="value"
+          :callback="selectGameType">
         </publicSelect>
       </li>
     </ul>
@@ -49,7 +63,8 @@
           <tr v-for="(item, index) in tableData" :key="index">
             <td>{{item.platform}}</td>
             <td>{{item.game}}</td>
-            <td>{{item.vote}}</td>
+            <td>{{Number(item.vote).toFixed(2)}}</td>
+            <td>{{Number(item.vote_valid).toFixed(2)}}</td>
             <td>{{item.profit}}</td>
             <td>{{moment(item.create_at).format('YYYY-MM-DD HH:mm:ss')}}</td>
           </tr>
@@ -78,7 +93,15 @@ export default {
       end_time: '',
       platform: '',
       platformList: [],
-      tableHead: ['游戏平台', '游戏名', '投注额', '盈利额', '游戏时间'],
+      gameType: '',
+      gameTypeList: [
+        {value: 'PVP', text: '棋牌'},
+        {value: 'FISH', text: '捕鱼'},
+        {value: 'LIVE', text: '真人'},
+        {value: 'RNG', text: '电子'},
+        {value: 'SPORTS', text: '体育'}
+      ],
+      tableHead: ['平台', '游戏类型', '投注额', '有效投注', '盈利额', '游戏时间'],
       tableData: [],
       emptyText: '暂无数据',
       showSelect: false,
@@ -121,12 +144,20 @@ export default {
         (error) => {}
       )
     },
-    // 选择申请状态
-    selectStatus(item) {
+    // 选择平台
+    selectPlatform(item) {
       if(item._id === ''){
         this.platform = '';
       }else{
         this.platform = item.platform
+      }
+    },
+    // 选择游戏类型
+    selectGameType(item) {
+      if(item.value === ''){
+        this.gameType = '';
+      }else{
+        this.gameType = item.value
       }
     },
     // 设置状态/类型的文字
@@ -185,6 +216,7 @@ export default {
           begintime: vm.start_time,
           endtime: vm.end_time,
           platform: vm.platform,
+          gametype: vm.gameType,
           self: 1
         },
         (success) => {

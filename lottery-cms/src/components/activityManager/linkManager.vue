@@ -65,10 +65,10 @@
       <div class="body-middle">
         <el-form :model="form" :rules="rules" ref="form">
           <el-form-item label="链接名称：" prop="name">
-            <el-input type="text" v-model="form.name"></el-input>
+            <el-input type="text" v-model.trim="form.name"></el-input>
           </el-form-item>
           <el-form-item label="链接地址：" prop="url">
-            <el-input type="text" v-model="form.url"></el-input>
+            <el-input type="text" v-model.trim="form.url"></el-input>
           </el-form-item>
         </el-form>
       </div>

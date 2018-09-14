@@ -1688,27 +1688,27 @@ export default {
           }
         }
         .dice1{
-          background: url('/static/img/dice1.png') no-repeat;
+          background: url('../../../assets/h5-img/dice1.png') no-repeat;
           background-size:100% 100%;
         }
         .dice2{
-          background: url('/static/img/dice2.png') no-repeat;
+          background: url('../../../assets/h5-img/dice2.png') no-repeat;
           background-size:100% 100%;
         }
         .dice3{
-          background: url('/static/img/dice3.png') no-repeat;
+          background: url('../../../assets/h5-img/dice3.png') no-repeat;
           background-size:100% 100%;
         }
         .dice4{
-          background: url('/static/img/dice4.png') no-repeat;
+          background: url('../../../assets/h5-img/dice4.png') no-repeat;
           background-size:100% 100%;
         }
         .dice5{
-          background: url('/static/img/dice5.png') no-repeat;
+          background: url('../../../assets/h5-img/dice5.png') no-repeat;
           background-size:100% 100%;
         }
         .dice6{
-          background: url('/static/img/dice6.png') no-repeat;
+          background: url('../../../assets/h5-img/dice6.png') no-repeat;
           background-size:100% 100%;
         }
       }
@@ -1725,7 +1725,7 @@ export default {
           -webkit-box-pack:center;
           border-radius:50%;
           position: relative;
-          background:url('/static/img/number.png') no-repeat;
+          background:url('../../../assets/h5-img/number.png') no-repeat;
           background-size:100% 100%;
           // background: #C5C5C5;
           // // background-image: radial-gradient(50% -58%, #808080 84%, #000000 100%);

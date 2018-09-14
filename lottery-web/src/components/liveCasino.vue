@@ -1,8 +1,8 @@
 <template>
   <div class="live-wrap" v-loading.fullscreen.lock="loading" element-loading-text="拼命加载中" element-loading-spinner="el-icon-loading" element-loading-background="rgba(0, 0, 0, 0.8)">
-    <!-- <iframe id='liveGame' scrolling="no" frameborder="0"></iframe> -->
+    <iframe id='liveGame' scrolling="no" frameborder="0"></iframe>
     <!-- <div id="liveGame"></div> -->
-    <agGame v-if="formData" :formData="formData"></agGame>
+    <!-- <agGame v-if="formData" :formData="formData"></agGame> -->
   </div>
 </template>
 <script>
@@ -32,41 +32,53 @@
       let vm = this;
       vm.loading = true;
       request.http('post', '/ag/user/login', {
-          gameType: '34'
+          gameType: 'A00070'
         },
         success => {
           vm.loading = false;
           if (success.returncode == 200) {
             let data = success.data;
             if (data) {
-              vm.formData = data;
+              let liveGame = document.getElementById('liveGame');
+              liveGame.src = data.url;
+              vm.changeFrameHeight();
+              // vm.formData = data;
               // vm.changeFrameHeight();
             } else {
-              vm.$alert('登录失败，请刷新当前页面重试', '系统提示', {
+              vm.$alert('<div class="lottery-title">登录失败，请刷新当前页面重试</div>', '系统提醒', {
                 confirmButtonText: '确定',
+                center: true,
+                dangerouslyUseHTMLString: true,
+                customClass: "syxw-wrap-inner",
                 callback: action => {}
               })
             }
           } else if (success.returncode == 101 || success.returncode == 103 || success.returncode == 106) {
             request.loginAgain(vm)
           } else {
-            vm.$alert('登录失败，请刷新当前页面重试', '系统提示', {
+            vm.$alert('<div class="lottery-title">登录失败，请刷新当前页面重试</div>', '系统提醒', {
               confirmButtonText: '确定',
+              center: true,
+              dangerouslyUseHTMLString: true,
+              customClass: "syxw-wrap-inner",
               callback: action => {}
             })
           }
         },
         error => {
           vm.loading = false;
-          vm.$alert('登录失败，请刷新当前页面重试', '系统提示', {
+          vm.$alert('<div class="lottery-title">登录失败，请刷新当前页面重试</div>', '系统提醒', {
             confirmButtonText: '确定',
+            center: true,
+            dangerouslyUseHTMLString: true,
+            customClass: "syxw-wrap-inner",
             callback: action => {}
           })
           console.log("error", error);
         });
-      // window.onresize = function() {
-      //   vm.changeFrameHeight();
-      // }
+      window.onresize = function() {
+        vm.changeFrameHeight();
+      }
     },
     mounted() {
       console.log(document);

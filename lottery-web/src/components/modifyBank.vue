@@ -1,5 +1,5 @@
 <template>
-  <div class="bank-wrap search-form" v-loading="loading">
+  <div class="bank-wrap search-form record-options" v-loading="loading">
     <div class="tab-line">
       <p>银行卡绑定</p>
     </div>
@@ -17,7 +17,7 @@
               <tr v-if="!addMore">
                 <td align="right" class="exp">银行卡号：</td>
                 <td align="left">
-                  <el-input v-model="validateForm.bankText" clearable disabled class="content">
+                  <el-input v-model.trim="validateForm.bankText" clearable disabled class="content">
                   </el-input>
                 </td>
               </tr>
@@ -33,33 +33,30 @@
               <tr>
                 <td align="right" class="exp">开户人姓名：</td>
                 <td align="left">
-                  <el-input placeholder="请输入内容" v-model="validateForm.realName" clearable class="content">
+                  <el-input placeholder="请输入内容" v-model.trim="validateForm.realName" clearable class="content">
                   </el-input>
                 </td>
               </tr>
               <tr>
                 <td align="right" class="exp">银行账号：</td>
                 <td align="left">
-                  <el-input placeholder="请输入内容" v-model="validateForm.inputBankNo" clearable class="content">
+                  <el-input placeholder="请输入内容" v-model.trim="validateForm.inputBankNo" clearable class="content">
                   </el-input>
                 </td>
               </tr>
               <tr>
                 <td align="right" class="exp">资金密码：</td>
                 <td align="left">
-                  <el-input placeholder="请输入内容" v-model="validateForm.bankPsd" clearable type="password" class="content">
+                  <el-input placeholder="请输入内容" v-model.trim="validateForm.bankPsd" clearable type="password" class="content">
                   </el-input>
-                </td>
-              </tr>
-              <tr>
-                <td align="right" class="exp"></td>
-                <td align="left">
-                  <a class="submit back" @click="previousBank">返回</a>
-                  <a class="submit next" type="submit" @click="validateOldBankInfo">下一步</a>
                 </td>
               </tr>
             </tbody>
           </table>
+          <div class="submit-line">
+            <!-- <a class="back" @click="previousBank">返回</a> -->
+            <a class="submit" type="submit" @click="validateOldBankInfo">下一步</a>
+          </div>
         </div>
         <div v-show="bindActive === 2" class="item">
           <table>
@@ -98,32 +95,29 @@
               <tr>
                 <td align="right" class="exp">开户人姓名：</td>
                 <td align="left">
-                  <el-input placeholder="请输入内容" v-model="accountName" clearable class="content">
+                  <el-input placeholder="请输入内容" v-model.trim="accountName" clearable class="content">
                   </el-input>
                 </td>
               </tr>
               <tr>
                 <td align="right" class="exp">银行账号：</td>
                 <td align="left">
-                  <el-input placeholder="请输入内容" v-model="bankCard" clearable class="content">
+                  <el-input placeholder="请输入内容" v-model.trim="bankCard" clearable class="content">
                   </el-input>
                 </td>
               </tr>
               <tr>
                 <td align="right" class="exp">确认银行账号：</td>
                 <td align="left">
-                  <el-input placeholder="请输入内容" v-model="bankCard2" clearable class="content">
+                  <el-input placeholder="请输入内容" v-model.trim="bankCard2" clearable class="content">
                   </el-input>
-                </td>
-              </tr>
-              <tr>
-                <td align="right" class="exp"></td>
-                <td align="left">
-                  <a class="submit" type="submit" @click="validateBankInfo">下一步</a>
                 </td>
               </tr>
             </tbody>
           </table>
+          <div class="submit-line">
+            <a class="submit" type="submit" @click="validateBankInfo">下一步</a>
+          </div>
         </div>
         <div v-show="bindActive === 3" class="item">
           <table>
@@ -131,55 +125,53 @@
               <tr>
                 <td align="right" class="exp">开户银行：</td>
                 <td align="left">
-                  <el-input placeholder="请输入内容" v-model="inputBank" :disabled="true" class="content">
+                  <el-input placeholder="请输入内容" v-model.trim="inputBank" :disabled="true" class="content">
                   </el-input>
                 </td>
               </tr>
               <tr>
                 <td align="right" class="exp">开户银行区域：</td>
                 <td align="left">
-                  <el-input placeholder="请输入内容" v-model="getKhyhArea" :disabled="true" class="content">
+                  <el-input placeholder="请输入内容" v-model.trim="getKhyhArea" :disabled="true" class="content">
                   </el-input>
                 </td>
               </tr>
               <tr>
                 <td align="right" class="exp">支行名称：</td>
                 <td align="left">
-                  <el-input placeholder="请选择支行名称" v-model="inputSubBranch" :disabled="true" class="content">
+                  <el-input placeholder="请选择支行名称" v-model.trim="inputSubBranch" :disabled="true" class="content">
                   </el-input>
                 </td>
               </tr>
               <tr>
                 <td align="right" class="exp">开户人姓名：</td>
                 <td align="left">
-                  <el-input placeholder="请输入内容" v-model="inputAccountName" :disabled="true" class="content">
+                  <el-input placeholder="请输入内容" v-model.trim="inputAccountName" :disabled="true" class="content">
                   </el-input>
                 </td>
               </tr>
               <tr>
                 <td align="right" class="exp">银行账号：</td>
                 <td align="left">
-                  <el-input placeholder="请输入内容" v-model="inputBankCard" :disabled="true" class="content">
+                  <el-input placeholder="请输入内容" v-model.trim="inputBankCard" :disabled="true" class="content">
                   </el-input>
-                </td>
-              </tr>
-              <tr>
-                <td align="right" class="exp"></td>
-                <td align="left">
-                  <a class="submit" type="submit" @click="onSubmit">信息确认无误</a>
                 </td>
               </tr>
             </tbody>
           </table>
+          <div class="submit-line">
+            <a class="back" @click="previousBank">返回上一步</a>
+            <a class="submit" type="submit" @click="onSubmit">确认无误</a>
+          </div>
         </div>
         <div v-show="bindActive === 4" class="step3">
-          <p>恭喜你，你的卡号
-            <span>{{bindSuccess.card_no}}</span> 银行卡绑定成功。</p>
-          <div class="bank-info mt-20" :class="'b'+getBankBg(bindSuccess.bank)">
-            <span class="info-no">{{bindSuccess.card_no}}</span>
+          <p>恭喜你，你的尾号
+            <span>{{bindSuccess.card_no | filterEnd}}</span> 银行卡绑定成功。</p>
+          <div class="bank-info" :class="'b'+getBankBg(bindSuccess.bank)">
+            <span class="info-no">{{bindSuccess.card_no | filterName}}</span>
           </div>
-          <p class="small-tip mt-60">现在您可以进行“银行卡管理”</p>
-          <a class="btn-binding" @click="previousBank()" style="margin-top:20px">银行卡管理</a>
+          <p class="small-tip mt-60" style="margin-bottom: 10px;">现在您可以进行“银行卡管理”</p>
+          <router-link :to="{name:'bank'}" class="btn-binding mt-20" style="margin-top: 10px;">银行卡管理</router-link>
         </div>
       </div>
     </div>
@@ -264,6 +256,25 @@
         addMore: false
       };
     },
+    filters: {
+      filterName(str) {
+        if (str) {
+          let strLength = str.split('').length;
+          let starStr = "***********";
+          let final = str.substr(0, 4) + starStr + str.substr(strLength - 4, strLength);
+          return final;
+        }
+        return;
+      },
+      filterEnd(str) {
+        if (str) {
+          let strLength = str.split('').length;
+          let final = str.substr(strLength - 4, strLength);
+          return final;
+        }
+        return;
+      }
+    },
     watch: {
       bindActive(newValue, oldValue) {
         if (newValue !== oldValue) {
@@ -316,7 +327,8 @@
     },
     methods: {
       previousBank() {
-        this.$router.push({ name: "bank" });
+        // this.$router.push({ name: "bank" });
+        this.bindActive = 2;
       },
       //验证旧银行卡开户信息
       validateOldBankInfo() {
@@ -395,23 +407,27 @@
                             } else if (success.returncode == 200) {
                               self.bindActive = 2;
                             } else if (success.returncode == 301) {
-                              self.$alert("验证失败，请重新填写", "系统提醒", {
-                                confirmButtonText: "确定",
+                              self.$alert('<div class="lottery-title">验证失败，请重新填写</div>', '系统提醒', {
+                                confirmButtonText: '关闭',
                                 center: true,
+                                dangerouslyUseHTMLString: true,
+                                customClass: "syxw-wrap-inner",
                                 callback: action => {
                                   self.validateForm.realName = "";
                                   self.validateForm.inputBankNo = "";
                                 }
-                              });
+                              })
                             } else if (success.returncode == 305) {
-                              self.$alert("验证失败，请重新填写", "系统提醒", {
-                                confirmButtonText: "确定",
+                              self.$alert('<div class="lottery-title">验证失败，请重新填写</div>', '系统提醒', {
+                                confirmButtonText: '关闭',
                                 center: true,
+                                dangerouslyUseHTMLString: true,
+                                customClass: "syxw-wrap-inner",
                                 callback: action => {
                                   self.validateForm.realName = "";
                                   self.validateForm.inputBankNo = "";
                                 }
-                              });
+                              })
                             } else {
                               self.$message({
                                 showClose: true,
@@ -790,25 +806,29 @@
                       self.bindActive = 4;
                       self.bindSuccess = success.data;
                     } else if (success.returncode == 301) {
-                      self.$alert("绑定失败，请重新填写", "系统提醒", {
-                        confirmButtonText: "确定",
+                      self.$alert('<div class="lottery-title">绑定失败，请重新填写</div>', '系统提醒', {
+                        confirmButtonText: '确定',
                         center: true,
+                        dangerouslyUseHTMLString: true,
+                        customClass: "syxw-wrap-inner",
                         callback: action => {
                           self.bindActive = 2;
                           self.validateForm.realName = "";
                           self.validateForm.inputBankNo = "";
                         }
-                      });
+                      })
                     } else if (success.returncode == 302) {
-                      self.$alert("此卡已绑定,不可重复绑定", "系统提醒", {
-                        confirmButtonText: "确定",
+                      self.$alert('<div class="lottery-title">此卡已绑定,不可重复绑定</div>', '系统提醒', {
+                        confirmButtonText: '确定',
                         center: true,
+                        dangerouslyUseHTMLString: true,
+                        customClass: "syxw-wrap-inner",
                         callback: action => {
                           self.bindActive = 2;
                           self.validateForm.realName = "";
                           self.validateForm.inputBankNo = "";
                         }
-                      });
+                      })
                     } else {
                       self.$message({
                         showClose: true,
@@ -821,13 +841,15 @@
                 error => {
                   self.loading = false;
                   console.log("数据异常", error);
-                  self.$alert("绑定失败，请重新绑定", "系统提醒", {
-                    confirmButtonText: "确定",
+                  self.$alert('<div class="lottery-title">绑定失败，请重新绑定</div>', '系统提醒', {
+                    confirmButtonText: '确定',
                     center: true,
+                    dangerouslyUseHTMLString: true,
+                    customClass: "syxw-wrap-inner",
                     callback: action => {
                       self.$router.push({ name: "bank" });
                     }
-                  });
+                  })
                 }
               );
             } else {
@@ -992,24 +1014,48 @@
   };
 </script>
 <style scoped lang="scss">
+  .submit-line {
+    width: 100%;
+    margin-top: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+  }
+
+  .back {
+    width: 140px;
+    display: inline-block;
+    margin-bottom: 20px;
+    text-align: center;
+    cursor: pointer;
+    text-decoration: none;
+    font-family: PingFangSC-Regular;
+    font-size: 12px;
+    font-weight: 700;
+    color: #777;
+    border-radius: 2px;
+  }
+
   .bank-info {
     width: 276px;
     height: 174px;
     display: inline-block;
     position: relative;
     text-align: center;
-    margin-right: 20px;
+    border-radius: 8px;
+    box-shadow: 0 10px 50px rgba(0, 0, 0, 0.3);
 
     .info-no {
       position: relative;
       display: block;
       margin: 0 auto;
       top: 90px;
+      color: #FFFFFF;
       font-family: PingFangSC-Regular;
       font-weight: 700;
-      font-size: 14px;
-      color: #FFFFFF;
-      width: 190px;
+      font-size: 20px;
+      text-align: center;
     }
   }
 
@@ -1185,20 +1231,21 @@
   }
 
   .btn-binding {
-    width: 115px;
-    height: 40px;
-    line-height: 40px;
-    display: inline-block;
+    margin: 30px auto 0;
+    width: 140px;
+    height: 48px;
+    line-height: 46px;
+    display: block;
     text-align: center;
     cursor: pointer;
     text-decoration: none;
-    background: #CC3447;
-    border-radius: 2px;
     font-family: PingFangSC-Regular;
-    font-size: 14px;
+    font-size: 16px;
     font-weight: 700;
-    color: #FFFFFF;
-    margin: 0 auto;
+    color: #ffffff;
+    background-image: linear-gradient(-180deg, #CFA072 0%, #B68E66 100%);
+    border: 1px solid #DDDDDD;
+    border-radius: 2px;
   }
 
   .mt-10 {
@@ -1240,12 +1287,13 @@
   }
 
   .binding-inner .exp {
-    font-size: 12px;
+    font-size: 14px;
     font-family: MicrosoftYaHei;
     color: #191919;
     height: 38px;
     line-height: 38px;
     min-width: 128px;
+    font-weight: bold;
   }
 
   /* .binding-inner .item-input {
@@ -1267,30 +1315,20 @@
   .binding-inner td {}
 
   .submit {
-    width: 115px;
-    height: 40px;
-    line-height: 40px;
+    width: 140px;
+    height: 48px;
+    line-height: 46px;
     display: inline-block;
     text-align: center;
     cursor: pointer;
     text-decoration: none;
-    background: #CC3447;
-    border-radius: 2px;
     font-family: PingFangSC-Regular;
-    font-size: 14px;
+    font-size: 16px;
     font-weight: 700;
-    color: #FFFFFF;
-    margin: 0 auto;
-  }
-
-  .back {
-    background: #777;
-    margin-left: -85px;
-  }
-
-  .next {
-    background: #CC3447;
-    margin-left: 20px;
+    color: #ffffff;
+    background-image: linear-gradient(-180deg, #CFA072 0%, #B68E66 100%);
+    border: 1px solid #DDDDDD;
+    border-radius: 2px;
   }
 
   .step3 .complete {
@@ -1310,6 +1348,7 @@
     font-family: PingFangSC-Regualr;
     font-size: 16px;
     color: #191919;
+    margin-bottom: 20px;
   }
 
   .step3 p.small-tip {

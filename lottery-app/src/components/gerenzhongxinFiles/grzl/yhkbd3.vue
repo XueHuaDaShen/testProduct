@@ -11,7 +11,7 @@
     <div class="bind-result-wrap">
       <p class="bind-result-title">恭喜你，你的尾号 {{bank_num}} 银行卡绑定成功。</p>
       <div class="bank-card-icon">
-        <img :src="'static/img/'+bank_bj+'.png'" alt="" v-if="bank_bj">
+        <img :src="$store.state.productPath+bank_bj+'.png'" alt="" v-if="bank_bj">
         <!-- <p class="bank-name">{{bank_name}}</p> -->
         <!-- <p class="bank-type">{{bank_type}}</p> -->
         <p class="bank-num"><span>****</span> <span>****</span> <span>****</span><span>{{bank_num}}</span></p>

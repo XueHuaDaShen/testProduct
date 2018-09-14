@@ -54,13 +54,13 @@
     <el-dialog title="新增账户" :before-close="closeCreate" :visible.sync="createDialog">
       <el-form :model="createForm" :rules="rules" ref="createForm" label-width="150px" class="demo-ruleForm">
         <el-form-item label="用户名" prop="name">
-          <el-input type="text" v-model="createForm.name"></el-input>
+          <el-input type="text" v-model.trim="createForm.name"></el-input>
         </el-form-item>
         <el-form-item label="支付宝账号" prop="account_no">
-          <el-input type="text" v-model="createForm.account_no"></el-input>
+          <el-input type="text" v-model.trim="createForm.account_no"></el-input>
         </el-form-item>
         <el-form-item label="收款二维码" prop="qr_code">
-          <el-input type="text" v-model="createForm.qr_code"></el-input>
+          <el-input type="text" v-model.trim="createForm.qr_code"></el-input>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -73,13 +73,13 @@
     <el-dialog title="修改账户" :before-close="closeUpdate" :visible.sync="updateDialog">
       <el-form :model="updateForm" :rules="rules" ref="updateForm" label-width="150px" class="demo-ruleForm">
         <el-form-item label="用户名" prop="name">
-          <el-input type="text" v-model="updateForm.name"></el-input>
+          <el-input type="text" v-model.trim="updateForm.name"></el-input>
         </el-form-item>
         <el-form-item label="支付宝账号" prop="account_no">
-          <el-input type="text" v-model="updateForm.account_no"></el-input>
+          <el-input type="text" v-model.trim="updateForm.account_no"></el-input>
         </el-form-item>
         <el-form-item label="收款二维码" prop="qr_code">
-          <el-input type="text" v-model="updateForm.qr_code"></el-input>
+          <el-input type="text" v-model.trim="updateForm.qr_code"></el-input>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">

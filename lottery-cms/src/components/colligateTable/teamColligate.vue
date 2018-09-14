@@ -12,7 +12,7 @@
         <div class="search-content">
           <div class="search-inner-wrap">
             <label>代理账号：</label>
-            <el-input clearable v-model="username" placeholder="代理账号" style="width:114px;"></el-input>
+            <el-input clearable v-model.trim="username" placeholder="代理账号" style="width:114px;"></el-input>
           </div>
           <div class="search-inner-wrap">
             <label>排序栏：</label>
@@ -68,7 +68,13 @@
         </el-table-column>
         <el-table-column align="center" prop="day" width="150" label="时间" :formatter="formatTime">
         </el-table-column>
-        <el-table-column align="center" prop="register_people_team" label="注册人数">
+        <el-table-column align="center" label="注册人数">
+          <template slot-scope="scope">
+            <router-link :to="{name:'userList',query:{parent:scope.row.loginname}}" target="_blank" v-if="scope.row.register_people_team != 0">
+              {{scope.row.register_people_team}}
+            </router-link>
+            <span v-else>{{scope.row.register_people_team}}</span>
+          </template>
         </el-table-column>
         <el-table-column align="center" prop="bid_people_team" label="投注人数">
         </el-table-column>
@@ -100,20 +106,6 @@
         </el-table-column>
         <el-table-column align="center" prop="profit_team" label="盈利" :formatter="formatMoney">
         </el-table-column>
-        <!-- <el-table-column align="center" prop="bid_total_team" label="团队投注总额">
-        </el-table-column>
-        <el-table-column align="center" prop="bid_invalid_team" label="团队撤单总额">
-        </el-table-column>
-        <el-table-column align="center" prop="activity_team" label="团队活动奖励">
-        </el-table-column>
-        <el-table-column align="center" prop="transferin_team" label="团队转入">
-        </el-table-column>
-        <el-table-column align="center" prop="transferout_team" label="团队转出">
-        </el-table-column>
-        <el-table-column align="center" prop="undo_team" label="团队扣款">
-        </el-table-column> -->
-        <!-- <el-table-column align="center" prop="is_test" :formatter="formatTestUser" width="80" label="测试用户">
-        </el-table-column> -->
       </el-table>
       <div class="fenye">
         <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="pageNum"
@@ -143,41 +135,41 @@
         dateChecked: 1,
         index1: 0,
         index2: 0,
-        titleName: '代理报表',
+        titleName: "代理报表",
         routerArr: [{
-            title: '会员报表',
-            name: 'userColligate',
+            title: "会员报表",
+            name: "userColligate",
             checked: false
           },
           {
-            title: '代理报表',
-            name: 'teamColligate',
+            title: "代理报表",
+            name: "teamColligate",
             checked: false
           }
         ],
         orderArr: [{
-            title: '充值',
-            code: 'recharge'
+            title: "充值",
+            code: "recharge"
           },
           {
-            title: '提现',
-            code: 'withdrawal'
+            title: "提现",
+            code: "withdrawal"
           },
           {
-            title: '有效投注',
-            code: 'bid_valid'
+            title: "有效投注",
+            code: "bid_valid"
           },
           {
-            title: '返奖',
-            code: 'rebate'
+            title: "返奖",
+            code: "rebate"
           },
           {
-            title: '盈利',
-            code: 'profit'
+            title: "盈利",
+            code: "profit"
           },
           {
-            title: '游戏盈利',
-            code: 'game_profit'
+            title: "游戏盈利",
+            code: "game_profit"
           },
           {
             title: "时间",
@@ -185,16 +177,16 @@
           }
         ],
         descArr: [{
-            title: '升序',
-            val: '1'
+            title: "升序",
+            val: "1"
           },
           {
-            title: '降序',
-            val: '-1'
+            title: "降序",
+            val: "-1"
           }
         ],
-        order: 'day',
-        desc: '-1',
+        order: "day",
+        desc: "-1",
         loading: false,
         pageNum: 1,
         pageSize: 40,
@@ -204,28 +196,42 @@
         loginname: "",
         username: "",
         searchTime: "",
-        pickerDefaultTime: ['00:00:00', '23:59:59'],
+        pickerDefaultTime: ["00:00:00", "23:59:59"],
         pickerOptions: {
           shortcuts: [{
               text: "昨天",
               onClick(picker) {
                 const end = new Date();
                 const start = new Date();
-                start.setTime(new Date(new Date(new Date().toLocaleDateString()).getTime()) - 3600 * 1000 * 24 * 1);
-                end.setTime(new Date(new Date(new Date().toLocaleDateString()).getTime() + 24 * 60 * 60 * 1000 - 1) -
-                  3600 * 1000 * 24 * 1);
-                // console.log("start", start.toLocaleString());
-                // console.log("end", end.toLocaleString());
+                start.setTime(
+                  new Date(new Date(new Date().toLocaleDateString()).getTime()) -
+                  3600 * 1000 * 24 * 1
+                );
+                end.setTime(
+                  new Date(
+                    new Date(new Date().toLocaleDateString()).getTime() +
+                    24 * 60 * 60 * 1000 -
+                    1
+                  ) -
+                  3600 * 1000 * 24 * 1
+                );
                 picker.$emit("pick", [start, end]);
               }
-            }, {
+            },
+            {
               text: "今天",
               onClick(picker) {
                 const end = new Date();
-                const start = new Date(new Date(new Date().toLocaleDateString()).getTime());
-                end.setTime(new Date(new Date(new Date().toLocaleDateString()).getTime() + 24 * 60 * 60 * 1000 - 1));
-                // console.log("start", start.toLocaleString());
-                // console.log("end", end.toLocaleString());
+                const start = new Date(
+                  new Date(new Date().toLocaleDateString()).getTime()
+                );
+                end.setTime(
+                  new Date(
+                    new Date(new Date().toLocaleDateString()).getTime() +
+                    24 * 60 * 60 * 1000 -
+                    1
+                  )
+                );
                 picker.$emit("pick", [start, end]);
               }
             },
@@ -237,14 +243,26 @@
                 let nowDay = now.getDate(); //当前日
                 let nowMonth = now.getMonth(); //当前月
                 let nowYear = now.getFullYear(); //当前年
-                let getWeekStartDate = new Date(nowYear, nowMonth, nowDay - nowDayOfWeek);
-                let getWeekEndDate = new Date(new Date(new Date(nowYear, nowMonth, nowDay + (6 - nowDayOfWeek)).toLocaleDateString())
-                  .getTime() + 24 * 60 * 60 * 1000 - 1);
-                // console.log("start", getWeekStartDate.toLocaleString());
-                // console.log("end", getWeekEndDate.toLocaleString());
+                let getWeekStartDate = new Date(
+                  nowYear,
+                  nowMonth,
+                  nowDay - nowDayOfWeek
+                );
+                let getWeekEndDate = new Date(
+                  new Date(
+                    new Date(
+                      nowYear,
+                      nowMonth,
+                      nowDay + (6 - nowDayOfWeek)
+                    ).toLocaleDateString()
+                  ).getTime() +
+                  24 * 60 * 60 * 1000 -
+                  1
+                );
                 picker.$emit("pick", [getWeekStartDate, getWeekEndDate]);
               }
-            }, {
+            },
+            {
               text: "上周",
               onClick(picker) {
                 let now = new Date();
@@ -252,15 +270,29 @@
                 let nowDay = now.getDate(); //当前日
                 let nowMonth = now.getMonth(); //当前月
                 let nowYear = now.getFullYear(); //当前年
-                let getWeekStartDate = new Date(new Date(new Date(nowYear, nowMonth, nowDay - nowDayOfWeek).toLocaleDateString())
-                  .getTime() -
-                  3600 * 1000 * 24 * 7);
-                let getWeekEndDate = new Date(new Date(new Date(nowYear, nowMonth, nowDay + (6 - nowDayOfWeek)).toLocaleDateString())
-                  .getTime() + 24 * 60 * 60 * 1000 - 1 - 3600 * 1000 * 24 * 7);
-                // console.log("start", getWeekStartDate.toLocaleString());
-                // console.log("end", getWeekEndDate.toLocaleString());
-                picker
-                  .$emit("pick", [getWeekStartDate, getWeekEndDate]);
+                let getWeekStartDate = new Date(
+                  new Date(
+                    new Date(
+                      nowYear,
+                      nowMonth,
+                      nowDay - nowDayOfWeek
+                    ).toLocaleDateString()
+                  ).getTime() -
+                  3600 * 1000 * 24 * 7
+                );
+                let getWeekEndDate = new Date(
+                  new Date(
+                    new Date(
+                      nowYear,
+                      nowMonth,
+                      nowDay + (6 - nowDayOfWeek)
+                    ).toLocaleDateString()
+                  ).getTime() +
+                  24 * 60 * 60 * 1000 -
+                  1 -
+                  3600 * 1000 * 24 * 7
+                );
+                picker.$emit("pick", [getWeekStartDate, getWeekEndDate]);
               }
             },
             {
@@ -273,55 +305,89 @@
                 let getMonthStartDate = new Date(nowYear, nowMonth, 1);
                 var monthStartDate = new Date(nowYear, nowMonth, 1);
                 var monthEndDate = new Date(nowYear, nowMonth + 1, 1);
-                var days = (monthEndDate - monthStartDate) / (1000 * 60 * 60 * 24);
+                var days =
+                  (monthEndDate - monthStartDate) / (1000 * 60 * 60 * 24);
                 //获得本月的结束日期
-                let getMonthEndDate = new Date(new Date(new Date(nowYear, nowMonth, days).toLocaleDateString()).getTime() +
-                  24 * 60 * 60 * 1000 - 1);
-                // console.log("start", getMonthStartDate.toLocaleString());
-                // console.log("end", getMonthEndDate.toLocaleString());
+                let getMonthEndDate = new Date(
+                  new Date(
+                    new Date(nowYear, nowMonth, days).toLocaleDateString()
+                  ).getTime() +
+                  24 * 60 * 60 * 1000 -
+                  1
+                );
                 picker.$emit("pick", [getMonthStartDate, getMonthEndDate]);
               }
             },
             {
               text: "上月",
               onClick(picker) {
-                var firstdate = new Date(new Date().getFullYear(), new Date().getMonth() - 1, 1);
+                var firstdate = new Date(
+                  new Date().getFullYear(),
+                  new Date().getMonth() - 1,
+                  1
+                );
                 var date = new Date();
-                var day = new Date(date.getFullYear(), date.getMonth(), 0).getDate();
-                var enddate = new Date(new Date(new Date(new Date().getFullYear(), new Date().getMonth() - 1, day).toLocaleDateString())
-                  .getTime() + 24 * 60 * 60 * 1000 - 1);
-                // console.log("start", firstdate.toLocaleString());
-                // console.log("end", enddate.toLocaleString());
+                var day = new Date(
+                  date.getFullYear(),
+                  date.getMonth(),
+                  0
+                ).getDate();
+                var enddate = new Date(
+                  new Date(
+                    new Date(
+                      new Date().getFullYear(),
+                      new Date().getMonth() - 1,
+                      day
+                    ).toLocaleDateString()
+                  ).getTime() +
+                  24 * 60 * 60 * 1000 -
+                  1
+                );
                 picker.$emit("pick", [firstdate, enddate]);
               }
             },
             {
               text: "最近一周",
               onClick(picker) {
-                const end = new Date(new Date(new Date().toLocaleDateString()).getTime() + 24 * 60 * 60 * 1000 - 1);
-                const start = new Date(new Date(new Date().toLocaleDateString()).getTime() - 3600 * 1000 * 24 * 7);
-                // console.log("start", start.toLocaleString());
-                // console.log("end", end.toLocaleString());
+                const end = new Date(
+                  new Date(new Date().toLocaleDateString()).getTime() +
+                  24 * 60 * 60 * 1000 -
+                  1
+                );
+                const start = new Date(
+                  new Date(new Date().toLocaleDateString()).getTime() -
+                  3600 * 1000 * 24 * 7
+                );
                 picker.$emit("pick", [start, end]);
               }
             },
             {
               text: "最近一个月",
               onClick(picker) {
-                const end = new Date(new Date(new Date().toLocaleDateString()).getTime() + 24 * 60 * 60 * 1000 - 1);
-                const start = new Date(new Date(new Date().toLocaleDateString()).getTime() - 3600 * 1000 * 24 * 30);
-                // console.log("start", start.toLocaleString());
-                // console.log("end", end.toLocaleString());
+                const end = new Date(
+                  new Date(new Date().toLocaleDateString()).getTime() +
+                  24 * 60 * 60 * 1000 -
+                  1
+                );
+                const start = new Date(
+                  new Date(new Date().toLocaleDateString()).getTime() -
+                  3600 * 1000 * 24 * 30
+                );
                 picker.$emit("pick", [start, end]);
               }
             },
             {
               text: "最近三个月",
               onClick(picker) {
-                const end = new Date(new Date(new Date().toLocaleDateString()).getTime() + 24 * 60 * 60 * 1000 - 1);
-                const start = new Date(new Date(new Date().toLocaleDateString()).getTime() - 3600 * 1000 * 24 * 90);
-                // console.log("start", start.toLocaleString());
-                // console.log("end", end.toLocaleString());
+                const end = new Date(
+                  new Date(new Date().toLocaleDateString()).getTime() +
+                  24 * 60 * 60 * 1000 -
+                  1
+                );
+                const start = new Date(
+                  new Date(new Date().toLocaleDateString()).getTime() -
+                  3600 * 1000 * 24 * 90
+                );
                 picker.$emit("pick", [start, end]);
               }
             }
@@ -340,7 +406,8 @@
         testUser: [{
             value: "",
             label: "全显示"
-          }, {
+          },
+          {
             value: "0",
             label: "不显示"
           },
@@ -349,7 +416,7 @@
             label: "仅显示"
           }
         ],
-        is_test: '0',
+        is_test: "0",
         status: "",
         order_no: "",
         duration: 1000,
@@ -363,24 +430,24 @@
       let query = this.$route.query;
       this.index1 = Number(query.index1);
       this.index2 = Number(query.index2);
-      const menus = JSON.parse(localStorage.getItem('menus'));
+      const menus = JSON.parse(localStorage.getItem("menus"));
       menus[this.index1].child[this.index2].child.filter((v, vi) => {
         let o = new Object();
-        if (v.url === 'teamColligate') {
+        if (v.url === "teamColligate") {
           this.titleName = v.menu_name;
         }
         o.title = v.menu_name;
         o.name = v.url;
         o.checked = false;
         this.routerArr.push(o);
-      })
+      });
       this.routerArr.filter(v => {
         if (this.titleName === v.title) {
-          v.checked = true
+          v.checked = true;
         } else {
-          v.checked = false
+          v.checked = false;
         }
-      })
+      });
       const end = new Date();
       const start = new Date(new Date(new Date().toLocaleDateString()).getTime());
       end.setTime(
@@ -406,7 +473,10 @@
             return;
           }
           let values = data.map(item => Number(item[column.property]));
-          if (!values.every(value => isNaN(value))) {
+          if ((index === 5 || index === 6 || index === 7 || index === 8 || index === 9 || index === 10 || index ===
+              11 || index === 12 || index === 13 || index === 14 || index === 15 || index === 16 || index === 17) &&
+            !values.every(value =>
+              isNaN(value))) {
             sums[index] = values.reduce((prev, curr) => {
               const value = Number(curr);
               if (!isNaN(value)) {
@@ -418,7 +488,11 @@
             sums[index] = parseFloat(sums[index]).toFixed(2);
             sums[index] += " 元";
           } else {
-            sums[index] = "--";
+            if ((index === 5 || index === 6 || index === 7 || index === 8 || index === 9 || index === 10 || index ===
+                11 || index === 12 || index === 13 || index === 14 || index === 15 || index === 16 || index === 17)) {
+              sums[index] = "0.00元";
+            } else
+              sums[index] = "--";
           }
         });
 
@@ -426,10 +500,9 @@
       },
       formatMoney(row, column, cellValue) {
         if (!cellValue) {
-          return 0.00;
+          return 0.0;
         }
         return Number(cellValue).toFixed(2);
-        // return moment(cellValue).format('YYYY-MM-DD')
       },
       handleChangeRouter(name) {
         this.$router.push({
@@ -438,8 +511,7 @@
             index1: this.index1,
             index2: this.index2
           }
-        })
-        // console.log(name)
+        });
       },
       succee() {
         const vm = this;
@@ -460,7 +532,6 @@
         });
       },
       isStatusFn(row, column, cellValue) {
-        // console.log(typeof cellValue)
         switch (cellValue) {
           case 0:
             return "未发工资";
@@ -469,24 +540,21 @@
         }
       },
       formatTestUser(row, column, cellValue) {
-        let t = '';
+        let t = "";
         if (cellValue === 1) {
-          t = '是'
+          t = "是";
         } else {
-          t = '否'
+          t = "否";
         }
         return t;
-        // return moment(cellValue).format('YYYY-MM-DD')
       },
       handleSizeChange(val) {
-        // console.log(`每页 ${val} 条`);
         this.pageSize = val;
         this.getTeamColligateList();
       },
       handleCurrentChange(val) {
         this.pageNum = val;
         this.getTeamColligateList();
-        // console.log(`当前页: ${val}`);
       },
       getUserInfoFn(row) {
         // this.dialog = true;
@@ -507,9 +575,11 @@
       },
       formatTime(row, column, cellValue) {
         if (cellValue) {
-          return moment(cellValue).utcOffset(8).format("YYYY-MM-DD");
+          return moment(cellValue)
+            .utcOffset(8)
+            .format("YYYY-MM-DD");
         }
-        return "--"
+        return "--";
       },
       getTeamColligateList() {
         const vm = this;

@@ -16,7 +16,7 @@
   },
   {
     "key": 3,
-    "value": "棋牌游戏",
+    "value": "游戏记录",
     "component": "chessRecord"
   }]
 },

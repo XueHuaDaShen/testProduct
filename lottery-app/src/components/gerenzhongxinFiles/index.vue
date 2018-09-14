@@ -214,23 +214,23 @@ export default {
           // bottom:.35rem;
         }
         .kfzx{
-          background:url('/static/img/customer.png') no-repeat;
+          background:url('../../assets/h5-img/customer.png') no-repeat;
           background-size:100% 100%;
         }
         .grzl{
-          background:url('/static/img/grzl_icon.png') no-repeat;
+          background:url('../../assets/h5-img/grzl_icon.png') no-repeat;
           background-size:100% 100%;
         }
         .zjmx{
-          background:url('/static/img/zjmx_icon.png') no-repeat;
+          background:url('../../assets/h5-img/zjmx_icon.png') no-repeat;
           background-size:100% 100%;
         }
         .tzjl{
-          background:url('/static/img/tzjl_icon.png') no-repeat;
+          background:url('../../assets/h5-img/tzjl_icon.png') no-repeat;
           background-size:100% 100%;
         }
         .dlzx{
-          background:url('/static/img/dlzx_icon.png') no-repeat;
+          background:url('../../assets/h5-img/dlzx_icon.png') no-repeat;
           background-size:100% 100%;
         }
       }

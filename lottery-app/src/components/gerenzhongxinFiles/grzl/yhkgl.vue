@@ -1,5 +1,5 @@
 <template>
-  <div class="yhkgl-wrap">
+  <div class="yhkgl-wrap" v-if="maxBindNum">
     <h2 class="yhk-title-wrap"><em></em>银行卡绑定规则</h2>
     <div class="yhk-rule-wrap">
       <p>一个游戏账户最多绑定 <em>{{maxBindNum}}张</em>银行卡，您目前绑定了<em>{{bankcardList.length}}张</em>卡，还可以绑定 <em>{{maxBindNum-bankcardList.length}}张</em>卡。</p>
@@ -130,7 +130,7 @@ export default {
       showQuestionDialog: false, // 显示问题弹框
       showCheckInZIjinPwdDialog: false, // 显示验证资金弹框
       zijinPwd: '', // 资金密码
-      maxBindNum: 4, // 最大绑定银行卡数量
+      maxBindNum: 0, // 最大绑定银行卡数量
       bankcardList: [], // 绑定过的银行卡列表
       questionArr: [], // 所有问题
       defaultAnswer: '1',
@@ -216,6 +216,7 @@ export default {
           // console.log(success)
           if (success.returncode && success.returncode == 200) {
             vm.bankcardList = success.data.bankcards;
+            vm.maxBindNum = success.data.max;
             // vm.showBank = true;
           }
         },

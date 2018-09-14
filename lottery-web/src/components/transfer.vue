@@ -91,12 +91,15 @@
             if (success.returncode == 200) {
               self.isSetBankPsd = success.data.isSet;
               if (!self.isSetBankPsd) {
-                self.$alert("您未设置资金密码，请设置资金密码", "系统提示", {
-                  confirmButtonText: "确定",
+                self.$alert('<div class="lottery-title">您未设置资金密码，请设置资金密码</div>', '系统提醒', {
+                  confirmButtonText: '确定',
+                  center: true,
+                  dangerouslyUseHTMLString: true,
+                  customClass: "syxw-wrap-inner",
                   callback: action => {
                     self.$router.push({ name: "password" });
                   }
-                });
+                })
               }
             } else if (success.returncode == 101 || success.returncode == 103 || success.returncode == 106) {
               request.loginAgain(self)
@@ -132,8 +135,11 @@
                 request.loginAgain(self);
               } else if (success.returncode == 200) {
                 self.result = success.data;
-                self.$alert("转账成功", "系统提示", {
-                  confirmButtonText: "确定",
+                self.$alert('<div class="lottery-title">转账成功</div>', '系统提示', {
+                  confirmButtonText: '确定',
+                  center: true,
+                  dangerouslyUseHTMLString: true,
+                  customClass: "syxw-wrap-inner",
                   callback: action => {
                     localStorage.setItem("blance", success.data.cash);
                     self.$store.dispatch('setBlance', success.data.cash);
@@ -141,60 +147,75 @@
                       name: "mytransfer",
                     });
                   }
-                });
+                })
               } else if (success.returncode == 301) {
                 self.result = success.data;
-                self.$alert("参数错误", "系统提示", {
-                  confirmButtonText: "确定",
+                self.$alert('<div class="lottery-title">参数错误</div>', '系统提示', {
+                  confirmButtonText: '确定',
+                  center: true,
+                  dangerouslyUseHTMLString: true,
+                  customClass: "syxw-wrap-inner",
                   callback: action => {
                     self.$router.push({
                       name: "mytransfer",
                     });
                   }
-                });
+                })
               } else if (success.returncode == 401) {
                 self.result = success.data;
-                self.$alert("账户余额不足，无法转账", "系统提示", {
-                  confirmButtonText: "确定",
+                self.$alert('<div class="lottery-title">账户余额不足，无法转账</div>', '系统提示', {
+                  confirmButtonText: '确定',
+                  center: true,
+                  dangerouslyUseHTMLString: true,
+                  customClass: "syxw-wrap-inner",
                   callback: action => {
                     self.$router.push({
                       name: "mytransfer",
                     });
                   }
-                });
+                })
               } else if (success.returncode == 500) {
                 self.result = success.data;
-                self.$alert("服务器内部错误，请联系客服", "系统提示", {
-                  confirmButtonText: "确定",
+                self.$alert('<div class="lottery-title">服务器内部错误，请联系客服</div>', '系统提示', {
+                  confirmButtonText: '确定',
+                  center: true,
+                  dangerouslyUseHTMLString: true,
+                  customClass: "syxw-wrap-inner",
                   callback: action => {
                     self.$router.push({
                       name: "mywithdraw",
                     });
                   }
-                });
+                })
               } else if (success.returncode == 402) {
                 self.result = success.data;
-                self.$alert("禁止转账，转账只限上下级", "系统提示", {
-                  confirmButtonText: "确定",
+                self.$alert('<div class="lottery-title">禁止转账，转账只限上下级</div>', '系统提示', {
+                  confirmButtonText: '确定',
+                  center: true,
+                  dangerouslyUseHTMLString: true,
+                  customClass: "syxw-wrap-inner",
                   callback: action => {
                     self.$router.push({
                       name: "mywithdraw",
                     });
                   }
-                });
+                })
               }
             }
           },
           error => {
             self.loading = false;
-            self.$alert(self.result.message, "系统提示", {
-              confirmButtonText: "确定",
+            self.$alert(`<div class="lottery-title">${self.result.message}</div>`, '系统提示', {
+              confirmButtonText: '确定',
+              center: true,
+              dangerouslyUseHTMLString: true,
+              customClass: "syxw-wrap-inner",
               callback: action => {
                 self.$router.push({
                   name: "mywithdraw",
                 });
               }
-            });
+            })
           }
         );
       },
@@ -284,13 +305,15 @@
                       success.returncode == 301 ||
                       success.returncode == 305
                     ) {
-                      self.$alert("资金密码不正确", "系统提醒", {
-                        confirmButtonText: "确定",
+                      self.$alert('<div class="lottery-title">资金密码不正确</div>', '系统提示', {
+                        confirmButtonText: '确定',
                         center: true,
+                        dangerouslyUseHTMLString: true,
+                        customClass: "syxw-wrap-inner",
                         callback: action => {
                           self.transferForm.input_cash_psd = "";
                         }
-                      });
+                      })
                     }
                   }
                 },

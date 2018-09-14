@@ -12,7 +12,7 @@
         <div class="search-content">
           <div class="search-inner-wrap">
             <label>用户名：</label>
-            <el-input clearable v-model="username" placeholder="用户名" style="width:114px;"></el-input>
+            <el-input clearable v-model.trim="username" placeholder="用户名" style="width:114px;"></el-input>
           </div>
           <div class="search-inner-wrap">
             <label>状态：</label>

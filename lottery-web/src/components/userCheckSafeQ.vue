@@ -1,5 +1,5 @@
 <template>
-  <div class="psd-wrap search-form" v-loading="loading">
+  <div class="psd-wrap search-form record-options" v-loading="loading">
     <div class="issue">
       <div class="issue-one">
         <p class="issue-title-two">为了您的资金安全，请验证您的口令</p>
@@ -81,10 +81,12 @@
       },
       makeSure() {
         if (!this.validateSafeQ.random.input) {
-          this.$alert('答案不能为空', '系统提醒', {
+          this.$alert('<div class="lottery-title">答案不能为空</div>', '系统提醒', {
             confirmButtonText: '确定',
             center: true,
-          });
+            dangerouslyUseHTMLString: true,
+            customClass: "syxw-wrap-inner"
+          })
           return false;
         }
         let self = this,
@@ -117,20 +119,26 @@
                   }
                 }
               } else if (success.returncode == 303) {
-                self.$alert('答案不正确', '系统提醒', {
+                self.$alert('<div class="lottery-title">答案不正确</div>', '系统提醒', {
                   confirmButtonText: '确定',
                   center: true,
-                });
+                  dangerouslyUseHTMLString: true,
+                  customClass: "syxw-wrap-inner"
+                })
               } else if (success.returncode == 301) {
-                self.$alert('错误码301', '系统提醒', {
+                self.$alert('<div class="lottery-title">错误码301</div>', '系统提醒', {
                   confirmButtonText: '确定',
                   center: true,
-                });
+                  dangerouslyUseHTMLString: true,
+                  customClass: "syxw-wrap-inner"
+                })
               } else if (success.returncode == 302) {
-                self.$alert('错误码302', '系统提醒', {
+                self.$alert('<div class="lottery-title">错误码302</div>', '系统提醒', {
                   confirmButtonText: '确定',
                   center: true,
-                });
+                  dangerouslyUseHTMLString: true,
+                  customClass: "syxw-wrap-inner"
+                })
               } else {
                 self.$message({
                   showClose: true,
@@ -184,8 +192,9 @@
   }
 
   .issue-title-two {
-    color: #CC3447;
+    color: #777;
     font-weight: bold;
+    font-size: 16px;
   }
 
   .warning {
@@ -208,6 +217,9 @@
 
   .issue-two li .safe-title {
     display: inline-block;
+    font-size: 14px;
+    font-weight: bold;
+    color: #191919;
     /* width: 75px; */
     /* text-align: right; */
   }
@@ -234,23 +246,20 @@
   }
 
   .submit {
-    width: 115px;
-    height: 40px;
-    background: #CC3447;
-    border-radius: 2px;
-    font-size: 14px;
-    font-family: MicrosoftYaHei;
-    color: #FFFFFF;
+    width: 140px;
+    height: 48px;
+    line-height: 46px;
     display: inline-block;
     text-align: center;
-    line-height: 40px;
     cursor: pointer;
     text-decoration: none;
-    margin-left: -10px;
-  }
-
-  .li-error {
-    /* width: 605px; */
+    font-family: PingFangSC-Regular;
+    font-size: 16px;
+    font-weight: 700;
+    color: #ffffff;
+    background-image: linear-gradient(-180deg, #CFA072 0%, #B68E66 100%);
+    border: 1px solid #DDDDDD;
+    border-radius: 2px;
   }
 
   .error {

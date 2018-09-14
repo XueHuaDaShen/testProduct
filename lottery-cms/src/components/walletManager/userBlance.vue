@@ -13,7 +13,7 @@
         <div class="search-content">
           <div class="search-inner-wrap">
             <label>用户名：</label>
-            <el-input clearable v-model="username" placeholder="姓名" style="width:114px;"></el-input>
+            <el-input clearable v-model.trim="username" placeholder="姓名" style="width:114px;"></el-input>
           </div>
           <div class="search-inner-wrap">
             <label>排序栏：</label>
@@ -26,6 +26,13 @@
             <label>顺序</label>
             <el-select clearable v-model="desc" placeholder="请选择" class="small">
               <el-option v-for="item in descArr" :key="item.val" :label="item.title" :value="item.val">
+              </el-option>
+            </el-select>
+          </div>
+          <div class="search-inner-wrap">
+            <label>测试用户：</label>
+            <el-select clearable v-model="is_test" placeholder="测试用户" class="small">
+              <el-option v-for="item in testUser" :key="item.value" :label="item.label" :value="item.value">
               </el-option>
             </el-select>
           </div>
@@ -139,6 +146,19 @@
         duration: 1000,
         dialog: false,
         dialogIsShow: false,
+        testUser: [{
+            value: "",
+            label: "全显示"
+          }, {
+            value: "0",
+            label: "不显示"
+          },
+          {
+            value: "1",
+            label: "仅显示"
+          }
+        ],
+        is_test: '0',
       };
     },
     created() {
@@ -232,7 +252,8 @@
             PageSize: vm.pageSize,
             loginname: trim(vm.username),
             order: vm.order,
-            desc: vm.desc
+            desc: vm.desc,
+            is_test: vm.is_test
           },
           success => {
             vm.loading = false;
@@ -261,6 +282,7 @@
       },
       handleReset() {
         this.username = "";
+        this.is_test = "0";
       },
       handleSearch() {
         this.pageNum = 1;

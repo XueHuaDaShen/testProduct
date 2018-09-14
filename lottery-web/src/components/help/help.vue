@@ -5,8 +5,8 @@
         <router-link class="nav-left" :to="{name: 'home'}">
           <img src="@/assets/img/Logo@3x.png">
         </router-link>
-        <router-link :to="{name:'download'}" class="download"><img src="@/assets/img/bets-img/xiazai-icon.png" class="xiazai-icon">下载中心</router-link>
-        <a @click="open" class="server"><img src="@/assets/img/bets-img/kefu-icon.png" class="kefu-icon">联系客服</a>
+        <router-link :to="{name:'download'}" class="download"><img src="../../img/xiazai-icon.png" class="xiazai-icon">下载中心</router-link>
+        <a @click="open" class="server"><img src="../../img/kefu-icon.png" class="kefu-icon">联系客服</a>
       </div>
     </header>
     <div class="help-content">

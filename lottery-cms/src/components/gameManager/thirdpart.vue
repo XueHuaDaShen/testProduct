@@ -12,18 +12,26 @@
         <div class="search-content">
           <div class="search-inner-wrap">
             <label>用户名：</label>
-            <el-input clearable v-model="username" placeholder="姓名" style="width:114px"></el-input>
+            <el-input clearable v-model.trim="username" placeholder="姓名" style="width:114px"></el-input>
           </div>
           <div class="search-inner-wrap">
             <label>平台：</label>
             <el-select clearable v-model="platform" placeholder="选择" class="small">
               <el-option label="KY" value="ky">
               </el-option>
+              <el-option label="AG" value="ag">
+              </el-option>
+            </el-select>
+          </div>
+          <div class="search-inner-wrap">
+            <label>游戏类型：</label>
+            <el-select v-model.trim="gameType" clearable placeholder="请选择游戏类型" class="small">
+              <el-option v-for="(item,index) in gameOptions" :key="index" :value="item.value" :label="item.text"></el-option>
             </el-select>
           </div>
           <div class="search-inner-wrap">
             <label>游戏名：</label>
-            <el-input clearable v-model="game" placeholder="游戏名称" style="width:114px"></el-input>
+            <el-input clearable v-model.trim="game" placeholder="游戏名称" style="width:114px"></el-input>
           </div>
           <div class="search-inner-wrap">
             <label>游戏时间：</label>
@@ -55,9 +63,13 @@
         </el-table-column>
         <el-table-column align="center" prop="platform" label="平台名">
         </el-table-column>
+        <el-table-column prop="game_type" align="center" width="110" label="游戏类型" :formatter="formatGameType">
+        </el-table-column>
         <el-table-column align="center" prop="game" label="游戏名">
         </el-table-column>
         <el-table-column align="center" prop="vote" label="投注额">
+        </el-table-column>
+        <el-table-column align="center" prop="vote_valid" label="有效投注">
         </el-table-column>
         <el-table-column align="center" prop="profit" label="盈利额">
         </el-table-column>
@@ -67,7 +79,7 @@
         </el-table-column>
         <el-table-column align="center" label="操作">
           <template slot-scope="scope">
-            <el-button class="small edit">原始数据</el-button>
+            <el-button class="small edit" @click="getInitData(scope.row)">原始数据</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -78,6 +90,14 @@
         </el-pagination>
       </div>
     </div>
+    <el-dialog title="游戏原始数据" :before-close="closeDialog" :visible.sync="dialogVisible" class="relative-dialog">
+      <div class="body-middle">
+        <p v-text="ysdata" class="ys_data"></p>
+      </div>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="closeDialog()" class="no">关 闭</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 <script>
@@ -104,9 +124,33 @@
         }
       };
       return {
+        gameType: "",
+        gameOptions: [
+          // PVP： 棋牌， FISH： 捕鱼， LIVE： 真人， RNG： 电子， SPORTS： 体育 
+          {
+            value: 'PVP',
+            text: '棋牌'
+          },
+          {
+            value: 'FISH',
+            text: '捕鱼'
+          },
+          {
+            value: 'LIVE',
+            text: '真人'
+          },
+          {
+            value: 'RNG',
+            text: '电子'
+          },
+          {
+            value: 'SPORTS',
+            text: '体育'
+          },
+        ],
         index1: 0,
         index2: 0,
-        titleName: '棋牌游戏',
+        titleName: '游戏记录',
         routerArr: [{
             title: '彩票投注',
             name: 'betsLog',
@@ -117,7 +161,7 @@
             name: 'chaseLog',
             checked: false
           }, {
-            title: '棋牌游戏',
+            title: '游戏记录',
             name: 'thirdpart',
             checked: false
           }
@@ -303,6 +347,8 @@
           }
         ],
         is_test: '0',
+        ysdata: "",
+        dialogVisible: false,
       };
     },
     created() {
@@ -331,6 +377,33 @@
       this.getRechargeLotList();
     },
     methods: {
+      formatGameType(row, column, cellValue) {
+        if (cellValue) {
+          switch (cellValue) {
+            case 'PVP':
+              return '棋牌';
+            case 'FISH':
+              return '捕鱼';
+            case 'LIVE':
+              return '真人';
+            case 'RNG':
+              return '电子';
+            case 'SPORTS':
+              return '体育';
+          }
+        }
+        return "--";
+      },
+      closeDialog() {
+        this.dialogVisible = false;
+        this.resetDialog();
+      },
+      resetDialog() {
+        this.ysdata = "";
+      },
+      openDialog() {
+        this.dialogVisible = true;
+      },
       getSummaries(param) {
         const {
           columns,
@@ -343,7 +416,7 @@
             return;
           }
           let values = data.map(item => Number(item[column.property]));
-          if ((index === 3 || index === 4) && !values.every(value => isNaN(value))) {
+          if ((index === 3 || index === 4 || index === 5) && !values.every(value => isNaN(value))) {
             sums[index] = values.reduce((prev, curr) => {
               const value = Number(curr);
               if (!isNaN(value)) {
@@ -355,7 +428,7 @@
             sums[index] = parseFloat(sums[index]).toFixed(2);
             sums[index] += " 元";
           } else {
-            if (index === 3 || index === 4) {
+            if (index === 3 || index === 4 || index === 5) {
               sums[index] = "0.00元";
             } else
               sums[index] = "--";
@@ -516,7 +589,8 @@
             endTime: endTime,
             game: vm.game,
             platform: vm.platform,
-            is_test: vm.is_test
+            is_test: vm.is_test,
+            game_type: vm.gameType
           },
           success => {
             vm.loading = false;
@@ -538,11 +612,54 @@
           }
         );
       },
+      getInitData(row) {
+        const vm = this;
+        let beginTime = "",
+          endTime = "";
+        if (vm.searchTime.toString() !== "") {
+          beginTime = new Date(vm.searchTime[0]);
+          endTime = new Date(vm.searchTime[1]);
+        }
+        vm.loading = true;
+        request.http(
+          "get",
+          "/thirdpart/game/list", {
+            pageNum: vm.pageNum,
+            pageSize: vm.pageSize,
+            loginname: trim(vm.username),
+            beginTime: beginTime,
+            endTime: endTime,
+            game: vm.game,
+            platform: vm.platform,
+            is_test: vm.is_test,
+            id: row._id,
+            single: '1'
+          },
+          success => {
+            vm.loading = false;
+            // console.log("rechargeLogList--------", success);
+            let code = success.returncode;
+            if (code === 200) {
+              vm.ysdata = success.data && success.data.data && success.data.data[0].content;
+              vm.success();
+              vm.openDialog();
+            } else if (code === 101 || code === 103 || code === 106) {
+              request.loginAgain(vm);
+            }
+          },
+          error => {
+            vm.loading = false;
+            vm.error();
+            console.log(error);
+          }
+        );
+      },
       handleReset() {
         this.username = "";
         this.searchTime = "";
         this.game = "";
         this.platform = "";
+        this.gameType = "";
         // this.is_test = '';
       },
       handleSearch() {
@@ -558,6 +675,23 @@
 
   .rechargeLot-wrap .el-form-item__content {
     text-align: left;
+  }
+
+</style>
+
+<style lang="scss" scoped>
+  .ys_data {
+    text-align: left;
+    padding: 30px 20px;
+    font-size: 14px;
+    color: #777;
+    width: 90%;
+    height: auto;
+    word-wrap: break-word;
+    word-break: break-all;
+    border: 1px solid #777;
+    margin: 0 auto;
+    min-height: 230px;
   }
 
 </style>

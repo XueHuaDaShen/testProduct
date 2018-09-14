@@ -175,7 +175,7 @@ $color:#c7c7c7;
         display:block;
         width:.37rem;
         height:.34rem;
-        background:url('/static/img/customer.png') no-repeat;
+        background:url('../assets/h5-img/customer.png') no-repeat;
         background-size:100% 100%;
         margin-right:.1rem;
       }

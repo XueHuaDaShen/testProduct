@@ -11,15 +11,17 @@
           <span :class="item.checked?'current':''" v-for="(item, index) in routerArr" :key="index" @click="handleChangeRouter(item.name)">{{item.title}}</span>
         </div>
         <div class="search-content">
-          <!-- <div class="search-inner-wrap">
-            <label>用户名：</label>
-            <el-input clearable v-model="username" placeholder="用户名" style="width:114px;"></el-input>
-          </div> -->
           <div class="search-inner-wrap">
             <label>平台名：</label>
             <el-select clearable v-model="platform" placeholder="请选择平台" class="small">
               <el-option v-for="item in platformArr" :key="item.value" :label="item.label" :value="item.value">
               </el-option>
+            </el-select>
+          </div>
+          <div class="search-inner-wrap">
+            <label>游戏类型：</label>
+            <el-select v-model.trim="gameType" clearable placeholder="请选择游戏类型" class="small">
+              <el-option v-for="(item,index) in gameOptions" :key="index" :value="item.value" :label="item.text"></el-option>
             </el-select>
           </div>
           <div class="search-inner-wrap">
@@ -45,13 +47,6 @@
               start-placeholder="开始日期" end-placeholder="结束日期" :picker-options="pickerOptions" :default-time="pickerDefaultTime">
             </el-date-picker>
           </div>
-          <!-- <div class="search-inner-wrap">
-            <label>状态：</label>
-            <el-select clearable v-model="status" placeholder="状态">
-              <el-option v-for="item in statusArr" :key="item.value" :label="item.label" :value="item.value">
-              </el-option>
-            </el-select>
-          </div> -->
           <div class="search-inner-wrap">
             <label>测试用户：</label>
             <el-select clearable v-model="is_test" placeholder="测试用户" class="small">
@@ -63,52 +58,30 @@
             <el-button type="danger" @click="handleSearch" size="medium" class="small yes">搜索</el-button>
             <el-button type="info" @click="handleReset" size="medium" class="small no">重置</el-button>
           </div>
-          <!-- <tableBtn :text="'搜索'" :plain="false" :btnType="'success'" :func="handleSearch"></tableBtn>
-          <tableBtn :text="'重置'" :func="handleReset"></tableBtn> -->
         </div>
       </div>
     </div>
     <div class="data-table" v-loading="loading">
       <el-table :data="lotteryColligateListData" header-row-class-name="table-header" stripe border style="width: 100%;font-size:12px;"
         max-height="450" :show-summary="true" sum-text="总计" :summary-method="getSummaries">
-        <!-- <el-table-column align="center" label="用户名">
-          <template slot-scope="scope">
-            <el-button type="text" @click="getUserInfoFn(scope.row)">{{scope.row.loginname}}</el-button>
-          </template>
-        </el-table-column> -->
-        <el-table-column align="center" prop="gamename" label="平台">
+        <el-table-column align="center" prop="_id.platform" label="平台" :formatter="formatPlatform">
+        </el-table-column>
+        <el-table-column align="center" prop="_id.game_type" label="游戏类型" :formatter="formatGameType">
         </el-table-column>
         <el-table-column align="center" label="时间">
           <template slot-scope="scope">
             <span>{{formatTime2(scope.row)}}</span>
           </template>
         </el-table-column>
-        <!-- <el-table-column align="center" prop="gamename" label="游戏名">
+        <!-- 这个表里面的有效投注额就是投注额 -->
+        <el-table-column align="center" prop="vote" label="有效投注" :formatter="formatMoney">
+        </el-table-column>
+        <!-- <el-table-column align="center" prop="rebate" label="返点" :formatter="formatMoney">
         </el-table-column> -->
-        <el-table-column align="center" prop="vote" label="投注额" :formatter="formatMoney">
-        </el-table-column>
-        <el-table-column align="center" prop="rebate" label="返点" :formatter="formatMoney">
-        </el-table-column>
         <el-table-column align="center" prop="user_count" label="玩家人数">
         </el-table-column>
         <el-table-column align="center" prop="profit" label="盈利" :formatter="formatMoney">
         </el-table-column>
-        <!-- <el-table-column align="center" prop="bid_invalid" label="撤单总额">
-        </el-table-column>
-        <el-table-column align="center" prop="rebate_ex" label="代理返点">
-        </el-table-column>
-        <el-table-column align="center" prop="bid_valid" label="有效投注金额">
-        </el-table-column>
-        <el-table-column align="center" prop="reward" label="奖金">
-        </el-table-column>
-        <el-table-column align="center" prop="day" :formatter="formatTime" label="投注日期">
-        </el-table-column>
-        <el-table-column align="center" prop="is_test" :formatter="formatTestUser" width="80" label="测试用户">
-        </el-table-column> -->
-        <!-- <el-table-column align="center" prop="pay_at" :formatter="formatTime" label="实发工资日期">
-        </el-table-column> -->
-        <!-- <el-table-column align="center" prop="status" :formatter="isStatusFn" label="发放工资">
-        </el-table-column> -->
       </el-table>
       <div class="fenye">
         <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="pageNum"
@@ -135,6 +108,30 @@
     },
     data() {
       return {
+        gameType: "",
+        gameOptions: [
+          // PVP： 棋牌， FISH： 捕鱼， LIVE： 真人， RNG： 电子， SPORTS： 体育 
+          {
+            value: 'PVP',
+            text: '棋牌'
+          },
+          {
+            value: 'FISH',
+            text: '捕鱼'
+          },
+          {
+            value: 'LIVE',
+            text: '真人'
+          },
+          {
+            value: 'RNG',
+            text: '电子'
+          },
+          {
+            value: 'SPORTS',
+            text: '体育'
+          },
+        ],
         dateChecked: 1,
         index1: 0,
         index2: 0,
@@ -154,15 +151,11 @@
           },
           {
             value: "ky",
-            label: "ky"
+            label: "KY"
           },
           {
             value: "ag",
-            label: "ag"
-          },
-          {
-            value: "pt",
-            label: "pt"
+            label: "AG"
           }
         ],
         platform: "",
@@ -409,7 +402,7 @@
             return;
           }
           let values = data.map(item => Number(item[column.property]));
-          if ((index === 2 || index === 3 || index === 5) && !values.every(value => isNaN(value))) {
+          if ((index === 3 || index === 4 || index === 5) && !values.every(value => isNaN(value))) {
             sums[index] = values.reduce((prev, curr) => {
               const value = Number(curr);
               if (!isNaN(value)) {
@@ -418,17 +411,53 @@
                 return prev;
               }
             }, 0);
-            sums[index] = parseFloat(sums[index]).toFixed(2);
-            sums[index] += " 元";
+            if (index === 3 || index === 5) {
+              sums[index] = parseFloat(sums[index]).toFixed(2);
+              sums[index] += " 元";
+            } else if (index === 4) {
+              sums[index] = parseFloat(sums[index]);
+              sums[index] += " 人";
+            }
           } else {
-            if ((index === 2 || index === 3 || index === 5)) {
-              sums[index] = "0.00元";
+            if ((index === 3 || index === 4 || index === 5)) {
+              if (index === 3 || index === 5) {
+                sums[index] = "0.00元";
+              } else if (index === 4) {
+                sums[index] = "0人";
+              }
             } else
               sums[index] = "--";
           }
         });
-
         return sums;
+      },
+      formatPlatform(row, column, cellValue) {
+        if (cellValue) {
+          switch (cellValue) {
+            case 'ky':
+              return 'KY';
+            case 'ag':
+              return 'AG';
+          }
+        }
+        return "--";
+      },
+      formatGameType(row, column, cellValue) {
+        if (cellValue) {
+          switch (cellValue) {
+            case 'PVP':
+              return '棋牌';
+            case 'FISH':
+              return '捕鱼';
+            case 'LIVE':
+              return '真人';
+            case 'RNG':
+              return '电子';
+            case 'SPORTS':
+              return '体育';
+          }
+        }
+        return "--";
       },
       formatMoney(row, column, cellValue) {
         if (cellValue) {
@@ -532,7 +561,8 @@
           order: vm.order,
           platform: vm.platform,
           date: vm.dateChecked,
-          desc: vm.desc
+          desc: vm.desc,
+          game_type: vm.gameType
         };
         if (vm.desc) {
           data['desc'] = Number(vm.desc);
@@ -571,6 +601,7 @@
         this.is_test = "0";
         this.platform = "";
         this.dateChecked = 1;
+        this.gameType = "";
       },
       handleSearch() {
         this.pageNum = 1;

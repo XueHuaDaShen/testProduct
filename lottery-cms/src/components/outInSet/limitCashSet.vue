@@ -79,7 +79,7 @@
           <span style="font-size:16px;color:#191919;">名称</span>
         </div>
         <div class="top-row">
-          <el-input v-model="ruleForm.name" auto-complete="off"></el-input>
+          <el-input v-model.trim="ruleForm.name" auto-complete="off"></el-input>
         </div>
       </div>
       <div class="body-top clearfix">
@@ -89,15 +89,15 @@
         <div class="top-row">
           <div class="row-item">
             <p class="title">每日次数</p>
-            <el-input class="small center" v-model="ruleForm.max_withdraw_times_daily"></el-input>
+            <el-input class="small center" v-model.trim="ruleForm.max_withdraw_times_daily"></el-input>
           </div>
           <div class="row-item">
             <p class="title">单笔上限</p>
-            <el-input class="small center" v-model="ruleForm.max_withdraw_every_time"></el-input>
+            <el-input class="small center" v-model.trim="ruleForm.max_withdraw_every_time"></el-input>
           </div>
           <div class="row-item">
             <p class="title">单笔下限</p>
-            <el-input class="small center" v-model="ruleForm.min_withdraw_every_time"></el-input>
+            <el-input class="small center" v-model.trim="ruleForm.min_withdraw_every_time"></el-input>
           </div>
         </div>
       </div>
@@ -108,11 +108,11 @@
         <div class="top-row">
           <div class="row-item">
             <p class="title">单笔上限</p>
-            <el-input class="small center" v-model="ruleForm.max_recharge_every_time"></el-input>
+            <el-input class="small center" v-model.trim="ruleForm.max_recharge_every_time"></el-input>
           </div>
           <div class="row-item">
             <p class="title">单笔下限</p>
-            <el-input class="small center" v-model="ruleForm.min_recharge_every_time"></el-input>
+            <el-input class="small center" v-model.trim="ruleForm.min_recharge_every_time"></el-input>
           </div>
         </div>
       </div>
@@ -123,11 +123,11 @@
         <div class="top-row">
           <div class="row-item">
             <p class="title">单笔上限</p>
-            <el-input class="small center" v-model="ruleForm.max_recharge_scan"></el-input>
+            <el-input class="small center" v-model.trim="ruleForm.max_recharge_scan"></el-input>
           </div>
           <div class="row-item">
             <p class="title">单笔下限</p>
-            <el-input class="small center" v-model="ruleForm.min_recharge_scan"></el-input>
+            <el-input class="small center" v-model.trim="ruleForm.min_recharge_scan"></el-input>
           </div>
         </div>
       </div>
@@ -138,11 +138,11 @@
         <div class="top-row">
           <div class="row-item">
             <p class="title">单笔上限</p>
-            <el-input class="small center" v-model="ruleForm.third_max_recharge_every_time"></el-input>
+            <el-input class="small center" v-model.trim="ruleForm.third_max_recharge_every_time"></el-input>
           </div>
           <div class="row-item">
             <p class="title">单笔下限</p>
-            <el-input class="small center" v-model="ruleForm.third_min_recharge_every_time"></el-input>
+            <el-input class="small center" v-model.trim="ruleForm.third_min_recharge_every_time"></el-input>
           </div>
         </div>
       </div>

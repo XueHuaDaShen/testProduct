@@ -60,7 +60,7 @@
           <label class="exp">用户名：</label>
           <el-input v-model.trim="dialogForm.loginname.value" type="text" placeholder="请输入用户名" style="width:114px" clearable />
         </div>
-        <div class="dialog-row mb-30 time-row">
+        <div class="dialog-row mb-30 time-row" style="margin-bottom:30px;">
           <label class="exp">登录密码：</label>
           <el-input v-model.trim="dialogForm.password.value" :type="dialogForm.password.type" placeholder="请输入登录密码" style="width:114px" clearable />
         </div>
@@ -450,10 +450,13 @@
           }
         }
         if (!validate) {
-          self.$alert(errorMessage, '系统提醒', {
+          self.$alert(`<div class="lottery-title">${errorMessage}</div>`, '系统提醒', {
             confirmButtonText: '确定',
-            center: true
-          });
+            center: true,
+            dangerouslyUseHTMLString: true,
+            customClass: "syxw-wrap-inner",
+            callback: action => {}
+          })
           return false;
         } else {
           this.loading = true;
@@ -516,6 +519,43 @@
   .team-manage-wrap .search-form .dialog-header {
     width: 800px;
   }
+
+  .team-manage-wrap .dialog-row {
+    .el-input__inner {
+      font-family: PingFangSC-Medium;
+      font-size: 14px;
+      color: #191919;
+      font-weight: bold;
+    }
+
+    .el-input__inner::-webkit-input-placeholder {
+      /* WebKit browsers */
+      color: #bcbcbc;
+      font-weight: bold;
+      font-size: 14px;
+    }
+
+    .el-input__inner:-moz-placeholder {
+      /* Mozilla Firefox 4 to 18 */
+      color: #bcbcbc;
+      font-weight: bold;
+      font-size: 14px;
+    }
+
+    .el-input__inner::-moz-placeholder {
+      /* Mozilla Firefox 19+ */
+      color: #bcbcbc;
+      font-weight: bold;
+      font-size: 14px;
+    }
+
+    .el-input__inner:-ms-input-placeholder {
+      /* Internet Explorer 10+ */
+      color: #bcbcbc;
+      font-weight: bold;
+      font-size: 14px;
+    }
+  }
 </style>
 <style scoped lang="scss">
   .dialog-row {
@@ -528,25 +568,28 @@
       text-align: right;
       display: inline-block;
       color: #191919;
-      font-size: 12px;
+      font-size: 14px;
       margin-right: 17px;
+      font-weight: bold;
     }
   }
 
   .contract-link-commit {
-    width: 115px;
-    height: 40px;
-    background: #CC3447;
-    border-radius: 2px;
-    font-size: 14px;
-    font-family: MicrosoftYaHei;
-    color: #FFFFFF;
+    width: 140px;
+    height: 48px;
+    line-height: 46px;
     display: inline-block;
     text-align: center;
-    line-height: 40px;
     cursor: pointer;
     text-decoration: none;
-    margin-top: 30px;
+    font-family: PingFangSC-Regular;
+    font-size: 16px;
+    font-weight: 700;
+    color: #ffffff;
+    margin: 0 auto;
+    background-image: linear-gradient(-180deg, #CFA072 0%, #B68E66 100%);
+    border: 1px solid #DDDDDD;
+    border-radius: 2px;
   }
 
   .percentage-row {
@@ -627,15 +670,20 @@
 
     .reg {
       display: inline-block;
-      line-height: 28px;
+      width: 80px;
       height: 30px;
-      border-radius: 6px;
+      line-height: 30px;
+      text-align: center;
+      font-size: 14px;
+      font-weight: bold;
+      color: #fff;
+      cursor: pointer;
       border-radius: 2px;
-      font-family: PingFangSC-Regular;
-      font-size: 12px;
-      color: #FFFFFF;
-      padding: 0 18px;
-      background-color: #2D996E;
+      outline: none;
+      font-family: microsoft yahei;
+      box-shadow: none;
+      border: none;
+      background-image: linear-gradient(-180deg, #CFA072 0%, #B68E66 100%);
     }
   }
 

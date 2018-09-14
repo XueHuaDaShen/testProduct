@@ -22,8 +22,8 @@
       <div class="size-double-bets">
         <span class="dice" v-for="(k, i) in sizeDouble" :key="i" @click="handleCheckBetsNum(k, sizeDouble)" :class="setStyle(k)">{{k}}</span>
         <div>
-          <em @click="handleclickAll(sizeDouble)">全</em>
-          <em @click="handleclickClean(sizeDouble)">清</em>
+          <input type="text" value="全" @blur="operateText=''" readonly :class="operateText==='全'?'active':''" @click="handleclickAll(sizeDouble)">
+          <input type="text" value="清" @blur="operateText=''" readonly :class="operateText==='清'?'active':''" @click="handleclickClean(sizeDouble)">
         </div>
       </div>
     </div>
@@ -157,6 +157,7 @@
     },
     data() {
       return {
+        operateText: '',
         andValue: [],
         andValueSelected: [],
         sizeDouble: ['大', '小', '单', '双'],
@@ -308,13 +309,15 @@
         this.$emit('sendBetsArr', this.betsArr)
       },
       handleclickAll(sizeDouble) {
+        this.operateText = '全'
         this.betsArr.data = [];
         this.betsArr.data.push(...sizeDouble)
         let bets = lottery.valueEnd(this.betsArr.data);
         this.$store.dispatch('setBets', bets);
-        this.$emit('sendBetsArr', this.betsArr)
+        this.$emit('sendBetsArr', this.betsArr);
       },
       handleclickClean(sizeDouble) {
+        this.operateText = '清'
         this.betsArr.data = [];
         let bets = lottery.valueEnd(this.betsArr.data);
         this.$store.dispatch('setBets', bets);
@@ -440,7 +443,8 @@
   .ks-bets-wrap {
     width: 100%;
     .dice {
-      box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.5);
+      // box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.5);
+      box-shadow: 0px 3px 3px 0px rgba(0, 0, 0, 0.38);
       margin-left: 5px;
       border-radius: 8px;
       &:first-child {
@@ -448,27 +452,27 @@
       }
     }
     .dice1 {
-      background: url('../assets/img/bets-img/dice1.png') no-repeat;
+      background: url('../img/dice1.png') no-repeat;
       background-size: 100% 100%;
     }
     .dice2 {
-      background: url('../assets/img/bets-img/dice2.png') no-repeat;
+      background: url('../img/dice2.png') no-repeat;
       background-size: 100% 100%;
     }
     .dice3 {
-      background: url('../assets/img/bets-img/dice3.png') no-repeat;
+      background: url('../img/dice3.png') no-repeat;
       background-size: 100% 100%;
     }
     .dice4 {
-      background: url('../assets/img/bets-img/dice4.png') no-repeat;
+      background: url('../img/dice4.png') no-repeat;
       background-size: 100% 100%;
     }
     .dice5 {
-      background: url('../assets/img/bets-img/dice5.png') no-repeat;
+      background: url('../img/dice5.png') no-repeat;
       background-size: 100% 100%;
     }
     .dice6 {
-      background: url('../assets/img/bets-img/dice6.png') no-repeat;
+      background: url('../img/dice6.png') no-repeat;
       background-size: 100% 100%;
     }
     .ks-content {
@@ -555,7 +559,7 @@
           background-image: linear-gradient(-180deg, #DBB894 5%, #7C5D3C 97%);
         }
       }
-      em {
+      input {
         font-style: normal;
         margin-left: 20px;
         font-size: 14px;
@@ -570,6 +574,18 @@
         font-size: 14px;
         color: #4F4F4F;
         border-radius: 50%;
+        &.active {
+          color: #fff;
+          background-image: -webkit-gradient(linear, left top, left bottom, color-stop(5%, #DBB894), color-stop(97%, #7C5D3C));
+          background-image: linear-gradient(-180deg, #DBB894 5%, #7C5D3C 97%);
+          border: 1px solid #DBB894;
+        }
+        &:hover {
+          color: #fff;
+          background-image: -webkit-gradient(linear, left top, left bottom, color-stop(5%, #DBB894), color-stop(97%, #7C5D3C));
+          background-image: linear-gradient(-180deg, #DBB894 5%, #7C5D3C 97%);
+          border: 1px solid #DBB894;
+        }
       }
       span.curr {
         color: #fff;

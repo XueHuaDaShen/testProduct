@@ -712,7 +712,7 @@
     margin-left: 8px;
     cursor: pointer;
     float: left;
-    margin-bottom: 8px; // background:url('../assets/img/bets-img/balls.png') no-repeat left;
+    margin-bottom: 8px; // background:url('../img/balls.png') no-repeat left;
     // background-size:100% 100%;
   }
 
@@ -825,7 +825,7 @@
     color: #fff;
     /* background:rgba(220,133,44,1);
   box-shadow:1px 2px 6px rgba(102,66,1,0.19); */
-    /* background: url('../assets/img/bets-img/ballsed.png') no-repeat left;
+    /* background: url('../img/ballsed.png') no-repeat left;
     background-size: 100% 100%; */
     background-image: linear-gradient(-180deg, #DBB894 5%, #7C5D3C 97%);
     border: 1px solid #DBB894;

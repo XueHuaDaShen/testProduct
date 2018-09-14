@@ -105,15 +105,17 @@
       },
       noMessage() {
         let self = this;
-        self.$alert('该公告不存在，请联系管理员', '系统提醒', {
-          confirmButtonText: '确定',
+        self.$alert('<div class="lottery-title">该公告不存在，请联系管理员</div>', '温馨提示', {
+          confirmButtonText: '关闭',
           center: true,
+          dangerouslyUseHTMLString: true,
+          customClass: "syxw-wrap-inner",
           callback: action => {
             setTimeout(function() {
               self.$router.push({ name: 'mail' });
             }, 1000)
           }
-        });
+        })
       },
       // status:  { type: String ,default:1 },                
       // 状态： 1未读  2 已读   3已删除

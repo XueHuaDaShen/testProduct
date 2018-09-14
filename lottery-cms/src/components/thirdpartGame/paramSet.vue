@@ -24,6 +24,8 @@
         </el-table-column>
         <el-table-column prop="name" align="center" width="110" label="平台名">
         </el-table-column>
+        <el-table-column prop="game_type" align="center" width="110" label="游戏类型" :formatter="formatGameType">
+        </el-table-column>
         <el-table-column label="当前状态" align="center">
           <template slot-scope="scope">
             {{getStatus(scope.row.disabled)}}
@@ -57,11 +59,17 @@
       <div class="body-top" style="border:none">
         <div class="top-row">
           <span class="exp">平台代号：</span>
-          <el-input v-model="contractFrom.platform" class="w-217" placeholder="请输入平台代号" type="text" />
+          <el-input v-model.trim="contractFrom.platform" class="w-217" placeholder="请输入平台代号" type="text" />
         </div>
         <div class="top-row">
           <span class="exp">平台名称：</span>
-          <el-input v-model="contractFrom.name" class="w-217" placeholder="请输入平台名称" type="text" />
+          <el-input v-model.trim="contractFrom.name" class="w-217" placeholder="请输入平台名称" type="text" />
+        </div>
+        <div class="top-row">
+          <span class="exp">游戏类型：</span>
+          <el-select v-model.trim="contractFrom.gameType" clearable placeholder="请选择游戏类型" class="small">
+            <el-option v-for="(item,index) in gameOptions" :key="index" :value="item.value" :label="item.text"></el-option>
+          </el-select>
         </div>
         <div class="top-row">
           <span class="exp">是否开启：</span>
@@ -78,11 +86,11 @@
         <tr v-for="(item,index) in contractItems" :key="index">
           <td align="left" class="td-right">
             {{contractDialogAdd.dialogContentexp1}}：
-            <el-input class="type2" v-model="item.range" style="width:72px" />
+            <el-input class="type2" v-model.trim="item.range" style="width:72px" />
           </td>
           <td align="left" class="td-right">
             {{contractDialogAdd.dialogContentexp2}}：
-            <el-input class="type2" v-model="item.rate" style="width:72px" /> %
+            <el-input class="type2" v-model.trim="item.rate" style="width:72px" /> %
           </td>
           <td>
             <a class="contract-dialog-delete" @click="closeContractItem(item)"></a>
@@ -149,8 +157,32 @@
           platform: "", // 平台代号
           name: "", // 平台名称
           disabled: "", // 是否开启
-          id: ""
+          id: "",
+          gameType: ""
         },
+        gameOptions: [
+          // PVP： 棋牌， FISH： 捕鱼， LIVE： 真人， RNG： 电子， SPORTS： 体育 
+          {
+            value: 'PVP',
+            text: '棋牌'
+          },
+          {
+            value: 'FISH',
+            text: '捕鱼'
+          },
+          {
+            value: 'LIVE',
+            text: '真人'
+          },
+          {
+            value: 'RNG',
+            text: '电子'
+          },
+          {
+            value: 'SPORTS',
+            text: '体育'
+          },
+        ],
         contractItems: [],
         noResult: true,
         totalPageNum: 0, //总页数
@@ -207,6 +239,7 @@
         let self = this;
         let platform = self.contractFrom.platform;
         let name = self.contractFrom.name;
+        let game_type = self.contractFrom.gameType;
         let disabled = self.contractFrom.disabled;
         let exp1 = self.contractDialogAdd.dialogContentexp1;
         let exp2 = self.contractDialogAdd.dialogContentexp2;
@@ -237,10 +270,10 @@
           });
           return;
         }
-        if (!name) {
+        if (!game_type) {
           this.$message({
             showClose: true,
-            message: "平台名称不能为空",
+            message: "游戏类型不能为空",
             type: "error",
             center: true
           });
@@ -271,9 +304,10 @@
           platform: platform,
           refund: self.contractItems,
           disabled: disabled,
-          name: name
+          name: name,
+          game_type: game_type
         };
-        // console.log('data', data);
+        console.log('data', data);
         let url = "/gameSetting/create";
         self.createLoading = true;
         request.http(
@@ -434,35 +468,7 @@
         self.contractFrom.name = row.name;
         self.contractFrom.disabled = row.disabled.toString();
         self.contractFrom.id = row._id;
-        /* let data = {
-          id: contractid
-        };
-        self.contractDialogAdd.loading = true;
-        let url = "/gameSetting/list";
-        request.http(
-          "get",
-          url,
-          data,
-          success => {
-            self.contractDialogAdd.loading = false;
-            if (success.returncode) {
-              if (
-                success.returncode == 103 ||
-                success.returncode == 106 ||
-                success.returncode == 101
-              ) {
-                request.loginAgain(self);
-              } else if (success.returncode == 200) {
-                self.contractDialogAdd.data = success.data;
-                self.contractItems = success.data.content;
-              }
-            }
-          },
-          error => {
-            self.contractDialogAdd.loading = false;
-            self.contractDialogAdd.data = {};
-          }
-        ); */
+        self.contractFrom.gameType = row.game_type;
       },
       // 合同更新
       /* status: 1,
@@ -476,8 +482,45 @@
         let disabled = self.contractFrom.disabled;
         let refund = self.contractItems;
         let id = self.contractFrom.id;
+        let game_type = self.contractFrom.gameType;
         let data = {};
         let message = "";
+        if (!platform) {
+          this.$message({
+            showClose: true,
+            message: "平台代号不能为空",
+            type: "error",
+            center: true
+          });
+          return;
+        }
+        if (!regexpInput(platform)) {
+          this.$message({
+            showClose: true,
+            message: "平台代号要求3-20位字母或者数字",
+            type: "error",
+            center: true
+          });
+          return;
+        }
+        if (!name) {
+          this.$message({
+            showClose: true,
+            message: "平台名称不能为空",
+            type: "error",
+            center: true
+          });
+          return;
+        }
+        if (!game_type) {
+          this.$message({
+            showClose: true,
+            message: "游戏类型不能为空",
+            type: "error",
+            center: true
+          });
+          return;
+        }
         if (self.contractItems.length == 0) {
           this.$message({
             showClose: true,
@@ -563,7 +606,24 @@
           }
         );
         return true;
-      }
+      },
+      formatGameType(row, column, cellValue) {
+        if (cellValue) {
+          switch (cellValue) {
+            case 'PVP':
+              return '棋牌';
+            case 'FISH':
+              return '捕鱼';
+            case 'LIVE':
+              return '真人';
+            case 'RNG':
+              return '电子';
+            case 'SPORTS':
+              return '体育';
+          }
+        }
+        return "--";
+      },
     },
     mounted() {
       this.getList();

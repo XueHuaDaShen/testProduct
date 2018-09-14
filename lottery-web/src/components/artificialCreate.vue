@@ -78,38 +78,53 @@
         let data = {},
           self = this;
         if (!this.loginname.value) {
-          self.$alert('请填写用户名', '系统提醒', {
+          self.$alert('<div class="lottery-title">请填写用户名</div>', '系统提醒', {
             confirmButtonText: '确定',
-            center: true
-          });
+            center: true,
+            dangerouslyUseHTMLString: true,
+            customClass: "syxw-wrap-inner",
+            callback: action => {}
+          })
           return false;
         }
         if (!regexpInput(this.loginname.value)) {
-          self.$alert('用户名格式不符合要求', '系统提醒', {
+          self.$alert('<div class="lottery-title">用户名格式不符合要求</div>', '系统提醒', {
             confirmButtonText: '确定',
-            center: true
-          });
+            center: true,
+            dangerouslyUseHTMLString: true,
+            customClass: "syxw-wrap-inner",
+            callback: action => {}
+          })
           return false;
         }
         if (!this.password.value) {
-          self.$alert('请填写登录密码', '系统提醒', {
+          self.$alert('<div class="lottery-title">请填写登录密码</div>', '系统提醒', {
             confirmButtonText: '确定',
-            center: true
-          });
+            center: true,
+            dangerouslyUseHTMLString: true,
+            customClass: "syxw-wrap-inner",
+            callback: action => {}
+          })
           return false;
         }
         if (!regexpPsd(this.password.value)) {
-          self.$alert('登录密码格式不符合要求', '系统提醒', {
+          self.$alert('<div class="lottery-title">登录密码格式不符合要求</div>', '系统提醒', {
             confirmButtonText: '确定',
-            center: true
-          });
+            center: true,
+            dangerouslyUseHTMLString: true,
+            customClass: "syxw-wrap-inner",
+            callback: action => {}
+          })
           return false;
         }
         if (!this.salary.group) {
-          self.$alert('请设置奖金组', '系统提醒', {
+          self.$alert('<div class="lottery-title">请设置奖金组</div>', '系统提醒', {
             confirmButtonText: '确定',
-            center: true
-          });
+            center: true,
+            dangerouslyUseHTMLString: true,
+            customClass: "syxw-wrap-inner",
+            callback: action => {}
+          })
           return false;
         }
         this.loading = true;
@@ -123,23 +138,27 @@
             if (success.returncode == 103 || success.returncode == 106 || success.returncode == 101) {
               request.loginAgain(self);
             } else if (success.returncode == 200) {
-              self.$alert('用户创建成功！', '系统提醒', {
+              self.$alert('<div class="lottery-title">用户创建成功！</div>', '系统提醒', {
                 confirmButtonText: '确定',
                 center: true,
+                dangerouslyUseHTMLString: true,
+                customClass: "syxw-wrap-inner",
                 callback: action => {
                   self.loginname.value = '';
                   self.password.value = '';
                 }
-              });
+              })
             } else if (success.returncode == 303) {
-              self.$alert('用户名已存在！', '系统提醒', {
+              self.$alert('<div class="lottery-title">用户名已存在！</div>', '系统提醒', {
                 confirmButtonText: '确定',
                 center: true,
+                dangerouslyUseHTMLString: true,
+                customClass: "syxw-wrap-inner",
                 callback: action => {
                   self.loginname.value = '';
                   self.password.value = '';
                 }
-              });
+              })
             } else {
               self.$message({
                 showClose: true,
@@ -150,14 +169,16 @@
           }
         }, (error) => {
           self.loading = false;
-          self.$alert('用户创建失败', '系统提醒', {
+          self.$alert('<div class="lottery-title">用户创建失败</div>', '系统提醒', {
             confirmButtonText: '确定',
             center: true,
+            dangerouslyUseHTMLString: true,
+            customClass: "syxw-wrap-inner",
             callback: action => {
-              self.loginame.value = '';
+              self.loginname.value = '';
               self.password.value = '';
             }
-          });
+          })
         })
       },
       //匹配6-16位数字和字母组合

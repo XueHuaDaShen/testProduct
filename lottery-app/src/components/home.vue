@@ -48,7 +48,7 @@
     <ul class="caipiaoList">
       <router-link v-for="(lottery, li) in lotteryList" :key="li" :to="{ name: lottery.gamecode.split('.')[0]==='lhc'?'lhc':'betsView', query:{id: lottery.gameid, name: lottery.gamename, code: lottery.gamecode.split('.')[0]==='qt'?lottery.gamecode.split('.')[1]:lottery.gamecode.split('.')[0]} }">
         <li>
-          <span><img :src="'static/img/'+lottery.gamecode.split('.')[0]+'_icon.png'"></span>
+          <span><img :src="$store.state.productPath+lottery.gamecode.split('.')[0]+'_icon.png'"></span>
           <em>{{lottery.gamename}}</em>
         </li>
       </router-link>
@@ -384,7 +384,7 @@ export default {
       width:.34rem;
       height:.34rem;
       // background:#c7c7c7;
-      background:url('/static/img/horn.png') no-repeat;
+      background:url('../assets/h5-img/horn.png') no-repeat;
       background-size:100% 100%;
     }
     em{
@@ -538,27 +538,27 @@ export default {
       }
     }
     li.agdz-li>div{
-      background:url('/static/img/image_4.png') no-repeat;
+      background:url('../assets/h5-img/image_4.png') no-repeat;
       background-size:100% 100%;
     }
     li.byyxg-li>div{
-      background:url('/static/img/image_1.png') no-repeat;
+      background:url('../assets/h5-img/image_1.png') no-repeat;
       background-size:100% 100%;
     }
     li.sbty-li>div{
-      background:url('/static/img/image_2.png') no-repeat;
+      background:url('../assets/h5-img/image_2.png') no-repeat;
       background-size:100% 100%;
     }
     li.agsx-li>div{
-      background:url('/static/img/image_3.png') no-repeat;
+      background:url('../assets/h5-img/image_3.png') no-repeat;
       background-size:100% 100%;
     }
     li.bbinyxg-li{
-      background:url('/static/img/bbinyxg.png') no-repeat;
+      background:url('../assets/h5-img/bbinyxg.png') no-repeat;
       background-size:100% 100%;
     }
     li.igyxg-li{
-      background:url('/static/img/igyxg.png') no-repeat;
+      background:url('../assets/h5-img/igyxg.png') no-repeat;
       background-size:100% 100%;
     }
   }

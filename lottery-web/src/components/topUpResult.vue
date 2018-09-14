@@ -36,17 +36,17 @@
           <div class="wrap-tip" v-if="topUpWayActive == 1">
             <img src='../assets/img/topUp/saomiao.png' />
             <p>用微信支付扫一扫
-              <br/>扫描二维码完成支付</p>
+              <br />扫描二维码完成支付</p>
           </div>
           <div class="wrap-tip" v-if="topUpWayActive == 2">
             <img src='../assets/img/topUp/saomiao.png' />
             <p>用支付宝钱包扫一扫
-              <br/>扫描二维码完成支付</p>
+              <br />扫描二维码完成支付</p>
           </div>
           <div class="wrap-tip" v-if="topUpWayActive == 3">
             <img src='../assets/img/topUp/saomiao.png' />
             <p>用银联扫一扫
-              <br/>扫描二维码完成支付</p>
+              <br />扫描二维码完成支付</p>
           </div>
         </div>
         <div class="result-wrap" v-if="payResult.visible">
@@ -94,10 +94,13 @@
     methods: {
       onSubmit() {
         if (!this.form.cash_apply || this.form.cash_apply == 0) {
-          this.$alert("充值金额应在[2元]至[20000元]之间", "系统提示", {
-            confirmButtonText: "确定",
+          this.$alert('<div class="lottery-title">充值金额应在[2元]至[20000元]之间</div>', '系统提醒', {
+            confirmButtonText: '确定',
+            center: true,
+            dangerouslyUseHTMLString: true,
+            customClass: "syxw-wrap-inner",
             callback: action => {}
-          });
+          })
           return;
         }
         let self = this;
@@ -200,7 +203,7 @@
       }
     },
     watch: {
-      "form.cash_apply" (newValue, oldValue) {
+      "form.cash_apply"(newValue, oldValue) {
         if (newValue !== oldValue) {
           if (newValue) {
             if (!validator.positiveInt(newValue)) {

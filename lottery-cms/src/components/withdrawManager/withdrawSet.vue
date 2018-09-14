@@ -11,7 +11,7 @@
         <div class="search-content">
           <div class="search-inner-wrap">
             <label>用户名：</label>
-            <el-input clearable v-model="username" placeholder="姓名"></el-input>
+            <el-input clearable v-model.trim="username" placeholder="姓名"></el-input>
           </div>
           <div class="search-btn">
             <el-button type="success" @click="createSet" size="medium">添加设置</el-button>
@@ -53,25 +53,25 @@
     <el-dialog title="添加设置" :visible.sync="dialogFormVisible" @close="resetForm('ruleForm')">
       <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="150px">
         <el-form-item label="支付方式" prop="name">
-          <el-input v-model="ruleForm.name" auto-complete="off"></el-input>
+          <el-input v-model.trim="ruleForm.name" auto-complete="off"></el-input>
         </el-form-item>
         <!-- <el-form-item label="每天最多提款金额" prop="max_cash_daily">
           <el-input type="number" v-model="ruleForm.max_cash_daily"></el-input>
         </el-form-item> -->
         <el-form-item label="每天提款最大次数" prop="max_withdraw_times_daily">
-          <el-input type="number" v-model="ruleForm.max_withdraw_times_daily"></el-input>
+          <el-input type="number" v-model.trim="ruleForm.max_withdraw_times_daily"></el-input>
         </el-form-item>
         <el-form-item label="每笔提款最大值" prop="max_withdraw_every_time">
-          <el-input type="number" v-model="ruleForm.max_withdraw_every_time"></el-input>
+          <el-input type="number" v-model.trim="ruleForm.max_withdraw_every_time"></el-input>
         </el-form-item>
         <el-form-item label="每笔提款最小值" prop="min_withdraw_every_time">
-          <el-input type="number" v-model="ruleForm.min_withdraw_every_time"></el-input>
+          <el-input type="number" v-model.trim="ruleForm.min_withdraw_every_time"></el-input>
         </el-form-item>
         <el-form-item label="每笔最高存款" prop="max_recharge_every_time">
-          <el-input type="number" v-model="ruleForm.max_recharge_every_time"></el-input>
+          <el-input type="number" v-model.trim="ruleForm.max_recharge_every_time"></el-input>
         </el-form-item>
         <el-form-item label="每笔最低存款" prop="min_recharge_every_time">
-          <el-input type="number" v-model="ruleForm.min_recharge_every_time"></el-input>
+          <el-input type="number" v-model.trim="ruleForm.min_recharge_every_time"></el-input>
         </el-form-item>
         <!-- <el-form-item label="创建时间" prop="create_at">
           <el-input v-model="ruleForm.create_at"></el-input>

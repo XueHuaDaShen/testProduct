@@ -5,7 +5,7 @@
         <tr>
           <td style="width:50%;">
             <label>用户名：</label>
-            <el-input disabled v-model="data.loginname" style="width:150px"></el-input>
+            <el-input disabled v-model.trim="data.loginname" style="width:150px"></el-input>
           </td>
           <td>
           </td>
@@ -13,7 +13,7 @@
         <tr>
           <td>
             <label>真实姓名：</label>
-            <el-input disabled v-model="data.realname" style="width:150px"></el-input>
+            <el-input disabled v-model.trim="data.realname" style="width:150px"></el-input>
           </td>
           <td>
             <label>生日:</label>
@@ -24,7 +24,7 @@
         <tr>
           <td>
             <label>昵称：</label>
-            <el-input disabled v-model="data.nickname" style="width:150px"></el-input>
+            <el-input disabled v-model.trim="data.nickname" style="width:150px"></el-input>
           </td>
           <td>
             <label>性别:</label>
@@ -39,11 +39,11 @@
         <tr>
           <td>
             <label>手机号码：</label>
-            <el-input disabled v-model="data.phone" style="width:150px"></el-input>
+            <el-input disabled v-model.trim="data.phone" style="width:150px"></el-input>
           </td>
           <td>
             <label>邮箱地址:</label>
-            <el-input disabled v-model="data.email" style="width:150px"></el-input>
+            <el-input disabled v-model.trim="data.email" style="width:150px"></el-input>
           </td>
         </tr>
       </tbody>

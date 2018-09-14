@@ -14,7 +14,7 @@
             <div class="tl clearfix content-row">
               <span class="exp">账号</span>
               <span>:</span>
-              <el-input type="text" v-model="ruleForm.loginname" style="width:114px;"></el-input>
+              <el-input type="text" v-model.trim="ruleForm.loginname" style="width:114px;"></el-input>
               <el-button type="primary" @click="searchLoginname()" class="yes small" style="margin-left:30px;">查询</el-button>
             </div>
             <div v-if="hasLoginname">
@@ -45,12 +45,12 @@
                 <div class="tl content-row">
                   <span class="exp">提出金额</span>
                   <span>:</span>
-                  <el-input v-model="ruleForm.amount" style="width:114px;"></el-input>
+                  <el-input v-model.trim="ruleForm.amount" style="width:114px;"></el-input>
                 </div>
                 <div class="tl content-row">
                   <span class="exp">备注</span>
                   <span>:</span>
-                  <el-input v-model="ruleForm.message" style="width:228px;"></el-input>
+                  <el-input v-model.trim="ruleForm.message" style="width:228px;"></el-input>
                 </div>
                 <!-- <div class="tl content-row">
                 <span class="exp">备注：</span>
@@ -162,7 +162,7 @@
       }
     },
     watch: {
-      "ruleForm.amount" () {
+      "ruleForm.amount"() {
         if (this.ruleForm.amount) {
           let cash = this.user.cash;
           if (parseFloat(this.ruleForm.amount) > parseFloat(cash)) {

@@ -12,7 +12,7 @@
         <div class="search-content">
           <div class="search-inner-wrap">
             <label>用户名：</label>
-            <el-input clearable v-model="username" placeholder="姓名" style="width:114px"></el-input>
+            <el-input clearable v-model.trim="username" placeholder="姓名" style="width:114px"></el-input>
           </div>
           <div class="search-inner-wrap">
             <label>彩种：</label>
@@ -161,7 +161,7 @@
             name: 'chaseLog',
             checked: false
           }, {
-            title: '棋牌游戏',
+            title: '游戏记录',
             name: 'thirdpart',
             checked: false
           }

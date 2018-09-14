@@ -12,7 +12,7 @@
         <div class="search-content">
           <div class="search-inner-wrap">
             <label>用户名：</label>
-            <el-input clearable v-model="username" placeholder="姓名" style="width:114px;"></el-input>
+            <el-input clearable v-model.trim="username" placeholder="姓名" style="width:114px;"></el-input>
           </div>
           <!--           <div class="search-inner-wrap">
             <label>查找时间：</label>
@@ -96,11 +96,11 @@
           </el-select>
         </el-form-item>
         <el-form-item label="实际充值金额" prop="realRecharge" :label-width="formLabelWidth">
-          <el-input v-model="form.realRecharge" placeholder="请输入实际充值金额">
+          <el-input v-model.trim="form.realRecharge" placeholder="请输入实际充值金额">
           </el-input>
         </el-form-item>
         <el-form-item label="手续费" prop="shouxufei" :label-width="formLabelWidth">
-          <el-input v-model="form.shouxufei" placeholder="请输入手续费">
+          <el-input v-model.trim="form.shouxufei" placeholder="请输入手续费">
           </el-input>
         </el-form-item>
       </el-form>

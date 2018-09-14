@@ -125,14 +125,14 @@
                 </el-tooltip>
                 <span class="unit">元</span>
               </div>
-              <div class="container-row mb-10">
+              <div class="container-row">
                 <span class="exp">存款银行：</span>
                 <el-select class="content" v-model="form.banks.value" clearable placeholder="请选择开户银行" :loading="form.banks.loading" :loading-text="form.banks.loadingtext" @focus="focusBank" :disabled="!entrance.thirdLvList.allowed">
                   <el-option v-for="item in form.banks.options" :key="item.bank_id" :label="item.bank_name" :value="item.bank_id">
                   </el-option>
                 </el-select>
               </div>
-              <div class="container-row mb-10">
+              <div class="container-row">
                 <span class="exp">存款人姓名：</span>
                 <el-input placeholder="请输入存款人姓名" type="text" v-model="form.realname.value" class="content" clearable :disabled="!entrance.thirdLvList.allowed"></el-input>
               </div>
@@ -1513,6 +1513,11 @@
     .el-input.ml4 {
       margin-left: -4px;
     }
+
+    .container-row .el-select {
+      height: 40px;
+      line-height: 40px;
+    }
   }
 </style>
 <style scoped lang="scss">
@@ -1717,10 +1722,10 @@
     text-align: center;
     font-size: 12px;
     font-family: MicrosoftYaHei;
-    /* color: rgba(51, 51, 51, 1); */
     cursor: pointer;
     position: relative;
     border-radius: 2px 2px 0 0;
+    border: 1px solid #ddd;
   }
 
   .tabs .tab-title>a {
@@ -1744,6 +1749,7 @@
     background: #fff;
     border: 1px solid #ddd;
     border-radius: 2px 2px 0 0;
+    border-bottom: none;
   }
 
   /* .tabs .tab-title:after {
@@ -1983,7 +1989,7 @@
   }
 
   .top-up-submit {
-    width: 180px;
+    width: 140px;
     height: 48px;
     display: inline-block;
     text-align: center;

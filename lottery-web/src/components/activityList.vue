@@ -90,10 +90,13 @@
             ) {
               request.loginAgain(self);
             } else {
-              self.$alert(success.data.msg, "系统提示", {
-                confirmButtonText: "确定",
+              self.$alert(`<div class="lottery-title">${success.data.msg}</div>`, '系统提示', {
+                confirmButtonText: '确定',
+                center: true,
+                dangerouslyUseHTMLString: true,
+                customClass: "syxw-wrap-inner",
                 callback: action => {}
-              });
+              })
             }
           },
           error => {

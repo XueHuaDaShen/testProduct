@@ -2,9 +2,9 @@
   <div class="bankCard-wrap">
     <h2 class="bankCard-title-wrap"><em></em><p>充值方式</p></h2>
     <ol class="recharge-kind-list">
-      <li v-if="rechargeKindCode==='wxsm'"><i class="recharge-icon"><img src="/static/img/wx.png"></i><span class="recharge-kind-text">{{receiver}}</span></li>
-      <li v-if="rechargeKindCode==='zfbsm'"><i class="recharge-icon"><img src="/static/img/ali.png"></i><span class="recharge-kind-text">{{receiver}}</span></li>
-      <li v-if="rechargeKindCode==='ylsm'"><i class="recharge-icon"><img src="/static/img/yl.png"></i><span class="recharge-kind-text">{{receiver}}</span></li>
+      <li v-if="rechargeKindCode==='wxsm'"><i class="recharge-icon"><img src="@/assets/h5-img/wx.png"></i><span class="recharge-kind-text">{{receiver}}</span></li>
+      <li v-if="rechargeKindCode==='zfbsm'"><i class="recharge-icon"><img src="@/assets/h5-img/ali.png"></i><span class="recharge-kind-text">{{receiver}}</span></li>
+      <li v-if="rechargeKindCode==='ylsm'"><i class="recharge-icon"><img src="@/assets/h5-img/yl.png"></i><span class="recharge-kind-text">{{receiver}}</span></li>
     </ol>
     <div class="recharge-kind"></div>
     <h2 class="bankCard-title-wrap"><em></em><p>充值金额</p></h2>

@@ -33,43 +33,43 @@
       const vm = this;
       vm.loading = true;
       request.http('post', '/ky/user/login', {
-            kindId: 0
-          },
-          success => {
-            vm.loading = false;
-            // console.log('success', formatJson(success));
-            /* let jsonString = JSON.parse(formatJson(success));
-            if (jsonString && jsonString.d && jsonString.d.url) {
-              vm.url = jsonString.d.url;
-              let chess = document.getElementById('chessGame');
-              chess.src = vm.url;
-              vm.changeFrameHeight();
-            } else {
-              vm.$alert('登录失败，请重新登录', '系统提示', {
-                confirmButtonText: '确定',
-                callback: action => {}
-              })
-            } */
-            if (success.returncode == 200) {
-              let data = success.data;
-              if (data && data.url) {
-                let chess = document.getElementById('chessGame');
-                chess.src = data.url;
-                vm.changeFrameHeight();
-              } else {
-                vm.showDialog = true;
-                vm.dialogTitle = '系统提示'
-                vm.dialogText = '登录失败，请重新登录';
-              }
-            }
-          },
-          error => {
-            vm.loading = false;
+        kindId: 0
+      },
+      success => {
+        vm.loading = false;
+        // console.log('success', formatJson(success));
+        /* let jsonString = JSON.parse(formatJson(success));
+        if (jsonString && jsonString.d && jsonString.d.url) {
+          vm.url = jsonString.d.url;
+          let chess = document.getElementById('chessGame');
+          chess.src = vm.url;
+          vm.changeFrameHeight();
+        } else {
+          vm.$alert('登录失败，请重新登录', '系统提示', {
+            confirmButtonText: '确定',
+            callback: action => {}
+          })
+        } */
+        if (success.returncode == 200) {
+          let data = success.data;
+          if (data && data.url) {
+            let chess = document.getElementById('chessGame');
+            chess.src = data.url;
+            vm.changeFrameHeight();
+          } else {
             vm.showDialog = true;
             vm.dialogTitle = '系统提示'
             vm.dialogText = '登录失败，请重新登录';
-            console.log("error", error);
-          });
+          }
+        }
+      },
+      error => {
+        vm.loading = false;
+        vm.showDialog = true;
+        vm.dialogTitle = '系统提示'
+        vm.dialogText = '登录失败，请重新登录';
+        console.log("error", error);
+      });
       
       window.onresize = function() {
         vm.changeFrameHeight();

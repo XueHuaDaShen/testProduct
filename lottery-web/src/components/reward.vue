@@ -1,5 +1,8 @@
 <template>
   <div class="reward-wrap reward-list" v-loading="loading">
+    <div class="tab-line">
+      <p>我的奖金</p>
+    </div>
     <table>
       <tbody>
         <tr>
@@ -11,7 +14,7 @@
         <tr>
           <td :rowspan="tables.size+1">彩票</td>
         </tr>
-        <tr v-for="item in tables.items" class="group-item">
+        <tr v-for="(item,index) in tables.items" class="group-item" :key="index">
           <td>{{item.name}}</td>
           <td>{{item.refund}}</td>
           <td>
@@ -76,6 +79,18 @@
   }
 </script>
 <style scoped>
+  .tab-line {
+    font-family: PingFangSC-Regular;
+    font-weight: 700;
+    font-size: 16px;
+    color: #191919;
+    text-align: left;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+  }
+
   .reward-wrap {
     padding: 30px 20px;
     color: #333333;
@@ -98,14 +113,17 @@
   }
 
   .reward-list .title-top {
-    height: 34px;
-    background: #D4914D;
-    color: #fff;
     font-size: 14px;
+    font-size: 14px;
+    font-family: MicrosoftYaHei;
+    padding: 15px 0;
+    background: #f6f6f6;
+    color: #777;
   }
 
   .reward-list tr {
-    background: #fff;
+    /* background: #f6f6f6; */
+    color: #777;
   }
 
   .reward-list td>a {
@@ -126,7 +144,7 @@
   }
 
   .reward-list .col1 {
-    width: 180px;
+    width: 140px;
   }
 
   .reward-list .col2 {

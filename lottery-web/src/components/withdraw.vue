@@ -897,7 +897,7 @@
   }
 
   a.submit {
-    width: 180px;
+    width: 140px;
     height: 48px;
     display: inline-block;
     text-align: center;
@@ -921,7 +921,7 @@
   }
 
   .submit {
-    width: 180px;
+    width: 140px;
     height: 48px;
     display: inline-block;
     text-align: center;
@@ -1745,6 +1745,7 @@
     /* color: rgba(51, 51, 51, 1); */
     cursor: pointer;
     position: relative;
+    border: 1px solid #ddd;
   }
 
   .tabs .tab-title>a {

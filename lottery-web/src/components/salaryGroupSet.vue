@@ -5,10 +5,8 @@
       <ul class="list">
         <li>
           <a @click="previous">
-            <<&nbsp;返回团队管理</a>
-        </li>
-        <li>
-          <a class="active">奖金组设置</a>
+            <<&nbsp;返回团队管理</a> </li> <li>
+              <a class="active">奖金组设置</a>
         </li>
       </ul>
     </div>
@@ -301,10 +299,13 @@
           }
         }
         if (!validate) {
-          self.$alert(errorMessage, '系统提醒', {
+          self.$alert(`<div class="lottery-title">${errorMessage}</div>`, '系统提醒', {
             confirmButtonText: '确定',
-            center: true
-          });
+            center: true,
+            dangerouslyUseHTMLString: true,
+            customClass: "syxw-wrap-inner",
+            callback: action => {}
+          })
           return false;
         } else {
           this.loading = true;
@@ -324,10 +325,13 @@
                   self.list = success.data.data
                 } else {
                   self.noResult = true;
-                  self.$alert('没有符合条件的记录', '系统提醒', {
+                  self.$alert('<div class="lottery-title">没有符合条件的记录</div>', '系统提醒', {
                     confirmButtonText: '确定',
                     center: true,
-                  });
+                    dangerouslyUseHTMLString: true,
+                    customClass: "syxw-wrap-inner",
+                    callback: action => {}
+                  })
                 }
               } else {
                 self.noResult = false;
@@ -365,10 +369,13 @@
               } else {
                 self.noResult = true;
                 self.list = [];
-                self.$alert('没有符合条件的记录', '系统提醒', {
+                self.$alert('<div class="lottery-title">没有符合条件的记录</div>', '系统提醒', {
                   confirmButtonText: '确定',
                   center: true,
-                });
+                  dangerouslyUseHTMLString: true,
+                  customClass: "syxw-wrap-inner",
+                  callback: action => {}
+                })
               }
             } else {
               self.noResult = true;
@@ -392,13 +399,15 @@
       if (loginname) {
         this.getSalaryGroup(loginname);
       } else {
-        this.$alert('当前奖金组不存在，请联系管理员', '系统提醒', {
+        this.$alert('<div class="lottery-title">当前奖金组不存在，请联系管理员</div>', '系统提醒', {
           confirmButtonText: '确定',
           center: true,
+          dangerouslyUseHTMLString: true,
+          customClass: "syxw-wrap-inner",
           callback: action => {
             this.previous();
           }
-        });
+        })
       }
     }
   }

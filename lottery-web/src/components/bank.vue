@@ -1,14 +1,155 @@
 <template>
-  <div class="bank-wrap search-form" v-loading="loading">
+  <div class="bank-wrap search-form record-options" v-loading="loading">
     <div class="binding-wrap" v-if="bindingVisible">
       <div class="tule-title">
         <strong>银行卡绑定</strong>
       </div>
-      <el-steps :active="bindActive" align-center>
+      <!-- <el-steps :active="bindActive" align-center>
         <el-step title="输入银行卡信息"></el-step>
         <el-step title="确认银行卡信息"></el-step>
         <el-step title="绑定结果"></el-step>
-      </el-steps>
+      </el-steps> -->
+      <div class="el-steps el-steps--horizontal" v-show="bindActive === 1">
+        <div class="el-step is-horizontal is-center" style="flex-basis: 33.3333%; margin-right: 0px;">
+          <div class="el-step__head is-finish">
+            <div class="el-step__line" style="margin-right: 0px;"><i class="el-step__line-inner" style="transition-delay: 0ms; border-width: 1px; width: 100%;"></i></div>
+            <div class="el-step__icon is-text" style="background:#dbdbdb;border:none;">
+              <!---->
+              <div style="background: #BD8454;width:  24px;height:  24px;line-height: 24px;border-radius:  50%;">
+                <div class="el-step__icon-inner">1</div>
+              </div>
+            </div>
+          </div>
+          <div class="el-step__main">
+            <div class="el-step__title is-finish">输入银行卡信息</div>
+            <div class="el-step__description is-finish"></div>
+          </div>
+        </div>
+        <div class="el-step is-horizontal is-center" style="flex-basis: 33.3333%; margin-right: 0px;">
+          <div class="el-step__head is-finish">
+            <div class="el-step__line" style="margin-right: 0px;"><i class="el-step__line-inner" style="transition-delay: 150ms; border-width: 0px; width: 0%;"></i></div>
+            <div class="el-step__icon is-text" style="background:#dbdbdb;border:none;">
+              <!---->
+              <div style="background: #777;width:  24px;height:  24px;line-height: 24px;border-radius:  50%;">
+                <div class="el-step__icon-inner">2</div>
+              </div>
+            </div>
+          </div>
+          <div class="el-step__main">
+            <div class="el-step__title is-process">确认银行卡信息</div>
+            <div class="el-step__description is-process"></div>
+          </div>
+        </div>
+        <div class="el-step is-horizontal is-center" style="flex-basis: 33.3333%; max-width: 33.3333%;">
+          <div class="el-step__head is-process">
+            <div class="el-step__line"><i class="el-step__line-inner"></i></div>
+            <div class="el-step__icon is-text" style="background:#dbdbdb;border:none;">
+              <!---->
+              <div style="background: #777;width:  24px;height:  24px;line-height: 24px;border-radius: 50%;">
+                <div class="el-step__icon-inner">3</div>
+              </div>
+            </div>
+          </div>
+          <div class="el-step__main">
+            <div class="el-step__title is-process">绑定结果</div>
+            <div class="el-step__description is-process"></div>
+          </div>
+        </div>
+      </div>
+      <div class="el-steps el-steps--horizontal" v-show="bindActive === 2">
+        <div class="el-step is-horizontal is-center" style="flex-basis: 33.3333%; margin-right: 0px;">
+          <div class="el-step__head is-finish">
+            <div class="el-step__line" style="margin-right: 0px;"><i class="el-step__line-inner" style="transition-delay: 0ms; border-width: 1px; width: 100%;"></i></div>
+            <div class="el-step__icon is-text" style="background:#dbdbdb;border:none;">
+              <!---->
+              <div style="background: #BD8454;width:  24px;height:  24px;line-height: 24px;border-radius:  50%;">
+                <div class="el-step__icon-inner">1</div>
+              </div>
+            </div>
+          </div>
+          <div class="el-step__main">
+            <div class="el-step__title is-finish">输入银行卡信息</div>
+            <div class="el-step__description is-finish"></div>
+          </div>
+        </div>
+        <div class="el-step is-horizontal is-center" style="flex-basis: 33.3333%; margin-right: 0px;">
+          <div class="el-step__head is-finish">
+            <div class="el-step__line" style="margin-right: 0px;"><i class="el-step__line-inner" style="transition-delay: 150ms; border-width: 0px; width: 0%;"></i></div>
+            <div class="el-step__icon is-text" style="background:#dbdbdb;border:none;">
+              <!---->
+              <div style="background: #BD8454;width:  24px;height:  24px;line-height: 24px;border-radius:  50%;">
+                <div class="el-step__icon-inner">2</div>
+              </div>
+            </div>
+          </div>
+          <div class="el-step__main">
+            <div class="el-step__title is-finish">确认银行卡信息</div>
+            <div class="el-step__description is-finish"></div>
+          </div>
+        </div>
+        <div class="el-step is-horizontal is-center" style="flex-basis: 33.3333%; max-width: 33.3333%;">
+          <div class="el-step__head is-process">
+            <div class="el-step__line"><i class="el-step__line-inner"></i></div>
+            <div class="el-step__icon is-text" style="background:#dbdbdb;border:none;">
+              <!---->
+              <div style="background: #777;width:  24px;height:  24px;line-height: 24px;border-radius: 50%;">
+                <div class="el-step__icon-inner">3</div>
+              </div>
+            </div>
+          </div>
+          <div class="el-step__main">
+            <div class="el-step__title is-process">绑定结果</div>
+            <div class="el-step__description is-process"></div>
+          </div>
+        </div>
+      </div>
+      <div class="el-steps el-steps--horizontal" v-show="bindActive === 3">
+        <div class="el-step is-horizontal is-center" style="flex-basis: 33.3333%; margin-right: 0px;">
+          <div class="el-step__head is-finish">
+            <div class="el-step__line" style="margin-right: 0px;"><i class="el-step__line-inner" style="transition-delay: 0ms; border-width: 1px; width: 100%;"></i></div>
+            <div class="el-step__icon is-text" style="background:#dbdbdb;border:none;">
+              <!---->
+              <div style="background: #BD8454;width:  24px;height:  24px;line-height: 24px;border-radius:  50%;">
+                <div class="el-step__icon-inner">1</div>
+              </div>
+            </div>
+          </div>
+          <div class="el-step__main">
+            <div class="el-step__title is-finish">输入银行卡信息</div>
+            <div class="el-step__description is-finish"></div>
+          </div>
+        </div>
+        <div class="el-step is-horizontal is-center" style="flex-basis: 33.3333%; margin-right: 0px;">
+          <div class="el-step__head is-finish">
+            <div class="el-step__line" style="margin-right: 0px;"><i class="el-step__line-inner" style="transition-delay: 150ms; border-width: 0px; width: 0%;"></i></div>
+            <div class="el-step__icon is-text" style="background:#dbdbdb;border:none;">
+              <!---->
+              <div style="background: #BD8454;width:  24px;height:  24px;line-height: 24px;border-radius:  50%;">
+                <div class="el-step__icon-inner">2</div>
+              </div>
+            </div>
+          </div>
+          <div class="el-step__main">
+            <div class="el-step__title is-finish">确认银行卡信息</div>
+            <div class="el-step__description is-finish"></div>
+          </div>
+        </div>
+        <div class="el-step is-horizontal is-center" style="flex-basis: 33.3333%; max-width: 33.3333%;">
+          <div class="el-step__head is-process">
+            <div class="el-step__line"><i class="el-step__line-inner"></i></div>
+            <div class="el-step__icon is-text" style="background:#dbdbdb;border:none;">
+              <!---->
+              <div style="background: #BD8454;width:  24px;height:  24px;line-height: 24px;border-radius: 50%;">
+                <div class="el-step__icon-inner">3</div>
+              </div>
+            </div>
+          </div>
+          <div class="el-step__main">
+            <div class="el-step__title is-finish">绑定结果</div>
+            <div class="el-step__description is-finish"></div>
+          </div>
+        </div>
+      </div>
       <div class="binding-inner item">
         <div v-show="bindActive === 1">
           <table>
@@ -134,8 +275,8 @@
           <div class="bank-info" :class="'b'+getBankBg(bindSuccess.bank)">
             <span class="info-no">{{bindSuccess.card_no | filterName}}</span>
           </div>
-          <p class="small-tip mt-60">现在您可以进行“银行卡管理”</p>
-          <a class="btn-binding mt-20" @click="getUserBankList">银行卡管理</a>
+          <p class="small-tip mt-60" style="margin-bottom: 10px;">现在您可以进行“银行卡管理”</p>
+          <a class="btn-binding mt-20" @click="getUserBankList" style="margin-top: 10px;">银行卡管理</a>
         </div>
       </div>
     </div>
@@ -150,20 +291,17 @@
         <strong>银行卡绑定规则</strong>
       </div>
       <div class="tips">
-        <p>1. 一个游戏账户最多绑定
-          <span>4 张</span>银行卡， 您目前绑定了
+        <p>一个游戏账户最多绑定
+          <span>{{bankMax}}张</span>银行卡， 您目前绑定了
           <span>{{bankcards.count}} 张</span>卡，还可以绑定
-          <span>{{restBankCount}} 张</span>。</p>
-        <!-- <p>2. 银行卡信息锁定后，不能增加新卡绑定，已绑定的银行卡信息不能进行修改和删除。</p> -->
-        <p>2. 发起第一次提现后, 系统会自动锁定银行卡。</p>
-        <p>3. 为了您的账户资金安全，银行卡“新增”和“修改”将在操作完成2小时0分后，新卡才能发起“向平台提现”。</p>
+          <span>{{restBankCount}} 张</span></p>
+        <p>发起第一次提现后, 系统会自动锁定银行卡</p>
+        <p>为了您的账户资金安全，银行卡“新增”和“修改”将在操作完成2小时0分后，新卡才能发起“向平台提现”</p>
       </div>
       <hr class="user-split-line">
       <div class="options">
-        <!-- <a class="btn-option add" @click="addBankCard()" v-if="bankcards.count<4">新增银行卡</a>
-        <a class="btn-option clock" @click="lockBankCard" v-if="bankcards.allStatus == 0">锁定银行卡</a> -->
-        <a class="btn-option add" @click="addBankCard" v-if="bankcards.count<4">新增银行卡</a>
-        <a class="btn-option clock" @click="lockBankCard" v-if="bankcards.allStatus == 0">锁定银行卡</a>
+        <a class="btn-option add" @click="addBankCard" v-if="bankcards.count<4" style="width:100px;">新增银行卡</a>
+        <a class="btn-option clock" @click="lockBankCard" v-if="bankcards.allStatus == 0" style="width:100px;">锁定银行卡</a>
       </div>
       <table>
         <tbody>
@@ -179,7 +317,7 @@
             <td>{{item.card_no}}</td>
             <td>{{getBindTime(item.create_at)}}</td>
             <td>{{getBankCardStatus(item.status)}}</td>
-            <td>
+            <td style="width:200px;display: flex;justify-content: center;">
               <a class="edit" @click="modifiedBankCard(item._id,item.card_no,item.status)">修改</a>
               <a class="delete" @click="deleteBankCard(item._id,item.card_no,item.status)">删除</a>
             </td>
@@ -258,7 +396,8 @@
         filter: {
           bankid: "",
           cityid: ""
-        }
+        },
+        bankMax: 0
       };
     },
     watch: {
@@ -369,15 +508,42 @@
       //修改银行卡
       modifiedBankCard(id, banktext, status) {
         if (status == 0) {
-          this.$router.push({
-            name: "userCheckSafeQ",
-            query: { id: id, banktext: banktext, urlName: "modifyBank" } //id:当前银行卡的_id，banktext:当前银行卡的文本,urlName:验证安全问题后，要跳转的组件name
-          });
+          let self = this;
+          this.loading = true;
+          request.http('get', '/user/bankcard/safe/question/isSet', {},
+            (success) => {
+              self.loading = false;
+              if (success.returncode && success.returncode == 200) {
+                if (!success.data.isSet) {
+                  this.$router.push({
+                    name: "userSecurityQuestions",
+                  });
+                } else if (success.returncode == 101 || success.returncode == 103 || success.returncode == 106) {
+                  request.loginAgain(self)
+                } else {
+                  this.$router.push({
+                    name: "userCheckSafeQ",
+                    query: { id: id, banktext: banktext, urlName: "modifyBank" } //id:当前银行卡的_id，banktext:当前银行卡的文本,urlName:验证安全问题后，要跳转的组件name
+                  });
+                }
+              }
+            },
+            (error) => {
+              self.loading = false;
+              self.$message({
+                showClose: true,
+                message: '系统出错，请联系管理员',
+                type: 'error'
+              });
+            })
         } else if (status == 1) {
-          this.$alert("银行卡已锁定", "系统提醒", {
-            confirmButtonText: "确定",
-            center: true
-          });
+          this.$alert('<div class="lottery-title">银行卡已锁定</div>', '系统提醒', {
+            confirmButtonText: '确定',
+            center: true,
+            dangerouslyUseHTMLString: true,
+            customClass: "syxw-wrap-inner",
+            callback: action => {}
+          })
         }
       },
       //删除银行卡
@@ -388,19 +554,25 @@
             query: { id: id, banktext: banktext } //id:当前银行卡的_id，banktext:当前银行卡的文本,urlName:验证安全问题后，要跳转的组件name
           });
         } else if (status == 1) {
-          this.$alert("银行卡已锁定", "系统提醒", {
-            confirmButtonText: "确定",
-            center: true
-          });
+          this.$alert('<div class="lottery-title">银行卡已锁定</div>', '系统提醒', {
+            confirmButtonText: '确定',
+            center: true,
+            dangerouslyUseHTMLString: true,
+            customClass: "syxw-wrap-inner",
+            callback: action => {}
+          })
         }
       },
       //锁定银行卡
       lockBankCard() {
         if (this.bankcards.allStatus == 1) {
-          this.$alert("银行卡已锁定", "系统提醒", {
-            confirmButtonText: "确定",
-            center: true
-          });
+          this.$alert('<div class="lottery-title">银行卡已锁定</div>', '系统提醒', {
+            confirmButtonText: '确定',
+            center: true,
+            dangerouslyUseHTMLString: true,
+            customClass: "syxw-wrap-inner",
+            callback: action => {}
+          })
         } else {
           this.$router.push({
             name: "lockBank"
@@ -424,16 +596,47 @@
       },
       addBankCard() {
         if (this.bankcards.allStatus == 1) {
-          this.$alert("银行卡已锁定，不可新增银行卡", "系统提醒", {
-            confirmButtonText: "确定",
-            center: true
-          });
+          this.$alert('<div class="lottery-title">银行卡已锁定，不可新增银行卡</div>', '系统提醒', {
+            confirmButtonText: '确定',
+            center: true,
+            dangerouslyUseHTMLString: true,
+            customClass: "syxw-wrap-inner",
+            callback: action => {}
+          })
         } else {
-          this.$router.push({
-            name: "userCheckSafeQ",
-            query: { urlName: "modifyBank", addMore: true } //urlName:验证安全问题后，要跳转的组件name;adMore:是否是增加更多银行卡,如果是，modifyBank页面的银行卡就要出现可以多选的下拉框，而不是一个span
-          });
+          this.getIsSetSafeQ();
         }
+      },
+      //是否设置安全问题
+      getIsSetSafeQ() {
+        let self = this;
+        this.loading = true;
+        request.http('get', '/user/bankcard/safe/question/isSet', {},
+          (success) => {
+            self.loading = false;
+            if (success.returncode && success.returncode == 200) {
+              if (!success.data.isSet) {
+                this.$router.push({
+                  name: "userSecurityQuestions",
+                });
+              } else if (success.returncode == 101 || success.returncode == 103 || success.returncode == 106) {
+                request.loginAgain(self)
+              } else {
+                this.$router.push({
+                  name: "userCheckSafeQ",
+                  query: { urlName: "modifyBank", addMore: true } //urlName:验证安全问题后，要跳转的组件name;adMore:是否是增加更多银行卡,如果是，modifyBank页面的银行卡就要出现可以多选的下拉框，而不是一个span
+                });
+              }
+            }
+          },
+          (error) => {
+            self.loading = false;
+            self.$message({
+              showClose: true,
+              message: '系统出错，请联系管理员',
+              type: 'error'
+            });
+          })
       },
       //验证银行卡开户信息
       validateBankInfo() {
@@ -565,6 +768,11 @@
                 } else {
                   self.bindingVisible = false;
                   self.isBindBank = false;
+                }
+                if (success.data.max) {
+                  self.bankMax = success.data.max;
+                } else {
+                  self.bankMax = 0;
                 }
               }
             } else if (success.returncode == 101 || success.returncode == 103 || success.returncode == 106) {
@@ -832,22 +1040,26 @@
                   self.loading = false;
                   if (success.returncode) {
                     if (success.returncode == 301 || success.returncode == 303) {
-                      self.$alert("绑定失败，请重新绑定", "系统提醒", {
-                        confirmButtonText: "确定",
+                      self.$alert('<div class="lottery-title">绑定失败，请重新绑定</div>', '系统提醒', {
+                        confirmButtonText: '确定',
                         center: true,
+                        dangerouslyUseHTMLString: true,
+                        customClass: "syxw-wrap-inner",
                         callback: action => {
                           self.bindActive = 1;
                         }
-                      });
+                      })
                     } else if (success.returncode == 200) {
                       self.bindActive = 3;
                       self.bindSuccess = success.data;
                     } else if (success.returncode == 305) {
-                      self.$alert("资金密码不正确", "系统提醒", {
-                        confirmButtonText: "确定",
+                      self.$alert('<div class="lottery-title">资金密码不正确</div>', '系统提醒', {
+                        confirmButtonText: '确定',
                         center: true,
+                        dangerouslyUseHTMLString: true,
+                        customClass: "syxw-wrap-inner",
                         callback: action => {}
-                      });
+                      })
                     } else if (success.returncode == 101 || success.returncode == 103 || success.returncode == 106) {
                       request.loginAgain(self)
                     } else {
@@ -862,13 +1074,15 @@
                 error => {
                   self.loading = false;
                   console.log("数据异常", error);
-                  self.$alert("绑定失败，请重新绑定", "系统提醒", {
-                    confirmButtonText: "确定",
+                  self.$alert('<div class="lottery-title">绑定失败，请重新绑定</div>', '系统提醒', {
+                    confirmButtonText: '确定',
                     center: true,
+                    dangerouslyUseHTMLString: true,
+                    customClass: "syxw-wrap-inner",
                     callback: action => {
                       self.$router.push({ name: "bank" });
                     }
-                  });
+                  })
                 }
               );
             } else {
@@ -888,7 +1102,10 @@
     },
     computed: {
       restBankCount() {
-        return 4 - this.bankcards.count;
+        if (this.bankMax) {
+          return this.bankMax - this.bankcards.count;
+        }
+        return 0;
       }
     },
     mounted() {
@@ -919,6 +1136,14 @@
     }
   };
 </script>
+<style lang="scss">
+  .bank-wrap.search-form.record-options {
+    .el-input.is-disabled .el-input__inner {
+      color: #777;
+    }
+  }
+</style>
+
 <style scoped lang="scss">
   .bank-info {
     width: 276px;
@@ -1109,41 +1334,50 @@
 
   .bank-list td>a {
     display: inline-block;
-    width: 60px;
+    width: 80px;
     height: 30px;
-    border-radius: 2px;
-    font-size: 12px;
-    font-family: MicrosoftYaHei;
     line-height: 30px;
+    text-align: center;
+    font-size: 14px;
+    font-weight: bold;
     color: #fff;
     cursor: pointer;
+    border-radius: 2px;
+    outline: none;
+    font-family: microsoft yahei;
+    box-shadow: none;
+    border: none;
+    background-image: linear-gradient(-180deg, #CFA072 0%, #B68E66 100%);
   }
 
   .no-binding {
-    height: 70px;
+    margin-top: 120px;
   }
 
   .no-binding-tip {
     display: inline-block;
     vertical-align: middle;
-    margin-right: 10px;
+    /* margin-right: 10px; */
+    font-size: 16px;
+    font-weight: bold;
   }
 
   .btn-binding {
-    width: 115px;
-    height: 40px;
-    line-height: 40px;
-    display: inline-block;
+    margin: 30px auto 0;
+    width: 140px;
+    height: 48px;
+    line-height: 46px;
+    display: block;
     text-align: center;
     cursor: pointer;
     text-decoration: none;
-    background: #CC3447;
-    border-radius: 2px;
     font-family: PingFangSC-Regular;
-    font-size: 14px;
+    font-size: 16px;
     font-weight: 700;
-    color: #FFFFFF;
-    margin: 0 auto;
+    color: #ffffff;
+    background-image: linear-gradient(-180deg, #CFA072 0%, #B68E66 100%);
+    border: 1px solid #DDDDDD;
+    border-radius: 2px;
   }
 
   .mt-10 {
@@ -1156,7 +1390,7 @@
   }
 
   .delete {
-    background: #777;
+    // background: #777;
     /* color: #e00000; */
     margin-left: 20px;
   }
@@ -1185,38 +1419,40 @@
 
   .options {
     text-align: right;
-    margin-bottom: 30px;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
   }
 
   .options .btn-option {
-    /* width: 144px;
-    height: 45px;
-    background: rgba(212, 145, 77, 1);
-    border-radius: 6px;
-    cursor: pointer;
-    color: #fff;
     display: inline-block;
-    line-height: 45px;
-    vertical-align: middle; */
-    width: 92px;
+    width: 80px;
     height: 30px;
-    border-radius: 2px;
-    cursor: pointer;
-    color: #fff;
-    display: inline-block;
     line-height: 30px;
-    vertical-align: middle;
-    font-size: 12px;
     text-align: center;
+    font-size: 14px;
+    font-weight: bold;
+    color: #fff;
+    cursor: pointer;
+    border-radius: 2px;
+    outline: none;
+    font-family: microsoft yahei;
+    box-shadow: none;
+    border: none;
+    background-image: linear-gradient(-180deg, #CFA072 0%, #B68E66 100%);
+  }
+
+  .btn-option+.btn-option {
     margin-left: 20px;
   }
 
   .options .add {
-    background: #2D996E;
+    // background: #2D996E;
   }
 
   .options .clock {
-    background: #CC3447;
+    // background: #CC3447;
   }
 
   .tule-title {
@@ -1233,7 +1469,7 @@
   }
 
   .tips {
-    width: 612px;
+    width: 474px;
     padding: 20px;
     background: #FFFFE1;
     border: 1px solid #DDDDDD;
@@ -1243,20 +1479,22 @@
   }
 
   .tips>p>span {
-    color: #ce3c4d;
+    color: #c83a4c;
+    font-weight: bold;
   }
 
   .tips>p {
     /* font-size: 14px; */
     font-size: 12px;
     font-family: MicrosoftYaHei;
-    color: #666666;
+    color: #191919;
     text-align: left;
     margin-bottom: 20px;
   }
 
   .tips>p:last-child {
     margin-bottom: 0;
+    font-weight: bold;
   }
 
   .binding-inner table {
@@ -1274,21 +1512,14 @@
   }
 
   .binding-inner .exp {
-    font-size: 12px;
+    font-size: 14px;
+    font-weight: bold;
     font-family: MicrosoftYaHei;
     color: #191919;
     height: 38px;
     line-height: 38px;
     min-width: 100px;
   }
-
-  /* .binding-inner .content {
-    font-size: 14px;
-    font-family: MicrosoftYaHei;
-    color: #333333;
-    height: 38px;
-    line-height: 38px;
-  } */
 
   .binding-inner .item-input {
     width: 241px;
@@ -1307,30 +1538,20 @@
   }
 
   .submit {
-    width: 115px;
-    height: 40px;
-    line-height: 40px;
+    width: 140px;
+    height: 48px;
+    line-height: 46px;
     display: inline-block;
     text-align: center;
     cursor: pointer;
     text-decoration: none;
-    background: #CC3447;
-    border-radius: 2px;
     font-family: PingFangSC-Regular;
-    font-size: 14px;
+    font-size: 16px;
     font-weight: 700;
-    color: #FFFFFF;
-    margin: 0 auto;
-  }
-
-  .el-step__head.is-finish {
-    background-color: #ea1c1c;
-    color: #fff;
-    border-color: transparent;
-  }
-
-  .el-step__title.is-finish {
-    color: #ea1c1c;
+    color: #ffffff;
+    background-image: linear-gradient(-180deg, #CFA072 0%, #B68E66 100%);
+    border: 1px solid #DDDDDD;
+    border-radius: 2px;
   }
 
   .step3 .complete {

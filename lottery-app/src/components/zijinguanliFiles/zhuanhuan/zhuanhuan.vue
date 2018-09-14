@@ -21,10 +21,10 @@
             <td class="td-title">KY 游戏</td>
             <td>{{Number(profile.cash_ky).toFixed(2) || 0}}元</td>
           </tr>
-          <!-- <tr>
+          <tr>
             <td class="td-title">AG 游戏</td>
             <td>{{Number(profile.cash_ag).toFixed(2) || 0}}元</td>
-          </tr> -->
+          </tr>
           <!-- <tr>
             <td class="td-title">AG 游戏</td>
             <td>0元</td>
@@ -103,20 +103,20 @@ export default {
       ],
       zhuanhuanArr2: [
         {title: 'KY 游戏', val: 'ky'},
-        // {title: 'AG 游戏', val: 'ag'},
+        {title: 'AG 游戏', val: 'ag'},
         // {title: 'PT 游戏', val: 'pt'},
       ],
 
       zhuanchuArr: [
         {title: '主账户', val: 'main'},
         {title: 'KY 游戏', val: 'ky'},
-        // {title: 'AG 游戏', val: 'ag'},
+        {title: 'AG 游戏', val: 'ag'},
         // {title: 'PT 游戏', val: 'pt'},
       ],
       zhuanruArr: [
         {title: '主账户', val: 'main'},
         {title: 'KY 游戏', val: 'ky'},
-        // {title: 'AG 游戏', val: 'ag'},
+        {title: 'AG 游戏', val: 'ag'},
         // {title: 'PT 游戏', val: 'pt'},
       ],
 
@@ -234,7 +234,7 @@ export default {
         this[arr] = [
           {title: '主账户', val: 'main'},
           {title: 'KY 游戏', val: 'ky'},
-          // {title: 'AG 游戏', val: 'ag'},
+          {title: 'AG 游戏', val: 'ag'},
           // {title: 'PT 游戏', val: 'pt'},
         ]
       } else if (val === 'main'){
@@ -245,7 +245,7 @@ export default {
         this[arr] = [
           // {title: '主账户', val: 'main'},
           {title: 'KY 游戏', val: 'ky'},
-          // {title: 'AG 游戏', val: 'ag'},
+          {title: 'AG 游戏', val: 'ag'},
           // {title: 'PT 游戏', val: 'pt'},
         ]
       } else {

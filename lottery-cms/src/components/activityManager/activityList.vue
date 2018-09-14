@@ -101,12 +101,12 @@
           <div class="form-row">
             <span class="exp">活动名称</span>
             <span class="exp-after">:</span>
-            <el-input type="text" v-model="form.title"></el-input>
+            <el-input type="text" v-model.trim="form.title"></el-input>
           </div>
           <div class="form-row">
             <span class="exp">排序值</span>
             <span class="exp-after">:</span>
-            <el-input type="text" v-model="form.order"></el-input>
+            <el-input type="text" v-model.trim="form.order"></el-input>
           </div>
           <div class="form-row">
             <span class="exp">活动时间</span>

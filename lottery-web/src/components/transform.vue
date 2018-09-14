@@ -37,23 +37,23 @@
               <span class="exp2">{{getTotalCash}}元</span>
               <img src="@/assets/img/refresh.png" style="margin-left:10px;width:18px;height:16px;cursor:pointer;" @click="refreshUser">
               <!-- <i class="el-icon-refresh" style="margin-left:20px;cursor:pointer;"></i> -->
-              <button :disabled="isClick" style="margin-left:10px;cursor:pointer;font-size:16px;width:64px;color:#BD8454;border:none;outline:none;background:none;font-weight:bold;" @click="rebackMoney">
-                一键回收
+              <button :disabled="isClick" class="btn-recycle" @click="rebackMoney">
+                回收
               </button>
             </div>
             <div class="account-all">
-              <div class="all-row">
+              <div class="all-row" v-loading='transformTable.loading'>
                 <label>主账户：</label>
-                <span v-loading='transformTable.loading'>{{transformTable.cash}}元</span>
+                <span>{{transformTable.cash}}元</span>
               </div>
-              <div class="all-row">
+              <div class="all-row" v-loading='transformTable.loading'>
                 <label>KY：</label>
-                <span v-loading='transformTable.loading'>{{transformTable.cash_ky}}元</span>
+                <span>{{transformTable.cash_ky}}元</span>
               </div>
-              <!-- <div class="all-row">
+              <div class="all-row" v-loading='transformTable.loading'>
                 <label>AG：</label>
-                <span v-loading='transformTable.loading'>{{transformTable.cash_ag}}元</span>
-              </div> -->
+                <span>{{transformTable.cash_ag}}元</span>
+              </div>
               <!-- <div class="all-row">
                 <label>AG</label>
                 <span class="cash">0元</span>
@@ -129,7 +129,7 @@
             options: [
               { name: '主账户', _id: 'main' },
               { name: "KY", _id: 'ky' },
-              // { name: "AG", _id: 'ag' }
+              { name: "AG", _id: 'ag' }
             ]
           }, // 转出平台
           to: {
@@ -137,7 +137,7 @@
             options: [
               { name: '主账户', _id: 'main' },
               { name: "KY", _id: 'ky' },
-              // { name: "AG", _id: 'ag' }
+              { name: "AG", _id: 'ag' }
             ]
           }, // 转入平台
           cash: '', // 转账金额
@@ -407,7 +407,7 @@
           channelIn: self.transform.to.value,
           money: self.transform.cash
         };
-        console.log(data)
+        // console.log(data)
         // return false;
         self.loading = true;
         // console.log('123')
@@ -508,7 +508,7 @@
             if (newValue == 'main') {
               this.transform.to.options = [
                 { name: "KY", _id: 'ky' },
-                // { name: "AG", _id: 'ag' }
+                { name: "AG", _id: 'ag' }
               ];
             } else {
               this.transform.to.options = [{ name: "主账户", _id: 'main' }];
@@ -517,7 +517,7 @@
             this.transform.to.options = [
               { name: '主账户', _id: 'main' },
               { name: "KY", _id: 'ky' },
-              // { name: "AG", _id: 'ag' }
+              { name: "AG", _id: 'ag' }
             ];
             this.transform.to.value = '';
           }
@@ -529,7 +529,7 @@
             if (newValue == 'main') {
               this.transform.from.options = [
                 { name: "KY", _id: 'ky' },
-                // { name: "AG", _id: 'ag' }
+                { name: "AG", _id: 'ag' }
               ];
             } else {
               this.transform.from.options = [{ name: "主账户", _id: 'main' }];
@@ -538,7 +538,7 @@
             this.transform.from.options = [
               { name: '主账户', _id: 'main' },
               { name: "KY", _id: 'ky' },
-              // { name: "AG", _id: 'ag' }
+              { name: "AG", _id: 'ag' }
             ];
             this.transform.from.value = '';
           }
@@ -617,12 +617,40 @@
       font-size: 20px;
     }
 
+    .item .done-row .el-select {
+      height: 40px;
+      line-height: 40px;
+    }
+
     .all-row {
       svg {
         height: 20px;
         width: 20px;
         vertical-align: middle;
+
+        .path {
+          stroke-width: 4;
+        }
       }
+    }
+
+    .btn-recycle {
+      margin-left: 10px;
+      width: 64px;
+      color: #fff;
+      height: 30px;
+      line-height: 28px;
+      outline: none;
+      font-weight: bold;
+      background-image: linear-gradient(-180deg, #CFA072 0%, #B68E66 100%);
+      border: 1px solid #DDDDDD;
+      display: inline-block;
+      text-align: center;
+      cursor: pointer;
+      text-decoration: none;
+      font-family: PingFangSC-Regular;
+      font-size: 12px;
+      border-radius: 2px;
     }
   }
 </style>
@@ -665,7 +693,7 @@
   }
 
   .submit {
-    width: 180px;
+    width: 140px;
     height: 48px;
     display: inline-block;
     text-align: center;
@@ -1301,7 +1329,7 @@
   }
 
   .submit {
-    width: 180px;
+    width: 140px;
     height: 48px;
     display: inline-block;
     text-align: center;
@@ -1387,6 +1415,7 @@
     /* color: rgba(51, 51, 51, 1); */
     cursor: pointer;
     position: relative;
+    border: 1px solid #ddd;
   }
 
   .tabs .tab-title>a {
@@ -1459,14 +1488,13 @@
     align-items: center;
 
     .exp {
-      font-size: 16px;
+      font-size: 18px;
       display: inline-block;
     }
 
     .exp2 {
-      font-size: 16px;
+      font-size: 18px;
       color: #CC3447;
-      line-height: 22px;
       display: inline-block;
     }
   }

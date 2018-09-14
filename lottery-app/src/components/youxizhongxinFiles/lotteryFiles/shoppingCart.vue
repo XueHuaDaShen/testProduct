@@ -61,7 +61,7 @@
     </div>
     <div class="alert-tip-text" v-if="tipText">{{tipText}}</div>
     <!-- <div class="alert-tip-text" v-if="issueChange">当前期号发生变化，请重新投注</div> -->
-    <div class="alert-tip-text" v-if="issueChange" style="color:#C83C4A">请注意当前已进入下一期</div>
+    <div class="alert-tip-text" v-if="issueChange" style="background:rgba(0,0,0,0.5);font-size:.32rem;height:.96rem;line-height:.96rem;">请注意当前已进入下一期</div>
     
     <div class="confirm-bets-dialog" v-if="betsOk">
       <div class="dialog-content">
@@ -144,14 +144,14 @@ export default {
     }
   },
   watch: {
-    '$getIssue' (o, n) {
-      console.log(o,n)
+    getIssue (o, n) {
+      // console.log(o,n)
       // this.$store.dispatch('setShoppingCartData', [])
       this.issueChange = true;
       const vm = this;
       setTimeout(()=>{
         vm.issueChange = false;
-      },vm.issueChangeTime)
+      },vm.issueChangeTime*1000)
     }
   },
   methods: {
@@ -212,7 +212,9 @@ export default {
           clearInterval(st)
           // clearInterval(vm.myInterval);
           // vm.getNewIssue();
-          vm.newIssueInterval();
+          setTimeout(() => {
+            vm.newIssueInterval();
+          }, 1000);
         }
         this.countDownTime = {hour, min, sec};
       }, 1000)
@@ -730,7 +732,7 @@ export default {
           opacity: 0;
         }
         #is-hot:checked+i{
-          background:url('/static/img/check_box_ed.png') no-repeat;
+          background:url('../../../assets/h5-img/check_box_ed.png') no-repeat;
           background-size:100% 100%;
         }
         i{
@@ -739,7 +741,7 @@ export default {
           width:.28rem;
           height:.28rem;
           margin-right:.1rem;
-          background:url('/static/img/check_box.png') no-repeat;
+          background:url('../../../assets/h5-img/check_box.png') no-repeat;
           background-size:100% 100%;
           margin-top:.06rem;
         }

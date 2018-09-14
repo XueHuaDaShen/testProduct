@@ -51,7 +51,9 @@
         </el-table-column>
         <el-table-column align="center" label="会员人数">
           <template slot-scope="scope">
-            <el-button class="small" type='text'>{{scope.row.num}}</el-button>
+            <router-link class="small" type='text' :to="{name:'userList',query:{group:scope.row._id}}" target="_blank"
+              v-if="scope.row.num != 0">{{scope.row.num}}</router-link>
+            <span v-else>{{scope.row.num}}</span>
           </template>
         </el-table-column>
         <el-table-column align="center" prop="message" label="备注">
@@ -86,37 +88,37 @@
           <div class="form-row">
             <span class="exp">层级编号</span>
             <span class="exp-after">:</span>
-            <el-input type="text" v-model="ruleForm.no" clearable></el-input>
+            <el-input type="text" v-model.trim="ruleForm.no" clearable></el-input>
           </div>
           <div class="form-row">
             <span class="exp">层级名称</span>
             <span class="exp-after">:</span>
-            <el-input type="text" v-model="ruleForm.name" clearable></el-input>
+            <el-input type="text" v-model.trim="ruleForm.name" clearable></el-input>
           </div>
           <div class="form-row">
             <span class="exp">存款次数</span>
             <span class="exp-after">:</span>
-            <el-input type="number" v-model="ruleForm.recharge_times" clearable></el-input>
+            <el-input type="number" v-model.trim="ruleForm.recharge_times" clearable></el-input>
           </div>
           <div class="form-row">
             <span class="exp">存款总额</span>
             <span class="exp-after">:</span>
-            <el-input type="number" v-model="ruleForm.recharge_amount" clearable></el-input>
+            <el-input type="number" v-model.trim="ruleForm.recharge_amount" clearable></el-input>
           </div>
           <div class="form-row">
             <span class="exp">最大存款额度</span>
             <span class="exp-after">:</span>
-            <el-input type="number" v-model="ruleForm.max_recharge_every_times" clearable></el-input>
+            <el-input type="number" v-model.trim="ruleForm.max_recharge_every_times" clearable></el-input>
           </div>
           <div class="form-row">
             <span class="exp">提款次数</span>
             <span class="exp-after">:</span>
-            <el-input type="number" v-model="ruleForm.withdraw_times" clearable></el-input>
+            <el-input type="number" v-model.trim="ruleForm.withdraw_times" clearable></el-input>
           </div>
           <div class="form-row">
             <span class="exp">提款总额</span>
             <span class="exp-after">:</span>
-            <el-input type="number" v-model="ruleForm.withdraw_amount" clearable></el-input>
+            <el-input type="number" v-model.trim="ruleForm.withdraw_amount" clearable></el-input>
           </div>
           <div class="form-row">
             <span class="exp">出入款项</span>
@@ -129,7 +131,7 @@
           <div class="form-row">
             <span class="exp">备注</span>
             <span class="exp-after">:</span>
-            <el-input type="text" v-model="ruleForm.message" clearable></el-input>
+            <el-input type="text" v-model.trim="ruleForm.message" clearable></el-input>
           </div>
         </div>
       </div>
@@ -174,7 +176,7 @@
       <div class="body-top clearfix">
         <div class="top-row">
           <span>用户名：</span>
-          <el-input clearable v-model="lockForm.username" style="width:114px;"></el-input>
+          <el-input clearable v-model.trim="lockForm.username" style="width:114px;"></el-input>
           <el-button @click="searchLockForm" class="small edit">查询</el-button>
         </div>
       </div>

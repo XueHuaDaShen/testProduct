@@ -11,7 +11,7 @@
         <div class="search-content">
           <div class="search-inner-wrap">
             <label>用户名:</label>
-            <el-input clearable v-model="adminName" placeholder="用户名" style="width:114px;"></el-input>
+            <el-input clearable v-model.trim="adminName" placeholder="用户名" style="width:114px;"></el-input>
           </div>
           <div class="search-inner-wrap">
             <label>群组：</label>
@@ -91,12 +91,12 @@
           <div class="form-row">
             <span class="exp">用户名</span>
             <span class="exp-after">:</span>
-            <el-input type="text" v-model="form.loginname" clearable></el-input>
+            <el-input type="text" v-model.trim="form.loginname" clearable></el-input>
           </div>
           <div class="form-row">
             <span class="exp">密码</span>
             <span class="exp-after">:</span>
-            <el-input type="password" v-model="form.pw" clearable></el-input>
+            <el-input type="password" v-model.trim="form.pw" clearable></el-input>
           </div>
           <div class="form-row">
             <span class="exp">群组</span>
@@ -109,7 +109,7 @@
           <div class="form-row">
             <span class="exp">备注</span>
             <span class="exp-after">:</span>
-            <el-input type="text" v-model="form.message" clearable></el-input>
+            <el-input type="text" v-model.trim="form.message" clearable></el-input>
           </div>
         </div>
       </div>
@@ -124,12 +124,12 @@
           <div class="form-row">
             <span class="exp">用户名</span>
             <span class="exp-after">:</span>
-            <el-input type="text" v-model="updateRoleForm.loginname" disabled></el-input>
+            <el-input type="text" v-model.trim="updateRoleForm.loginname" disabled></el-input>
           </div>
           <div class="form-row">
             <span class="exp">原群组</span>
             <span class="exp-after">:</span>
-            <el-input type="text" v-model="updateRoleForm.checked" disabled></el-input>
+            <el-input type="text" v-model.trim="updateRoleForm.checked" disabled></el-input>
           </div>
           <div class="form-row">
             <span class="exp">新群组</span>
@@ -165,7 +165,7 @@
           <div class="form-row">
             <span class="exp">用户名</span>
             <span class="exp-after">:</span>
-            <el-input type="text" v-model="pwdForm.loginname" disabled></el-input>
+            <el-input type="text" v-model.trim="pwdForm.loginname" disabled></el-input>
           </div>
           <!-- <div class="form-row">
             <span class="exp">旧密码</span>
@@ -175,12 +175,12 @@
           <div class="form-row">
             <span class="exp">新密码</span>
             <span class="exp-after">:</span>
-            <el-input type="password" v-model="pwdForm.newpw" clearable></el-input>
+            <el-input type="password" v-model.trim="pwdForm.newpw" clearable></el-input>
           </div>
           <div class="form-row">
             <span class="exp">确认密码</span>
             <span class="exp-after">:</span>
-            <el-input type="password" v-model="pwdForm.checkPass" clearable></el-input>
+            <el-input type="password" v-model.trim="pwdForm.checkPass" clearable></el-input>
           </div>
         </div>
       </div>

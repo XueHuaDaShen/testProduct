@@ -17,9 +17,9 @@
             </el-select>
           </div>
           <div class="search-inner-wrap">
-            <el-input clearable v-model="username" placeholder="用户名" style="width:114px" v-show="searchType.value == 1"></el-input>
-            <el-input clearable v-model="realname" placeholder="真实姓名" style="width:114px" v-show="searchType.value == 2"></el-input>
-            <el-input clearable v-model="phone" placeholder="手机号" style="width:114px" v-show="searchType.value == 3"></el-input>
+            <el-input clearable v-model.trim="username" placeholder="用户名" style="width:114px" v-show="searchType.value == 1"></el-input>
+            <el-input clearable v-model.trim="realname" placeholder="真实姓名" style="width:114px" v-show="searchType.value == 2"></el-input>
+            <el-input clearable v-model.trim="phone" placeholder="手机号" style="width:114px" v-show="searchType.value == 3"></el-input>
           </div>
           <div class="search-inner-wrap">
             <label>状态：</label>
@@ -38,7 +38,7 @@
           </div>
           <div class="search-inner-wrap">
             <label>上层代理：</label>
-            <el-input clearable v-model="superLoginname" placeholder="上层代理" style="width:114px"></el-input>
+            <el-input clearable v-model.trim="superLoginname" placeholder="上层代理" style="width:114px"></el-input>
           </div>
           <div class="search-inner-wrap">
             <label>测试账号：</label>
@@ -144,17 +144,17 @@
           <div class="form-row">
             <span class="exp">账号</span>
             <span class="exp-after">:</span>
-            <el-input type="text" v-model="createForm.loginname"></el-input>
+            <el-input type="text" v-model.trim="createForm.loginname"></el-input>
           </div>
           <div class="form-row">
             <span class="exp">密码</span>
             <span class="exp-after">:</span>
-            <el-input type="password" v-model="createForm.password"></el-input>
+            <el-input type="password" v-model.trim="createForm.password"></el-input>
           </div>
           <div class="form-row">
             <span class="exp">确认密码</span>
             <span class="exp-after">:</span>
-            <el-input type="password" v-model="createForm.psd_sure"></el-input>
+            <el-input type="password" v-model.trim="createForm.psd_sure"></el-input>
           </div>
           <div class="form-row">
             <span class="exp">测试账号</span>
@@ -169,7 +169,7 @@
           <div class="form-row">
             <span class="exp">奖金组</span>
             <span class="exp-after">:</span>
-            <el-input type="text" v-model="createForm.refund"></el-input>
+            <el-input type="text" v-model.trim="createForm.refund"></el-input>
           </div>
           <div class="form-row">
             <span class="exp"></span>
@@ -191,7 +191,7 @@
           <div class="form-row">
             <span class="exp">标题</span>
             <span class="exp-after">:</span>
-            <el-input type="text" v-model="msgForm.topic"></el-input>
+            <el-input type="text" v-model.trim="msgForm.topic"></el-input>
           </div>
           <div class="form-row file-inner">
             <span class="exp">内容文字</span>
@@ -356,6 +356,14 @@
     created() {
       this.routerArr = [];
       let query = this.$route.query;
+      if (query.param) {
+        this.searchType.value = 1;
+        this.username = query.param;
+      }
+      if (query.parent) {
+        this.superLoginname = query.parent;
+      }
+      this.groupFocus();
       this.index1 = Number(query.index1);
       this.index2 = Number(query.index2);
       const menus = JSON.parse(localStorage.getItem('menus'));
@@ -376,11 +384,6 @@
           v.checked = false
         }
       })
-      if (query.param) {
-        this.searchType.value = 1;
-        this.username = query.param;
-      }
-      this.getUserList();
     },
     methods: {
       searchTypeChange() {
@@ -646,7 +649,7 @@
         this.resetForm("createForm");
       },
       // 层级
-      groupFocus(event) {
+      groupFocus() {
         let vm = this;
         if (vm.group.options.length != 0) {
           return;
@@ -670,12 +673,6 @@
               } else if (success.returncode == 200) {
                 let options = success.data;
                 if (options.length != 0) {
-                  /* for (let i = 0; i < options.length; i++) {
-                    let typeArr = new Array();
-                    let option = options[i];
-                    typeArr.push(option.type);
-                    option.type = typeArr;
-                  } */
                   vm.group.options = options;
                 }
               } else {
@@ -900,6 +897,13 @@
         this.pageNum = 1;
         this.getUserList();
       },
+    },
+    mounted() {
+      let query = this.$route.query;
+      if (query.group) {
+        this.group.value = query.group;
+      }
+      this.getUserList();
     }
   }
 

@@ -2,10 +2,14 @@
 <template>
   <div class="lottery-wrap search-form" v-loading="loading">
     <div class="record-options search-form">
-      <div class="option-row">
+      <div class="option-row mb-20">
         <span class="exp">游戏平台：</span>
         <el-select v-model="form.gameplatform.value" style="width:114px;" clearable>
-          <el-option v-for="(o,index) in form.gameplatform.options" :label="o.platform" :value="o.name" :key="index"></el-option>
+          <el-option v-for="(o,index) in form.gameplatform.options" :label="o" :value="o" :key="index"></el-option>
+        </el-select>
+        <span class="exp ml-20">游戏类型：</span>
+        <el-select v-model.trim="gameType" clearable placeholder="请选择" class="small">
+          <el-option v-for="(item,index) in gameOptions" :key="index" :value="item.value" :label="item.text"></el-option>
         </el-select>
         <span class="exp ml-20">游戏名：</span>
         <el-input v-model="form.ganmename" placeholder="请输入游戏名" style="width:114px;"></el-input>
@@ -36,11 +40,44 @@
     </div>
     <hr class="user-split-line">
     <table class="record-group">
+      <tbody>
+        <tr class="group-title">
+          <th>用户名</th>
+          <th>有效投注</th>
+          <th style="border-right: 1px solid #dddddd;">游戏盈亏</th>
+        </tr>
+        <tr class="group-item" v-for="(item,index) in agg" :key="index" v-if="!aggNoResult">
+          <td>{{item._id ? item._id.loginname : '--'}}</td>
+          <td>{{item.vote_valid | formatMoney}}</td>
+          <td style="border-right: 1px solid #dddddd;" class="success">{{item.profit | formatMoney}}</td>
+        </tr>
+        <tr v-if="aggNoResult" class="no-result">
+          <td colspan="10" style="border-right: 1px solid #dddddd;">
+            <p style="color:#777;font-weight:bold;margin:35px 0;font-size:14px;">没有符合条件的记录，请更改查询条件</p>
+          </td>
+        </tr>
+      </tbody>
+      <tfoot class="record-bottom">
+        <tr class="group-item">
+          <td>所在区间统计：</td>
+          <td>{{getCurrentPageCash('vote_valid')}}</td>
+          <td style="border-right: 1px solid #dddddd;" class="success">{{getCurrentPageCash('profit')}}</td>
+        </tr>
+      </tfoot>
+    </table>
+    <div class="record-pagination clearfix" v-if="!aggNoResult">
+      <el-pagination @size-change="handleSizeChangeAgg" @current-change="handleCurrentChangeAgg" :current-page.sync="aggpage_num" :page-size="aggpage_size" layout="total, prev, pager, next" :total="aggtotal">
+      </el-pagination>
+    </div>
+    <div style="margin-bottom:20px;"></div>
+    <table class="record-group">
       <thead>
         <tr class="group-title">
-          <th>游戏平台</th>
+          <th>平台</th>
+          <th>游戏类型</th>
           <th>游戏名</th>
           <th>投注额</th>
+          <th>有效投注</th>
           <th>盈利额</th>
           <th style="border-right: 1px solid #dddddd;">游戏时间</th>
         </tr>
@@ -48,8 +85,10 @@
       <tbody>
         <tr v-for="item in list" class="group-item" v-if="!noResult" :key="item._id">
           <td>{{item.platform?item.platform:'--'}}</td>
+          <td>{{item.game_type | filterGameType}}</td>
           <td>{{item.game}}</td>
           <td>{{item.vote}}元</td>
+          <th>{{item.vote_valid}}元</th>
           <td>{{item.profit}}元</td>
           <td>{{getTime(item.start_at)}}</td>
         </tr>
@@ -63,7 +102,9 @@
         <tr class="group-item">
           <td>本页小结</td>
           <td></td>
+          <td></td>
           <td>{{getCurrentPageVote}}</td>
+          <td>{{getCurrentPageVoteValid}}</td>
           <td>{{getCurrentPageProfit}}</td>
           <td></td>
         </tr>
@@ -84,6 +125,30 @@
     data() {
       return {
         loading: false,
+        gameType: '',
+        gameOptions: [
+          // PVP： 棋牌， FISH： 捕鱼， LIVE： 真人， RNG： 电子， SPORTS： 体育 
+          {
+            value: 'PVP',
+            text: '棋牌'
+          },
+          {
+            value: 'FISH',
+            text: '捕鱼'
+          },
+          {
+            value: 'LIVE',
+            text: '真人'
+          },
+          {
+            value: 'RNG',
+            text: '电子'
+          },
+          {
+            value: 'SPORTS',
+            text: '体育'
+          },
+        ],
         form: {
           //form Start
           //开始结束时间
@@ -245,12 +310,28 @@
         total: 0, //总条数
         pageIndex: 1, //当前页
         pageSize: 15, //单页条数
-        agg: {} //投注统计
+        agg: [], //投注统计
+        aggpage_size: 15,
+        aggpage_num: 1,
+        aggtotal: 0,
+        aggtotal_page_num: 0,
+        aggNoResult: true,
       };
     },
     methods: {
+      getCurrentPageCash(key) {
+        let amount = 0.00;
+        if (this.agg.length != 0) {
+          for (let i = 0; i < this.agg.length; i++) {
+            if (this.agg[i][key]) {
+              amount += this.agg[i][key];
+            }
+          }
+        }
+        return parseFloat(amount).toFixed(2);
+      },
       getTime(time) {
-        return moment(time).format("YYYY-MM-DD");
+        return moment(time).format("YYYY-MM-DD HH:MM:SS");
       },
       handleSearch() {
         this.pageIndex = 1;
@@ -262,6 +343,7 @@
         let ymd = this.formatDate(date);
         this.form.dateTo.value = ymd + " 23:59:59";
         this.form.dateFrom.value = ymd + " 00:00:00";
+        this.handleSearch();
       },
       //本周
       setTimeNowWeek() {
@@ -282,6 +364,7 @@
         );
         getWeekEndDate = this.formatDate(getWeekEndDate);
         this.form.dateTo.value = getWeekEndDate + " 23:59:59";
+        this.handleSearch();
       },
       //本月
       setTimeNowMonth() {
@@ -301,6 +384,7 @@
         );
         getMonthEndDate = this.formatDate(getMonthEndDate);
         this.form.dateTo.value = getMonthEndDate + " 23:59:59";
+        this.handleSearch();
       },
       //设置近几日
       setTimeRecent3Days(day) {
@@ -309,6 +393,7 @@
         this.form.dateFrom.value = previous + " 00:00:00";
         let ymd = this.formatDate(now);
         this.form.dateTo.value = ymd + " 23:59:59";
+        this.handleSearch();
       },
       getDay(day) {
         var today = new Date();
@@ -356,6 +441,13 @@
         this.pageIndex = val;
         this.onSubmit();
       },
+      handleSizeChangeAgg(val) {
+        // console.log(`每页 ${val} 条`);
+      },
+      handleCurrentChangeAgg(val) {
+        this.aggpage_num = val;
+        this.onSubmit();
+      },
       onSubmit() {
         let validate = true,
           data = {},
@@ -365,6 +457,9 @@
         }
         data["pageSize"] = this.pageSize;
         data["pageNum"] = this.pageIndex;
+        data['aggpage_size'] = this.aggpage_size;
+        data['aggpage_num'] = this.aggpage_num;
+        data['game_type'] = this.gameType;
         let errorMessage = "查询错误";
         for (let v in this.form) {
           if (this.form.hasOwnProperty(v)) {
@@ -385,10 +480,13 @@
           }
         }
         if (!validate) {
-          self.$alert(errorMessage, "系统提醒", {
-            confirmButtonText: "确定",
-            center: true
-          });
+          self.$alert(`<div class="lottery-title">${errorMessage}</div>`, '系统提醒', {
+            confirmButtonText: '确定',
+            center: true,
+            dangerouslyUseHTMLString: true,
+            customClass: "syxw-wrap-inner",
+            callback: action => {}
+          })
           return false;
         } else {
           this.loading = true;
@@ -415,18 +513,21 @@
                   } else {
                     self.noResult = true;
                     self.list = [];
-                    // self.$alert('没有符合条件的记录', '系统提醒', {
-                    //   confirmButtonText: '确定',
-                    //   center: true,
-                    // });
+                  }
+                  self.aggtotal = success.data.aggtotal;
+                  if (self.aggtotal) {
+                    self.aggNoResult = false;
+                    self.aggtotal_page_num = success.data.aggtotal_page_num;
+                    self.agg = success.data.aggdata;
+                  } else {
+                    self.aggNoResult = true;
+                    self.agg = [];
                   }
                 } else {
                   self.noResult = true;
                   self.list = [];
-                  // self.$alert('没有符合条件的记录', '系统提醒', {
-                  //   confirmButtonText: '确定',
-                  //   center: true,
-                  // });
+                  self.aggNoResult = true;
+                  sefl.agg = [];
                 }
               }
             },
@@ -491,6 +592,17 @@
         }
         return vote;
       },
+      getCurrentPageVoteValid() {
+        let vote = 0.0;
+        if (this.list.length != 0) {
+          for (let i = 0; i < this.list.length; i++) {
+            if (this.list[i].vote_valid) {
+              vote += this.list[i].vote_valid;
+            }
+          }
+        }
+        return vote;
+      },
       getCurrentPageProfit() {
         let profit = 0.0;
         if (this.list.length != 0) {
@@ -502,17 +614,6 @@
         }
         return profit;
       },
-      getCurrentPageCash() {
-        let cash = 0.0;
-        if (this.list.length != 0) {
-          for (let i = 0; i < this.list.length; i++) {
-            if (this.list[i].cash) {
-              cash += this.list[i].cash;
-            }
-          }
-        }
-        return cash;
-      }
     },
     mounted() {
       this.setTimeToday();
@@ -523,10 +624,39 @@
     created() {
       this.$store.dispatch('setbodyBG', 'no-bg');
       localStorage.setItem('bodyBG', 'no-bg');
-    }
+    },
+    filters: {
+      formatMoney(value) {
+        if (value) {
+          return parseFloat(value).toFixed(2);
+        }
+        return 0;
+      },
+      filterGameType(cellValue) {
+        if (cellValue) {
+          switch (cellValue) {
+            case 'PVP':
+              return '棋牌';
+            case 'FISH':
+              return '捕鱼';
+            case 'LIVE':
+              return '真人';
+            case 'RNG':
+              return '电子';
+            case 'SPORTS':
+              return '体育';
+          }
+        }
+        return "--";
+      },
+    },
   };
 </script>
 <style scoped>
+  .mb-20 {
+    margin-bottom: 20px;
+  }
+
   .user-split-line {
     background: #ddd;
     height: 1px;
@@ -608,11 +738,11 @@
 
   .record-options {
     background: #ffffff;
+    padding-bottom: 30px;
   }
 
   .record-options .option-row {
     text-align: left;
-    margin-bottom: 20px;
     font-size: 12px;
     font-family: MicrosoftYaHei;
     color: #333333;

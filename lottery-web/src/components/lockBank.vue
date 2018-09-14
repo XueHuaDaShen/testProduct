@@ -1,6 +1,6 @@
 <template>
-  <div class="bank-wrap search-form" v-loading="loading">
-    <div class="binding-wrap">
+  <div class="bank-wrap search-form record-options" v-loading="loading">
+    <div class="binding-wrap item">
       <div class="binding-inner">
         <div class="x-auto">
           为了账户的资金安全，建议锁定银行卡信息。
@@ -12,26 +12,23 @@
             <tr v-for="(item,index) in bankCards" v-cloak :key="index">
               <td align="right" class="exp">已绑卡{{index+1}}：</td>
               <td align="left" class="content">
-                <el-input v-model="item.bank[0].bank_name+item.card_no" clearable :disabled="true">
+                <el-input v-model="item.bank[0].bank_name+item.card_no" clearable :disabled="true" class="content">
                 </el-input>
               </td>
             </tr>
             <tr>
               <td align="right" class="exp">资金密码：</td>
               <td align="left" class="content">
-                <el-input placeholder="请输入内容" v-model="validateForm.bankPsd" clearable type="password">
+                <el-input placeholder="请输入内容" v-model="validateForm.bankPsd" clearable type="password" class="content">
                 </el-input>
-              </td>
-            </tr>
-            <tr>
-              <td align="right" class="exp"></td>
-              <td align="left" class="content">
-                <a class="submit" type="submit" @click="lock">提交锁定</a>
-                <a class="submit back" @click="previousBank" style="margin-left:20px;">返回</a>
               </td>
             </tr>
           </tbody>
         </table>
+        <div class="submit-line">
+          <a class="back" @click="previousBank">返回上一步</a>
+          <a class="submit" type="submit" @click="lock">提交锁定</a>
+        </div>
       </div>
     </div>
   </div>
@@ -96,21 +93,25 @@
                             if (success.returncode == 103 || success.returncode == 106 || success.returncode == 101) {
                               request.loginAgain(self);
                             } else if (success.returncode == 200) {
-                              self.$alert('锁定成功', '系统提醒', {
+                              self.$alert('<div class="lottery-title">锁定成功</div>', '系统提醒', {
                                 confirmButtonText: '确定',
                                 center: true,
+                                dangerouslyUseHTMLString: true,
+                                customClass: "syxw-wrap-inner",
                                 callback: action => {
                                   self.previousBank();
                                 }
-                              });
+                              })
                             } else if (success.returncode == 301) {
-                              self.$alert('锁定失败，请重新验证', '系统提醒', {
+                              self.$alert('<div class="lottery-title">锁定失败，请重新验证</div>', '系统提醒', {
                                 confirmButtonText: '确定',
                                 center: true,
+                                dangerouslyUseHTMLString: true,
+                                customClass: "syxw-wrap-inner",
                                 callback: action => {
                                   self.validateForm.bankPsd = '';
                                 }
-                              });
+                              })
                             }
                           }
                         },
@@ -226,6 +227,15 @@
     cursor: pointer;
   }
 
+  .submit-line {
+    width: 100%;
+    margin-top: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+  }
+
   .btn-binding {
     width: 136px;
     height: 48px;
@@ -284,10 +294,12 @@
   .binding-inner .exp {
     font-size: 14px;
     font-family: MicrosoftYaHei;
-    color: #333333;
+    color: #191919;
     height: 38px;
     line-height: 38px;
     min-width: 128px;
+    padding-bottom: 20px;
+    font-weight: bold;
   }
 
   .binding-inner .content {
@@ -317,24 +329,34 @@
   .binding-inner td {}
 
   .submit {
-    width: 115px;
-    height: 40px;
-    line-height: 40px;
+    width: 140px;
+    height: 48px;
+    line-height: 46px;
     display: inline-block;
     text-align: center;
     cursor: pointer;
     text-decoration: none;
-    background: #CC3447;
-    border-radius: 2px;
     font-family: PingFangSC-Regular;
-    font-size: 14px;
+    font-size: 16px;
     font-weight: 700;
-    color: #FFFFFF;
-    margin: 0 auto;
+    color: #ffffff;
+    background-image: linear-gradient(-180deg, #CFA072 0%, #B68E66 100%);
+    border: 1px solid #DDDDDD;
+    border-radius: 2px;
   }
 
-  .submit.back {
-    background: #777;
+  .back {
+    width: 140px;
+    display: inline-block;
+    margin-bottom: 20px;
+    text-align: center;
+    cursor: pointer;
+    text-decoration: none;
+    font-family: PingFangSC-Regular;
+    font-size: 12px;
+    font-weight: 700;
+    color: #777;
+    border-radius: 2px;
   }
 
   .step3 .complete {

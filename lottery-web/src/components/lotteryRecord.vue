@@ -62,17 +62,32 @@
           <th>有效投注</th>
           <th>派奖总额</th>
           <th>投注返点</th>
-          <th>彩票盈亏</th>
+          <th style="border-right: 1px solid #dddddd;">彩票盈亏</th>
         </tr>
-        <tr class="group-item" v-for="(item,index) in agg" :key="index">
+        <tr class="group-item" v-for="(item,index) in agg" :key="index" v-if="agg.length!=0">
           <td>{{item.username}}</td>
           <td>{{item.totalVote | formatMoney}}</td>
           <td>{{item.totalTrueVote | formatMoney}}</td>
           <td>{{item.totalAward | formatMoney}}</td>
           <td>{{item.totalRefund | formatMoney}}</td>
-          <td class="success">{{item.profit | formatMoney}}</td>
+          <td style="border-right: 1px solid #dddddd;" class="success">{{item.profit | formatMoney}}</td>
+        </tr>
+        <tr v-if="agg.length===0" class="no-result">
+          <td colspan="10" style="border-right: 1px solid #dddddd;">
+            <p style="color:#777;font-weight:bold;margin:35px 0;font-size:14px;">没有符合条件的记录，请更改查询条件</p>
+          </td>
         </tr>
       </tbody>
+      <tfoot class="record-bottom">
+        <tr class="group-item">
+          <td>所在区间统计：</td>
+          <td>{{getCurrentPageCash('totalVote')}}</td>
+          <td>{{getCurrentPageCash('totalTrueVote')}}</td>
+          <td>{{getCurrentPageCash('totalAward')}}</td>
+          <td>{{getCurrentPageCash('totalRefund')}}</td>
+          <td style="border-right: 1px solid #dddddd;" class="success">{{getCurrentPageCash('profit')}}</td>
+        </tr>
+      </tfoot>
     </table>
     <table class="record-group">
       <thead>
@@ -121,7 +136,6 @@
           <td colspan="10" style="border-right: 1px solid #dddddd;">
             <p style="color:#777;font-weight:bold;margin:35px 0;font-size:14px;">没有符合条件的记录，请更改查询条件</p>
           </td>
-          <!-- <td></td> -->
         </tr>
       </tbody>
       <tfoot class="record-bottom">
@@ -422,12 +436,24 @@
         this.pageIndex = 1;
         this.onSubmit();
       },
+      getCurrentPageCash(key) {
+        let amount = 0.00;
+        if (this.agg.length != 0) {
+          for (let i = 0; i < this.agg.length; i++) {
+            if (this.agg[i][key]) {
+              amount += this.agg[i][key];
+            }
+          }
+        }
+        return parseFloat(amount).toFixed(2);
+      },
       //今天
       setTimeToday() {
         let date = new Date();
         let ymd = this.formatDate(date);
         this.form.dateTo.value = ymd + " 23:59:59";
         this.form.dateFrom.value = ymd + " 00:00:00";
+        this.handleSearch();
       },
       //本周
       setTimeNowWeek() {
@@ -448,6 +474,7 @@
         );
         getWeekEndDate = this.formatDate(getWeekEndDate);
         this.form.dateTo.value = getWeekEndDate + " 23:59:59";
+        this.handleSearch();
       },
       //本月
       setTimeNowMonth() {
@@ -467,6 +494,7 @@
         );
         getMonthEndDate = this.formatDate(getMonthEndDate);
         this.form.dateTo.value = getMonthEndDate + " 23:59:59";
+        this.handleSearch();
       },
       //设置近几日
       setTimeRecent3Days(day) {
@@ -475,6 +503,7 @@
         this.form.dateFrom.value = previous + " 00:00:00";
         let ymd = this.formatDate(now);
         this.form.dateTo.value = ymd + " 23:59:59";
+        this.handleSearch();
       },
       getDay(day) {
         var today = new Date();
@@ -559,10 +588,13 @@
           }
         }
         if (!validate) {
-          self.$alert(errorMessage, "系统提醒", {
-            confirmButtonText: "确定",
-            center: true
-          });
+          self.$alert(`<div class="lottery-title">${errorMessage}</div>`, '温馨提示', {
+            confirmButtonText: '关闭',
+            center: true,
+            dangerouslyUseHTMLString: true,
+            customClass: "syxw-wrap-inner",
+            callback: action => {}
+          })
           return false;
         } else {
           this.loading = true;

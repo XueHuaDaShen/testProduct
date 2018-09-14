@@ -32,7 +32,7 @@
       let vm = this;
       vm.loading = true;
       request.http('post', '/ag/user/login', {
-          gameType: 'A00162'
+          gameType: 'A00012'
         },
         success => {
           vm.loading = false;

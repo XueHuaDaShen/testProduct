@@ -113,7 +113,8 @@
           <td>{{getZZJTStatus(item.is_hit_stop)}}</td>
           <td>{{getStatusText(item.status)}}</td>
           <td>
-            <router-link :to="{name:'trackDetail',query:{id:item._id}}">详情</router-link>
+            <router-link :to="{name:'trackDetail',query:{id:item._id,self:0}}" v-if="item.loginname!= loginname">详情</router-link>
+            <router-link :to="{name:'trackDetail',query:{id:item._id}}" v-else>详情</router-link>
           </td>
         </tr>
         <tr v-if="noResult" class="no-result">
@@ -411,7 +412,8 @@
         total: 0, //总条数
         pageIndex: 1, //当前页
         pageSize: 15, //单页条数
-        agg: {} //投注统计
+        agg: {}, //投注统计
+        loginname: localStorage.getItem('loginname').toString(),
       };
     },
     methods: {
@@ -456,6 +458,7 @@
         let ymd = this.formatDate(date);
         this.form.dateTo.value = ymd + " 23:59:59";
         this.form.dateFrom.value = ymd + " 00:00:00";
+        this.handleSearch();
       },
       //本周
       setTimeNowWeek() {
@@ -476,6 +479,7 @@
         );
         getWeekEndDate = this.formatDate(getWeekEndDate);
         this.form.dateTo.value = getWeekEndDate + " 23:59:59";
+        this.handleSearch();
       },
       //本月
       setTimeNowMonth() {
@@ -495,6 +499,7 @@
         );
         getMonthEndDate = this.formatDate(getMonthEndDate);
         this.form.dateTo.value = getMonthEndDate + " 23:59:59";
+        this.handleSearch();
       },
       //设置近几日
       setTimeRecent3Days(day) {
@@ -503,6 +508,7 @@
         this.form.dateFrom.value = previous + " 00:00:00";
         let ymd = this.formatDate(now);
         this.form.dateTo.value = ymd + " 23:59:59";
+        this.handleSearch();
       },
       getDay(day) {
         var today = new Date();
@@ -600,10 +606,13 @@
           }
         }
         if (!validate) {
-          self.$alert(errorMessage, "系统提醒", {
-            confirmButtonText: "确定",
-            center: true
-          });
+          self.$alert(`<div class="lottery-title">${errorMessage}</div>`, '系统提醒', {
+            confirmButtonText: '确定',
+            center: true,
+            dangerouslyUseHTMLString: true,
+            customClass: "syxw-wrap-inner",
+            callback: action => {}
+          })
           return false;
         } else {
           this.loading = true;

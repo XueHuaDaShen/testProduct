@@ -14,7 +14,7 @@
                 <tr>
                   <td style="width:50%;">
                     <label>用户名：</label>
-                    <el-input disabled v-model="data.loginname" style="width:150px"></el-input>
+                    <el-input disabled v-model.trim="data.loginname" style="width:150px"></el-input>
                   </td>
                   <td>
                   </td>
@@ -22,18 +22,19 @@
                 <tr>
                   <td>
                     <label>真实姓名：</label>
-                    <el-input disabled v-model="data.realname" style="width:150px"></el-input>
+                    <el-input disabled v-model.trim="data.realname" style="width:150px"></el-input>
                   </td>
                   <td>
                     <label>生日:</label>
-                    <el-date-picker v-model="data.birthday" align="right" type="date" style="width:150px;" disabled>
+                    <el-date-picker v-model.trim="data.birthday" align="right" type="date" style="width:150px;"
+                      disabled>
                     </el-date-picker>
                   </td>
                 </tr>
                 <tr>
                   <td>
                     <label>昵称：</label>
-                    <el-input disabled v-model="data.nickname" style="width:150px"></el-input>
+                    <el-input disabled v-model.trim="data.nickname" style="width:150px"></el-input>
                   </td>
                   <td>
                     <label>性别:</label>
@@ -48,11 +49,11 @@
                 <tr>
                   <td>
                     <label>手机号码：</label>
-                    <el-input disabled v-model="data.phone" style="width:150px"></el-input>
+                    <el-input disabled v-model.trim="data.phone" style="width:150px"></el-input>
                   </td>
                   <td>
                     <label>邮箱地址:</label>
-                    <el-input disabled v-model="data.email" style="width:150px"></el-input>
+                    <el-input disabled v-model.trim="data.email" style="width:150px"></el-input>
                   </td>
                 </tr>
               </tbody>
@@ -84,9 +85,7 @@
                     <label>主钱包：</label>
                     <span>{{formatcash(cash)}}</span>
                     <img src="@/assets/refresh.png" @click="refreshCash" style="width:14px;height:12px;margin:0 10px;margin-bottom:-1px;cursor:pointer;">
-                    <button
-                      :disabled="isClick"
-                      style="cursor:pointer;font-size:12px;width:48px;color:#191919;text-decoration: underline;border:none;outline:none;background:none;font-weight:bold;"
+                    <button :disabled="isClick" style="cursor:pointer;font-size:12px;width:48px;color:#191919;text-decoration: underline;border:none;outline:none;background:none;font-weight:bold;"
                       @click="rebackMoney">
                       一键回收
                     </button>
@@ -266,14 +265,16 @@
         let self = this;
         self.isClick = true;
         self.loading = true;
-        request.http('post', '/user/oneKey/exchange', {userid: self.userid},
+        request.http('post', '/user/oneKey/exchange', {
+            userid: self.userid
+          },
           (success) => {
             let code = success.returncode;
             self.isClick = false;
             self.loading = false;
             if (code == 200) {
               self.getziiao();
-            } else if(code == 101 || code == 103 || code == 106) {
+            } else if (code == 101 || code == 103 || code == 106) {
               request.loginAgain(self)
             }
           },
@@ -288,7 +289,9 @@
       refreshCash() {
         let self = this;
         self.loading = true;
-        request.http('get', '/user/refreshThirdCoin', {id: self.userid},
+        request.http('get', '/user/refreshThirdCoin', {
+            id: self.userid
+          },
           (success) => {
             let code = success.returncode;
             self.loading = false;
@@ -297,9 +300,9 @@
               self.cash_ky = success.data.cash_ky;
               self.cash_ag = success.data.cash_ag;
               self.cash = success.data.cash;
-            } else if(code == 101 || code == 103 || code == 106) {
+            } else if (code == 101 || code == 103 || code == 106) {
               request.loginAgain(self)
-            } else if(code == 303){
+            } else if (code == 303) {
               self.$message({
                 message: '查询失败',
                 type: "error",
@@ -457,6 +460,7 @@
             vm.loading = false;
             let code = success.returncode;
             if (code === 200) {
+              vm.success('加载成功');
               vm.data = success.data;
               vm.cash_ky = vm.data.cash_ky;
               vm.cash_ag = vm.data.cash_ag;
@@ -470,6 +474,7 @@
           },
           (error) => {
             vm.loading = false;
+            vm.success('加载成功');
             console.log(error)
           }
         )
@@ -668,6 +673,7 @@
     .content-header {
       width: 100%;
       padding: 10px;
+
       .search-wrap {
         width: 100%;
         min-width: 100%;

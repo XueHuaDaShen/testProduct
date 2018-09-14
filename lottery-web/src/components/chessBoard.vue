@@ -50,24 +50,33 @@
                 chess.src = data.url;
                 vm.changeFrameHeight();
               } else {
-                vm.$alert('登录失败，请刷新当前页面重试', '系统提示', {
+                vm.$alert('<div class="lottery-title">登录失败，请刷新当前页面重试</div>', '系统提醒', {
                   confirmButtonText: '确定',
+                  center: true,
+                  dangerouslyUseHTMLString: true,
+                  customClass: "syxw-wrap-inner",
                   callback: action => {}
                 })
               }
-            } else if(success.returncode == 101 || success.returncode == 103 || success.returncode == 106) {
+            } else if (success.returncode == 101 || success.returncode == 103 || success.returncode == 106) {
               request.loginAgain(vm)
             } else {
-              vm.$alert('登录失败，请刷新当前页面重试', '系统提示', {
+              vm.$alert('<div class="lottery-title">登录失败，请刷新当前页面重试</div>', '系统提醒', {
                 confirmButtonText: '确定',
+                center: true,
+                dangerouslyUseHTMLString: true,
+                customClass: "syxw-wrap-inner",
                 callback: action => {}
               })
             }
           },
           error => {
             vm.loading = false;
-            vm.$alert('登录失败，请刷新当前页面重试', '系统提示', {
+            vm.$alert('<div class="lottery-title">登录失败，请刷新当前页面重试</div>', '系统提醒', {
               confirmButtonText: '确定',
+              center: true,
+              dangerouslyUseHTMLString: true,
+              customClass: "syxw-wrap-inner",
               callback: action => {}
             })
             console.log("error", error);

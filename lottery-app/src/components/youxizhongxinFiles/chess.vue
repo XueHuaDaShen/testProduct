@@ -64,15 +64,15 @@ export default {
         }
       }
       dt.agsx-dt{
-        background:url('/static/img/sort3.png') no-repeat;
+        background:url('../../assets/h5-img/sort3.png') no-repeat;
         background-size:100% 100%;
       }
       dt.bbinyxg-dt{
-        background:url('/static/img/bbinyxg.png') no-repeat;
+        background:url('../../assets/h5-img/bbinyxg.png') no-repeat;
         background-size:100% 100%;
       }
       dt.igyxg-dt{
-        background:url('/static/img/igyxg.png') no-repeat;
+        background:url('../../assets/h5-img/igyxg.png') no-repeat;
         background-size:100% 100%;
       }
       dd{

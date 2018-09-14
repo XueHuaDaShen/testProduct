@@ -71,7 +71,7 @@
     <div v-if="rechargeKindCode === 'ylzz'">
       <h2 class="bankCard-title-wrap"><em></em><p>充值方式</p></h2>
       <ol class="recharge-kind-list">
-        <li><i class="recharge-icon yl-icon"><img src="/static/img/yl.png"></i><span class="recharge-kind-text">{{bankCardList.length>0?bankCardList[0].name:''}}</span></li>
+        <li><i class="recharge-icon yl-icon"><img src="@/assets/h5-img/yl.png"></i><span class="recharge-kind-text">{{bankCardList.length>0?bankCardList[0].name:''}}</span></li>
       </ol>
       <div class="recharge-kind"></div>
       <h2 class="bankCard-title-wrap"><em></em><p>充值金额</p></h2>
@@ -489,7 +489,7 @@ export default {
         }
       }
       // i.yl-icon{
-      //   background:url('/static/img/yl.png') no-repeat;
+      //   background:url('../../../assets/h5-img/yl.png') no-repeat;
       //   background-size:100% 100%;
       // }
       span.recharge-kind-text{
@@ -522,14 +522,14 @@ export default {
       width:.38rem;
       height:.38rem;
       border-radius:50%;
-      background:url('/static/img/check_box.png') no-repeat;
+      background:url('../../../assets/h5-img/check_box.png') no-repeat;
       background-size:100% 100%;
       position: absolute;
       right:.3rem;
       bottom:.3rem;
     }
     .bankCard-checkbox:checked+i.check-icon{
-      background:url('/static/img/check_box_ed.png') no-repeat;
+      background:url('../../../assets/h5-img/check_box_ed.png') no-repeat;
       background-size:100% 100%;
     }
     div{

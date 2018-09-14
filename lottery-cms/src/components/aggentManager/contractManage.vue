@@ -14,7 +14,7 @@
         <div class="search-content">
           <div class="search-inner-wrap">
             <label>契约编号：</label>
-            <el-input v-model="form.contract_no" placeholder="契约编号" clearable style="width:114px;"></el-input>
+            <el-input v-model.trim="form.contract_no" placeholder="契约编号" clearable style="width:114px;"></el-input>
           </div>
           <div class="search-inner-wrap">
             <label>类型：</label>
@@ -25,11 +25,11 @@
           </div>
           <div class="search-inner-wrap">
             <label>甲方：</label>
-            <el-input v-model="form.jiafang" placeholder="甲方" clearable style="width:114px;"></el-input>
+            <el-input v-model.trim="form.jiafang" placeholder="甲方" clearable style="width:114px;"></el-input>
           </div>
           <div class="search-inner-wrap">
             <label>乙方：</label>
-            <el-input v-model="form.yifang" placeholder="乙方" clearable style="width:114px;"></el-input>
+            <el-input v-model.trim="form.yifang" placeholder="乙方" clearable style="width:114px;"></el-input>
           </div>
           <div class="search-inner-wrap">
             <label>状态：</label>
@@ -60,7 +60,8 @@
       </div>
     </div>
     <div class="data-table" v-loading="loading">
-      <el-table :data="list" header-row-class-name="table-header" stripe border style="width: 100%;font-size:12px;" max-height="450">
+      <el-table :data="list" header-row-class-name="table-header" stripe border style="width: 100%;font-size:12px;"
+        max-height="450">
         <el-table-column prop="_id" align="center" label="编号">
         </el-table-column>
         <el-table-column align="center" label="类型">
@@ -114,7 +115,7 @@
         </div>
         <div class="top-row">
           <span class="exp">乙方：</span>
-          <el-input v-model="contractFrom.yifang" class="w-217" placeholder="请输入下级用户名" />
+          <el-input v-model.trim="contractFrom.yifang" class="w-217" placeholder="请输入下级用户名" />
         </div>
       </div>
       <table class="dialog-table">
@@ -126,11 +127,11 @@
         <tr v-for="(item,index) in contractItems" :key="index">
           <td align="left" class="td-right">
             {{contractDialogAdd.dialogContentexp1}}：
-            <el-input class="type2" v-model="item.quota" style="width:72px" />
+            <el-input class="type2" v-model.trim="item.quota" style="width:72px" />
           </td>
           <td align="left" class="td-right">
             {{contractDialogAdd.dialogContentexp2}}：
-            <el-input class="type2" v-model="item.profit" style="width:72px" />%
+            <el-input class="type2" v-model.trim="item.profit" style="width:72px" />%
           </td>
           <td>
             <a class="contract-dialog-delete" @click="closeContractItem(item)"></a>
@@ -186,11 +187,11 @@
         <tr v-for="(item,index) in contractItems" :key="index">
           <td align="left" class="td-right">
             投注金额：
-            <el-input class="type2" v-model="item.quota" style="width:72px" />
+            <el-input class="type2" v-model.trim="item.quota" style="width:72px" />
           </td>
           <td align="left" class="td-right">
             日工资比例：
-            <el-input class="type2" v-model="item.profit" style="width:72px" />%
+            <el-input class="type2" v-model.trim="item.profit" style="width:72px" />%
           </td>
           <td>
             <a class="contract-dialog-delete" @click="closeContractItem(item)"></a>

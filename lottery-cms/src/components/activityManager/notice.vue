@@ -96,12 +96,12 @@
           <div class="form-row">
             <span class="exp">标题</span>
             <span class="exp-after">:</span>
-            <el-input type="text" v-model="form.title"></el-input>
+            <el-input type="text" v-model.trim="form.title"></el-input>
           </div>
           <div class="form-row">
             <span class="exp">排序值</span>
             <span class="exp-after">:</span>
-            <el-input type="text" v-model="form.order"></el-input>
+            <el-input type="text" v-model.trim="form.order"></el-input>
           </div>
           <div class="form-row">
             <span class="exp">公告时间</span>
@@ -917,48 +917,35 @@
             }
           );
         } else {
-          formdata.append("picture", content_photo);
-          request.upload(
-            "post",
-            "/uploadFile",
-            formdata,
-            success => {
-              vm.form.content_photo.url = success.toString();
-              request.http(
-                'post',
-                '/notice/create', {
-                  groupid: vm.form.group.checked,
-                  title: vm.form.title,
-                  order: vm.form.order,
-                  start_at: start_at,
-                  stop_at: stop_at,
-                  content: vm.form.content,
-                  enabled: 1,
-                  isRoll: "0"
-                },
-                (success) => {
-                  vm.dialogLoading = false;
-                  let code = success.returncode;
-                  if (code === 200) {
-                    vm.formVisible = false;
-                    vm.getActivityLogList();
-                  } else if (code === 101 || code === 103 || code === 106) {
-                    request.loginAgain(vm)
-                  } else {
-                    alert(success.returncode)
-                  }
-                },
-                (error) => {
-                  vm.dialogLoading = false;
-                  vm.error();
-                }
-              )
+          request.http(
+            'post',
+            '/notice/create', {
+              groupid: vm.form.group.checked,
+              title: vm.form.title,
+              order: vm.form.order,
+              start_at: start_at,
+              stop_at: stop_at,
+              content: vm.form.content,
+              enabled: 1,
+              isRoll: "0"
             },
-            error => {
+            (success) => {
+              vm.dialogLoading = false;
+              let code = success.returncode;
+              if (code === 200) {
+                vm.formVisible = false;
+                vm.getActivityLogList();
+              } else if (code === 101 || code === 103 || code === 106) {
+                request.loginAgain(vm)
+              } else {
+                alert(success.returncode)
+              }
+            },
+            (error) => {
               vm.dialogLoading = false;
               vm.error();
             }
-          );
+          )
         }
       },
       deleteActivity(item) {

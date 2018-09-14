@@ -15,7 +15,7 @@
 <script>
 export default {
   name: 'dialogSuccess',
-  porps: {
+  props: {
     dialogTitle: {
       type: String
     },

@@ -93,7 +93,7 @@
           <div class="form-row">
             <span class="exp">名称</span>
             <span class="exp-after">:</span>
-            <el-input type="text" v-model="createForm.name"></el-input>
+            <el-input type="text" v-model.trim="createForm.name"></el-input>
           </div>
           <div class="form-row">
             <span class="exp">支付方式</span>
@@ -106,7 +106,7 @@
           <div class="form-row">
             <span class="exp">账号名</span>
             <span class="exp-after">:</span>
-            <el-input type="text" v-model="createForm.account_no"></el-input>
+            <el-input type="text" v-model.trim="createForm.account_no"></el-input>
           </div>
           <div class="form-row file-inner">
             <span class="exp">二维码</span>
@@ -146,7 +146,7 @@
           <div class="form-row">
             <span class="exp">名称</span>
             <span class="exp-after">:</span>
-            <el-input type="text" v-model="updateForm.name"></el-input>
+            <el-input type="text" v-model.trim="updateForm.name"></el-input>
           </div>
           <div class="form-row">
             <span class="exp">支付方式</span>
@@ -159,7 +159,7 @@
           <div class="form-row">
             <span class="exp">账号名</span>
             <span class="exp-after">:</span>
-            <el-input type="text" v-model="updateForm.account_no"></el-input>
+            <el-input type="text" v-model.trim="updateForm.account_no"></el-input>
           </div>
           <div class="form-row file-inner">
             <span class="exp">二维码</span>

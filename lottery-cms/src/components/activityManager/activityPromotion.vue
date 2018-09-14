@@ -14,22 +14,6 @@
           <div class="search-btn">
             <el-button type="success" @click="createActivity" size="medium">添加公告</el-button>
           </div>
-          <!-- <el-input style="width:15%;margin-left:15px;float:left;" v-model="username" placeholder="姓名"></el-input>
-          <el-date-picker
-            v-model="searchTime"
-            type="datetimerange"
-            align="right"
-            style="margin-left:15px;float:left;width:38%"
-            unlink-panels
-            range-separator="至"
-            start-placeholder="开始日期"
-            end-placeholder="结束日期"
-            :picker-options="pickerOptions">
-          </el-date-picker>
-          <el-input style="width:15%;margin-left:15px;float:left;" v-model="ip" placeholder="操作IP"></el-input>
-          <el-input style="width:10%;margin-left:15px;float:left;" v-model="keywords" placeholder="关键词"></el-input>
-          <tableBtn :text="'搜索'" :plain="false" :btnType="'success'" :func="handleSearch"></tableBtn>
-          <tableBtn :text="'重置'" :func="handleReset"></tableBtn> -->
         </div>
       </div>
     </div>

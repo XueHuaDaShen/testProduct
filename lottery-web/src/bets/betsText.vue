@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-loading="loading">
     <div class="bets-text-wrap">
       <hr class="my-split-line">
       <div class="import-text-wrap">
@@ -69,6 +69,7 @@
     },
     data() {
       return {
+        loading: false,
         dialogFormVisible: false,
         filterNumber: '',
         defaultText: '',
@@ -87,6 +88,7 @@
         var file = e.target.files[0];
         if (file) {
           this.loadBetsFile(file)
+          this.loading = true;
           e.target.value = '';
         }
       },
@@ -101,6 +103,7 @@
             } else if (vm.lotteryType === 'syxw') {
               vm.syxw_checkBetsText(false);
             }
+            vm.loading = false;
           }
           reader.readAsText(file);
         } else {
@@ -275,30 +278,26 @@
           if (!/[\u4e00-\u9fa5]/g.test(n)) {
             return sym
           } else {
-            return n
+            if(order){
+              return n.split('').sort((a, b) => { return a - b }).join('')
+            }else{
+              return n
+            }
           }
         })
         //检测后的投注号码 数组
-        var numArr = checkedBetsNum.split(sym);
+        // var numArr = checkedBetsNum.split(sym);
         var c_numArr = checkedBetsNum.split(sym);
         //被删除的元素集合，以及剩余有效元素集合
         var delArr = [],
           lifeArr = [];
-        for (let i = numArr.length - 1; i >= 0; i--) {
-          for (let j = i - 1; j >= 0; j--) {
-            if (order) {
-              let currVal = c_numArr[i].split('').sort((a, b) => { return a - b }).join('');
-              let nextVal = c_numArr[j].split('').sort((a, b) => { return a - b }).join('');
-              if (nextVal === currVal) {
-                delArr.push(numArr[i])
-                c_numArr.splice(i, 1, '')
-              }
-            } else {
-              if (c_numArr[j] === c_numArr[i]) {
-                delArr.push(numArr[i])
-                c_numArr.splice(i, 1, '')
-              }
-            }
+        var obj = {};
+        for(var i = 0; i< c_numArr.length; i++){
+          if(!obj[c_numArr[i]]){
+            obj[c_numArr[i]] = c_numArr[i];
+          }else{
+            delArr.push(c_numArr[i])
+            c_numArr.splice(i, 1, '')
           }
         }
         for (let i in c_numArr) {
@@ -415,7 +414,11 @@
           if (!/[\u4e00-\u9fa5]/g.test(n)) {
             return ' '
           } else {
-            return n
+            if(order){
+              return n.split('').sort((a, b) => { return a - b }).join('')
+            }else{
+              return n
+            }
           }
         });
         c3 = c2.split(' ');
@@ -449,23 +452,13 @@
             copy_c4.splice(i, 1, '')
           }
         }
-        for (let i = copy_c4.length - 1; i >= 0; i--) {
-          for (let j = i - 1; j >= 0; j--) {
-            if (copy_c4[i] !== '') {
-              if (order) {
-                let currVal = copy_c4[i].split(' ').sort((a, b) => { return a - b }).join('');
-                let nextVal = copy_c4[j].split(' ').sort((a, b) => { return a - b }).join('');
-                if (nextVal === currVal) {
-                  delArr.push(copy_c4[i])
-                  copy_c4.splice(i, 1, '')
-                }
-              } else {
-                if (copy_c4[j] === copy_c4[i]) {
-                  delArr.push(copy_c4[i])
-                  copy_c4.splice(i, 1, '')
-                }
-              }
-            }
+        var obj = {};
+        for(var i = 0; i< copy_c4.length; i++){
+          if(!obj[copy_c4[i]]){
+            obj[copy_c4[i]] = copy_c4[i];
+          }else{
+            delArr.push(copy_c4[i])
+            copy_c4.splice(i, 1, '')
           }
         }
         for (let i = copy_c4.length - 1; i >= 0; i--) {

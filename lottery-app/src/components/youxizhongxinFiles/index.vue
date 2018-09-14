@@ -109,7 +109,7 @@ export default {
       left:14.5%;
       font-style:normal;
       transition: all .3s;
-      background:url('/static/img/up_red_sanjiao.png') no-repeat;
+      background:url('../../assets/h5-img/up_red_sanjiao.png') no-repeat;
       background-size:100% 100%;
     }
     em.lottery-place{

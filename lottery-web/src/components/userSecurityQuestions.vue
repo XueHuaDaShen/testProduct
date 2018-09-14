@@ -1,5 +1,5 @@
 <template>
-  <div class="psd-wrap search-form" v-loading="loading">
+  <div class="psd-wrap search-form record-options" v-loading="loading">
     <div v-if="!isSetSafeQ" v-cloak>
       <div v-if="!checkRules&&!isSetSafeQFirst">
         <div class="issue">
@@ -11,7 +11,7 @@
             <ul>
               <li class="mb-10 time-row">
                 <span class="last-exp" align="right">问题一：</span>
-                <el-select v-model="question1.selected" placeholder="请选择安全问题一" clearable class="content placeholder" @change="changeValueQ1">
+                <el-select v-model="question1.selected" placeholder="请选择安全问题一" clearable class="content" @change="changeValueQ1">
                   <el-option v-for="item in question1.options" :key="item._id" :label="item.content" :value="item._id">
                   </el-option>
                 </el-select>
@@ -23,7 +23,7 @@
               </li>
               <li class="mb-10 time-row">
                 <span class="last-exp" align="right">问题二：</span>
-                <el-select v-model="question2.selected" placeholder="请选择安全问题二" clearable class="content placeholder" @change="changeValueQ2">
+                <el-select v-model="question2.selected" placeholder="请选择安全问题二" clearable class="content" @change="changeValueQ2">
                   <el-option v-for="item in question2.options" :key="item._id" :label="item.content" :value="item._id">
                   </el-option>
                 </el-select>
@@ -35,7 +35,7 @@
               </li>
               <li class="mb-10 time-row">
                 <span class="last-exp" align="right">问题三：</span>
-                <el-select v-model="question3.selected" placeholder="请选择安全问题三" clearable class="content placeholder" @change="changeValueQ3">
+                <el-select v-model="question3.selected" placeholder="请选择安全问题三" clearable class="content" @change="changeValueQ3">
                   <el-option v-for="item in question3.options" :key="item._id" :label="item.content" :value="item._id">
                   </el-option>
                 </el-select>
@@ -47,7 +47,7 @@
               </li>
             </ul>
             <div class="submit-line">
-              <a class="submit" type="submit" @click="setSafeQ()">提交修改</a>
+              <a class="submit" type="submit" @click="setSafeQ()">下一步</a>
             </div>
           </div>
         </div>
@@ -92,8 +92,8 @@
               </li>
             </ul>
             <div class="submit-line">
-              <a class="submit" type="submit" @click="previous()">上一步</a>
-              <a class="submit" type="submit" @click="makeSureSafeQ()">确认修改</a>
+              <a type="submit" @click="previous()" class="back">上一步</a>
+              <a class="submit" type="submit" @click="makeSureSafeQ()">确认提交</a>
             </div>
           </div>
         </div>
@@ -145,9 +145,6 @@
             if (success.returncode && success.returncode == 200) {
               // console.log(success);
               if (!success.data.isSet) {
-                /*self.$alert('资金密码设置成功，您还未设置安全问题！这将导致您的账号存在风险！', '系统提醒', {
-                  confirmButtonText: '确定',
-                });*/
                 self.isSetSafeQ = false;
                 self.getSafeArrayList();
               } else if (success.returncode == 101 || success.returncode == 103 || success.returncode == 106) {
@@ -343,23 +340,41 @@
   .submit-line {
     width: 100%;
     margin-top: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
   }
 
   .submit {
-    width: 115px;
-    height: 40px;
-    line-height: 40px;
+    width: 140px;
+    height: 48px;
+    line-height: 46px;
     display: inline-block;
     text-align: center;
     cursor: pointer;
     text-decoration: none;
-    background: #CC3447;
-    border-radius: 2px;
     font-family: PingFangSC-Regular;
-    font-size: 14px;
+    font-size: 16px;
     font-weight: 700;
-    color: #FFFFFF;
-    margin: 0 auto;
+    color: #ffffff;
+    background-image: linear-gradient(-180deg, #CFA072 0%, #B68E66 100%);
+    border: 1px solid #DDDDDD;
+    border-radius: 2px;
+  }
+
+  .back {
+    width: 140px;
+    display: inline-block;
+    margin-bottom: 20px;
+    text-align: center;
+    cursor: pointer;
+    text-decoration: none;
+    font-family: PingFangSC-Regular;
+    font-size: 12px;
+    font-weight: 700;
+    color: #777;
+    border-radius: 2px;
   }
 
   .mb-10 {
@@ -407,7 +422,8 @@
   }
 
   .warning {
-    color: orange;
+    color: 191919;
+    font-weight: bold;
   }
 
   .issue-two {}
@@ -421,12 +437,13 @@
   }
 
   .issue-two li .last-exp {
-    font-size: 12px;
+    font-size: 14px;
+    font-weight: bold;
     color: #191919;
     display: inline-block;
     text-align: right;
     font-family: PingFangSC-Regular;
-    width: 48px;
+    width: 60px;
   }
 
   .issuce-two li .safe-input {
@@ -448,5 +465,6 @@
     text-align: center;
     height: 303px;
     line-height: 303px;
+    font-weight: bold;
   }
 </style>

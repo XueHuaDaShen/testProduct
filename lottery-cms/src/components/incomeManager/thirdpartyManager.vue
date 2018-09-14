@@ -90,12 +90,12 @@
           <div class="form-row">
             <span class="exp">名称</span>
             <span class="exp-after">:</span>
-            <el-input type="text" v-model="createForm.name"></el-input>
+            <el-input type="text" v-model.trim="createForm.name"></el-input>
           </div>
           <div class="form-row">
             <span class="exp">支付系统</span>
             <span class="exp-after">:</span>
-            <el-input type="text" v-model="createForm.system"></el-input>
+            <el-input type="text" v-model.trim="createForm.system"></el-input>
           </div>
           <div class="form-row">
             <span class="exp">支付方式</span>
@@ -104,7 +104,7 @@
               <el-option v-for="(item,index) in createForm.type.options" :key="index" :label="item.label" :value="item.value">
               </el-option>
             </el-select> -->
-            <el-input type="text" v-model="createForm.type.value"></el-input>
+            <el-input type="text" v-model.trim="createForm.type.value"></el-input>
           </div>
         </div>
       </div>
@@ -134,17 +134,17 @@
       <div class="body-middle">
         <el-form :model="updateForm" :rules="rules" ref="updateForm" class="demo-ruleForm">
           <el-form-item label="名称：" prop="name">
-            <el-input type="text" v-model="updateForm.name"></el-input>
+            <el-input type="text" v-model.trim="updateForm.name"></el-input>
           </el-form-item>
           <el-form-item label="支付系统：" prop="system">
-            <el-input type="text" v-model="updateForm.system"></el-input>
+            <el-input type="text" v-model.trim="updateForm.system"></el-input>
           </el-form-item>
           <el-form-item label="支付方式：" prop="type.value">
             <!-- <el-select clearable v-model="updateForm.type.value" placeholder="支付方式" class="small">
               <el-option v-for="(item,index) in updateForm.type.options" :key="index" :label="item.label" :value="item.value">
               </el-option>
             </el-select> -->
-            <el-input type="text" v-model="updateForm.type.value"></el-input>
+            <el-input type="text" v-model.trim="updateForm.type.value"></el-input>
           </el-form-item>
         </el-form>
       </div>

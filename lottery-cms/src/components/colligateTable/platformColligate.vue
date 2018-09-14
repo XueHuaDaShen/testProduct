@@ -128,6 +128,13 @@
               <div class="row-item">
                 <span class="inline-flx">
                   <i class="icon-tip-small"></i>
+                  充提差
+                </span>
+                <span class="warning">{{formatMoneyMount(data.recharge,data.withdrawal)}} 元</span>
+              </div>
+              <div class="row-item">
+                <span class="inline-flx">
+                  <i class="icon-tip-small"></i>
                   回收
                 </span>
                 <span class="warning">{{formatMoney(data.undo)}} 元</span>
@@ -139,6 +146,8 @@
                 </span>
                 <span class="warning">{{data.max_online?data.max_online : 0}} 人</span>
               </div>
+            </div>
+            <div class="body-row">
               <div class="row-item">
                 <span class="inline-flx">
                   <i class="icon-tip-small"></i>
@@ -146,14 +155,13 @@
                 </span>
                 <span class="warning">{{formatMoney(data.gift)}} 元</span>
               </div>
-            </div>
-            <div class="body-row">
               <div class="row-item">
                 <span class="inline-flx">
                   <i class="icon-tip-small"></i>
                   主钱包
                 </span>
-                <span class="warning">{{formatMoney(data.cash)}} 元</span>
+                <el-button class="small edit" @click="getCash()" :loading="cashLoading" v-if="!cashVisible">查看</el-button>
+                <span class="warning" v-if="cashVisible">{{formatMoney(cashFinal)}} 元</span>
               </div>
               <div class="row-item">
                 <span class="inline-flx">
@@ -184,6 +192,9 @@
     },
     data() {
       return {
+        cashVisible: false,
+        cashFinal: "",
+        cashLoading: false,
         pickerDefaultTime: ['00:00:00', '23:59:59'],
         index1: 0,
         index2: 0,
@@ -401,6 +412,13 @@
         }
         return 0;
       },
+      formatMoneyMount(value1, value2) {
+        if (value1 || value2) {
+          let final = parseFloat(value1) + parseFloat(value2);
+          return final.toFixed(2);
+        }
+        return 0;
+      },
       handleChangeRouter(name) {
         this.$router.push({
           name: name,
@@ -479,6 +497,39 @@
         return moment(cellValue).format("YYYY-MM-DD HH:mm:ss");
         // return moment(cellValue).format('YYYY-MM-DD')
       },
+      getCash() {
+        const vm = this;
+        vm.cashLoading = true;
+        request.http(
+          "get",
+          "/user/aggmoney", {
+            is_test: vm.is_test
+          },
+          success => {
+            vm.cashLoading = false;
+            let code = success.returncode;
+            if (code === 200) {
+              if (success.data.length > 0) {
+                vm.cashVisible = true;
+                vm.cashFinal = success.data[0].count;
+              } else {
+                vm.cashVisible = false;
+                vm.cashFinal = "";
+                vm.message("查看失败", "warning");
+              }
+            } else if (code === 101 || code === 103 || code === 106) {
+              request.loginAgain(vm);
+            }
+          },
+          error => {
+            vm.cashLoading = false;
+            vm.cashVisible = false;
+            vm.cashFinal = "";
+            vm.error();
+            console.log(error);
+          }
+        );
+      },
       getPlatformColligateList() {
         const vm = this;
         let beginTime = "",
@@ -534,14 +585,9 @@
         this.is_test = "0";
       },
       handleSearch() {
-        // console.log(
-        //   this.username,
-        //   this.searchTime,
-        //   this.type,
-        //   this.status,
-        //   this.order_no
-        // );
         this.pageNum = 1;
+        this.cashVisible = false;
+        this.cashFinal = "";
         this.getPlatformColligateList();
       }
     }

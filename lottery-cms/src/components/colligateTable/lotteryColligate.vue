@@ -384,8 +384,13 @@
                 return prev;
               }
             }, 0);
-            sums[index] = parseFloat(sums[index]).toFixed(2);
-            sums[index] += " 元";
+            if (index === 6) {
+              sums[index] = parseFloat(sums[index]);
+              sums[index] += " 人";
+            } else {
+              sums[index] = parseFloat(sums[index]).toFixed(2);
+              sums[index] += " 元";
+            }
           } else {
             sums[index] = "--";
           }

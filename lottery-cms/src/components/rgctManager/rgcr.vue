@@ -14,7 +14,7 @@
             <div class="tl clearfix content-row">
               <span class="exp">账号</span>
               <span>:</span>
-              <el-input type="text" v-model="ruleForm.loginname" style="width:114px;"></el-input>
+              <el-input type="text" v-model.trim="ruleForm.loginname" style="width:114px;"></el-input>
               <el-button type="primary" @click="searchLoginname()" class="yes small" style="margin-left:30px;">查询</el-button>
             </div>
             <div v-if="hasLoginname">
@@ -45,16 +45,16 @@
                 <div class="tl content-row">
                   <span class="exp">存入金额</span>
                   <span>:</span>
-                  <el-input v-model="ruleForm.amount" style="width:114px;"></el-input>
+                  <el-input v-model.trim="ruleForm.amount" style="width:114px;"></el-input>
                 </div>
                 <div class="tl content-row">
                   <span class="exp">打码量</span>
                   <span>:</span>
                   <el-radio v-model="indicatorSelected" label="1">
                     <span>默认值</span>
-                    <el-input v-model="ruleForm.amountDefault" :disabled="true" style="width:150px" type="number"></el-input>
+                    <el-input v-model.trim="ruleForm.amountDefault" :disabled="true" style="width:150px" type="number"></el-input>
                     <span>元 =</span>
-                    <el-input v-model="ruleForm.indicatorDefault" :disabled="true" style="width:150px" type="number"></el-input>
+                    <el-input v-model.trim="ruleForm.indicatorDefault" :disabled="true" style="width:150px" type="number"></el-input>
                     <span>倍</span>
                   </el-radio>
                   <br />
@@ -64,10 +64,10 @@
                   <span>&nbsp;</span>
                   <el-radio v-model="indicatorSelected" label="2" style="margin-top:10px">
                     <span>自定义</span>
-                    <el-input v-model="ruleForm.amountCustom" style="width:150px" type="number" @focus="ammountCustomChange"
+                    <el-input v-model.trim="ruleForm.amountCustom" style="width:150px" type="number" @focus="ammountCustomChange"
                       @change="acChange()"></el-input>
                     <span>元 =</span>
-                    <el-input v-model="ruleForm.indicatorCustom" style="width:150px" type="number" @focus="indicatorCustomChange"
+                    <el-input v-model.trim="ruleForm.indicatorCustom" style="width:150px" type="number" @focus="indicatorCustomChange"
                       @change="icChange()"></el-input>
                     <span>倍</span>
                   </el-radio>

@@ -24,6 +24,7 @@ const shoppingCart = r => require.ensure([], () => r(require('@/components/youxi
 const betsDetail = r => require.ensure([], () => r(require('@/components/youxizhongxinFiles/lotteryFiles/betsDetail')), 'chunkname4-1-3')
 const chaseDetail = r => require.ensure([], () => r(require('@/components/youxizhongxinFiles/lotteryFiles/chaseDetail')), 'chunkname4-1-4')
 const chessBoard = r => require.ensure([], () => r(require('@/components/youxizhongxinFiles/chessBoard')), 'chunkname4-1-5') // 棋牌竞技
+const agGame = r => require.ensure([], () => r(require('@/components/youxizhongxinFiles/agGame')), 'chunkname4-1-6') // ag游戏
 
 const electron = r => require.ensure([], () => r(require('@/components/youxizhongxinFiles/electron')), 'chunkname4-2')
 const soccer = r => require.ensure([], () => r(require('@/components/youxizhongxinFiles/soccer')), 'chunkname4-3')
@@ -95,6 +96,11 @@ export default new Router({
       path: '/chessBoard',
       name: 'chessBoard',
       component: chessBoard
+    },
+    {
+      path: '/agGame',
+      name: 'agGame',
+      component: agGame
     },
     {
       path: '/wrap',

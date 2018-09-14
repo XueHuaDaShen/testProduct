@@ -152,10 +152,13 @@
         }
       },
       makeSureDelete(id) {
-        this.$confirm("确定关闭该开户链接?", "提示", {
-            confirmButtonText: "确定",
-            cancelButtonText: "取消",
-            type: "warning"
+        this.$confirm('<div class="bets-alert-title">确定关闭该开户链接?</div>', "提示", {
+            showCancelButton: true,
+            dangerouslyUseHTMLString: true,
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: "warning",
+            customClass: "syxw-wrap-inner"
           })
           .then(() => {
             this.linkDelete(id);
@@ -182,9 +185,11 @@
               if (success.returncode == 103 || success.returncode == 106 || success.returncode == 101) {
                 request.loginAgain(self);
               } else if (success.returncode == 200) {
-                self.$alert("删除成功！", "系统提醒", {
-                  confirmButtonText: "确定",
+                self.$alert('<div class="lottery-title">删除成功</div>', "系统提醒", {
+                  confirmButtonText: '关闭',
                   center: true,
+                  dangerouslyUseHTMLString: true,
+                  customClass: "syxw-wrap-inner",
                   callback: action => {
                     self.getLinkList();
                   }
@@ -194,9 +199,12 @@
           },
           error => {
             self.loading = false;
-            self.$alert("删除失败", "系统提醒", {
-              confirmButtonText: "确定",
-              center: true
+            self.$alert('<div class="lottery-title">删除失败</div>', "系统提醒", {
+              confirmButtonText: '关闭',
+              center: true,
+              dangerouslyUseHTMLString: true,
+              customClass: "syxw-wrap-inner",
+              callback: action => {}
             });
           }
         );
@@ -263,24 +271,23 @@
       onSubmit() {
         let data = {},
           self = this;
-        // if (!this.userType.value) {
-        //   self.$alert("请选择用户类型", "系统提醒", {
-        //     confirmButtonText: "确定",
-        //     center: true
-        //   });
-        //   return false;
-        // }
         if (!this.inDate.value) {
-          self.$alert("请选择链接有效期", "系统提醒", {
-            confirmButtonText: "确定",
-            center: true
+          self.$alert('<div class="lottery-title">请选择链接有效期</div>', "系统提醒", {
+            confirmButtonText: '关闭',
+            center: true,
+            dangerouslyUseHTMLString: true,
+            customClass: "syxw-wrap-inner",
+            callback: action => {}
           });
           return false;
         }
         if (!this.salary.group) {
-          self.$alert("请设置奖金组", "系统提醒", {
-            confirmButtonText: "确定",
-            center: true
+          self.$alert('<div class="lottery-title">请设置奖金组</div>', "系统提醒", {
+            confirmButtonText: '关闭',
+            center: true,
+            dangerouslyUseHTMLString: true,
+            customClass: "syxw-wrap-inner",
+            callback: action => {}
           });
           return false;
         }
@@ -300,17 +307,24 @@
                 request.loginAgain(self);
               } else if (success.returncode == 200) {
                 if (success.data.length != 0) {
-                  self.$alert("开户链接已创建！", "系统提醒", {
-                    confirmButtonText: "确定",
+                  self.$alert('<div class="lottery-title">开户链接已创建</div>', "系统提醒", {
+                    confirmButtonText: '确定',
                     center: true,
+                    dangerouslyUseHTMLString: true,
+                    customClass: "syxw-wrap-inner",
                     callback: action => {
                       self.getLinkList();
                     }
                   });
                 } else {
-                  self.$alert("没有符合条件的记录", "系统提醒", {
-                    confirmButtonText: "确定",
-                    center: true
+                  self.$alert('<div class="lottery-title">没有符合条件的记录</div>', "系统提醒", {
+                    confirmButtonText: '确定',
+                    center: true,
+                    dangerouslyUseHTMLString: true,
+                    customClass: "syxw-wrap-inner",
+                    callback: action => {
+                      // self.getLinkList();
+                    }
                   });
                 }
               }
@@ -405,14 +419,9 @@
   .percentage-row .slider {
     .el-slider__bar {
       height: 6px;
-      background-color: #CC3447;
       border-top-left-radius: 3px;
       border-bottom-left-radius: 3px;
       position: absolute;
-    }
-
-    .el-slider__button {
-      border-color: #CC3447;
     }
   }
 </style>
@@ -520,18 +529,20 @@
   }
 
   .link-create {
-    width: 115px;
-    height: 40px;
-    cursor: pointer;
-    line-height: 40px;
-    text-decoration: none;
+    width: 140px;
+    height: 48px;
+    line-height: 46px;
     display: inline-block;
-    background: #CC3447;
-    border-radius: 2px;
+    text-align: center;
+    cursor: pointer;
+    text-decoration: none;
     font-family: PingFangSC-Regular;
-    font-size: 14px;
-    color: #FFFFFF;
+    font-size: 16px;
     font-weight: 700;
+    color: #ffffff;
+    background-image: linear-gradient(-180deg, #CFA072 0%, #B68E66 100%);
+    border: 1px solid #DDDDDD;
+    border-radius: 2px;
   }
 
   .no-result p {
@@ -602,7 +613,8 @@
 
   .lottery-wrap .record-options .option-row .exp {
     display: inline-block;
-    font-size: 12px;
+    font-size: 14px;
+    font-weight: bold;
     color: #191919;
     min-width: 72px;
     text-align: left;
@@ -722,15 +734,20 @@
 
   .record-group .group-item a.delete {
     display: inline-block;
-    line-height: 28px;
-    width: 60px;
+    width: 80px;
     height: 30px;
-    border-radius: 6px;
-    background: #CC3447;
+    line-height: 30px;
+    text-align: center;
+    font-size: 14px;
+    font-weight: bold;
+    color: #fff;
+    cursor: pointer;
     border-radius: 2px;
-    font-family: PingFangSC-Regular;
-    font-size: 12px;
-    color: #FFFFFF;
+    outline: none;
+    font-family: microsoft yahei;
+    box-shadow: none;
+    border: none;
+    background-image: linear-gradient(-180deg, #CFA072 0%, #B68E66 100%);
   }
 
   .record-options .option-row>a.time {

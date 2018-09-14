@@ -13,7 +13,7 @@
         <div class="search-content">
           <div class="search-inner-wrap">
             <label>用户名：</label>
-            <el-input clearable v-model="form.loginname" placeholder="用户名" style="width:114px"></el-input>
+            <el-input clearable v-model.trim="form.loginname" placeholder="用户名" style="width:114px"></el-input>
           </div>
           <div class="search-inner-wrap">
             <label>帐变类型：</label>
@@ -389,7 +389,7 @@
             label: "仅显示"
           }
         ],
-        is_test: "",
+        is_test: "0",
         totalPageNum: 0, //总页数
         total: 0, //总条数
         pageIndex: 1, //当前页
@@ -498,7 +498,7 @@
         // this.form.status.selected = '';
         this.form.type.selected = null;
         this.form.searchTime = "";
-        this.is_test = "";
+        this.is_test = "0";
       },
       formatTestUser(row, column, cellValue) {
         let t = "";

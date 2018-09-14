@@ -3,10 +3,10 @@
     <header class="header">
       <div>
         <a class="nav-left" href="/">
-          <img src="@/assets/img/Logo@3x.png">
+          <img src="../assets/img/Logo@3x.png">
         </a>
-        <router-link :to="{name:'download'}" class="download"><img src="@/assets/img/bets-img/xiazai-icon.png" class="xiazai-icon">下载中心</router-link>
-        <a @click="open" class="server"><img src="@/assets/img/bets-img/kefu-icon.png" class="kefu-icon">联系客服</a>
+        <router-link :to="{name:'download'}" class="download"><img src="../img/xiazai-icon.png" class="xiazai-icon">下载中心</router-link>
+        <a @click="open" class="server"><img src="../img/kefu-icon.png" class="kefu-icon">联系客服</a>
       </div>
     </header>
     <!-- <div class="content-wrap" v-loading="loading">
@@ -17,19 +17,19 @@
           </div>
           <div class="user-info" v-if="showInput">
             <span class="icon-user">
-              <img src="@/assets/img/bets-img/icon-user.png">
+              <img src="../img/icon-user.png">
             </span>
             <input type="text" v-model="loginName" placeholder="请输入您的用户名">
           </div>
           <div class="user-info" v-if="showInput">
             <span class="icon-pwd">
-              <img src="@/assets/img/bets-img/icon-pwd.png">
+              <img src="../img/icon-pwd.png">
             </span>
             <input type="password" name="pwd" autocomplete="off" v-model="loginPwd" placeholder="请输入您的密码">
           </div>
           <div class="user-info" v-if="showInput&&loginArr[1].checked">
             <span class="icon-pwd">
-              <img src="@/assets/img/bets-img/icon-pwd.png">
+              <img src="../img/icon-pwd.png">
             </span>
             <input type="password" name="pwd" autocomplete="off" v-model="repeatPwd" placeholder="请确认您的密码">
           </div>
@@ -46,24 +46,24 @@
         <div class="login-wrap animated" :class="animated?'bounceOutLeft':''">
           <div class="login-bj"></div>
           <div class="login-title">
-            <span><img src="@/assets/img/bets-img/login-logo.png"></span>
+            <span><img src="../img/login-logo.png"></span>
           </div>
           <div class="alert-tip" v-if="tip"><span>{{tip}}</span></div>
           <div class="user-info">
             <span class="icon-user">
-              <img src="@/assets/img/bets-img/icon-user.png">
+              <img src="../img/icon-user.png">
             </span>
             <input type="text" v-model.trim="loginName" placeholder="请输入您的用户名">
           </div>
           <div class="user-info">
             <span class="icon-pwd">
-              <img src="@/assets/img/bets-img/icon-pwd.png">
+              <img src="../img/icon-pwd.png">
             </span>
             <input type="password" name="pwd" autocomplete="off" v-model.trim="loginPwd" placeholder="请输入您的密码">
           </div>
           <div class="captcha-info" v-if="captcha">
             <span class="icon-captcha">
-              <img src="@/assets/img/bets-img/icon-captcha.png">
+              <img src="../img/icon-captcha.png">
             </span>
             <span class="captcha-svg" @click="getCaptcha" v-html="captcha">
             </span>
@@ -100,21 +100,12 @@
     },
     created() {
       let islogout = localStorage.getItem('islogout')
-      if (islogout === true) {
-        this.$alert('您的登录已超时，请重新登录', '温馨提示', {
-          confirmButtonText: '确定',
-          callback: action => {
-            localStorage.setItem('islogout', false)
-          }
+      if (islogout === 'false') {
+        this.$router.push({
+          name: 'home'
         })
       }
-      // this.showInputFn();
-      // console.log(pubkey)
       const vm = this;
-      // this.animated = true;
-      // setTimeout(() => {
-      //   vm.animated = false;
-      // }, 1000);
       this.handleKeyup();
       this.getCaptcha();
     },
@@ -169,8 +160,9 @@
       // 生成 UUID
       getGuid() {
         // xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx
-        return 'xxxxxxxxxxxx4xxxyxxxxxxxxxxxxxxx'.replace(/[xy]/g, function(c) { 
-          var r = Math.random()*16|0, v = c == 'x' ? r : (r&0x3|0x8); 
+        return 'xxxxxxxxxxxx4xxxyxxxxxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+          var r = Math.random() * 16 | 0,
+            v = c == 'x' ? r : (r & 0x3 | 0x8);
           return v.toString(16);
         })
       },
@@ -180,7 +172,7 @@
         // console.log(vm.guid);
         request.http(
           'get',
-          '/user/captcha', {id: vm.guid},
+          '/user/captcha', { id: vm.guid },
           (success) => {
             // console.log(success);
             vm.captcha = success;
@@ -190,7 +182,7 @@
           }
         )
       },
-      handleLogin() { 
+      handleLogin() {
         // else if (!validator.regexpInput(this.loginName)) {
         //   this.tip = '用户名需3-16位字符，只能包含英文字母或数字'
         //   setTimeout(() => {
@@ -204,24 +196,24 @@
         //   }, vm.tipTime*1000);
         // }
         const vm = this;
-        if(this.tip !== ''){
+        if (this.tip !== '') {
           return false;
-        } 
+        }
         if (this.loginName === '') {
           this.tip = '请输入您的用户名'
           setTimeout(() => {
             vm.tip = '';
-          }, vm.tipTime*1000);
+          }, vm.tipTime * 1000);
         } else if (this.loginPwd === '') {
           this.tip = '请输入您的密码'
           setTimeout(() => {
             vm.tip = '';
-          }, vm.tipTime*1000);
+          }, vm.tipTime * 1000);
         } else if (this.loginCaptcha === '') {
           this.tip = '请输入验证码'
           setTimeout(() => {
             vm.tip = '';
-          }, vm.tipTime*1000);
+          }, vm.tipTime * 1000);
         } else {
           this.loading = true;
           request.login(
@@ -401,12 +393,11 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
-
   .content-wrap {
     width: 100%;
     color: #fff;
     /* background: #2d3236; */
-    background: url("../assets/img/bets-img/login-bj.png") no-repeat;
+    background: url("../img/login-bj.png") no-repeat;
     background-size: cover;
   }
 
@@ -414,7 +405,7 @@
     width: 1024px;
     height: 940px;
     position: relative;
-    margin:0 auto;
+    margin: 0 auto;
   }
 
   .login-wrap {
@@ -425,52 +416,55 @@
     /* border: 6px solid #979797; */
     border-radius: 4px;
     // padding: 39px 50px;
-    padding:30px;
+    padding: 30px;
     display: -webkit-box;
     position: absolute;
     overflow: hidden;
     // top:210px;
     // right:88px;
-    left:0;
-    right:0;
-    top:0;
-    bottom:0;
-    margin:auto;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    margin: auto;
     /* autoprefixer: off */
     -webkit-box-orient: vertical;
+
     /* autoprefixer: on */
     // box-shadow: 0 2px 50px 0 rgba(0,0,0,0.50);
-    .login-bj{
+    .login-bj {
       position: absolute;
-      left:0;
-      top:0;
-      z-index:1;
+      left: 0;
+      top: 0;
+      z-index: 1;
       opacity: 0;
       background: #191919;
-      width:100%;
-      height:100%;
+      width: 100%;
+      height: 100%;
     }
-    .alert-tip{
-      display:-webkit-box;
-      -webkit-box-align:center;
-      -webkit-box-pack:center;
-      background: rgba(0,0,0,0.90);
+
+    .alert-tip {
+      display: -webkit-box;
+      -webkit-box-align: center;
+      -webkit-box-pack: center;
+      background: rgba(0, 0, 0, 0.90);
       border-radius: 2px;
       position: absolute;
-      left:30px;
+      left: 30px;
       top: 42px;
-      width:340px;
-      height:60px;
-      text-align:center;
+      width: 340px;
+      height: 60px;
+      text-align: center;
       // line-height:46px;
-      color:#dcdcdc;
-      font-size:14px;
-      z-index:3;
-      font-weight:700;
-      padding:0 20px;
-      span{
-        display:block;
-        width:100%;
+      color: #dcdcdc;
+      font-size: 14px;
+      z-index: 3;
+      font-weight: 700;
+      padding: 0 20px;
+
+      span {
+        display: block;
+        width: 100%;
       }
     }
   }
@@ -484,23 +478,25 @@
   .login-title {
     width: 100%;
     display: -webkit-box;
-    -webkit-box-pack:center;
+    -webkit-box-pack: center;
     font-size: 20px;
     color: #BCBCBC;
     position: relative;
-    z-index:3;
-    margin-bottom:20px;
+    z-index: 3;
+    margin-bottom: 20px;
   }
 
   .login-title span {
     display: block;
-    width:210px;
-    height:52px;
-    img{
-      display:block;
-      width:100%;
-      height:100%;
+    width: 210px;
+    height: 52px;
+
+    img {
+      display: block;
+      width: 100%;
+      height: 100%;
     }
+
     // color: #D4914D;
   }
 
@@ -528,10 +524,11 @@
     border-radius: 2px;
     position: relative;
     margin-top: 10px;
-    z-index:3;
+    z-index: 3;
   }
 
-  .user-info input, .captcha-info input {
+  .user-info input,
+  .captcha-info input {
     width: 100%;
     height: 100%;
     display: block;
@@ -540,26 +537,31 @@
     position: relative;
     background: none;
     border-radius: 2px;
-    color:#BD8454;
-    font-weight:700;
+    color: #BD8454;
+    font-weight: 700;
     border: 2px solid #777777;
-    &::-webkit-input-placeholder{
-      font-size:14px;
-      color:#777;
+
+    &::-webkit-input-placeholder {
+      font-size: 14px;
+      color: #777;
     }
-    &:-moz-placeholder{
-      font-size:14px;
-      color:#777;
+
+    &:-moz-placeholder {
+      font-size: 14px;
+      color: #777;
     }
-    &::-moz-placeholder{
-      font-size:14px;
-      color:#777;
+
+    &::-moz-placeholder {
+      font-size: 14px;
+      color: #777;
     }
-    &:-ms-input-placeholder{
-      font-size:14px;
-      color:#777;
+
+    &:-ms-input-placeholder {
+      font-size: 14px;
+      color: #777;
     }
-    &:focus{
+
+    &:focus {
       background-color: rgba(0, 0, 0, 0.25);
     }
   }
@@ -567,7 +569,7 @@
   .user-info span {
     position: absolute;
     display: block;
-    z-index:3;
+    z-index: 3;
   }
 
   .user-info span img {
@@ -588,28 +590,33 @@
     left: 21px;
     top: 11px;
   }
-  .captcha-info{
+
+  .captcha-info {
     height: 46px;
     border-radius: 2px;
     position: relative;
     margin-top: 10px;
-    z-index:3;
-    span{
+    z-index: 3;
+
+    span {
       position: absolute;
       display: block;
-      z-index:3;
+      z-index: 3;
     }
-    .icon-captcha{
+
+    .icon-captcha {
       width: 17px;
       height: 21px;
       left: 21px;
       top: 11px;
-      img{
-        width:100%;
-        height:100%;
+
+      img {
+        width: 100%;
+        height: 100%;
       }
     }
-    .captcha-svg{
+
+    .captcha-svg {
       width: 150px;
       height: 50px;
       right: -17px;
@@ -622,22 +629,25 @@
   .login-btn-wrap {
     padding-top: 30px;
     position: relative;
-    z-index:3;
-    button{
+    z-index: 3;
+
+    button {
       width: 100%;
       height: 50px;
       font-size: 16px;
-      border-radius:2px;
+      border-radius: 2px;
       letter-spacing: 1.12px;
       cursor: pointer;
-      background:none;
-      font-weight:600;
+      background: none;
+      font-weight: 600;
       position: relative;
-      .btn-text{
+
+      .btn-text {
         position: relative;
         z-index: 1;
       }
-      i{
+
+      i {
         position: absolute;
         z-index: 0;
         width: 100%;
@@ -668,11 +678,13 @@
   button.login-btn {
     border: 2px solid #BD8454;
     color: #BD8454;
-    &:hover{
-      .btn-text{
-        color:#DCDCDC;
+
+    &:hover {
+      .btn-text {
+        color: #DCDCDC;
       }
-      i{
+
+      i {
         background: #BD8454;
         -webkit-transform: scale(1);
         -moz-transform: scale(1);
@@ -682,15 +694,18 @@
       }
     }
   }
-  button.reg-btn{
+
+  button.reg-btn {
     border: 2px solid #DCDCDC;
     color: #DCDCDC;
-    margin-top:10px;
-    &:hover{
-      .btn-text{
-        color:#191919;
+    margin-top: 10px;
+
+    &:hover {
+      .btn-text {
+        color: #191919;
       }
-      i{
+
+      i {
         background: #DCDCDC;
         -webkit-transform: scale(1);
         -moz-transform: scale(1);
@@ -723,19 +738,21 @@
     text-decoration: none;
     cursor: pointer;
     position: relative;
-    .xiazai-icon{
-      width:16px;
-      height:18px;
+
+    .xiazai-icon {
+      width: 16px;
+      height: 18px;
       position: absolute;
-      left:-21px;
-      top:0;
+      left: -21px;
+      top: 0;
     }
-    .kefu-icon{
-      width:20px;
-      height:21px;
+
+    .kefu-icon {
+      width: 20px;
+      height: 21px;
       position: absolute;
-      left:-25px;
-      top:-2px;
+      left: -25px;
+      top: -2px;
     }
   }
 

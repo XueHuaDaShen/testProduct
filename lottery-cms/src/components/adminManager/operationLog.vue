@@ -16,7 +16,7 @@
             </el-select>
           </div> -->
           <div class="search-inner-wrap">
-            <el-input clearable v-model="username" placeholder="姓名" style="width:114px;"></el-input>
+            <el-input clearable v-model.trim="username" placeholder="姓名" style="width:114px;"></el-input>
             <!-- <el-input clearable v-model="ip" placeholder="操作IP" style="width:114px;" v-show="searchType.value == 2"></el-input> -->
           </div>
           <div class="search-inner-wrap">

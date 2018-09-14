@@ -15,13 +15,13 @@
       <el-card class="box-card">
         <el-form ref="form" :model="form" label-width="150px" :rules="rules">
           <el-form-item label="用户名：" prop="loginname">
-            <el-input placeholder="用户名" v-model="form.loginname"></el-input>
+            <el-input placeholder="用户名" v-model.trim="form.loginname"></el-input>
           </el-form-item>
           <el-form-item label="返点：" prop="refund">
-            <el-input placeholder="返点值" v-model="form.refund"></el-input>
+            <el-input placeholder="返点值" v-model.trim="form.refund"></el-input>
           </el-form-item>
           <el-form-item label="登录密码：" prop="password">
-            <el-input placeholder="登录密码" v-model="form.password" type="password"></el-input>
+            <el-input placeholder="登录密码" v-model.trim="form.password" type="password"></el-input>
           </el-form-item>
           <el-form-item>
             <el-switch v-model="is_test" active-value="1" inactive-value="0" active-text="测试用户">
@@ -103,7 +103,7 @@
       const menus = JSON.parse(localStorage.getItem('menus'));
       menus[this.index1].child[this.index2].child.filter((v, vi) => {
         let o = new Object();
-        if(v.url === 'addAgent'){
+        if (v.url === 'addAgent') {
           this.titleName = v.menu_name;
         }
         o.title = v.menu_name;

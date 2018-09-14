@@ -191,6 +191,7 @@
         end.setTime(new Date(new Date(new Date().toLocaleDateString()).getTime() + 24 * 60 * 60 * 1000 - 1));
         this.form.dateTo.value = end;
         this.form.dateFrom.value = start;
+        this.handleSearch();
       },
       //本周
       setTimeNowWeek() {
@@ -204,6 +205,7 @@
           .getTime() + 24 * 60 * 60 * 1000 - 1);
         this.form.dateTo.value = getWeekEndDate;
         this.form.dateFrom.value = getWeekStartDate;
+        this.handleSearch();
       },
       //本月
       setTimeNowMonth() {
@@ -220,6 +222,7 @@
           24 * 60 * 60 * 1000 - 1);
         this.form.dateTo.value = getMonthEndDate;
         this.form.dateFrom.value = getMonthStartDate;
+        this.handleSearch();
       },
       //设置近几日
       setTimeRecent3Days() {
@@ -227,6 +230,7 @@
         const start = new Date(new Date(new Date().toLocaleDateString()).getTime() - 3600 * 1000 * 24 * 30);
         this.form.dateTo.value = end;
         this.form.dateFrom.value = start;
+        this.handleSearch();
       },
       handleSearch() {
         this.pageIndex = 1;
@@ -271,10 +275,13 @@
           }
         }
         if (!validate) {
-          vm.$alert(errorMessage, '系统提醒', {
+          vm.$alert(`<div class="lottery-title">${errorMessage}</div>`, '系统提醒', {
             confirmButtonText: '确定',
-            center: true
-          });
+            center: true,
+            dangerouslyUseHTMLString: true,
+            customClass: "syxw-wrap-inner",
+            callback: action => {}
+          })
           return false;
         } else {
           this.loading = true;
@@ -377,7 +384,6 @@
     },
     mounted() {
       this.setTimeToday();
-      this.handleSearch();
     },
     created() {
       this.$store.dispatch('setbodyBG', 'no-bg');
@@ -512,12 +518,6 @@
     line-height: 25px;
     border-radius: 5px;
     border: 1px solid #D4914D;
-    margin-right: 3px;
-  }
-
-  .record-options .option-row>a:hover {
-    background: #C83A4C;
-    color: #fff;
   }
 
   .record-group {

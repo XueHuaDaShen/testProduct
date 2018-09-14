@@ -20,7 +20,7 @@
           <template slot-scope="scope">
             <!-- <el-radio v-model="scope.row.indicator" @change="handelChangeIndicator(scope.row)" :label="-1">默认</el-radio> -->
             <el-radio v-model="scope.row.indicator" :label="2" :disabled="scope.row.direct !='IN'">自定义</el-radio>
-            <el-input v-if="scope.row.showInput = scope.row.indicator===2" @blur="handleBlur(scope.row)" v-model="scope.row.myValue"
+            <el-input v-if="scope.row.showInput = scope.row.indicator===2" @blur="handleBlur(scope.row)" v-model.trim="scope.row.myValue"
               type="number" min='0.1' style="margin-right:30px;width:114px;" placeholder="请输入内容"></el-input>
             <el-radio v-model="scope.row.indicator" @change="handelChangeIndicator(scope.row)" :label="0">无打码</el-radio>
           </template>
@@ -82,7 +82,7 @@
       const menus = JSON.parse(localStorage.getItem('menus'));
       menus[this.index1].child[this.index2].child.filter((v, vi) => {
         let o = new Object();
-        if(v.url === 'dmlSet'){
+        if (v.url === 'dmlSet') {
           this.titleName = v.menu_name;
         }
         o.title = v.menu_name;

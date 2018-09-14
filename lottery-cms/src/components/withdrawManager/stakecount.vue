@@ -13,7 +13,7 @@
         <div class="search-content">
           <div class="search-inner-wrap">
             <label>用户名：</label>
-            <el-input clearable v-model="username" placeholder="姓名"></el-input>
+            <el-input clearable v-model.trim="username" placeholder="姓名"></el-input>
           </div>
           <div class="search-inner-wrap">
             <label>查找时间：</label>

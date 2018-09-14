@@ -4,8 +4,8 @@
     <form class="record-options search-form" action="">
       <div class="option-row mb-20">
         <span class="exp w-60">类型：</span>
-        <el-select v-model="form.type.value" placeholder="请选择" clearable style="width:114px">
-          <el-option v-for="(item,index) in form.type.options" :key="index" :label="item.key" :value="item.value">
+        <el-select v-model="form.type.value" placeholder="请选择" style="width:114px">
+          <el-option v-for="(item,index) in form.type.options" :key="index" :label="item.key" :value="item.key">
           </el-option>
         </el-select>
       </div>
@@ -55,7 +55,9 @@
           <td>
             {{item.trade_current.toFixed(2)}}
           </td>
-          <td style="border-right: 1px solid #dddddd;">{{getStatus(item.status)}}</td>
+          <td style="border-right: 1px solid #dddddd;">
+            <a>{{getStatus(item.status)}}</a>
+          </td>
         </tr>
         <tr v-if="noResult" class="no-result">
           <td colspan="10" style="border-right: 1px solid #dddddd;">
@@ -144,15 +146,20 @@
           type: {
             key: "type",
             options: [{ key: "全部", value: [4, 5] }, { key: "转入", value: [4] }, { key: "转出", value: [5] }],
-            value: null,
+            value: "全部",
             getValue() {
               if (this.value) {
-                return this.value;
+                for (let i = 0; i < this.options.length; i++) {
+                  let obj = this.options[i];
+                  if (this.value === obj.label) {
+                    return obj.value;
+                  }
+                }
               }
               return [4, 5];
             },
             reset() {
-              this.value = null;
+              this.value = "全部";
             },
             error: {
               visible: false,
@@ -210,6 +217,7 @@
         end.setTime(new Date(new Date(new Date().toLocaleDateString()).getTime() + 24 * 60 * 60 * 1000 - 1));
         this.form.dateTo.value = end;
         this.form.dateFrom.value = start;
+        this.handleSearch();
       },
       //本周
       setTimeNowWeek() {
@@ -223,6 +231,7 @@
           .getTime() + 24 * 60 * 60 * 1000 - 1);
         this.form.dateTo.value = getWeekEndDate;
         this.form.dateFrom.value = getWeekStartDate;
+        this.handleSearch();
       },
       //本月
       setTimeNowMonth() {
@@ -239,6 +248,7 @@
           24 * 60 * 60 * 1000 - 1);
         this.form.dateTo.value = getMonthEndDate;
         this.form.dateFrom.value = getMonthStartDate;
+        this.handleSearch();
       },
       //设置近几日
       setTimeRecent3Days() {
@@ -246,6 +256,7 @@
         const start = new Date(new Date(new Date().toLocaleDateString()).getTime() - 3600 * 1000 * 24 * 30);
         this.form.dateTo.value = end;
         this.form.dateFrom.value = start;
+        this.handleSearch();
       },
       getLoginname(loginid) {
         if (loginid && loginid.loginname) {
@@ -283,10 +294,13 @@
           }
         }
         if (!validate) {
-          self.$alert(errorMessage, "系统提醒", {
-            confirmButtonText: "确定",
-            center: true
-          });
+          self.$alert(`<div class="lottery-title">${errorMessage}</div>`, '系统提醒', {
+            confirmButtonText: '确定',
+            center: true,
+            dangerouslyUseHTMLString: true,
+            customClass: "syxw-wrap-inner",
+            callback: action => {}
+          })
           return false;
         } else {
           this.loading = true;
@@ -309,18 +323,10 @@
                   } else {
                     self.list = [];
                     self.noResult = true;
-                    /* self.$alert("没有符合条件的记录", "系统提醒", {
-                      confirmButtonText: "确定",
-                      center: true
-                    }); */
                   }
                 } else if (success.returncode == 303) {
                   self.list = [];
                   self.noResult = true;
-                  /* vm.$alert("没有符合条件的记录", "系统提醒", {
-                    confirmButtonText: "确定",
-                    center: true
-                  }); */
                 } else {
                   self.list = [];
                   self.noResult = true;
@@ -385,7 +391,6 @@
     },
     mounted() {
       this.setTimeToday();
-      this.onSubmit();
     },
     created() {
       this.$store.dispatch('setbodyBG', 'no-bg');
@@ -449,6 +454,7 @@
   a {
     text-decoration: none;
     color: #333333;
+    cursor: pointer;
   }
 
   .transactions-wrap {
@@ -475,6 +481,9 @@
     font-size: 12px;
     font-family: MicrosoftYaHei;
     color: #333333;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
   }
 
   .transactions-wrap .record-group {
@@ -520,47 +529,13 @@
   .transactions-wrap .record-group .group-item a {
     width: 69px;
     height: 32px;
-    background: #c38755;
-    color: #fff;
+    color: #191919;
     display: inline-block;
+    font-weight: bold;
     line-height: 32px;
     font-size: 12px;
     font-family: MicrosoftYaHei;
-  }
-
-  .transactions-wrap .record-group .group-item a.success {
-    background: #C83A4C;
-    font-size: 12px;
-    width: 75px;
-    height: 25px;
-    line-height: 25px;
-    display: inline-block;
-  }
-
-  .transactions-wrap .record-group .group-item a.applying {
-    background: #4d86fa;
-    font-size: 12px;
-    width: 75px;
-    height: 25px;
-    line-height: 25px;
-    display: inline-block;
-  }
-
-  .transactions-wrap .record-group .group-item a.failure {
-    background: #74a402;
-    font-size: 12px;
-    width: 75px;
-    height: 25px;
-    line-height: 25px;
-    display: inline-block;
-  }
-
-  .transactions-wrap .record-group .group-item:nth-child(2n) {
-    /* background: #fff; */
-  }
-
-  .transactions-wrap .record-group .group-item:nth-child(2n + 1) {
-    /* background: #f7f7f7; */
+    cursor: auto;
   }
 
   .transactions-wrap .record-group .record-bottom {

@@ -16,10 +16,10 @@
         <span style="margin:0 5px;font-weight:bold;color:#777;font-size:14px;">至</span>
         <el-date-picker v-model="form.dateTo.value" type="datetime" prefix-icon="void-icon" placeholder="选择日期时间" value-format="yyyy-MM-dd HH:mm:ss">
         </el-date-picker>
-        <a class="time ml-20" @click="setTimeToday">今日</a>&nbsp;
-        <a class="time ml-20" @click="setTimeNowWeek">本周</a>&nbsp;
-        <a class="time ml-20" @click="setTimeNowMonth">本月</a>&nbsp;
-        <a class="time ml-20" @click="setTimeRecent3Days(-30)">近一月</a>
+        <a class="time ml-20" @click="setTimeToday">今日</a>
+        <a class="time ml-20" @click="setTimeNowWeek">本周</a>
+        <a class="time ml-20" @click="setTimeNowMonth">本月</a>
+        <a class="time ml-20" @click="setTimeRecent3Days()">近一月</a>
         <a class="submit ml-20" @click="handleSearch()">搜索</a>
       </div>
     </div>
@@ -56,6 +56,19 @@
           </td>
         </tr>
       </tbody>
+      <tfoot class="record-bottom">
+        <tr class="group-item">
+          <td colspan="2">所在区间统计：</td>
+          <td>{{getCurrentPageCash('recharge')}}</td>
+          <td>{{getCurrentPageCash('withdrawal')}}</td>
+          <td>{{getCurrentPageCash('bid_valid')}}</td>
+          <td>{{getCurrentPageCash('reward')}}</td>
+          <td>{{getCurrentPageCash('rebate')}}</td>
+          <td>{{getCurrentPageCash('rebate_ex')}}</td>
+          <td>{{getCurrentPageCash('activity')}}</td>
+          <td style="border-right: 1px solid #dddddd;" class="success">{{getCurrentPageCash('profit')}}</td>
+        </tr>
+      </tfoot>
     </table>
     <!--<div class="record-pagination clearfix">
       <el-pagination
@@ -217,6 +230,7 @@
         end.setTime(new Date(new Date(new Date().toLocaleDateString()).getTime() + 24 * 60 * 60 * 1000 - 1));
         this.form.dateTo.value = end;
         this.form.dateFrom.value = start;
+        this.handleSearch();
       },
       //本周
       setTimeNowWeek() {
@@ -230,6 +244,7 @@
           .getTime() + 24 * 60 * 60 * 1000 - 1);
         this.form.dateTo.value = getWeekEndDate;
         this.form.dateFrom.value = getWeekStartDate;
+        this.handleSearch();
       },
       //本月
       setTimeNowMonth() {
@@ -246,6 +261,7 @@
           24 * 60 * 60 * 1000 - 1);
         this.form.dateTo.value = getMonthEndDate;
         this.form.dateFrom.value = getMonthStartDate;
+        this.handleSearch();
       },
       //设置近几日
       setTimeRecent3Days() {
@@ -253,6 +269,7 @@
         const start = new Date(new Date(new Date().toLocaleDateString()).getTime() - 3600 * 1000 * 24 * 30);
         this.form.dateTo.value = end;
         this.form.dateFrom.value = start;
+        this.handleSearch();
       },
       /* handleSizeChange(val) {
         //  console.log(`每页 ${val} 条`);
@@ -288,10 +305,13 @@
           }
         }
         if (!validate) {
-          vm.$alert(errorMessage, '系统提醒', {
+          vm.$alert(`<div class="lottery-title">${errorMessage}</div>`, '系统提醒', {
             confirmButtonText: '确定',
-            center: true
-          });
+            center: true,
+            dangerouslyUseHTMLString: true,
+            customClass: "syxw-wrap-inner",
+            callback: action => {}
+          })
           return false;
         } else {
           this.loading = true;
@@ -323,15 +343,25 @@
           return true;
         }
       },
+      getCurrentPageCash(key) {
+        let amount = 0.00;
+        if (this.list.length != 0) {
+          for (let i = 0; i < this.list.length; i++) {
+            if (this.list[i][key]) {
+              amount += this.list[i][key];
+            }
+          }
+        }
+        return parseFloat(amount).toFixed(2);
+      },
     },
     computed: {
       getCurrentUserName() {
         return localStorage.getItem('loginname');
-      }
+      },
     },
     mounted() {
       this.setTimeToday();
-      this.handleSearch();
     },
     created() {
       this.$store.dispatch('setbodyBG', 'no-bg');
@@ -466,12 +496,6 @@
     line-height: 25px;
     border-radius: 5px;
     border: 1px solid #D4914D;
-    margin-right: 3px;
-  }
-
-  .record-options .option-row>a:hover {
-    background: #C83A4C;
-    color: #fff;
   }
 
   .record-group {

@@ -13,11 +13,11 @@
         <div class="search-content">
           <div class="search-inner-wrap">
             <label>用户名：</label>
-            <el-input v-model="form.loginname" placeholder="用户名" clearable style="width:114px;"></el-input>
+            <el-input v-model.trim="form.loginname" placeholder="用户名" clearable style="width:114px;"></el-input>
           </div>
           <div class="search-inner-wrap">
             <label>账户名：</label>
-            <el-input v-model="form.realname" placeholder="账户名" clearable style="width:114px;"></el-input>
+            <el-input v-model.trim="form.realname" placeholder="账户名" clearable style="width:114px;"></el-input>
           </div>
           <div class="search-inner-wrap">
             <label>开户银行：</label>
@@ -29,7 +29,7 @@
           </div>
           <div class="search-inner-wrap">
             <label>银行卡号：</label>
-            <el-input v-model="form.card_no" placeholder="银行卡号" clearable style="width:114px;"></el-input>
+            <el-input v-model.trim="form.card_no" placeholder="银行卡号" clearable style="width:114px;"></el-input>
           </div>
           <div class="search-inner-wrap">
             <label>测试用户：</label>

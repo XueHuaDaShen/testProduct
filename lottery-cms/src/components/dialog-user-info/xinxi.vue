@@ -8,18 +8,19 @@
         </el-table-column>
         <el-table-column prop="detail" align="center" label="备注内容">
         </el-table-column>
-        <!-- <el-table-column align="center" label="操作">
+        <el-table-column align="center" label="操作">
           <template slot-scope="scope">
             <el-button type="text" @click="deleteDetail(scope.row)" size="small">删除</el-button>
           </template>
-        </el-table-column> -->
+        </el-table-column>
       </el-table>
       <table class="xinxi-table" v-loading="subLoading">
         <tbody>
           <tr>
             <th>备注内容：</th>
             <td style="position:relative">
-              <el-input ref="textArea" type="textarea" :rows="3" style="width:574px" placeholder="请输入内容" @change="handleTextChange" v-model="textarea">
+              <el-input ref="textArea" type="textarea" :rows="3" style="width:574px" placeholder="请输入内容" @change="handleTextChange"
+                v-model.trim="textarea">
               </el-input>
               <div class="xinxi-alert-tip" v-if="(textarea==''?isTextEmpty:textarea=='')">
                 <span class="sanjiao"></span>

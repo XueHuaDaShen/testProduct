@@ -12,8 +12,8 @@
         <div class="search-content">
           <div class="search-inner-wrap">
             <label>游戏大类：</label>
-            <el-select v-model="gameType.selected" clearable placeholder="选择游戏大类" @change="gameTypeChange" @focus="gameTypeFocus" :loading="gameType.loading"
-              :loading-text="gameType.loadingText" class="small">
+            <el-select v-model="gameType.selected" clearable placeholder="选择游戏大类" @change="gameTypeChange" @focus="gameTypeFocus"
+              :loading="gameType.loading" :loading-text="gameType.loadingText" class="small">
               <el-option v-for="item in gameType.options" :key="item._id" :label="item.name" :value="item._id">
               </el-option>
             </el-select>
@@ -34,7 +34,8 @@
       </div>
     </div>
     <div class="data-table" v-loading="loading">
-      <el-table :data="getModifiedLotList" header-row-class-name="table-header" @cell-mouse-enter="mouseOver" stripe border style="width: 100%;font-size:12px;">
+      <el-table :data="getModifiedLotList" header-row-class-name="table-header" @cell-mouse-enter="mouseOver" stripe
+        border style="width: 100%;font-size:12px;">
         <!-- <el-table-column prop="code" align="center" label="代码">
         </el-table-column> -->
         <el-table-column prop="l2" align="center" label="彩种">
@@ -45,8 +46,8 @@
         </el-table-column>
         <el-table-column align="center" label="玩法名称">
           <template slot-scope="scope">
-            <el-input v-model="scope.row.name" @blur="gameNameBlur" :data-code="scope.row.code+'name'" @focus="gameNameFocus" @keyup.enter.native="gameNameEnter"
-              :ref="scope.row.code+'name'">
+            <el-input v-model.trim="scope.row.name" @blur="gameNameBlur" :data-code="scope.row.code+'name'" @focus="gameNameFocus"
+              @keyup.enter.native="gameNameEnter" :ref="scope.row.code+'name'">
             </el-input>
           </template>
         </el-table-column>
@@ -54,15 +55,15 @@
         </el-table-column>
         <el-table-column align="center" label="最多投注">
           <template slot-scope="scope">
-            <el-input v-model="scope.row.max_votes" @blur="gameVoteBlur" :data-code="scope.row.code+'vote'" @focus="gameVoteFocus" @keyup.enter.native="gameVoteEnter"
-              :ref="scope.row.code+'vote'">
+            <el-input v-model.trim="scope.row.max_votes" @blur="gameVoteBlur" :data-code="scope.row.code+'vote'" @focus="gameVoteFocus"
+              @keyup.enter.native="gameVoteEnter" :ref="scope.row.code+'vote'">
             </el-input>
           </template>
         </el-table-column>
         <el-table-column align="center" label="排序值">
           <template slot-scope="scope">
-            <el-input v-model="scope.row.order" @blur="gameOrderBlur" :data-code="scope.row.code+'order'" @focus="gameOrderFocus" @keyup.enter.native="gameOrderEnter"
-              :ref="scope.row.code+'order'">
+            <el-input v-model.trim="scope.row.order" @blur="gameOrderBlur" :data-code="scope.row.code+'order'" @focus="gameOrderFocus"
+              @keyup.enter.native="gameOrderEnter" :ref="scope.row.code+'order'">
             </el-input>
           </template>
         </el-table-column>
@@ -209,7 +210,7 @@
       const menus = JSON.parse(localStorage.getItem('menus'));
       menus[this.index1].child[this.index2].child.filter((v, vi) => {
         let o = new Object();
-        if(v.url === 'playType'){
+        if (v.url === 'playType') {
           this.titleName = v.menu_name;
         }
         o.title = v.menu_name;

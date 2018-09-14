@@ -172,6 +172,11 @@ export default {
                   code: vm.code
                 }
               })
+            } else {
+              vm.tipText = success.data.msg;
+              setTimeout(() => {
+                vm.tipText = '';
+              }, vm.tipTimeOut*1000);
             }
             // } else if(code == 305) {
             //   vm.tipText = '密码错误'

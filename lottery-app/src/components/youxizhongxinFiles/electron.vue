@@ -5,9 +5,20 @@
         <dt class="agdz-dt">
           <span>AG电子</span>
         </dt>
+        <dd>人气爆棚，激情无限</dd>
+        <!-- <button class="beginBtn noActive">即将上线</button> -->
+        <button class="beginBtn" :disabled="isClick" @click="getLoginFormElectron">立即开始</button>
+      </dl>
+      <div class="split-bar"></div>
+    </div>
+    <div class="electronList">
+      <dl>
+        <dt class="agby-dt">
+          <span>AG捕鱼</span>
+        </dt>
         <dd>大鱼满屏，惊喜不断</dd>
-        <button class="beginBtn noActive">即将上线</button>
-        <!-- <button class="beginBtn" :disabled="isClick" @click="getLoginForm">立即开始</button> -->
+        <!-- <button class="beginBtn noActive">即将上线</button> -->
+        <button class="beginBtn" :disabled="isClick" @click="getLoginFormFish">立即开始</button>
       </dl>
       <div class="split-bar"></div>
     </div>
@@ -24,8 +35,13 @@
   </div>
 </template>
 <script>
+import request from '@/axios/axios.js'
+import agGame from './agGame'
 export default {
   name: 'electron',
+  components: {
+    agGame
+  },
   data() {
     return {
       isClick: false,
@@ -38,27 +54,43 @@ export default {
   destroyed() {},
   computed: {},
   methods: {
-    getLoginForm() {
-      const vm = this;
-      vm.isClick = true;
-      let url = "/ag/user/login";
-      request.http(
-        "post",
-        url, {gameType: 500},
-        success => {
-          vm.isClick = false;
-          let code = success.returncode;
-          console.log('form----', success)
-          if (code == 200) {
-            vm.formData = success.data;
-          } else if(code == 101 || code == 103 || code == 106) {
-            request.loginAgain(vm)
-          }
-        },
-        error => {
-          vm.isClick = false;
+    // 电子
+    getLoginFormElectron() {
+      this.$router.push({
+        name: 'agGame',
+        query: {
+          gameType: 'A00070'
         }
-      );
+      })
+      // const vm = this;
+      // vm.isClick = true;
+      // let url = "/ag/user/login";
+      // request.http(
+      //   "post",
+      //   url, {gameType: 500},
+      //   success => {
+      //     vm.isClick = false;
+      //     let code = success.returncode;
+      //     // console.log('form----', success)
+      //     if (code == 200) {
+      //       vm.formData = success.data;
+      //     } else if(code == 101 || code == 103 || code == 106) {
+      //       request.loginAgain(vm)
+      //     }
+      //   },
+      //   error => {
+      //     vm.isClick = false;
+      //   }
+      // );
+    },
+    // 捕鱼
+    getLoginFormFish() {
+      this.$router.push({
+        name: 'agGame',
+        query: {
+          gameType: 'A00012'
+        }
+      })
     }
   },
 }
@@ -95,11 +127,15 @@ export default {
         }
       }
       dt.agdz-dt{
-        background:url('/static/img/sort1.png') no-repeat;
+        background:url('../../assets/h5-img/sort1.png') no-repeat;
+        background-size:100% 100%;
+      }
+      dt.agby-dt{
+        background:url('../../assets/h5-img/agdz.png') no-repeat;
         background-size:100% 100%;
       }
       dt.byyxg-dt{
-        background:url('/static/img/byyxg.png') no-repeat;
+        background:url('../../assets/h5-img/byyxg.png') no-repeat;
         background-size:100% 100%;
       }
       dd{

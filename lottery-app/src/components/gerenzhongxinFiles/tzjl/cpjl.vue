@@ -92,7 +92,7 @@
             <td>{{item.gamename}}</td>
             <td>{{item.issue_no?item.issue_no.substr(2):''}}</td>
             <td>{{item.lotteryname}}</td>
-            <td>{{item.vote_no}}</td>
+            <td>{{setChart20(item.vote_no)}}</td>
             <td>{{formatMoney(item.vote_cash)}}</td>
             <td>{{formatMoney(item.award_cash)}}</td>
             <td>{{getVoteStatus(item.status)}}</td>
@@ -157,6 +157,17 @@ export default {
   watch: {},
   computed: {},
   methods: {
+    // 设置字符长度大于20
+    setChart20(val) {
+      let s = '';
+      if(val.length>28){
+        s = val.slice(0,26);
+        s+='...'
+      }else{
+        s = val
+      }
+      return s;
+    },
     formatMoney(money) {
       if(money){
         return Number(money).toFixed(2);

@@ -5,7 +5,7 @@
         <div class="header-left">
           <ul>
             <li>
-              <span class="pc-client" @click="openKf()">人工客服</span>
+              <span class="pc-client" @click="openKf()">在线客服</span>
             </li>
             <li>
               <router-link target="_blank" :to="{name:'download'}">手机客户端</router-link>
@@ -19,6 +19,7 @@
               <el-badge :value="announcement.num" :hidden="announcement.hidden" :max="announcement.max" class="badge">
               </el-badge>
             </a>
+            <span class="icon-single"></span>
             <div class="announce-wrap" v-show="this.headerActivited === 1" v-loading="announcement.hidden">
               <ul>
                 <li v-for="item in announcement.data" :key="item.title">
@@ -32,6 +33,7 @@
             <a @mouseover="headerToggle(2)" :class="{'active':this.headerActivited ===2}">
               管理中心
             </a>
+            <span class="icon-single"></span>
             <div class="header-wrap" v-show="this.headerActivited === 2">
               <div class="item" v-for="data_ in tabs.data" v-cloak :key="data_.type">
                 <div class="title">{{data_.title}}</div>
@@ -54,11 +56,11 @@
               <img class="user-icon" src="../assets/img/icon_User@3x.png">
               <span> 账户余额：{{getBlance}}元</span>
             </a>
+            <span class="icon-single"></span>
             <div class="user-wrap" v-show="this.headerActivited === 3" v-loading="profile.loading">
-              你好，
-              <span>{{profile.nickName}}</span>
-              <br />
-              <p>
+              <span style="font-size:12px;color:#191919;font-weight:bold;line-height:normal;display:block;">你好，</span>
+              <span style="font-size:14px;color:#191919;font-weight:bold;line-height:normal;">{{profile.nickName}}</span>
+              <p style="margin-top:10px;">
                 <router-link :to="{name:'topUp'}" class="chongzhi">立即充值</router-link>
               </p>
               <p class="fund-btn">
@@ -69,8 +71,8 @@
                   <span class="ico-logout"></span> 退出游戏</a>
               </p>
               <p class="info" v-if="profile.lastTimeVisible">
-                <span>上次登录</span>
-                <span>{{profile.lastTime}}</span>
+                <span style="color:#777">上次登录</span>
+                <span style="color:#777">{{profile.lastTime}}</span>
               </p>
             </div>
           </li>
@@ -89,7 +91,7 @@
             <router-link @mouseover="headerToggle(6)" :class="{'active':this.headerActivited ===4}" :to="{name:'transfer'}">转账</router-link>
           </li> -->
           <li @mouseleave="headerToggle(0)">
-            <router-link @mouseover="headerToggle(7)" :class="{'active':this.headerActivited ===4}" :to="{name:'transform'}">额度转换</router-link>
+            <router-link @mouseover="headerToggle(7)" :class="{'active':this.headerActivited ===4}" :to="{name:'transform'}" style="padding-right: 0;">额度转换</router-link>
           </li>
         </ul>
       </div>
@@ -129,7 +131,7 @@
             <div class="nav-wrap live live1" :style="this.navActivited === 2 ? 'visibility:visible':'visibility:hidden'">
               <div style="text-align:left">
                 <span class="v-line"></span>
-                <span>AG娱乐</span>
+                <span class="v-bold">AG娱乐</span>
               </div>
               <img alt="AG娱乐" class="logo0" src="../assets/img/Logo_0.png">
               <!-- <button class="item-link noallowed">即将上线</button> -->
@@ -139,14 +141,25 @@
           <li @mouseleave="navToggle(0)">
             <a @mouseover="navToggle(3)" :class="{'active':this.navActivited ===3}">电子游艺</a>
             <span class="icon-single"></span>
-            <div class="nav-wrap live live2" :style="this.navActivited === 3 ? 'visibility:visible':'visibility:hidden'">
-              <div style="text-align:left">
-                <span class="v-line"></span>
-                <span>AG电子</span>
+            <div :style="this.navActivited === 3 ? 'visibility:visible':'visibility:hidden'" class="nav-wrap two">
+              <div style="padding: 0 20px;width: 248px;border-right: 1px solid #ddd;" class="live no-shadow">
+                <div style="text-align:left">
+                  <span class="v-line"></span>
+                  <span class="v-bold">AG电子</span>
+                </div>
+                <img alt="AG电子" class="logo0" src="../assets/img/Logo_0.png">
+                <!-- <button class="item-link noallowed">即将上线</button> -->
+                <router-link class="item-link" :to="{name:'slots'}" target='_blank'>立即参加</router-link>
               </div>
-              <img alt="AG电子" class="logo0" src="../assets/img/Logo_0.png">
-              <!-- <button class="item-link noallowed">即将上线</button> -->
-              <router-link class="item-link" :to="{name:'slots'}" target='_blank'>立即参加</router-link>
+              <div style="padding:0 20px;width:248px" class="live no-shadow">
+                <div style="text-align:left">
+                  <span class="v-line"></span>
+                  <span class="v-bold">AG捕鱼达人</span>
+                </div>
+                <img alt="AG捕鱼达人" class="logo0" src="../assets/img/Logo_01.png">
+                <!-- <button class="item-link noallowed">即将上线</button> -->
+                <router-link class="item-link" :to="{name:'fishGame'}" target='_blank'>立即参加</router-link>
+              </div>
             </div>
           </li>
           <li @mouseleave="navToggle(0)">
@@ -155,7 +168,7 @@
             <div class="nav-wrap live live2" :style="this.navActivited === 4 ? 'visibility:visible':'visibility:hidden'">
               <div style="text-align:left">
                 <span class="v-line"></span>
-                <span>沙巴体育</span>
+                <span class="v-bold">沙巴体育</span>
               </div>
               <img alt="沙巴体育" class="logo1" src="../assets/img/Logo_1.png">
               <a class="item-link noallowed">即将上线</a>
@@ -168,7 +181,7 @@
             <div class="nav-wrap live live2" :style="this.navActivited === 5 ? 'visibility:visible':'visibility:hidden'">
               <div style="text-align:left">
                 <span class="v-line"></span>
-                <span>开元棋牌</span>
+                <span class="v-bold">开元棋牌</span>
               </div>
               <img alt="开元棋牌" class="logo2" src="../assets/img/Logo_2.png">
               <router-link class="item-link" :to="{name:'chessBoard'}" target='_blank'>立即参加</router-link>
@@ -505,6 +518,10 @@
   };
 </script>
 <style scoped lang="scss">
+  .v-bold {
+    font-weight: bold;
+  }
+
   li {
     list-style: none;
   }
@@ -549,11 +566,12 @@
     left: 50%;
     top: 36px;
     background: rgb(255, 255, 255);
-    z-index: 10000;
-    border-top: 1px solid #262732;
+    z-index: 2002;
+    // border-top: 1px solid #262732;
     line-height: 20px;
     font-size: 12px;
     text-align: left;
+    box-shadow: 0 2px 30px 0 rgba(0, 0, 0, 0.5);
   }
 
   .announce-wrap ul {
@@ -568,6 +586,10 @@
     width: 100%;
   }
 
+  .announce-wrap li+li {
+    margin-top: 10px;
+  }
+
   .announce-wrap li>a {
     color: #484848;
     font-size: 12px;
@@ -575,10 +597,13 @@
     margin-left: 5px;
     display: inline-block;
     width: 100%;
-  }
+    font-weight: bold;
+    text-decoration: none;
 
-  .announce-wrap li>a:hover {
-    text-decoration: underline;
+    &:hover {
+      text-decoration: underline;
+      color: #BD8454;
+    }
   }
 
   .announce-wrap li>i {
@@ -594,10 +619,10 @@
 
   .header {
     width: 100%;
-    background: #64646C;
     z-index: 2003;
     position: fixed;
     top: 0;
+    background: #2A2A2A;
   }
 
   .nav {
@@ -658,7 +683,7 @@
   }
 
   .header-left a {
-    color: #fff;
+    color: #BD8454;
     text-decoration: none;
     font-weight: bold;
   }
@@ -668,6 +693,7 @@
     display: inline-block;
     vertical-align: middle;
     line-height: 36px;
+    color: #BD8454;
   }
 
   .moble-client {
@@ -689,6 +715,24 @@
     border-right: 1px solid rgba(204, 204, 204, 0.12);
   }
 
+  ul.header-right>li .icon-single {
+    display: none;
+  }
+
+  ul.header-right>li:hover .icon-single {
+    display: inline-block;
+    width: 0;
+    height: 0;
+    overflow: hidden;
+    font-size: 0;
+    border-width: 6px;
+    border-color: transparent transparent #fff transparent;
+    border-style: dashed dashed solid dashed;
+    bottom: 14px;
+    position: relative;
+    z-index: 2003;
+  }
+
   ul.header-right>li:last-child {
     border-right: none;
   }
@@ -701,7 +745,7 @@
     height: 100%;
     display: block;
     padding: 0 20px;
-    color: #fff;
+    color: #BD8454;
     text-decoration: none;
     position: relative;
     font-weight: bold;
@@ -714,7 +758,7 @@
   }
 
   ul.header-right>li>a:hover {
-    background: #272727;
+    // background: #272727;
   }
 
   ul.header-right>li>a.active {
@@ -735,12 +779,13 @@
     position: absolute;
     top: 36px;
     background: rgb(255, 255, 255);
-    z-index: 10000;
+    z-index: 2002;
     left: 50%;
     padding: 10px;
-    border-top: 1px solid #262732;
+    // border-top: 1px solid #262732;
     display: flex;
-    margin-left: -230px;
+    margin-left: -285px;
+    box-shadow: 0 2px 30px 0 rgba(0, 0, 0, 0.5);
   }
 
   .header-wrap .item {
@@ -748,7 +793,7 @@
     text-align: center;
     width: 110px;
     border-right: 1px solid rgba(0, 0, 0, 0.1);
-    min-height: 300px;
+    min-height: 260px;
   }
 
   .header-wrap .item:last-child {
@@ -780,15 +825,16 @@
     color: #000;
     height: 36px;
     line-height: 36px;
+    font-weight: bold;
   }
 
   .header-wrap .item li {
     list-style: none;
     text-align: center;
     float: none;
-    height: 35px;
-    line-height: 35px;
     cursor: pointer;
+    height: 36px;
+    line-height: 36px;
   }
 
   .pc-client {
@@ -796,8 +842,13 @@
   }
 
   .header-wrap .item li a:hover {
-    background: #272727;
-    color: #fff;
+    color: #BD8454;
+    text-decoration: underline;
+    font-weight: bold;
+
+    &>.badge {
+      font-weight: normal;
+    }
   }
 
   .header .item li a {
@@ -905,6 +956,15 @@
     transform: translateY(-100%) translateZ(0);
     transition: all .3s ease-in-out;
     z-index: -200;
+  }
+
+  .nav-wrap.two {
+    display: flex;
+    justify-content: space-around;
+    width: 496px;
+    margin-left: -248px;
+    box-shadow: rgba(0, 0, 0, 0.5) 0px 2px 30px 0px;
+    padding: 20px 0px;
   }
 
   .nav-wrap.lottery-content {
@@ -1071,6 +1131,10 @@
     -moz-box-shadow: 0 2px 30px 0 rgba(0, 0, 0, 0.5);
   }
 
+  .live.no-shadow {
+    box-shadow: none;
+  }
+
   .live1 {
     margin-left: -124px;
   }
@@ -1123,22 +1187,23 @@
     position: absolute;
     top: 36px;
     background: rgb(255, 255, 255);
-    z-index: 10000;
+    z-index: 2002;
     left: 50%;
-    border-top: 1px solid #262732;
+    // border-top: 1px solid #262732;
     width: 174px;
-    padding: 10px 20px;
+    padding: 10px;
     margin-left: -87px;
     line-height: 24px;
     font-size: 12px;
     color: #000;
     text-align: left;
     min-height: 156px;
+    box-shadow: 0 2px 30px 0 rgba(0, 0, 0, 0.5);
   }
 
   .user-wrap .chongzhi {
     display: block;
-    background: #fb5b23;
+    background: #ff5000;
     border-radius: 3px;
     font-size: 14px;
     color: #fff;
@@ -1150,12 +1215,12 @@
   }
 
   .user-wrap .chongzhi:hover {
-    background: #ff7516;
+    opacity: 0.8;
   }
 
   .user-wrap .tikuan {
     display: inline-block;
-    padding: 5px 23px;
+    padding: 5px 0;
     border: 1px solid rgba(0, 0, 0, 0.3);
     border-radius: 3px;
     font-size: 14px;
@@ -1163,10 +1228,13 @@
     cursor: pointer;
     text-decoration: none;
     color: #333;
+    width: 100%;
+    text-align: center;
+    font-weight: bold;
   }
 
   .user-wrap .tikuan:hover {
-    background: #262732;
+    background: #2a2a2a;
     color: #fff;
   }
 
@@ -1190,7 +1258,7 @@
   .user-wrap .info {
     text-align: center;
     padding: 10px 0 0 0;
-    color: rgba(39, 33, 56, 0.56);
+    color: #777;
   }
 
   .user-wrap .info>span {

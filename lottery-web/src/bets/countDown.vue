@@ -201,12 +201,12 @@
         vm.cm2 = arr[1][1];
         vm.cs1 = arr[2][0];
         vm.cs2 = arr[2][1];
+        this.setCountDown()
         let time = vm.h1 + vm.h2 + ':' + vm.m1 + vm.m2 + ':' + vm.s1 + vm.s2;
         if (vm.h1 == 0 && vm.h2 == 0 && vm.m1 == 0 && vm.m2 == 0 && vm.s1 == 0 && vm.s2 == 0) {
           this.$emit("sendTime", time)
           return false
         }
-        this.setCountDown()
       },
       setCountDown() {
         const vm = this;
@@ -276,9 +276,11 @@
           vm.$emit("sendTime", time)
           if (vm.h1 == 0 && vm.h2 == 0 && vm.m1 == 0 && vm.m2 == 0 && vm.s1 == 0 && vm.s2 == 0) {
             vm.$emit("countdownisflase", false);
-            vm.getCountTime();
             clearInterval(st);
-            vm.getNextIssue();
+            setTimeout(() => {
+              vm.getCountTime();
+              vm.getNextIssue();
+            }, 1000);
           }
         }, 1000)
       },

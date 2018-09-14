@@ -11,13 +11,13 @@
         </div>
         <div class="search-content">
           <div class="search-inner-wrap"><label>订单号：</label>
-            <el-input clearable v-model="form.order_no" placeholder="订单号"></el-input>
+            <el-input clearable v-model.trim="form.order_no" placeholder="订单号"></el-input>
           </div>
           <div class="search-inner-wrap"><label>转账从：</label>
-            <el-input clearable v-model="form.transferFrom" placeholder="转账从"></el-input>
+            <el-input clearable v-model.trim="form.transferFrom" placeholder="转账从"></el-input>
           </div>
           <div class="search-inner-wrap"><label>转账到：</label>
-            <el-input clearable v-model="form.transferTo" placeholder="转账到"></el-input>
+            <el-input clearable v-model.trim="form.transferTo" placeholder="转账到"></el-input>
           </div>
           <div class="search-inner-wrap">
             <label>状态：</label>

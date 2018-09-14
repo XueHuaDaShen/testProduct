@@ -12,7 +12,7 @@
         <div class="search-content">
           <div class="search-inner-wrap">
             <label>用户名：</label>
-            <el-input clearable v-model="username" placeholder="用户名" style="width:114px;"></el-input>
+            <el-input clearable v-model.trim="username" placeholder="用户名" style="width:114px;"></el-input>
           </div>
           <div class="search-inner-wrap">
             <label>状态：</label>
@@ -63,9 +63,23 @@
         </el-table-column>
         <el-table-column align="center" prop="parent.name" label="上级代理">
         </el-table-column>
-        <el-table-column align="center" prop="vote_ky" width="110" label="开元投注额" :formatter="formatMoney">
+        <el-table-column align="center" prop="vote_ky" width="110" label="开元投注" :formatter="formatMoney">
         </el-table-column>
-        <el-table-column align="center" prop="rebate_ky" width="110" label="返点" :formatter="formatMoney">
+        <el-table-column align="center" prop="rebate_ky" width="110" label="开元返点" :formatter="formatMoney">
+        </el-table-column>
+        <el-table-column align="center" prop="vote_ag" width="110" label="AG投注" :formatter="formatMoney">
+        </el-table-column>
+        <el-table-column align="center" prop="rebate_ag" width="110" label="AG返点" :formatter="formatMoney">
+        </el-table-column>
+        <el-table-column align="center" width="110" label="总投注">
+          <template slot-scope="scope">
+            {{formatMoney2(scope.row.vote_ky,scope.row.vote_ag)}}
+          </template>
+        </el-table-column>
+        <el-table-column align="center" width="110" label="总返点">
+          <template slot-scope="scope">
+            {{formatMoney2(scope.row.rebate_ky,scope.row.rebate_ag)}}
+          </template>
         </el-table-column>
         <el-table-column align="center" prop="day" :formatter="formatTime" width="110" label="应发时间">
         </el-table-column>
@@ -342,7 +356,17 @@
             return;
           }
           let values = data.map(item => Number(item[column.property]));
-          if ((index === 3 || index === 4) && !values.every(value => isNaN(value))) {
+          if (index === 7) {
+            values = data.map(item => ((item["vote_ky"] ? Number(item["vote_ky"]) : 0) + (item["vote_ag"] ? Number(
+              item["vote_ag"]) : 0)));
+          }
+          if (index === 8) {
+            values = data.map(item => ((item["rebate_ky"] ? Number(item["rebate_ky"]) : 0) + (item["rebate_ag"] ?
+              Number(
+                item["rebate_ag"]) : 0)));
+          }
+          if ((index === 3 || index === 4 || index === 5 || index === 6 || index === 7 || index === 8) && !values.every(
+              value => isNaN(value))) {
             sums[index] = values.reduce((prev, curr) => {
               const value = Number(curr);
               if (!isNaN(value)) {
@@ -354,7 +378,9 @@
             sums[index] = parseFloat(sums[index]).toFixed(2);
             sums[index] += " 元";
           } else {
-            sums[index] = "--";
+            if (index === 3 || index === 4 || index === 5 || index === 6 || index === 7 || index === 8) {
+              sums[index] = "0.00元";
+            } else sums[index] = "--";
           }
         });
 
@@ -479,6 +505,19 @@
           return Number(cellValue).toFixed(2);
         }
         return "0.00"
+      },
+      formatMoney2(value1, value2) {
+        if (value1 || value2) {
+          if (!value1) {
+            value1 = 0;
+          }
+          if (!value2) {
+            value2 = 0;
+          }
+          let final = parseFloat(value1) + parseFloat(value2);
+          return final.toFixed(2);
+        }
+        return "0.00";
       },
       handleSelectionChange(val) {
         if (val.length != 0) {

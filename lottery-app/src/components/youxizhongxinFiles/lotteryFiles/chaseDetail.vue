@@ -74,8 +74,11 @@
       <div class="split-bar"></div>
       <div class="detail-footer">
         <p>投注号码</p>
-        <p class="bets-number">
+        <!-- <p class="bets-number">
           <span v-for="(n, ni) in setBetsNumber(detailData.vote_no)" :key="ni">{{renderNumber(n)}}<em v-if="ni<setBetsNumber(detailData.vote_no).length-1"></em></span>
+        </p> -->
+        <p class="bets-number">
+          {{detailData.vote_no}}
         </p>
       </div>
       <button class="cancel-order" v-if="detailData.status == 1" :disabled="isClick" @click="cancelChaseOrderFn">终止追号</button>
@@ -344,7 +347,7 @@ export default {
       -webkit-box-pack:center;
       border-radius:50%;
       position: relative;
-      background:url('/static/img/number.png') no-repeat;
+      background:url('../../../assets/h5-img/number.png') no-repeat;
       background-size:100% 100%;
       // background: #C5C5C5;
       // // background-image: radial-gradient(50% -58%, #808080 84%, #000000 100%);
@@ -419,9 +422,12 @@ export default {
     .bets-number{
       margin-top:.2rem;
       font-size:.38rem;
-      min-height:.53rem;
-      line-height:.53rem;
+      // min-height:.53rem;
+      // line-height:.53rem;
+      max-height:3rem;
+      overflow-y:auto;
       color:#939DB8;
+      word-wrap:break-word;
       span{
         display:inline-block;
       }

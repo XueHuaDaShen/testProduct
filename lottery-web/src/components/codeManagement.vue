@@ -34,7 +34,9 @@
           <td>{{item.load}}</td>
           <td>{{item.stake}}</td>
           <td>{{getTime(item.update_at)}}</td>
-          <td style="border-right: 1px solid #dddddd;">{{getStatus(item.status)}}</td>
+          <td style="border-right: 1px solid #dddddd;">
+            <a>{{getStatus(item.status)}}</a>
+          </td>
         </tr>
         <tr v-if="noResult" class="no-result">
           <td colspan="10" style="border-right: 1px solid #dddddd;">
@@ -113,6 +115,7 @@
             loadingtext: "正在搜索...",
             key: 'status',
             options: [
+              { key: '全部', value: "" },
               { key: '不满足', value: "0" },
               { key: '满足', value: "1" }
             ],
@@ -207,10 +210,13 @@
           }
         }
         if (!validate) {
-          self.$alert(errorMessage, '系统提醒', {
+          self.$alert(`<div class="lottery-title">${errorMessage}</div>`, '系统提醒', {
             confirmButtonText: '确定',
-            center: true
-          });
+            center: true,
+            dangerouslyUseHTMLString: true,
+            customClass: "syxw-wrap-inner",
+            callback: action => {}
+          })
           return false;
         } else {
           this.loading = true;
@@ -386,6 +392,9 @@
     font-size: 12px;
     font-family: MicrosoftYaHei;
     color: #333333;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
   }
 
   .transactions-wrap .record-group {
@@ -431,47 +440,13 @@
   .transactions-wrap .record-group .group-item a {
     width: 69px;
     height: 32px;
-    background: #c38755;
-    color: #fff;
+    /* background: #c38755; */
+    color: #191919;
     display: inline-block;
+    font-weight: bold;
     line-height: 32px;
     font-size: 12px;
     font-family: MicrosoftYaHei;
-  }
-
-  .transactions-wrap .record-group .group-item a.success {
-    background: #C83A4C;
-    font-size: 12px;
-    width: 75px;
-    height: 25px;
-    line-height: 25px;
-    display: inline-block;
-  }
-
-  .transactions-wrap .record-group .group-item a.applying {
-    background: #4d86fa;
-    font-size: 12px;
-    width: 75px;
-    height: 25px;
-    line-height: 25px;
-    display: inline-block;
-  }
-
-  .transactions-wrap .record-group .group-item a.failure {
-    background: #74a402;
-    font-size: 12px;
-    width: 75px;
-    height: 25px;
-    line-height: 25px;
-    display: inline-block;
-  }
-
-  .transactions-wrap .record-group .group-item:nth-child(2n) {
-    /* background: #fff; */
-  }
-
-  .transactions-wrap .record-group .group-item:nth-child(2n + 1) {
-    /* background: #f7f7f7; */
   }
 
   .transactions-wrap .record-group .record-bottom {

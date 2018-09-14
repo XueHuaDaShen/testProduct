@@ -13,7 +13,7 @@
         <span class="exp w-60">时间：</span>
         <el-date-picker v-model="form.dateFrom.value" type="datetime" prefix-icon="void-icon" placeholder="选择日期时间">
         </el-date-picker>
-        <span class="exp">至</span>
+        <span style="margin:0 5px;font-weight:bold;color:#777;font-size:14px;">至</span>
         <el-date-picker v-model="form.dateTo.value" type="datetime" prefix-icon="void-icon" placeholder="选择日期时间">
         </el-date-picker>
         <a class="time ml-20" @click="setTimeToday">今日</a>
@@ -138,12 +138,13 @@
             key: "type",
             // 1：微信 2：支付宝 3：银行卡转账 4：银联转账 5：网银快捷 6：银联扫码 
             options: [
+              { key: "全部", value: '' },
               { key: "微信", value: '1' },
               { key: "支付宝", value: '2' },
               { key: "银行卡转账", value: '3' },
               { key: "银联转账", value: '101' },
               { key: "网银快捷", value: '113' },
-              { key: "银联扫码", value: '111' }
+              { key: "银联扫码", value: '111' },
             ],
             value: "",
             getValue() {
@@ -189,6 +190,7 @@
         end.setTime(new Date(new Date(new Date().toLocaleDateString()).getTime() + 24 * 60 * 60 * 1000 - 1));
         this.form.dateTo.value = end;
         this.form.dateFrom.value = start;
+        this.handleSearch();
       },
       //本周
       setTimeNowWeek() {
@@ -202,6 +204,7 @@
           .getTime() + 24 * 60 * 60 * 1000 - 1);
         this.form.dateTo.value = getWeekEndDate;
         this.form.dateFrom.value = getWeekStartDate;
+        this.handleSearch();
       },
       //本月
       setTimeNowMonth() {
@@ -218,6 +221,7 @@
           24 * 60 * 60 * 1000 - 1);
         this.form.dateTo.value = getMonthEndDate;
         this.form.dateFrom.value = getMonthStartDate;
+        this.handleSearch();
       },
       //设置近几日
       setTimeRecent3Days() {
@@ -225,6 +229,7 @@
         const start = new Date(new Date(new Date().toLocaleDateString()).getTime() - 3600 * 1000 * 24 * 30);
         this.form.dateTo.value = end;
         this.form.dateFrom.value = start;
+        this.handleSearch();
       },
       onSubmit() {
         let validate = true,
@@ -252,10 +257,13 @@
           }
         }
         if (!validate) {
-          self.$alert(errorMessage, "系统提醒", {
-            confirmButtonText: "确定",
-            center: true
-          });
+          self.$alert(`<div class="lottery-title">${errorMessage}</div>`, '系统提醒', {
+            confirmButtonText: '确定',
+            center: true,
+            dangerouslyUseHTMLString: true,
+            customClass: "syxw-wrap-inner",
+            callback: action => {}
+          })
           return false;
         } else {
           this.loading = true;
@@ -278,13 +286,6 @@
                   } else {
                     self.list = [];
                     self.noResult = true;
-                    // self.$alert("没有符合条件的记录", "系统提醒", {
-                    //   confirmButtonText: "确定",
-                    //   center: true,
-                    //   callback: action => {
-
-                    //   }
-                    // });
                   }
                 } else {
                   self.list = [];
@@ -437,6 +438,7 @@
   a {
     text-decoration: none;
     color: #333333;
+    cursor: pointer;
   }
 
   .mydeposit-wrap {
@@ -462,6 +464,9 @@
     font-size: 12px;
     font-family: MicrosoftYaHei;
     color: #333333;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
   }
 
   .mydeposit-wrap .record-group {
@@ -507,8 +512,10 @@
   .mydeposit-wrap .record-group .group-item a {
     width: 69px;
     height: 32px;
-    background: #c38755;
-    color: #fff;
+    /* background: #c38755; */
+    color: #777;
+    font-weight: bold;
+    cursor: auto;
     display: inline-block;
     line-height: 32px;
     font-size: 12px;
@@ -517,8 +524,9 @@
 
   .mydeposit-wrap .record-group .group-item a.submit {
     height: 30px;
-    background: #C83A4C;
-    color: #fff;
+    /* background: #C83A4C; */
+    color: #191919;
+    font-weight: bold;
     display: inline-block;
     line-height: 30px;
     font-size: 12px;
@@ -530,7 +538,9 @@
   }
 
   .mydeposit-wrap .record-group .group-item a.success {
-    background: #C83A4C;
+    /* background: #C83A4C; */
+    color: #191919;
+    font-weight: bold;
     font-size: 12px;
     width: 75px;
     height: 25px;
@@ -539,7 +549,9 @@
   }
 
   .mydeposit-wrap .record-group .group-item a.applying {
-    background: #4d86fa;
+    color: #777;
+    font-weight: bold;
+    /* background: #4d86fa; */
     font-size: 12px;
     width: 75px;
     height: 25px;
@@ -548,7 +560,9 @@
   }
 
   .mydeposit-wrap .record-group .group-item a.failure {
-    background: #74a402;
+    /* background: #74a402; */
+    color: #777;
+    font-weight: bold;
     font-size: 12px;
     width: 75px;
     height: 25px;

@@ -58,7 +58,7 @@
                 <a class="step-link" @click="previous">
                   返回
                 </a>
-                <a class="step-link back" @click="cancelVote()" v-if='result.status == 1 || result.status == 2'>
+                <a class="step-link back" @click="cancelVote()" v-if='(result.status == 1 || result.status == 2) && cancelBtn'>
                   撤单
                 </a>
               </div>
@@ -84,7 +84,8 @@
     data() {
       return {
         loading: false,
-        result: {}
+        result: {},
+        cancelBtn: false,
       };
     },
     methods: {
@@ -114,6 +115,12 @@
                 request.loginAgain(self);
               } else if (success.returncode == 200) {
                 this.result = success.data;
+                let loginname = localStorage.getItem('loginname').toString();
+                if (loginname === this.result.loginname) {
+                  this.cancelBtn = true;
+                } else {
+                  this.cancelBtn = false;
+                }
               }
             }
           },
@@ -151,36 +158,44 @@
               ) {
                 request.loginAgain(self);
               } else if (success.returncode == 200) {
-                self.$alert("撤单成功", "系统提示", {
-                  confirmButtonText: "确定",
+                self.$alert('<div class="lottery-title">撤单成功</div>', '系统提醒', {
+                  confirmButtonText: '确定',
                   center: true,
+                  dangerouslyUseHTMLString: true,
+                  customClass: "syxw-wrap-inner",
                   callback: action => {
                     self.previous();
                   }
-                });
+                })
               } else if (success.returncode == 301) {
-                self.$alert("撤单失败，请联系管理员", "系统提示", {
-                  confirmButtonText: "确定",
+                self.$alert('<div class="lottery-title">撤单失败，请联系管理员</div>', '系统提醒', {
+                  confirmButtonText: '确定',
                   center: true,
+                  dangerouslyUseHTMLString: true,
+                  customClass: "syxw-wrap-inner",
                   callback: action => {}
-                });
+                })
               } else if (success.returncode == 302) {
-                self.$alert("撤单失败，请联系管理员", "系统提示", {
-                  confirmButtonText: "确定",
+                self.$alert('<div class="lottery-title">撤单失败，请联系管理员</div>', '系统提醒', {
+                  confirmButtonText: '确定',
                   center: true,
+                  dangerouslyUseHTMLString: true,
+                  customClass: "syxw-wrap-inner",
                   callback: action => {}
-                });
+                })
               }
             }
           },
           error => {
             this.loading = false;
             console.log("error", error);
-            self.$alert("撤单失败，请联系管理员", "系统提示", {
-              confirmButtonText: "确定",
+            self.$alert('<div class="lottery-title">撤单失败，请联系管理员</div>', '系统提醒', {
+              confirmButtonText: '确定',
               center: true,
+              dangerouslyUseHTMLString: true,
+              customClass: "syxw-wrap-inner",
               callback: action => {}
-            });
+            })
           }
         );
       },
@@ -189,11 +204,13 @@
       if (this.$route.query.id) {
         this.getDetail(this.$route.query.id);
       } else {
-        this.$alert("当前编号不存在", "系统提示", {
-          confirmButtonText: "确定",
+        this.$alert('<div class="lottery-title">当前编号不存在</div>', '系统提醒', {
+          confirmButtonText: '确定',
           center: true,
+          dangerouslyUseHTMLString: true,
+          customClass: "syxw-wrap-inner",
           callback: action => {}
-        });
+        })
       }
     },
     created() {

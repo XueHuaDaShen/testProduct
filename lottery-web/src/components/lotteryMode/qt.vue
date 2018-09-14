@@ -272,132 +272,7 @@
             <div class="my-bets-table-tip">
               <span v-for="(item, index) in myBetsTableTip" :key="index" @click="handleChangemyTableTipTitle(item)" :class="item.checked?'checked':''">{{item.title}}</span>
             </div>
-            <div class="my-bets-table-wrap" v-if="isShowData">
-              <table style="width:100%">
-                <thead>
-                  <tr>
-                    <th>
-                      <span>游戏</span>
-                    </th>
-                    <th>
-                      <span>玩法</span>
-                    </th>
-                    <th>
-                      <span>期号</span>
-                    </th>
-                    <th>
-                      <span>开奖号</span>
-                    </th>
-                    <th>
-                      <span>投注内容</span>
-                    </th>
-                    <!-- <th>注数比例</th> -->
-                    <th>
-                      <span>投注金额</span>
-                    </th>
-                    <th>
-                      <span>奖金</span>
-                    </th>
-                    <th>
-                      <span>奖金-返点</span>
-                    </th>
-                    <th>
-                      <span>状态</span>
-                    </th>
-                    <th>
-                      <span>操作</span>
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr v-for="(item, index) in betsDataList" :key="index">
-                    <th>{{item.gamename}}</th>
-                    <th>{{item.lotteryname}}</th>
-                    <th>{{item.issue_no}}</th>
-                    <th>{{item.luck_no}}</th>
-                    <th style="width:10%;">
-                      <div>{{item.vote_no}}</div>
-                    </th>
-                    <!-- <th>0.5%</th> -->
-                    <th>{{Number(item.vote_cash||0).toFixed(2)}}</th>
-                    <th :class="item.status==5?'zhongjiangMoney':''">{{Number(item.award_cash||0).toFixed(2)}}</th>
-                    <th>{{item.refund}}</th>
-                    <th :class="item.status==5?'zhongjiang':''">{{voteStatus(item.status)}}</th>
-                    <th class="bets-detail-btn">
-                      <router-link target="_blank" :to="{path:'/project/lotteryRecord',query:{id:item._id}}">
-                        详情
-                      </router-link>
-                    </th>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-            <div class="my-bets-table-wrap" v-if="!isShowData">
-              <table style="width:100%">
-                <thead>
-                  <tr>
-                    <th>
-                      <span>游戏</span>
-                    </th>
-                    <th>
-                      <span>玩法</span>
-                    </th>
-                    <th>
-                      <span>起始奖期</span>
-                    </th>
-                    <th>
-                      <span>追号进度</span>
-                    </th>
-                    <th>
-                      <span>投注内容</span>
-                    </th>
-                    <!-- <th>注数比例</th> -->
-                    <th>
-                      <span>总追号金额</span>
-                    </th>
-                    <th>
-                      <span>已完成金额</span>
-                    </th>
-                    <th>
-                      <span>已中奖金额</span>
-                    </th>
-                    <th>
-                      <span>已取消金额</span>
-                    </th>
-                    <th>
-                      <span>追中即停</span>
-                    </th>
-                    <th>
-                      <span>状态</span>
-                    </th>
-                    <th>操作</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr v-for="(item, index) in chaseDataList" :key="index">
-                    <th>{{item.gamename}}</th>
-                    <th>{{item.lotteryname}}</th>
-                    <th>{{item.start_issue_no}}</th>
-                    <th>{{item.issue_num_finished+'/'+item.issue_num}}</th>
-                    <th style="width:10%;">
-                      <div>{{item.vote_no}}</div>
-                    </th>
-                    <!-- <th>注数比例</th> -->
-                    <th>{{Number(item.total_vote_cash||0).toFixed(2)}}</th>
-                    <th>{{Number(item.vote_cash_finished||0).toFixed(2)}}</th>
-                    <th>{{Number(item.award_cash||0).toFixed(2)}}</th>
-                    <th>{{Number(item.vote_cash_canceled||0).toFixed(2)}}</th>
-                    <th>{{item.is_hit_stop===1?'是':'否'}}</th>
-                    <th>{{chaseStatus(item.status)}}</th>
-                    <th class="bets-detail-btn">
-                      <router-link target="_blank" :to="{path:'/project/trackRecord',query:{id:item._id}}">
-                        详情
-                      </router-link>
-                    </th>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
+            <voteList :voteDataList="computedGetVoteDataList||voteDataList" :chaseDataList="computedGetChaseDataList||chaseDataList" :isShowData="isShowData"></voteList>
           </div>
         </div>
         <el-dialog title="温馨提示" :visible.sync="dialogVisible" width="33%" :center="true" :before-close="handleDialogClose">
@@ -470,6 +345,7 @@
   import betsText from '../../bets/betsText';
   import lotteryNumberArr from '../../bets/lotteryNumberArr';
   import countDown from '../../bets/countDown';
+  import voteList from './voteList';
   import request from '../../axios/axios.js'
   import { getVoteStatus } from '../../common/filterStatus.js';
   import { getChaseStatus } from '../../common/filterStatus.js';
@@ -482,12 +358,15 @@
       betsAreaTen,
       betsText,
       lotteryNumberArr,
-      countDown
+      countDown,
+      voteList
     },
     data() {
       return {
         bets: this.$store.state.bets,
         money: this.$store.state.bets * this.$store.state.price,
+        voteDataList: [],
+        chaseDataList: [],
         s_code: '',
         issueTimeData: {
           sd: 19,
@@ -542,6 +421,7 @@
         countDownTime1: '00:09:15',
         countDownTime2: [],
         maxMultiple: 222, // 最大倍数
+        c_maxMultiple: 222, // 最大倍数
         minMultiple: 1,
         betsNumber: '', // 加入到采购蓝的 所有投注号码 字符串 ru: 0-1|0-1|0-1|0-1|0-1
         randernewBetsMode: false, // 为了同步模块中的数据
@@ -648,7 +528,7 @@
     created() {
       const vm = this;
       this.gameid = this.$route.query.id;
-      this.logoImgCode = '/static/logo/' + this.$route.query.s_code + '.png';
+      this.logoImgCode = this.$store.state.productPath + this.$route.query.s_code + '.png';
       this.getLotteryDetailList();
 
 
@@ -666,6 +546,12 @@
     computed: {
       getBlance() {
         return this.$store.state.blance;
+      },
+      computedGetVoteDataList() {
+        return this.$store.state.voteDataList;
+      },
+      computedGetChaseDataList() {
+        return this.$store.state.chaseDataList;
       }
     },
     methods: {
@@ -706,10 +592,17 @@
       },
       //
       handlecountdownisflase(val) {
+        const vm = this;
         if (!val) {
           this.chaseData1 = [];
           this.chaseData2 = [];
           this.chaseData3 = [];
+          clearInterval(vm.myInterval);
+          setTimeout(() => {
+            vm.newIssueInterval();
+            var time = vm.getIssueTime;
+            vm.myInterval = setInterval(vm.newIssueInterval, (time * 1000))
+          }, 1000);
         }
       },
       // 定时获取最新的期数
@@ -772,10 +665,16 @@
         this.moneyType = item;
         if (this.moneyType === '元') {
           this.c_prize = this.prize
+          this.maxMultiple = this.c_maxMultiple
         } else if (this.moneyType === '角') {
           this.c_prize = this.prize * 0.1
+          this.maxMultiple = this.c_maxMultiple * 10
         } else if (this.moneyType === '分') {
           this.c_prize = this.prize * 0.01
+          this.maxMultiple = this.c_maxMultiple * 100
+        }
+        if (this.multiple > this.maxMultiple) {
+          this.multiple = this.maxMultiple
         }
       },
       // 切换投注类型
@@ -835,15 +734,19 @@
             max_multiple = Math.floor(this.maxPrize / prize);
           }
           this.maxMultiple = max_multiple;
+          this.c_maxMultiple = max_multiple;
           vm.prize = prize
           // console.log(this.userRefund, this.maxRefund, this.diff, data.item.probability)
           // console.log(max_multiple)
           if (this.moneyType === '元') {
             vm.c_prize = vm.prize
+            vm.maxMultiple = vm.c_maxMultiple
           } else if (vm.moneyType === '角') {
             vm.c_prize = vm.prize * 0.1
+            vm.maxMultiple = vm.c_maxMultiple * 10
           } else if (vm.moneyType === '分') {
             vm.c_prize = vm.prize * 0.01
+            vm.maxMultiple = vm.c_maxMultiple * 100
           }
         } catch (e) {}
       },
@@ -1187,10 +1090,12 @@
         })
         item.checked = true;
         if (item.title === '我的投注') {
-          this.getBetsDataList()
+          // this.getBetsDataList()
+          this.voteDataList = this.$store.state.voteDataList;
           this.isShowData = true;
         } else {
-          this.getChaseDataList();
+          // this.getChaseDataList();
+          this.chaseDataList = this.$store.state.chaseDataList;
           this.isShowData = false;
         }
       },
@@ -1267,7 +1172,8 @@
         this.betsMode = this.fiveStar;
         this.handleChangeNav(this.navData[0]);
         this.$nextTick(() => {
-          this.getBetsDataList();
+          // this.getBetsDataList();
+          this.voteDataList = this.$store.state.voteDataList;
         })
       },
       filterLotteryList(data, arr, item) {
@@ -1303,10 +1209,13 @@
         const vm = this;
         this.lotteryType = val;
         if (this.shoppingCart.length === 0) {
-          this.$alert('请至少选择一注投注号码！', '温馨提示', {
+          this.$alert('<div class="lottery-title">请至少选择一注投注号码！</div>', '温馨提示', {
             confirmButtonText: '关闭',
-            center: true
-          });
+            center: true,
+            dangerouslyUseHTMLString: true,
+            customClass: "syxw-wrap-inner",
+            callback: action => {}
+          })
         } else if (val === 1) {
           let onePrice = this.setAllMoneyFn();
           vm.profitChase(vm.yinglilv / 100, vm.c_prize, onePrice, vm.issueTimes1, 1, vm.maxMultiple)
@@ -1592,9 +1501,12 @@
           })
           let totalMoney = vm.chaseNumMoney ? Number(vm.chaseNumMoney).toFixed(2) : vm.setAllMoneyFn().toFixed(2);
           if (vm.userBlance < totalMoney) {
-            vm.$alert('投注失败-余额不足', '温馨提示', {
+            vm.$alert('<div class="lottery-title">投注失败-余额不足</div>', '温馨提示', {
               confirmButtonText: '关闭',
               center: true,
+              dangerouslyUseHTMLString: true,
+              customClass: "syxw-wrap-inner",
+              callback: action => {}
             })
           } else {
             vm.isClick = true;
@@ -1626,9 +1538,12 @@
                 } else if (code === 106) {
                   request.loginAgain(vm)
                 } else if (code === 304) {
-                  vm.$alert('投注失败-余额不足', '温馨提示', {
+                  vm.$alert('<div class="lottery-title">投注失败-余额不足</div>', '温馨提示', {
                     confirmButtonText: '关闭',
                     center: true,
+                    dangerouslyUseHTMLString: true,
+                    customClass: "syxw-wrap-inner",
+                    callback: action => {}
                   })
                 } else if (code === 200) {
                   // console.log()
@@ -1695,9 +1610,12 @@
           })
           let totalMoney = vm.chaseNumMoney ? Number(vm.chaseNumMoney).toFixed(2) : vm.setAllMoneyFn().toFixed(2);
           if (vm.userBlance < totalMoney) {
-            vm.$alert('投注失败-余额不足', '温馨提示', {
+            vm.$alert('<div class="lottery-title">投注失败-余额不足</div>', '温馨提示', {
               confirmButtonText: '关闭',
               center: true,
+              dangerouslyUseHTMLString: true,
+              customClass: "syxw-wrap-inner",
+              callback: action => {}
             })
           } else {
             vm.isClick = true;
@@ -1716,9 +1634,12 @@
                 } else if (code === 106) {
                   request.loginAgain(vm)
                 } else if (code === 304) {
-                  vm.$alert('投注失败-余额不足', '温馨提示', {
+                  vm.$alert('<div class="lottery-title">投注失败-余额不足</div>', '温馨提示', {
                     confirmButtonText: '关闭',
                     center: true,
+                    dangerouslyUseHTMLString: true,
+                    customClass: "syxw-wrap-inner",
+                    callback: action => {}
                   })
                 } else if (code === 200) {
                   // console.log()
@@ -1732,14 +1653,20 @@
                   localStorage.setItem('blance', success.data.cash);
                   // console.log(vm.$store)
                 } else if (code === 301 || code == 303) {
-                  vm.$alert('投注失败-参数错误', '温馨提示', {
+                  vm.$alert('<div class="lottery-title">投注失败-参数错误</div>', '温馨提示', {
                     confirmButtonText: '关闭',
                     center: true,
+                    dangerouslyUseHTMLString: true,
+                    customClass: "syxw-wrap-inner",
+                    callback: action => {}
                   })
                 } else if (code === 305) {
-                  vm.$alert('期号过期', '温馨提示', {
+                  vm.$alert('<div class="lottery-title">期号过期</div>', '温馨提示', {
                     confirmButtonText: '关闭',
                     center: true,
+                    dangerouslyUseHTMLString: true,
+                    customClass: "syxw-wrap-inner",
+                    callback: action => {}
                   })
                 }
               },
@@ -1874,7 +1801,8 @@
               request.loginAgain(vm)
             } else if (code === 200) {
               // console.log()
-              vm.betsDataList = success.data.data
+              // vm.betsDataList = success.data.data
+              vm.$store.dispatch('setVoteDataList', success.data.data);
             }
           },
           (error) => {
@@ -1896,7 +1824,8 @@
               request.loginAgain(vm)
             } else if (code === 200) {
               // console.log()
-              vm.chaseDataList = success.data.data
+              // vm.chaseDataList = success.data.data
+              vm.$store.dispatch('setChaseDataList', success.data.data);
             }
           },
           (error) => {
@@ -2237,6 +2166,7 @@
     color: #191919;
     font-size: 18px;
     cursor: default;
+    outline: none;
   }
 
   .adjust {

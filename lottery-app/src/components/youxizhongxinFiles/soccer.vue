@@ -58,7 +58,7 @@ export default {
         }
       }
       dt.sbty-dt{
-        background:url('/static/img/sort2.png') no-repeat;
+        background:url('../../assets/h5-img/sort2.png') no-repeat;
         background-size:100% 100%;
       }
       dd{

@@ -28,7 +28,8 @@
       </div>
     </div>
     <div class="data-table" v-loading="loading">
-      <el-table :data="activityLogListData" header-row-class-name="table-header" align="left" stripe border style="width: 100%;font-size:12px;" max-height="450">
+      <el-table :data="activityLogListData" header-row-class-name="table-header" align="left" stripe border style="width: 100%;font-size:12px;"
+        max-height="450">
         <el-table-column prop="name" label="角色名称">
         </el-table-column>
         <el-table-column label="操作">
@@ -52,12 +53,12 @@
           <div class="form-row form-top">
             <span class="exp">群组名</span>
             <span class="exp-after">:</span>
-            <el-input type="text" v-model="form.name" clearable></el-input>
+            <el-input type="text" v-model.trim="form.name" clearable></el-input>
           </div>
           <div class="form-row form-top">
             <span class="exp">备注</span>
             <span class="exp-after">:</span>
-            <el-input type="text" v-model="form.message" clearable></el-input>
+            <el-input type="text" v-model.trim="form.message" clearable></el-input>
           </div>
           <div class="split-line"></div>
           <div class="form-row form-cen">
@@ -91,12 +92,12 @@
           <div class="form-row form-top">
             <span class="exp">群组名</span>
             <span class="exp-after">:</span>
-            <el-input type="text" v-model="updateMenuForm.name" disabled></el-input>
+            <el-input type="text" v-model.trim="updateMenuForm.name" disabled></el-input>
           </div>
           <div class="form-row form-top">
             <span class="exp">备注</span>
             <span class="exp-after">:</span>
-            <el-input type="text" v-model="updateMenuForm.message" clearable></el-input>
+            <el-input type="text" v-model.trim="updateMenuForm.message" clearable></el-input>
           </div>
           <div class="split-line"></div>
           <div class="form-row form-cen">

@@ -88,10 +88,12 @@
                   self.noMessage();
                 }
               } else {
-                self.$alert(success.data.msg, "系统提示", {
-                  confirmButtonText: "确定",
-                  callback: action => {}
-                });
+                self.$alert(`<div class="lottery-title">错误代码：${success.returncode}</div>`, '系统提示', {
+                  confirmButtonText: '确定',
+                  center: true,
+                  dangerouslyUseHTMLString: true,
+                  customClass: "syxw-wrap-inner"
+                })
               }
             }
           },
@@ -104,15 +106,17 @@
       },
       noMessage() {
         let self = this;
-        self.$alert('该活动不存在，请联系管理员', '系统提醒', {
+        self.$alert('<div class="lottery-title">该活动不存在，请联系管理员</div>', '系统提醒', {
           confirmButtonText: '确定',
           center: true,
+          dangerouslyUseHTMLString: true,
+          customClass: "syxw-wrap-inner",
           callback: action => {
             setTimeout(function() {
               self.$router.push({ name: 'activityList' });
             }, 1000)
           }
-        });
+        })
       },
     },
     mounted() {

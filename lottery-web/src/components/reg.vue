@@ -3,40 +3,40 @@
     <header class="header">
       <div>
         <a class="nav-left" href="/">
-          <img src="@/assets/img/Logo@3x.png">
+          <img src="../assets/img/Logo@3x.png">
         </a>
-        <router-link :to="{name:'download'}" class="download"><img src="@/assets/img/bets-img/xiazai-icon.png" class="xiazai-icon">下载中心</router-link>
-        <a @click="open" class="server"><img src="@/assets/img/bets-img/kefu-icon.png" class="kefu-icon">联系客服</a>
+        <router-link :to="{name:'download'}" class="download"><img src="../img/xiazai-icon.png" class="xiazai-icon">下载中心</router-link>
+        <a @click="open" class="server"><img src="../img/kefu-icon.png" class="kefu-icon">联系客服</a>
       </div>
     </header>
     <div class="content-wrap" v-loading="loading">
       <div class="content">
         <div class="login-wrap animated" :class="animated?'bounceOutLeft':''">
           <div class="login-title">
-            <span><img src="@/assets/img/bets-img/login-logo.png"></span>
+            <span><img src="../img/login-logo.png"></span>
           </div>
           <div class="alert-tip" v-if="tip"><span>{{tip}}</span></div>
           <div class="user-info">
             <span class="icon-user">
-              <img src="@/assets/img/bets-img/icon-user.png">
+              <img src="../img/icon-user.png">
             </span>
             <input type="text" @focus="handleFocusInput('name')" @blur="handleBlurInput" v-model.trim="loginName" placeholder="请输入您的用户名">
           </div>
           <div class="user-info">
             <span class="icon-pwd">
-              <img src="@/assets/img/bets-img/icon-pwd.png">
+              <img src="../img/icon-pwd.png">
             </span>
             <input type="password" @focus="handleFocusInput('pwd')" @blur="handleBlurInput" name="pwd" autocomplete="off" v-model.trim="loginPwd" placeholder="请输入您的密码">
           </div>
           <div class="user-info">
             <span class="icon-pwd">
-              <img src="@/assets/img/bets-img/icon-pwd.png">
+              <img src="../img/icon-pwd.png">
             </span>
             <input type="password" @focus="handleFocusInput('pwd')" @blur="handleBlurInput" name="pwd" autocomplete="off" v-model.trim="repeatPwd" placeholder="请确认您的密码">
           </div>
           <div class="captcha-info" v-if="captcha">
             <span class="icon-captcha">
-              <img src="@/assets/img/bets-img/icon-captcha.png">
+              <img src="../img/icon-captcha.png">
             </span>
             <span class="captcha-svg" @click="getCaptcha" v-html="captcha">
             </span>
@@ -306,7 +306,7 @@
     width: 100%;
     color: #fff;
     /* background: #2d3236; */
-    background: url("../assets/img/bets-img/login-bj.png") no-repeat;
+    background: url("../img/login-bj.png") no-repeat;
     background-size: cover;
   }
 

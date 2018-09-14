@@ -567,10 +567,13 @@
           }
         }
         if (!validate) {
-          self.$alert(errorMessage, "系统提醒", {
-            confirmButtonText: "确定",
-            center: true
-          });
+          self.$alert(`<div class="lottery-title">${errorMessage}</div>`, '系统提醒', {
+            confirmButtonText: '确定',
+            center: true,
+            dangerouslyUseHTMLString: true,
+            customClass: "syxw-wrap-inner",
+            callback: action => {}
+          })
           return false;
         } else {
           this.loading = true;
@@ -592,10 +595,13 @@
                     self.list = success.data.data;
                   } else {
                     self.noResult = true;
-                    self.$alert("没有符合条件的记录", "系统提醒", {
-                      confirmButtonText: "确定",
-                      center: true
-                    });
+                    self.$alert('<div class="lottery-title">没有符合条件的记录</div>', '系统提醒', {
+                      confirmButtonText: '确定',
+                      center: true,
+                      dangerouslyUseHTMLString: true,
+                      customClass: "syxw-wrap-inner",
+                      callback: action => {}
+                    })
                   }
                 }
               }

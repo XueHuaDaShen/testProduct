@@ -139,7 +139,7 @@
             loading: false,
             loadingtext: "正在搜索...",
             key: 'type',
-            options: [],
+            options: [{ name: '全部', type: '' }],
             value: '',
             getValue() {
               if (this.value) {
@@ -232,6 +232,7 @@
         end.setTime(new Date(new Date(new Date().toLocaleDateString()).getTime() + 24 * 60 * 60 * 1000 - 1));
         this.form.dateTo.value = end;
         this.form.dateFrom.value = start;
+        this.handleSearch();
       },
       //本周
       setTimeNowWeek() {
@@ -245,6 +246,7 @@
           .getTime() + 24 * 60 * 60 * 1000 - 1);
         this.form.dateTo.value = getWeekEndDate;
         this.form.dateFrom.value = getWeekStartDate;
+        this.handleSearch();
       },
       //本月
       setTimeNowMonth() {
@@ -261,6 +263,7 @@
           24 * 60 * 60 * 1000 - 1);
         this.form.dateTo.value = getMonthEndDate;
         this.form.dateFrom.value = getMonthStartDate;
+        this.handleSearch();
       },
       //设置近几日
       setTimeRecent3Days() {
@@ -268,6 +271,7 @@
         const start = new Date(new Date(new Date().toLocaleDateString()).getTime() - 3600 * 1000 * 24 * 30);
         this.form.dateTo.value = end;
         this.form.dateFrom.value = start;
+        this.handleSearch();
       },
       getName(id) {
         if (id && id.name) {
@@ -311,10 +315,13 @@
           }
         }
         if (!validate) {
-          self.$alert(errorMessage, '系统提醒', {
+          self.$alert(`<div class="lottery-title">${errorMessage}</div>`, '系统提醒', {
             confirmButtonText: '确定',
-            center: true
-          });
+            center: true,
+            dangerouslyUseHTMLString: true,
+            customClass: "syxw-wrap-inner",
+            callback: action => {}
+          })
           return false;
         } else {
           this.loading = true;
@@ -333,18 +340,10 @@
                 } else {
                   self.noResult = true;
                   self.list = [];
-                  // self.$alert('没有符合条件的记录', '系统提醒', {
-                  //   confirmButtonText: '确定',
-                  //   center: true,
-                  // });
                 }
               } else {
                 self.noResult = true;
                 self.list = [];
-                // self.$alert('没有符合条件的记录', '系统提醒', {
-                //   confirmButtonText: '确定',
-                //   center: true,
-                // });
               }
             }
           }, (error) => {
@@ -376,7 +375,7 @@
         return "--"
       },
       getTypeOptions(e) {
-        if (this.form.type.options.length != 0) {
+        if (this.form.type.options.length > 1) {
           return;
         }
         let self = this;
@@ -390,7 +389,8 @@
             } else if (success.returncode == 200) {
               let data = success.data;
               if (data.length != 0) {
-                self.form.type.options = data;
+                let options = [{ name: '全部', type: '' }];
+                self.form.type.options = options.concat(data);
               }
             } else {
               self.$message({

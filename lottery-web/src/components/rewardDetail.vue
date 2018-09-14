@@ -8,13 +8,11 @@
           <span class="salary-unit">当前奖金组</span>
         </div>
         <div class="tab-line">
-          <router-link :to="{name:'reward'}">
-            <span>
-              < </span><span class="back">返回</span></router-link><span class="ml-34">玩法奖金详情</span>
-    </div>
-    <table id="table">
-    </table>
-  </div>
+          <p>玩法奖金详情</p>
+        </div>
+        <table id="table">
+        </table>
+      </div>
     </div>
   </div>
 </template>
@@ -91,7 +89,7 @@
                 // console.log('items', self.tables.items);
                 // console.log('arr', self.tables.arr);
                 self.render(self.tables.arr, self);
-              }else {
+              } else {
                 self.$message({
                   showClose: true,
                   message: success.returncode,
@@ -109,11 +107,11 @@
       render(data, vm) {
         let Data = data; // 随机生成数据
         let templateStr = '<tr>' +
-          '<th style="background: #D4914D;height: 34px;line-height: 34px;color: #fff;font-size: 14px;border: 1px solid #DADADA;border-collapse: collapse;"></th>' +
-          '<th style="background: #D4914D;height: 34px;line-height: 34px;color: #fff;font-size: 14px;border: 1px solid #DADADA;border-collapse: collapse;width: 200px">类型</th>' +
-          '<th style="background: #D4914D;height: 34px;line-height: 34px;color: #fff;font-size: 14px;border: 1px solid #DADADA;border-collapse: collapse;width: 282px">返点</th>' +
-          '<th style="background: #D4914D;height: 34px;line-height: 34px;color: #fff;font-size: 14px;border: 1px solid #DADADA;border-collapse: collapse;width: 247px">玩法</th>' +
-          '<th style="background: #D4914D; height: 34px;line-height: 34px;color: #fff;font-size: 14px;border: 1px solid #DADADA;border-collapse: collapse;width:161px">单注奖金/元</th>' +
+          '<th style="padding: 15px 0;background: #f6f6f6;color: #777;font-size: 14px;border: 1px solid #DADADA;border-collapse: collapse;"></th>' +
+          '<th style="padding: 15px 0;background: #f6f6f6;color: #777;font-size: 14px;border: 1px solid #DADADA;border-collapse: collapse;width: 200px">类型</th>' +
+          '<th style="padding: 15px 0;background: #f6f6f6;color: #777;font-size: 14px;border: 1px solid #DADADA;border-collapse: collapse;width: 282px">返点</th>' +
+          '<th style="padding: 15px 0;background: #f6f6f6;color: #777;font-size: 14px;border: 1px solid #DADADA;border-collapse: collapse;width: 247px">玩法</th>' +
+          '<th style="padding: 15px 0;background: #f6f6f6;color: #777;font-size: 14px;border: 1px solid #DADADA;border-collapse: collapse;width:161px">单注奖金/元</th>' +
           '</tr>';
         for (let i = 0, l = Data.length; i < l; i++) {
           let children = vm.getChildren(Data[i], true, vm); // 获取列尾部节点集合
@@ -244,15 +242,17 @@
         if (this.$route.query.id) {
           this.getTables(this.$route.query.id);
         } else {
-          self.$alert('该奖金组不存在，请联系管理员', '系统提醒', {
+          self.$alert('<div class="lottery-title">该奖金组不存在，请联系管理员</div>', '系统提醒', {
             confirmButtonText: '确定',
             center: true,
+            dangerouslyUseHTMLString: true,
+            customClass: "syxw-wrap-inner",
             callback: action => {
               setTimeout(function() {
                 self.$router.push({ name: 'reward' });
               }, 1000)
             }
-          });
+          })
         }
       }
     },
@@ -264,26 +264,15 @@
 </script>
 <style scoped>
   .tab-line {
-    font-size: 12px;
-    color: #333;
+    font-family: PingFangSC-Regular;
+    font-weight: 700;
+    font-size: 16px;
+    color: #191919;
     text-align: left;
-    margin-bottom: 5px;
-    height: 30px;
-    line-height: 30px;
-  }
-
-  .tab-line>a {
-    text-decoration: none;
-    display: inline-block;
-    color: #333;
-  }
-
-  .tab-line .back {
-    margin-left: 9px;
-  }
-
-  .tab-line .ml-34 {
-    margin-left: 34px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
   }
 
   .salary-cell {
@@ -376,7 +365,7 @@
     width: 252px;
   }
 
-  .notice-wrap{
+  .notice-wrap {
     font-family: MicrosoftYaHei;
     color: #191919;
     margin: 0 auto;

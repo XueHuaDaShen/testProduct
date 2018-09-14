@@ -1,5 +1,5 @@
 <template>
-  <div class="bank-wrap search-form" v-loading="loading">
+  <div class="bank-wrap search-form record-options" v-loading="loading">
     <div class="binding-wrap item">
       <div class="binding-inner">
         <table>
@@ -18,15 +18,12 @@
                 </el-input>
               </td>
             </tr>
-            <tr>
-              <td align="right" class="exp"></td>
-              <td align="left">
-                <a class="submit" type="submit" @click="destroy" style="margin-right:20px;">删除</a>
-                <a class="submit back" @click="previousBank">取消</a>
-              </td>
-            </tr>
           </tbody>
         </table>
+        <div class="submit-line">
+          <a class="back" @click="previousBank">返回上一步</a>
+          <a class="submit" type="submit" @click="destroy">确认删除</a>
+        </div>
       </div>
     </div>
   </div>
@@ -78,33 +75,9 @@
           });
           return;
         }
-        // if (!this.validateForm.bankPsd) {
-        //   this.$message({
-        //     showClose: true,
-        //     message: '请填写资金密码',
-        //     type: 'error'
-        //   });
-        //   return;
-        // }
         let self = this;
         let url = '/user/bankcard/update';
         self.loading = true;
-        /* request.login(
-          'post',
-          '/user/random',
-          {
-            loginname: localStorage.getItem('loginname')
-          },
-          (success) => {
-            if (success.returncode == 200) {
-              let random = success.data.random;
-              let cash_password = CryptoJS.HmacMD5(CryptoJS.MD5(self.validateForm.bankPsd).toString(), random).toString();
-
-            }
-          }, (error) => {
-            self.loading = false;
-            console.log('/user/random---error', error)
-          }) */
         request.http('post', url, {
             _id: self.validateForm.bankid,
             card_no: self.validateForm.inputBankNo,
@@ -118,15 +91,15 @@
               } else if (success.returncode == 200) {
                 self.previousBank();
               } else if (success.returncode == 301) {
-                self.$alert('删除失败，请重新验证', '系统提醒', {
+                self.$alert('<div class="lottery-title">删除失败，请重新验证</div>', '系统提醒', {
                   confirmButtonText: '确定',
                   center: true,
+                  dangerouslyUseHTMLString: true,
+                  customClass: "syxw-wrap-inner",
                   callback: action => {
-                    // self.validateForm.realName = '';
                     self.validateForm.inputBankNo = '';
-                    // self.validateForm.bankPsd = '';
                   }
-                });
+                })
               } else {
                 self.$message({
                   showClose: true,
@@ -134,17 +107,6 @@
                   type: "error"
                 });
               }
-              /* else if (success.returncode == 305) {
-                             self.$alert('资金密码错误，请重新验证', '系统提醒', {
-                               confirmButtonText: '确定',
-                               center: true,
-                               callback: action => {
-                                 self.validateForm.realName = '';
-                                 self.validateForm.inputBankNo = '';
-                                 self.validateForm.bankPsd = '';
-                               }
-                             });
-                           } */
             }
           },
           (error) => {
@@ -163,6 +125,15 @@
   }
 </script>
 <style scoped>
+  .submit-line {
+    width: 100%;
+    margin-top: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+  }
+
   .ml-300 {
     margin-left: 300px;
   }
@@ -251,12 +222,13 @@
   }
 
   .binding-inner .exp {
-    font-size: 12px;
+    font-size: 14px;
     color: #191919;
     display: inline-block;
     text-align: right;
     font-family: PingFangSC-Regular;
     width: 80px;
+    font-weight: bold;
   }
 
   .binding-inner .content {
@@ -286,19 +258,20 @@
   .binding-inner td {}
 
   .submit {
-    width: 115px;
-    height: 40px;
-    background: #CC3447;
-    border-radius: 2px;
-    font-size: 14px;
-    font-family: MicrosoftYaHei;
-    color: #FFFFFF;
+    width: 140px;
+    height: 48px;
+    line-height: 46px;
     display: inline-block;
     text-align: center;
-    line-height: 40px;
     cursor: pointer;
     text-decoration: none;
-    margin-left: -10px;
+    font-family: PingFangSC-Regular;
+    font-size: 16px;
+    font-weight: 700;
+    color: #ffffff;
+    background-image: linear-gradient(-180deg, #CFA072 0%, #B68E66 100%);
+    border: 1px solid #DDDDDD;
+    border-radius: 2px;
   }
 
   .step3 .complete {
@@ -321,6 +294,16 @@
   }
 
   .back {
-    background: #777;
+    width: 140px;
+    display: inline-block;
+    margin-bottom: 20px;
+    text-align: center;
+    cursor: pointer;
+    text-decoration: none;
+    font-family: PingFangSC-Regular;
+    font-size: 12px;
+    font-weight: 700;
+    color: #777;
+    border-radius: 2px;
   }
 </style>

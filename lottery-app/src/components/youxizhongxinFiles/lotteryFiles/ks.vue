@@ -395,27 +395,27 @@ export default {
     box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.5);
   }
   .dice1{
-    background: url('/static/img/dice1.png') no-repeat;
+    background: url('../../../assets/h5-img/dice1.png') no-repeat;
     background-size:100% 100%;
   }
   .dice2{
-    background: url('/static/img/dice2.png') no-repeat;
+    background: url('../../../assets/h5-img/dice2.png') no-repeat;
     background-size:100% 100%;
   }
   .dice3{
-    background: url('/static/img/dice3.png') no-repeat;
+    background: url('../../../assets/h5-img/dice3.png') no-repeat;
     background-size:100% 100%;
   }
   .dice4{
-    background: url('/static/img/dice4.png') no-repeat;
+    background: url('../../../assets/h5-img/dice4.png') no-repeat;
     background-size:100% 100%;
   }
   .dice5{
-    background: url('/static/img/dice5.png') no-repeat;
+    background: url('../../../assets/h5-img/dice5.png') no-repeat;
     background-size:100% 100%;
   }
   .dice6{
-    background: url('/static/img/dice6.png') no-repeat;
+    background: url('../../../assets/h5-img/dice6.png') no-repeat;
     background-size:100% 100%;
   }
   .ks-content{

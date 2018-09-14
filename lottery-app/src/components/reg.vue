@@ -219,7 +219,7 @@ export default {
     z-index:6;
     left:.3rem;
     bottom:.22rem;
-    background:url('/static/img/left_jiantou.png') no-repeat;
+    background:url('../assets/h5-img/left_jiantou.png') no-repeat;
     background-size:100% 100%;
   }
   .logo-wrap{
@@ -238,8 +238,9 @@ export default {
   }
   .login-title{
     display:block;
-    margin-top:1rem;
-    font-size:.32rem;
+    margin-top:.5rem;
+    font-size:.36rem;
+    font-weight:700;
     text-align:center;
     margin-bottom:.45rem;
   }
@@ -293,10 +294,9 @@ export default {
         z-index:3;
       }
       span.icon-captcha{
-        width: .34rem;
-        height: .42rem;
+        width: .35rem;
+        height: .4rem;
         bottom:.16rem;
-        left:.1rem;
         img{
           width:100%;
           height:100%;
@@ -316,17 +316,15 @@ export default {
         width:.34rem;
         height:.43rem;
         position: absolute;
-        left:.1rem;
         bottom:.16rem;
       }
     }
     .password{
-      margin-bottom:.3rem;
+      margin-bottom:.45rem;
       span.lock-icon{
         width:.35rem;
         height:.41rem;
         position: absolute;
-        left:.1rem;
         bottom:.17rem;
       }
     }
@@ -378,7 +376,7 @@ export default {
     }
     .login-btn{
       width:100%;
-      margin-top:1.2rem;
+      margin-top:1rem;
       button{
         width:100%;
         height:.88rem;

@@ -20,7 +20,7 @@
           <template slot-scope="scope">
             <el-radio v-model="scope.row.indicator" @change="handelChangeIndicator(scope.row)" :label="-1">默认</el-radio>
             <el-radio v-model="scope.row.indicator" :label="2">自定义</el-radio>
-            <el-input v-if="scope.row.showInput = scope.row.indicator===2" @blur="handleBlur(scope.row)" v-model="scope.row.myValue"
+            <el-input v-if="scope.row.showInput = scope.row.indicator===2" @blur="handleBlur(scope.row)" v-model.trim="scope.row.myValue"
               type="number" min='0.1' style="width:20%;margin-right:30px;" placeholder="请输入内容"></el-input>
             <el-radio v-model="scope.row.indicator" @change="handelChangeIndicator(scope.row)" :label="0">无打码</el-radio>
           </template>

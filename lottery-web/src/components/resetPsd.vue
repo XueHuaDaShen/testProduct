@@ -1,17 +1,17 @@
 <template>
-  <div class="psd-wrap search-form" v-loading="loading">
-    <el-row>
+  <div class="psd-wrap search-form record-options" v-loading="loading">
+    <el-row class="item">
       <div class="x-auto">
         为了您的帐号安全，请设置资金密码，该密码用于验证你的资金操作
       </div>
       <div class="table-xinxi">
-        <div class="table-row mb-20 mt-30">
-          <span class="exp">设置资金密码：</span>
-          <el-input placeholder="请输入资金密码" v-model="newPsd" class="content" type="password"></el-input>
+        <div class="table-row mt-30">
+          <span class="exp" style="margin-bottom:20px;">设置资金密码：</span>
+          <el-input placeholder="请输入资金密码" v-model="newPsd" class="content" type="password" clearable></el-input>
         </div>
         <div class="table-row mb-20">
-          <span class="exp" align="right">确认资金密码：</span>
-          <el-input placeholder="请确认资金密码" v-model="newPsd2" class="content" type="password"></el-input>
+          <span class="exp" align="right" style="margin-bottom:20px;">确认资金密码：</span>
+          <el-input placeholder="请确认资金密码" v-model="newPsd2" class="content" type="password" clearable></el-input>
         </div>
       </div>
       <div class="submit-line">
@@ -104,10 +104,11 @@
                   self.loading = false;
                   if (success.returncode) {
                     if (success.returncode == 200) {
-                      // console.log(success);
-                      self.$alert('设置成功', '系统提醒', {
+                      self.$alert('<div class="lottery-title">设置成功</div>', '系统提醒', {
                         confirmButtonText: '确定',
                         center: true,
+                        dangerouslyUseHTMLString: true,
+                        customClass: "syxw-wrap-inner",
                         callback: action => {
                           self.$store.dispatch('setBankPassword', 1);
                           self.$router.push({ name: 'userSecurityQuestions' });
@@ -116,22 +117,30 @@
                     } else if (success.returncode == 101 || success.returncode == 103 || success.returncode == 106) {
                       request.loginAgain(self)
                     } else if (success.returncode == 301) {
-                      self.$alert('设置失败', '系统提醒', {
-                        confirmButtonText: '确定',
-                        center: true,
-                        callback: action => {
-                          self.oldPsd = '';
-                          self.newPsd = '';
-                          self.newPsd2 = ''
-                        }
+                      self.$message({
+                        showClose: true,
+                        message: '设置失败',
+                        type: 'error'
                       });
+                      self.oldPsd = '';
+                      self.newPsd = '';
+                      self.newPsd2 = ''
+                    } else if (success.returncode == 307) {
+                      self.$message({
+                        showClose: true,
+                        message: '资金密码不可与登录密码一致',
+                        type: 'error'
+                      });
+                      self.oldPsd = '';
+                      self.newPsd = '';
+                      self.newPsd2 = ''
                     }
                   }
                 },
                 (error) => {
                   self.loading = false;
                   console.log('数据异常', error)
-                  this.$message({
+                  self.$message({
                     showClose: true,
                     message: '系统出错，请联系管理员',
                     type: 'error'
@@ -205,6 +214,16 @@
     }
   }
 
+  .exp {
+    font-size: 14px;
+    font-weight: bold;
+    color: #191919;
+    display: inline-block;
+    width: 120px;
+    text-align: left;
+    font-family: PingFangSC-Regular;
+  }
+
   .mb-20 {
     margin-bottom: 20px;
   }
@@ -223,7 +242,7 @@
     font-family: PingFangSC-Regular;
     font-weight: 700;
     font-size: 16px;
-    color: #CC3447;
+    color: #777;
   }
 
   table {
@@ -243,12 +262,12 @@
     width: 400px;
   }
 
-  .item {
-    float: left;
-    padding: 0 10px;
-    font-size: 14px;
-    padding-left: 55px;
-  }
+  // .item {
+  //   float: left;
+  //   padding: 0 10px;
+  //   font-size: 14px;
+  //   padding-left: 55px;
+  // }
 
   .item-top {
     height: 250px;
@@ -275,20 +294,21 @@
   }
 
   .submit {
-    width: 115px;
-    height: 40px;
-    line-height: 40px;
+    width: 140px;
+    height: 48px;
+    line-height: 46px;
     display: inline-block;
     text-align: center;
     cursor: pointer;
     text-decoration: none;
-    background: #CC3447;
-    border-radius: 2px;
     font-family: PingFangSC-Regular;
-    font-size: 14px;
+    font-size: 16px;
     font-weight: 700;
-    color: #FFFFFF;
+    color: #ffffff;
     margin: 0 auto;
+    background-image: linear-gradient(-180deg, #CFA072 0%, #B68E66 100%);
+    border: 1px solid #DDDDDD;
+    border-radius: 2px;
   }
 
   .input-nick {

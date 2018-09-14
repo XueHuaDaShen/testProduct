@@ -15,7 +15,7 @@
               <span>投注截止时间</span>
             </div>
             <div class="countDown-animate">
-              <countDown :issueNo="Number(issue)" @sendTime="handlesendTime" :gameid="gameid"></countDown>
+              <countDown :issueNo="Number(issue)" @sendTime="handlesendTime" @countdownisflase="handlecountdownisflase" :gameid="gameid"></countDown>
             </div>
           </div>
         </div>
@@ -492,7 +492,7 @@
               </tr>
             </thead>
             <tbody>
-              <tr v-for="(item, index) in betsDataList" :key="index">
+              <tr v-for="(item, index) in (computedGetVoteDataList||voteDataList)" :key="index">
                 <th>{{item.gamename}}</th>
                 <th>{{item.lotteryname}}</th>
                 <th>{{item.issue_no}}</th>
@@ -597,6 +597,7 @@
         money: '', // 总输入框的 money
         radioBtn: '', // 单选按钮的值
         radioBtn2: '', // 单选按钮的值
+        voteDataList: [],
         betsDataList: [],
         betsSuccessId: '',
         betsSuccess: false,
@@ -709,7 +710,7 @@
     created() {
       const vm = this;
       this.gameid = this.$route.query.id;
-      this.logoImgCode = '/static/logo/' + this.$route.query.s_code + '.png';
+      this.logoImgCode = this.$store.state.productPath + this.$route.query.s_code + '.png';
       this.refund = Number(localStorage.getItem('refund'));
       // this.refund = 1950;
       this.refundText = this.refund + '-0%';
@@ -719,9 +720,15 @@
       localStorage.setItem('bodyBG', vm.bg);
       vm.$store.dispatch('setbodyBG', vm.bg);
       vm.getAnimalList();
-      vm.getBetsDataList();
+      // vm.getBetsDataList();
+      this.voteDataList = this.$store.state.voteDataList;
       //设置 所有的 数字 集合
       // vm.setAllnumbersDataFn()
+    },
+    computed: {
+      computedGetVoteDataList() {
+        return this.$store.state.voteDataList;
+      }
     },
     methods: {
       voteStatus(status) {
@@ -895,6 +902,17 @@
       handlesendTime(val) {
         this.countDownTime2 = val.split(':');
       },
+      handlecountdownisflase(val) {
+        const vm = this;
+        if (!val) {
+          clearInterval(vm.myInterval);
+          setTimeout(() => {
+            vm.newIssueInterval();
+            var time = vm.getIssueTime;
+            vm.myInterval = setInterval(vm.newIssueInterval, (time * 1000))
+          }, 1000);
+        }
+      },
       setAllnumbersDataFn() {
         const vm = this;
         let arr = [];
@@ -984,10 +1002,10 @@
         if (item.title === '半波') {
           this.bbNumbersArr();
         }
-        if(item.title === '尾数'){
+        if (item.title === '尾数') {
           this.wsNumbersArr(item.lotteryMode.children[0].extra);
         }
-        if(item.title === '总分'){
+        if (item.title === '总分') {
           this.zfNumberArr(item.lotteryMode.children[0].extra);
         }
         // 重置 数据
@@ -1853,12 +1871,13 @@
         // console.log('refund---返点-----',this.refund);
         const vm = this;
         if (arr.length === 0 && (this.money === '' || this.money != '')) {
-          this.$alert('您还未投注，或者投注有误', '温馨提示', {
-            showConfirmButton: false,
-            callback: action => {
-              // 
-            }
-          });
+          this.$alert('<div class="lottery-title">您还未投注，或者投注有误</div>', '温馨提示', {
+            confirmButtonText: '关闭',
+            center: true,
+            dangerouslyUseHTMLString: true,
+            customClass: "syxw-wrap-inner",
+            callback: action => {}
+          })
         } else {
           let gameid = this.gameid;
           let lottery3id = this.lottery3id;
@@ -1917,12 +1936,13 @@
                 // console.log('取消')
               })
             } else {
-              this.$alert('您还未投注，或者投注有误', '温馨提示', {
-                showConfirmButton: false,
-                callback: action => {
-                  // 
-                }
-              });
+              this.$alert('<div class="lottery-title">您还未投注，或者投注有误</div>', '温馨提示', {
+                confirmButtonText: '关闭',
+                center: true,
+                dangerouslyUseHTMLString: true,
+                customClass: "syxw-wrap-inner",
+                callback: action => {}
+              })
             }
           } else {
             let voteList = [];
@@ -2008,9 +2028,12 @@
             } else if (code === 106) {
               request.loginAgain(vm)
             } else if (code === 304) {
-              vm.$alert('投注失败-余额不足', '温馨提示', {
+              vm.$alert('<div class="lottery-title">投注失败-余额不足</div>', '温馨提示', {
                 confirmButtonText: '关闭',
                 center: true,
+                dangerouslyUseHTMLString: true,
+                customClass: "syxw-wrap-inner",
+                callback: action => {}
               })
             } else if (code === 200) {
               vm.handleResetAllBalls();
@@ -2047,7 +2070,8 @@
               request.loginAgain(vm)
             } else if (code === 200) {
               // console.log()
-              vm.betsDataList = success.data.data
+              // vm.betsDataList = success.data.data
+              vm.$store.dispatch('setVoteDataList', success.data.data);
             }
           },
           (error) => {
@@ -2070,6 +2094,7 @@
     display: flex;
     flex-wrap: wrap;
     font-size: 14px;
+
     span {
       display: block;
       margin: 2px 7px 0 0;
@@ -2087,8 +2112,10 @@
     margin-top: 10px;
     display: -webkit-box;
     -webkit-box-orient: vertical;
+
     span {
       display: block;
+
       em {
         font-style: normal;
         color: red;
@@ -2101,42 +2128,52 @@
       .el-radio__label {
         font-size: 12px;
       }
+
       .el-radio__inner {
         width: 10px;
         height: 10px;
       }
     }
+
     .radio-red {
       .el-radio__input.is-checked+.el-radio__label {
         color: #ED361E;
       }
+
       .el-radio__label {
         color: #ED361E;
       }
+
       .el-radio__input.is-checked .el-radio__inner {
         background: #ED361E;
         border-color: #ED361E;
       }
     }
+
     .radio-green {
       .el-radio__input.is-checked+.el-radio__label {
         color: #039A8E;
       }
+
       .el-radio__label {
         color: #039A8E;
       }
+
       .el-radio__input.is-checked .el-radio__inner {
         background: #039A8E;
         border-color: #039A8E;
       }
     }
+
     .radio-blue {
       .el-radio__input.is-checked+.el-radio__label {
         color: #1E4FED;
       }
+
       .el-radio__label {
         color: #1E4FED;
       }
+
       .el-radio__input.is-checked .el-radio__inner {
         background: #1E4FED;
         border-color: #1E4FED;
@@ -2155,19 +2192,23 @@
     width: 100%;
     height: 104px;
     margin-bottom: 20px;
+
     .lottery-header {
       width: 100%;
       height: 104px; // padding:0 20px;
       display: -webkit-box;
       -webkit-box-align: center;
       -webkit-box-pack: justify;
+
       // margin-bottom: 20px;
       // background: #fff;
       .header-left,
       .header-right {
         display: -webkit-box;
       }
+
       .header-left {
+
         // margin-left:20px;
         .header-left-r {
           display: -webkit-box;
@@ -2177,6 +2218,7 @@
           position: relative;
           margin-left: 12px;
           height: 96px;
+
           .header-left-r-bj {
             position: absolute;
             left: 0;
@@ -2191,13 +2233,16 @@
         }
       }
     }
+
     .lottery-icon {
       width: 140px;
       height: 104px; // margin-left:25px;
     }
+
     .lottery-icon img {
       width: 100%;
     }
+
     .bets-issue {
       display: -webkit-box; // -webkit-box-orient: vertical;
       font-size: 14px; // color: #191919;
@@ -2206,27 +2251,33 @@
       position: relative;
       z-index: 2;
     }
+
     .bets-issue span {
       display: block;
       text-align: left; // color: #939DB8;
     }
+
     .bets-issue em {
       font-style: normal;
     }
+
     .countDown-animate {
       // margin-left:4px;
     }
+
     .history-issue {
       font-size: 14px;
       font-weight: 600;
       color: #e2e2e2;
       text-align: left;
     }
+
     .history-lottery-number {
       // margin-left:33px;
       // margin-left:20px;
       display: -webkit-box;
       margin-top: 7px;
+
       div {
         height: auto;
         color: #939DB8;
@@ -2234,6 +2285,7 @@
         -webkit-box-align: center;
         padding-right: 4px;
         position: relative;
+
         em.animalText {
           position: absolute;
           font-style: normal;
@@ -2242,11 +2294,13 @@
           font-size: 12px;
         }
       }
+
       strong {
         color: #CC3447;
         font-size: 24px;
       }
     }
+
     .history-lottery-number span {
       display: block;
       width: 30px;
@@ -2257,30 +2311,37 @@
       border-radius: 50%;
       margin-right: 4px;
     }
+
     .history-lottery-number span.green {
       border: 2px solid #0F9075;
     }
+
     .history-lottery-number span.blue {
       border: 2px solid #3357D7;
     }
+
     .history-lottery-number span.red {
       border: 2px solid #BD3840;
     }
+
     .history-lottery-number span.green-fullColor {
       background: #0F9075;
       line-height: 26px;
       color: #fff;
     }
+
     .history-lottery-number span.blue-fullColor {
       background: #3357D7;
       line-height: 26px;
       color: #fff;
     }
+
     .history-lottery-number span.red-fullColor {
       background: #BD3840;
       line-height: 26px;
       color: #fff;
     }
+
     .explain {
       margin-left: 20px;
       height: 78px;
@@ -2288,6 +2349,7 @@
       -webkit-box-orient: vertical;
       -webkit-box-pack: justify;
     }
+
     .explain span {
       display: block;
       width: 86px;
@@ -2297,13 +2359,15 @@
       border-radius: 2px;
       font-size: 14px;
       position: relative;
+
       a {
         color: #fff;
         text-decoration: none;
         position: relative;
-        z-index:2;
-        font-weight:600;
+        z-index: 2;
+        font-weight: 600;
       }
+
       em.explain-btn-bj {
         position: absolute;
         width: 100%;
@@ -2321,14 +2385,17 @@
     height: 100%; // padding-top:20px;
     position: relative;
     background: #242445;
-    input.money{
-      font-size:16px;
+
+    input.money {
+      font-size: 16px;
     }
+
     .lhc-nav {
       width: 100%;
       height: 38px;
       color: #E9EDFD;
       background: #434382; // border-top-left-radius: 5px;
+
       // border-top-right-radius: 5px;
       // margin-bottom:17px;
       span {
@@ -2341,6 +2408,7 @@
         font-size: 14px;
         font-weight: 800;
       }
+
       span.curr {
         background: #242445;
         border-top: 4px solid #BD8454;
@@ -2349,6 +2417,7 @@
         font-weight: 800;
       }
     }
+
     .game-area {
       width: 100%;
       display: -webkit-box;
@@ -2356,22 +2425,27 @@
       // padding-right:0;
       // height:634px;
       background: #242445; // margin-bottom:6px;
+
       .buzhong {
         // margin-right:5px;
       }
+
       .left {
         -webkit-box-flex: 1;
         display: -webkit-box;
         -webkit-box-orient: vertical;
+
         .left-content {
           -webkit-box-flex: 1;
           background: #191930;
+
           .panel {
             padding: 20px;
             background: #242445;
             overflow: hidden;
             position: relative;
             list-style-type: none;
+
             li {
               cursor: pointer;
               font-size: 12px;
@@ -2385,15 +2459,18 @@
               border-radius: 2px;
               margin-right: 10px;
               color: #939DB8;
+
               :first-child {
                 box-shadow: none;
               }
             }
+
             li.curr {
               background: #2C8A84;
               color: #fff;
             }
           }
+
           .tz-ruler {
             padding: 20px;
             font-size: 14px;
@@ -2404,6 +2481,7 @@
             min-height: 52px;
             position: relative;
             padding-right: 200px;
+
             .refund-btn {
               width: 110px;
               height: 30px;
@@ -2412,6 +2490,7 @@
               position: absolute;
               right: 20px;
               top: 20px;
+
               .refund-tag {
                 width: 100px;
                 height: 20px;
@@ -2423,6 +2502,7 @@
                 text-align: center;
                 line-height: 20px;
               }
+
               span {
                 display: block;
                 width: 50px;
@@ -2434,6 +2514,7 @@
                 color: #777;
                 cursor: pointer;
               }
+
               span.curr {
                 background: #242445;
                 border: 1px solid #BD8454;
@@ -2441,22 +2522,27 @@
               }
             }
           }
+
           .tz-area {
             width: 100%;
+
             .tz-area-wrap {
               width: 100%;
               display: -webkit-box;
               -webkit-box-orient: vertical;
             }
+
             .tz-title {
               width: 100%; // padding-right:12px;
               margin-bottom: 8px;
+
               ul {
                 width: 100%;
                 display: -webkit-box;
                 -webkit-box-pack: justify;
                 list-style: none
               }
+
               .tmzm {
                 li {
                   width: 172px;
@@ -2468,15 +2554,18 @@
                   background-image: linear-gradient(-180deg, #292955 0%, #212144 100%);
                   font-size: 12px;
                   border-right: 1px solid #191930;
+
                   &:last-child {
                     border-right: none;
                   }
+
                   span {
                     display: block;
                     -webkit-box-flex: 1;
                   }
                 }
               }
+
               .bbws {
                 li {
                   width: 50%;
@@ -2488,15 +2577,18 @@
                   -webkit-box-pack: justify;
                   -webkit-box-align: center;
                   font-size: 12px;
+
                   span {
                     display: block;
                     width: 24%;
                   }
+
                   span.num {
                     width: 50%;
                   }
                 }
               }
+
               .bz-list {
                 li {
                   width: 102px;
@@ -2508,6 +2600,7 @@
                   background-image: linear-gradient(-180deg, #292955 0%, #212144 100%);
                   font-size: 12px;
                   border-right: 1px solid #191930;
+
                   span {
                     display: block;
                     -webkit-box-flex: 1;
@@ -2515,19 +2608,23 @@
                 }
               }
             }
+
             .tz-content {
               width: 100%; // padding-right:12px;
+
               .buzhong-money-input {
                 margin: 20px;
                 margin-top: 0px;
                 color: #F7CD88;
                 display: -webkit-box;
                 -webkit-box-pack: end; // -webkit-box-pack:center;
+
                 span {
                   // display:block;
                   color: #939DB8;
                   font-size: 12px;
                 }
+
                 input {
                   // display:block;
                   background: #191919;
@@ -2543,10 +2640,12 @@
                   margin-left: 11px;
                 }
               }
+
               ul {
                 width: 100%;
                 display: flex;
                 flex-wrap: wrap;
+
                 li {
                   height: 43px;
                   display: -webkit-box;
@@ -2557,23 +2656,27 @@
                   padding-right: 5px;
                   padding-left: 4px;
                   margin-bottom: 5px;
+
                   .balls-num {
                     display: block;
                     border-radius: 50%;
                     text-align: center;
                     font-size: 14px;
                   }
+
                   .bs {
                     font-style: normal;
                     font-size: 14px;
                     color: #939DB8;
                     display: block;
                     line-height: 34px;
+
                     span {
                       display: inline-block;
                       height: 100%;
                     }
                   }
+
                   input {
                     width: 68px;
                     height: 26px;
@@ -2586,35 +2689,43 @@
                     color: #F7CD88;
                   }
                 }
+
                 .red {
                   background: #BD3840;
                 }
+
                 .blue {
                   background: #3357D7;
                 }
+
                 .green {
                   background: #0F9075;
                 }
               }
+
               .tmzm {
                 li {
                   width: 170px;
                   padding: 0 10px;
                   margin-left: 2px;
+
                   .balls-num {
                     width: 26px;
                     height: 26px;
                     line-height: 26px;
                   }
+
                   .bs {
                     padding-left: 0px;
                   }
                 }
               }
+
               .bbws {
                 li {
                   width: 50%;
                   padding: 0 5px; // margin-left:2px;
+
                   .balls-num {
                     width: 22px;
                     height: 22px;
@@ -2622,23 +2733,28 @@
                     margin-left: 5px;
                     font-size: 12px;
                   }
+
                   div {
                     display: -webkit-box;
                     -webkit-box-pack: start;
                     -webkit-box-flex: 1;
                   }
+
                   h5 {
                     width: 43px;
                     text-align: left;
                     font-size: 12px;
                   }
+
                   h5.animal-icon-par {
                     width: 53px;
                   }
+
                   em.bs {
                     font-size: 12px;
                   }
                 }
+
                 li.bbws-ws {
                   .balls-num {
                     width: 28px;
@@ -2647,92 +2763,109 @@
                     margin-left: 5px;
                     font-size: 14px;
                   }
+
                   em.bs {
                     font-size: 14px;
                   }
+
                   h5 {
                     font-size: 14px;
                   }
                 }
               }
+
               .zf {
                 li {
                   min-width: 48%;
                   margin-left: 12px;
+
                   div {
                     display: -webkit-box;
                     -webkit-box-pack: start;
                     -webkit-box-flex: 1;
                     margin-left: 3px;
                   }
+
                   h5 {
                     width: 38px;
                     text-align: left;
                   }
                 }
               }
+
               .bz-list {
                 li {
                   min-width: 88px;
                   padding: 0 10px;
                   margin-left: 13px;
+
                   .balls-num {
                     width: 26px;
                     height: 26px;
                     line-height: 26px;
                   }
+
                   span {
                     display: block;
                     width: 26px;
                     height: 26px; // border-radius:50%;
-                    background: url('../../assets/img/bets-img/check.png') no-repeat left;
+                    background: url('../../img/check.png') no-repeat left;
                     background-size: 100% 100%;
                     cursor: pointer;
                   }
+
                   span.checked {
-                    background: url('../../assets/img/bets-img/checked.png') no-repeat left;
+                    background: url('../../img/checked.png') no-repeat left;
                     background-size: 100% 100%;
                   }
                 }
               }
+
               .sx-list {
                 li {
                   min-width: 48%;
                   padding: 0 10px;
                   margin-left: 13px;
+
                   .balls-num {
                     width: 26px;
                     height: 26px;
                     line-height: 26px;
                     margin-left: 5px;
                   }
+
                   div {
                     display: -webkit-box;
                     -webkit-box-pack: start;
                     -webkit-box-flex: 1;
                     margin-left: 40px;
                   }
+
                   h5 {
                     width: 43px;
                     text-align: left;
                   }
+
                   span {
                     display: block;
                     width: 26px;
                     height: 26px; // border-radius:50%;
-                    background: url('../../assets/img/bets-img/check.png') no-repeat left;
+                    background: url('../../img/check.png') no-repeat left;
                     background-size: 100% 100%;
                     cursor: pointer;
                   }
+
                   span.checked {
-                    background: url('../../assets/img/bets-img/checked.png') no-repeat left;
+                    background: url('../../img/checked.png') no-repeat left;
                     background-size: 100% 100%;
                   }
                 }
               }
+
               li.curr {
                 background: #60637a;
               }
+
               .animal-icon-par {
                 height: 100%;
                 width: auto;
@@ -2741,74 +2874,89 @@
                 -webkit-box-pack: center;
                 margin-right: 5px;
                 margin-left: 10px;
+
                 em {
                   font-style: normal;
                   display: block;
                   margin-left: 10px;
                 }
               }
+
               .animal-icon {
                 width: 30px;
                 display: inline-block;
-                height: 100%; // background: url('../../assets/img/bets-img/dog.png') no-repeat left;
-                // background-size:100% 100%;
-                // float: left;
-                // margin-left: 29px;
+                height: 100%;
               }
+
               .mouse {
-                background: url('../../assets/img/bets-img/animal-sprite.png') -73px -124px no-repeat;
+                background: url('../../img/animal-sprite.png') -73px -124px no-repeat;
               }
+
               .bulls {
-                background: url('../../assets/img/bets-img/animal-sprite.png') -17px -6px no-repeat;
+                background: url('../../img/animal-sprite.png') -17px -6px no-repeat;
               }
+
               .tiger {
-                background: url('../../assets/img/bets-img/animal-sprite.png') -138px -176px no-repeat;
+                background: url('../../img/animal-sprite.png') -138px -176px no-repeat;
               }
+
               .rabbit {
-                background: url('../../assets/img/bets-img/animal-sprite.png') -189px -8px no-repeat;
+                background: url('../../img/animal-sprite.png') -189px -8px no-repeat;
               }
+
               .dragon {
-                background: url('../../assets/img/bets-img/animal-sprite.png') -10px -60px no-repeat;
+                background: url('../../img/animal-sprite.png') -10px -60px no-repeat;
               }
+
               .snake {
-                background: url('../../assets/img/bets-img/animal-sprite.png') -198px -124px no-repeat;
+                background: url('../../img/animal-sprite.png') -198px -124px no-repeat;
               }
+
               .horse {
-                background: url('../../assets/img/bets-img/animal-sprite.png') -131px -64px no-repeat;
+                background: url('../../img/animal-sprite.png') -131px -64px no-repeat;
               }
+
               .sheep {
-                background: url('../../assets/img/bets-img/animal-sprite.png') -198px -68px no-repeat;
+                background: url('../../img/animal-sprite.png') -198px -68px no-repeat;
               }
+
               .monkey {
-                background: url('../../assets/img/bets-img/animal-sprite.png') -15px -126px no-repeat;
+                background: url('../../img/animal-sprite.png') -15px -126px no-repeat;
               }
+
               .chicken {
-                background: url('../../assets/img/bets-img/animal-sprite.png') -71px -9px no-repeat;
+                background: url('../../img/animal-sprite.png') -71px -9px no-repeat;
               }
+
               .dog {
-                background: url('../../assets/img/bets-img/animal-sprite.png') -133px -6px no-repeat;
+                background: url('../../img/animal-sprite.png') -133px -6px no-repeat;
               }
+
               .pig {
-                background: url('../../assets/img/bets-img/animal-sprite.png') -135px -123px no-repeat;
+                background: url('../../img/animal-sprite.png') -135px -123px no-repeat;
               }
             }
           }
         }
       }
+
       .right {
         width: 162px;
         padding: 0 20px;
+
         .r-top {
           width: 100%; // height:116px;
           // padding:0 22px;
           border-bottom: 1px solid #444;
           display: -webkit-box;
           -webkit-box-orient: vertical;
+
           .srje {
             color: #F7CD88;
             font-size: 12px;
             margin-top: 12px;
             text-align: left;
+
             input {
               width: 122px;
               height: 30px;
@@ -2822,10 +2970,12 @@
               margin-top: 10px; // margin-left:14px;
             }
           }
+
           .czan {
             margin: 20px 0;
             display: -webkit-box;
             -webkit-box-pack: justify;
+
             button {
               outline: none;
               color: #fff;
@@ -2833,6 +2983,7 @@
               cursor: pointer;
               display: block;
             }
+
             .ljxz {
               width: 72px;
               height: 30px;
@@ -2840,6 +2991,7 @@
               background-image: linear-gradient(-180deg, #CFA072 0%, #B68E66 100%);
               border-radius: 2px; // box-shadow: 0 0 1px 1px #111;
             }
+
             .reset {
               width: 40px;
               height: 30px;
@@ -2850,26 +3002,32 @@
             }
           }
         }
+
         .r-bot {
           width: 100%; // padding:0 44px;
+
           .radio-area {
             margin-top: 20px;
             border-bottom: 1px solid #444444;
+
             .el-radio-group {
               width: 100%;
               display: -webkit-box;
               -webkit-box-orient: vertical;
             }
+
             .bbws {
               div {
                 width: auto;
               }
             }
+
             div {
               width: 100%;
               display: -webkit-box;
               -webkit-box-pack: justify;
               margin-bottom: 6px;
+
               label {
                 display: block;
                 width: 66px;
@@ -2879,6 +3037,7 @@
               }
             }
           }
+
           .animal-area {
             width: 100%;
             margin-top: 20px;
@@ -2887,6 +3046,7 @@
             border-top: 1px solid;
             border-left: 1px solid;
             border-color: #6060A2;
+
             span {
               display: block;
               width: 30.25px;
@@ -2899,21 +3059,26 @@
               cursor: pointer;
               color: #939DB8;
             }
+
             span.width50 {
               width: 50%;
             }
+
             :nth-child(1),
             :nth-child(2),
             :nth-child(3),
             :nth-child(4) {
               color: #939DB8;
             }
+
             .curr {
               background: #60637a;
             }
           }
+
           .animalType {
             margin-top: 12px;
+
             span {
               width: 50%;
               display: block;
@@ -2926,6 +3091,7 @@
               cursor: pointer;
               color: #939DB8;
             }
+
             :nth-child(1),
             :nth-child(2),
             :nth-child(3),
@@ -2933,8 +3099,10 @@
               color: #939DB8;
             }
           }
+
           .wuxing {
             margin-top: 12px;
+
             span {
               width: 100%;
               display: block;
@@ -2947,6 +3115,7 @@
               cursor: pointer;
               color: #939DB8;
             }
+
             :nth-child(1),
             :nth-child(2),
             :nth-child(3),
@@ -2957,18 +3126,21 @@
         }
       }
     }
+
     .czan {
       width: 100%;
       display: -webkit-box;
       -webkit-box-align: center;
       -webkit-box-pack: center;
       margin: 30px 0;
+
       button {
         outline: none;
         color: #fff;
         border: none;
         cursor: pointer;
       }
+
       .ljxz {
         width: 218px;
         height: 60px;
@@ -2977,6 +3149,7 @@
         background-image: linear-gradient(-180deg, #CFA072 0%, #B68E66 100%);
         border-radius: 4px;
       }
+
       .reset {
         color: #777;
         background: none;
@@ -2984,13 +3157,16 @@
         cursor: pointer; // margin-left:31px;
       }
     }
+
     .my-split-line {
       width: 984px;
       height: 1px;
       background: #444;
       margin: 0 auto;
       border: none;
-    } // .table-area{
+    }
+
+    // .table-area{
     //   margin-top: 5px;
     //   width: 100%;
     //   background: #191930;
@@ -3047,9 +3223,11 @@
       min-height: 153px;
       margin-top: 31px;
       padding-bottom: 30px;
+
       .table-title {
         width: 100%;
         height: 40px;
+
         span {
           display: block;
           float: left;
@@ -3063,96 +3241,120 @@
         }
       }
     }
+
     .my-bets-table-wrap thead th {
       padding: 8px 0;
       font-weight: normal;
       font-size: 12px;
       background-image: linear-gradient(-180deg, #292955 0%, #212144 100%);
       color: #777;
+
       &:last-child {
         div {
           border-right: none;
         }
       }
+
       div {
         padding: 2px 0; // width:100%;
         border-right: 1px solid #777;
       }
+
       .youxi {
         width: 106px;
       }
+
       .wanfa {
         width: 118px;
       }
+
       .qihao {
         width: 118px;
       }
+
       .kaijiang {
         width: 118px;
       }
+
       .neirong {
         width: 120px;
       }
+
       .jine {
         width: 77px;
       }
+
       .jiangjin {
         width: 68px;
       }
+
       .fandian {
         width: 88px;
       }
+
       .zhuangtai {
         width: 70px;
       }
+
       .caozuo {
         width: 50px;
       }
     }
+
     .my-bets-table-wrap tbody th {
       padding: 10px 0;
       font-weight: normal;
       font-size: 12px;
     }
+
     .my-bets-table-wrap table th div {
       width: 120px;
       text-overflow: ellipsis;
       overflow: hidden;
       white-space: nowrap;
     }
+
     .my-bets-table-wrap {
       max-height: 306px;
       overflow-y: auto;
     }
+
     .my-bets-table-wrap tbody tr {
       color: #939DB8;
       border-bottom: 1px solid #444;
+
       &:last-child {
         border-bottom: none;
       }
+
       &:first-child {
         th {
           padding-top: 20px;
         }
       }
     }
+
     .my-bets-table-wrap tbody tr th.zhongjiang {
       color: red;
     }
+
     .my-bets-table-wrap tbody tr th.zhongjiangMoney {
       font-size: 12px;
       color: #D4914D;
     }
+
     .my-bets-table-wrap .bets-detail-btn a {
       color: #BD8454;
       text-decoration: underline;
       cursor: pointer;
     }
+
     .youxijilu a {
       color: #dda771;
       cursor: pointer;
       text-decoration: none;
     }
+
     .zhudanxiangqi a {
       color: #fff;
       cursor: pointer;

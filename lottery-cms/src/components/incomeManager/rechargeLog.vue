@@ -12,7 +12,7 @@
         <div class="search-content">
           <div class="search-inner-wrap">
             <label>用户名：</label>
-            <el-input clearable v-model="username" placeholder="姓名" style="width:114px"></el-input>
+            <el-input clearable v-model.trim="username" placeholder="姓名" style="width:114px"></el-input>
           </div>
           <div class="search-inner-wrap">
             <label>入款渠道：</label>
@@ -28,7 +28,7 @@
           </div> -->
           <div class="search-inner-wrap">
             <label>流水号：</label>
-            <el-input clearable v-model="order_no" placeholder="流水号" style="width:114px"></el-input>
+            <el-input clearable v-model.trim="order_no" placeholder="流水号" style="width:114px"></el-input>
           </div>
           <div class="search-inner-wrap">
             <label>状态：</label>
@@ -45,9 +45,9 @@
           </div>
           <div class="search-inner-wrap">
             <label>申请金额：</label>
-            <el-input clearable v-model="incomeRange.min" placeholder="最小金额" style="width:114px" type="number"></el-input>
+            <el-input clearable v-model.trim="incomeRange.min" placeholder="最小金额" style="width:114px" type="number"></el-input>
             <span>--</span>
-            <el-input clearable v-model="incomeRange.max" placeholder="最大金额" style="width:114px" type="number"></el-input>
+            <el-input clearable v-model.trim="incomeRange.max" placeholder="最大金额" style="width:114px" type="number"></el-input>
           </div>
           <div class="search-inner-wrap">
             <label>测试账号：</label>
@@ -112,11 +112,11 @@
       <div class="body-middle">
         <el-form ref="form" :rules="rules" :model="form">
           <el-form-item label="真实姓名：" v-if="form.realName">
-            <el-input v-model="form.realName" disabled>
+            <el-input v-model.trim="form.realName" disabled>
             </el-input>
           </el-form-item>
           <el-form-item label="银行卡卡号" v-if="form.bank_no">
-            <el-input v-model="form.bank_no" disabled>
+            <el-input v-model.trim="form.bank_no" disabled>
             </el-input>
           </el-form-item>
           <el-form-item label="审核结果：" prop="rechargeStatus">
@@ -126,11 +126,11 @@
             </el-select>
           </el-form-item>
           <el-form-item label="到账金额：" prop="realRecharge">
-            <el-input v-model="form.realRecharge" placeholder="请输入实际充值金额" disabled>
+            <el-input v-model.trim="form.realRecharge" placeholder="请输入实际充值金额" disabled>
             </el-input>
           </el-form-item>
           <el-form-item label="备注：" prop="message">
-            <el-input v-model="form.message" placeholder="请输入备注">
+            <el-input v-model.trim="form.message" placeholder="请输入备注">
             </el-input>
           </el-form-item>
         </el-form>
@@ -144,11 +144,11 @@
       <div class="body-middle">
         <el-form>
           <el-form-item label="真实姓名：" v-if="detail.realName">
-            <el-input v-model="detail.realName" disabled>
+            <el-input v-model.trim="detail.realName" disabled>
             </el-input>
           </el-form-item>
           <el-form-item label="银行卡卡号" v-if="detail.bank_no">
-            <el-input v-model="detail.bank_no" disabled>
+            <el-input v-model.trim="detail.bank_no" disabled>
             </el-input>
           </el-form-item>
           <el-form-item label="审核结果：" v-if="detail.rechargeStatus">
@@ -158,11 +158,11 @@
             </el-select>
           </el-form-item>
           <el-form-item label="到账金额：" v-if="detail.realRecharge">
-            <el-input v-model="detail.realRecharge" disabled>
+            <el-input v-model.trim="detail.realRecharge" disabled>
             </el-input>
           </el-form-item>
           <el-form-item label="备注：" v-if="detail.message">
-            <el-input v-model="detail.message" disabled>
+            <el-input v-model.trim="detail.message" disabled>
             </el-input>
           </el-form-item>
         </el-form>

@@ -13,11 +13,11 @@
         <div class="search-content">
           <div class="search-inner-wrap">
             <label>用户名：</label>
-            <el-input clearable v-model="username" placeholder="姓名" style="width:114px;"></el-input>
+            <el-input clearable v-model.trim="username" placeholder="姓名" style="width:114px;"></el-input>
           </div>
           <div class="search-inner-wrap">
             <label>流水号：</label>
-            <el-input clearable v-model="order_no" placeholder="流水号" style="width:114px;"></el-input>
+            <el-input clearable v-model.trim="order_no" placeholder="流水号" style="width:114px;"></el-input>
           </div>
           <div class="search-inner-wrap">
             <label>入款类型：</label>

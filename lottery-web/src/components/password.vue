@@ -1,5 +1,5 @@
 <template>
-  <div class="psd-wrap search-form" v-loading="loading">
+  <div class="psd-wrap search-form record-options" v-loading="loading">
     <el-row class="wrap-outer">
       <div class="item">
         <div class="tab-line">
@@ -20,7 +20,7 @@
           <div class="table-row">
             <div class="row-item">
               <span class="exp">昵称：</span>
-              <el-input placeholder="请输入内容" v-model="nickname" class="content" type="text"></el-input>
+              <el-input placeholder="请输入昵称" v-model="nickname" class="content" type="text"></el-input>
             </div>
             <div class="row-item">
               <span class="exp">手机号：</span>
@@ -78,7 +78,7 @@
           <span class="last-exp">输入旧登录密码：</span>
           <el-input placeholder="请输入旧密码" v-model.trim="oldPsd" class="content" type="password" clearable></el-input>
         </div>
-        <div class="time-row mb-20">
+        <div class="time-row mb-20" style="margin-bottom:5px">
           <span class="last-exp">输入新登录密码：</span>
           <el-input placeholder="请输入新密码" v-model.trim="newPsd" class="content" type="password" clearable></el-input>
         </div>
@@ -105,7 +105,7 @@
           <span class="last-exp">输入旧资金密码：</span>
           <el-input placeholder="请输入旧密码" v-model.trim="oldPsdzj" class="content" type="password" clearable></el-input>
         </div>
-        <div class="time-row mb-20">
+        <div class="time-row mb-20" style="margin-bottom:5px">
           <span class="last-exp">输入新资金密码：</span>
           <el-input placeholder="请输入旧密码" v-model.trim="newPsdzj" class="content" type="password" clearable></el-input>
         </div>
@@ -123,7 +123,7 @@
       </div>
       <div class="item" v-if="!isSetBankPsd">
         <div class="setting-wrap">
-          <span class="" align="left">为了保障您的资金安全，请立即设置您的资金密码</span>&nbsp;&nbsp;
+          <span class="" align="left">为了保障您的资金安全，请立即设置您的资金密码</span>
           <router-link :to="{name:'resetPsd'}" class="submit">立即设置</router-link>
         </div>
       </div>
@@ -171,6 +171,11 @@
         this.oldPsdzj = '';
         this.newPsdzj = '';
         this.newPsd2zj = '';
+      },
+      resetPsddl() {
+        this.oldPsd = '';
+        this.newPsd = '';
+        this.newPsd2 = '';
       },
       //修改昵称
       modifiedName() {
@@ -246,14 +251,13 @@
             if (success.returncode == 103 || success.returncode == 106 || success.returncode == 101) {
               request.loginAgain(self);
             } else if (success.returncode == 200) {
-              self.$alert('修改成功', '系统提醒', {
+              self.$alert('<div class="lottery-title">修改成功</div>', '系统提醒', {
                 confirmButtonText: '确定',
                 center: true,
-                callback: action => {
-                  // localStorage.removeItem('nickName');
-                  // self.nickname = '';
-                }
-              });
+                dangerouslyUseHTMLString: true,
+                customClass: "syxw-wrap-inner",
+                callback: action => {}
+              })
             } else {
               self.$message({
                 showClose: true,
@@ -357,23 +361,39 @@
                     if (success.returncode == 103 || success.returncode == 106 || success.returncode == 101) {
                       request.loginAgain(self);
                     } else if (success.returncode == 200) {
-                      self.$alert('密码修改成功！', '系统提醒', {
+                      self.$alert('<div class="lottery-title">密码修改成功！</div>', '系统提醒', {
                         confirmButtonText: '确定',
                         center: true,
+                        dangerouslyUseHTMLString: true,
+                        customClass: "syxw-wrap-inner",
                         callback: action => {
-                          // request.loginAgain(self);
+                          self.resetPsddl()
                         }
-                      });
+                      })
                     } else if (success.returncode == 307) {
-                      self.$alert('资金密码和登录密码不能相同', '系统提醒', {
+                      self.$alert('<div class="lottery-title">资金密码和登录密码不能相同</div>', '系统提醒', {
                         confirmButtonText: '确定',
                         center: true,
-                        callback: action => {
-                          self.resetPsdzj()
-                        }
-                      });
+                        dangerouslyUseHTMLString: true,
+                        customClass: "syxw-wrap-inner",
+                        callback: action => {}
+                      })
+                    } else if (success.returncode == 305) {
+                      self.$alert('<div class="lottery-title">旧密码不正确，请重新输入</div>', '系统提醒', {
+                        confirmButtonText: '确定',
+                        center: true,
+                        dangerouslyUseHTMLString: true,
+                        customClass: "syxw-wrap-inner",
+                        callback: action => {}
+                      })
                     } else {
-                      console.log('error', success.returncode);
+                      self.$alert(`<div class="lottery-title">错误代码：${success.returncode}</div>`, '系统提醒', {
+                        confirmButtonText: '确定',
+                        center: true,
+                        dangerouslyUseHTMLString: true,
+                        customClass: "syxw-wrap-inner",
+                        callback: action => {}
+                      })
                     }
                   }
                 }, (error) => {
@@ -481,31 +501,40 @@
                   if (success.returncode == 103 || success.returncode == 106 || success.returncode == 101) {
                     request.loginAgain(self);
                   } else if (success.returncode == 200) {
-                    self.$alert('修改成功', '系统提醒', {
+                    self.$alert('<div class="lottery-title">修改成功</div>', '系统提醒', {
                       confirmButtonText: '确定',
                       center: true,
+                      dangerouslyUseHTMLString: true,
+                      customClass: "syxw-wrap-inner",
                       callback: action => {
                         self.resetPsdzj()
                       }
-                    });
+                    })
                   } else if (success.returncode == 305) {
-                    self.$alert('旧密码不正确，请重新输入', '系统提醒', {
+                    self.$alert('<div class="lottery-title">旧密码不正确，请重新输入</div>', '系统提醒', {
                       confirmButtonText: '确定',
                       center: true,
-                      callback: action => {
-                        self.resetPsdzj()
-                      }
-                    });
+                      dangerouslyUseHTMLString: true,
+                      customClass: "syxw-wrap-inner",
+                      callback: action => {}
+                    })
                   } else if (success.returncode == 307) {
-                    self.$alert('资金密码和登录密码不能相同', '系统提醒', {
+                    self.$alert('<div class="lottery-title">资金密码和登录密码不能相同</div>', '系统提醒', {
                       confirmButtonText: '确定',
                       center: true,
-                      callback: action => {
-                        self.resetPsdzj()
-                      }
-                    });
+                      dangerouslyUseHTMLString: true,
+                      customClass: "syxw-wrap-inner",
+                      callback: action => {}
+                    })
                   } else {
                     console.log('error', success.returncode);
+                    self.$alert(`<div class="lottery-title">${success.returncode}</div>`, '系统提醒', {
+                      confirmButtonText: '确定',
+                      center: true,
+                      dangerouslyUseHTMLString: true,
+                      customClass: "syxw-wrap-inner",
+                      callback: action => {}
+                    })
                   }
                 }
               }, (error) => {
@@ -607,21 +636,7 @@
         )
       },
       hasProfile() {
-        // let nickName = localStorage.getItem('nickName');
-        // this.birthday = localStorage.getItem('birthday');
-        // this.nickname = nickName;
-        // this.phone = localStorage.getItem('phone');
-        // this.realname = localStorage.getItem('realname');
-        // this.email = localStorage.getItem('email');
-        // this.sex.value = localStorage.getItem('sex');
-        // let lastLoginTime = localStorage.getItem('lastTime');
         this.getProfile();
-        // if (lastLoginTime) {
-        //   this.profile.lastTimeVisible = true;
-        //   this.profile.lastTime = lastLoginTime;
-        // } else {
-        //   this.profile.lastTimeVisible = false;
-        // }
       },
     },
     mounted() {
@@ -635,7 +650,21 @@
     }
   }
 </script>
+<style lang="scss">
+  .psd-wrap.search-form.record-options .el-date-editor .el-input__inner {
+    width: 200px;
+  }
+</style>
 <style scoped lang="scss">
+  .v-line {
+    display: inline-block;
+    width: 4px;
+    height: 20px;
+    border-right: 4px solid #191919;
+    vertical-align: middle;
+    margin-right: 10px;
+  }
+
   .ml-60 {
     margin-left: 60px;
   }
@@ -655,7 +684,8 @@
         .exp {
           text-align: left;
           font-family: PingFangSC-Regular;
-          font-size: 12px;
+          font-size: 14px;
+          font-weight: bold;
           color: #191919;
           width: 120px;
           display: inline-block;
@@ -686,7 +716,7 @@
     margin-bottom: 20px;
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: flex-start;
   }
 
   .user-split-line {
@@ -703,20 +733,21 @@
   }
 
   .submit {
-    width: 115px;
-    height: 40px;
-    line-height: 40px;
+    width: 140px;
+    height: 48px;
+    line-height: 46px;
     display: inline-block;
     text-align: center;
     cursor: pointer;
     text-decoration: none;
-    background: #CC3447;
-    border-radius: 2px;
     font-family: PingFangSC-Regular;
-    font-size: 14px;
+    font-size: 16px;
     font-weight: 700;
-    color: #FFFFFF;
+    color: #ffffff;
     margin: 0 auto;
+    background-image: linear-gradient(-180deg, #CFA072 0%, #B68E66 100%);
+    border: 1px solid #DDDDDD;
+    border-radius: 2px;
   }
 
   .input-nick {
@@ -742,15 +773,16 @@
       text-align: center;
       font-family: PingFangSC-Regular;
       font-weight: 700;
-      font-size: 12px;
-      color: #191919;
-      background: #FFFFE1;
+      font-size: 14px;
+      color: #777;
+      background: #f5f7fa;
       border: 1px solid #C8C8C8;
       border-radius: 4px;
     }
 
     .last-exp {
-      font-size: 12px;
+      font-size: 14px;
+      font-weight: bold;
       color: #191919;
       display: inline-block;
       width: 120px;
@@ -789,18 +821,20 @@
   }
 
   .setting-wrap {
-    width: 471px;
-    height: 260px;
     background: #f2f2f2;
-    margin-top: 90px;
-    margin-right: 50px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    flex-direction: column;
+    padding: 30px;
   }
 
   .setting-wrap>span {
     text-align: center;
-    display: inline-block;
-    line-height: 260px;
+    display: block;
     vertical-align: middle;
-    font-size: 12px;
+    font-size: 14px;
+    font-weight: bold;
+    margin-bottom: 60px;
   }
 </style>

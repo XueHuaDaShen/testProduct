@@ -15,7 +15,7 @@
               <tr>
                 <th>标题：</th>
                 <td>
-                  <el-input v-model="activityParam.title" placeholder="请输入标题"></el-input>
+                  <el-input v-model.trim="activityParam.title" placeholder="请输入标题"></el-input>
                 </td>
               </tr>
               <tr>

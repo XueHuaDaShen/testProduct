@@ -1,5 +1,5 @@
 <template>
-  <div class="lottery-wrap">
+  <div class="lottery-wrap" v-loading="loading">
     <div class="header">
       <div class="title" style="line-height:25px;">
         <span class="v-line"></span>
@@ -11,10 +11,10 @@
         <ul class="j-t-num">
           <li v-for="(item,index) in getIssue" :key="index">{{item}}</li>
         </ul>
-        <router-link class="j-t-click" :to="{name:'lottery',query:{id:'5b03b1911279962a87186abc',p_code:'ssc',s_code:'cqssc'}}">来一注</router-link>
+        <router-link class="j-t-click" :to="{name:'cqssc',query:{id:gameid,p_code:'ssc',s_code:'cqssc'}}">来一注</router-link>
       </div>
     </div>
-    <div class="main" v-loading="loading">
+    <div class="main">
       <div class="lottery-list clearfix">
         <div :span="12" v-for="lottery in getLotteryData" class="lottery-item" v-cloak :key="lottery.code">
           <dl>{{lottery.name}}</dl>
@@ -35,7 +35,8 @@
     data() {
       return {
         loading: false,
-        issue: ''
+        issue: '',
+        gameid: ''
       }
     },
     computed: {
@@ -62,7 +63,7 @@
         return newArr;
       },
       getIssue() {
-        if(this.issue === '' || this.issue === undefined || this.issue === null){
+        if (this.issue === '' || this.issue === undefined || this.issue === null) {
           return '';
         }
         let luck_no = this.issue.split(',');
@@ -92,6 +93,7 @@
                 for (let j = 0; j < obj.length; j++) {
                   let o_ = obj[j];
                   if (o_.code === 'cqssc') {
+                    self.gameid = o_._id;
                     self.getIssueList(o_._id);
                     break;
                   }
@@ -145,9 +147,10 @@
       },
     },
     mounted() {
-      if (this.$store.state.lotteryArr.length == 0) {
-        this.getLotteryList();
-      }
+      // if (this.$store.state.lotteryArr.length == 0) {
+
+      // }
+      this.getLotteryList();
     }
   }
 </script>
@@ -216,7 +219,7 @@
     color: #BD8454;
     vertical-align: middle;
     margin-right: 5px;
-    font-weight:700;
+    font-weight: 700;
   }
 
   .j-t-num {

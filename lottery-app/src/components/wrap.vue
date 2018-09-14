@@ -208,7 +208,7 @@ a{
     background: #666;
   }
   .slide-down-em-white{
-    background:url('/static/img/down-white-sanjiao.png') no-repeat;
+    background:url('../assets/h5-img/down-white-sanjiao.png') no-repeat;
     background-size:100% 100%;
   }
   .option-view-input{
@@ -359,7 +359,7 @@ a{
   z-index:6;
   left:.3rem;
   bottom:.22rem;
-  background:url('/static/img/left_jiantou.png') no-repeat;
+  background:url('../assets/h5-img/left_jiantou.png') no-repeat;
   background-size:100% 100%;
 }
 .right-sanjiao{
@@ -369,7 +369,7 @@ a{
   z-index:6;
   right:.3rem;
   bottom:.4rem;
-  background:url('/static/img/right_jiantou.png') no-repeat;
+  background:url('../assets/h5-img/right_jiantou.png') no-repeat;
   background-size:100% 100%;
 }
 .down-sanjiao{
@@ -379,7 +379,7 @@ a{
   z-index:6;
   right:0;
   bottom:.45rem;
-  background:url('/static/img/down_jiantou.png') no-repeat;
+  background:url('../assets/h5-img/down_jiantou.png') no-repeat;
   background-size:100% 100%;
 }
   
@@ -406,7 +406,7 @@ a{
     z-index:6;
     left:.3rem;
     bottom:.22rem;
-    background:url('/static/img/left_jiantou.png') no-repeat;
+    background:url('../assets/h5-img/left_jiantou.png') no-repeat;
     background-size:100% 100%;
   }
   .search{

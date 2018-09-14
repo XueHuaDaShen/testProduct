@@ -4,8 +4,8 @@
     <form class="record-options search-form" action="">
       <div class="option-row mb-20">
         <span class="exp w-60">状态：</span>
-        <el-select v-model="form.status.value" placeholder="请选择" clearable style="width:114px">
-          <el-option v-for="(item,index) in form.status.options" :key="index" :label="item.label" :value="item.value">
+        <el-select v-model="form.status.value" placeholder="请选择" style="width:114px">
+          <el-option v-for="(item,index) in form.status.options" :key="index" :label="item.label" :value="item.label">
           </el-option>
         </el-select>
       </div>
@@ -155,15 +155,20 @@
               value: ['7'],
               label: '审核失败'
             }],
-            value: ['1', '2', '3', '4', '5', '6', '7'],
+            value: '全部',
             getValue() {
               if (this.value) {
-                return this.value;
+                for (let i = 0; i < this.options.length; i++) {
+                  let obj = this.options[i];
+                  if (this.value === obj.label) {
+                    return obj.value;
+                  }
+                }
               }
               return ['1', '2', '3', '4', '5', '6', '7'];
             },
             reset() {
-              this.value = null;
+              this.value = '全部';
             },
             error: {
               visible: false,
@@ -199,6 +204,7 @@
         end.setTime(new Date(new Date(new Date().toLocaleDateString()).getTime() + 24 * 60 * 60 * 1000 - 1));
         this.form.dateTo.value = end;
         this.form.dateFrom.value = start;
+        this.handleSearch();
       },
       //本周
       setTimeNowWeek() {
@@ -212,6 +218,7 @@
           .getTime() + 24 * 60 * 60 * 1000 - 1);
         this.form.dateTo.value = getWeekEndDate;
         this.form.dateFrom.value = getWeekStartDate;
+        this.handleSearch();
       },
       //本月
       setTimeNowMonth() {
@@ -228,6 +235,7 @@
           24 * 60 * 60 * 1000 - 1);
         this.form.dateTo.value = getMonthEndDate;
         this.form.dateFrom.value = getMonthStartDate;
+        this.handleSearch();
       },
       //设置近几日
       setTimeRecent3Days() {
@@ -235,6 +243,7 @@
         const start = new Date(new Date(new Date().toLocaleDateString()).getTime() - 3600 * 1000 * 24 * 30);
         this.form.dateTo.value = end;
         this.form.dateFrom.value = start;
+        this.handleSearch();
       },
       onSubmit() {
         let validate = true,
@@ -262,12 +271,16 @@
           }
         }
         if (!validate) {
-          self.$alert(errorMessage, "系统提醒", {
-            confirmButtonText: "确定",
-            center: true
-          });
+          self.$alert(`<div class="lottery-title">${errorMessage}</div>`, '系统提醒', {
+            confirmButtonText: '确定',
+            center: true,
+            dangerouslyUseHTMLString: true,
+            customClass: "syxw-wrap-inner",
+            callback: action => {}
+          })
           return false;
         } else {
+          console.log(data);
           this.loading = true;
           let url = "/user/trade/withdraw/list";
           request.http(
@@ -288,13 +301,6 @@
                   } else {
                     self.list = [];
                     self.noResult = true;
-                    /* self.$alert("没有符合条件的记录", "系统提醒", {
-                      confirmButtonText: "确定",
-                      center: true,
-                      callback: action => {
-
-                      }
-                    }); */
                   }
                 } else {
                   self.list = [];
@@ -368,7 +374,6 @@
     },
     mounted() {
       this.setTimeToday();
-      this.onSubmit();
     },
     created() {
       this.$store.dispatch('setbodyBG', 'no-bg');
@@ -533,47 +538,43 @@
   .mywithdraw-wrap .record-group .group-item a {
     width: 69px;
     height: 32px;
-    background: #c38755;
-    color: #fff;
+    /* background: #c38755; */
+    color: #777;
+    font-weight: bold;
     display: inline-block;
     line-height: 32px;
     font-size: 12px;
     font-family: MicrosoftYaHei;
+    cursor: auto;
   }
 
   .mywithdraw-wrap .record-group .group-item a.success {
-    background: #e1701d;
+    /* background: #e1701d; */
     font-size: 12px;
     width: 75px;
     height: 25px;
     line-height: 25px;
     display: inline-block;
+    color: #191919;
   }
 
   .mywithdraw-wrap .record-group .group-item a.applying {
-    background: #4d86fa;
+    /* background: #4d86fa; */
     font-size: 12px;
     width: 75px;
     height: 25px;
     line-height: 25px;
     display: inline-block;
+    color: #191919;
   }
 
   .mywithdraw-wrap .record-group .group-item a.failure {
-    background: #74a402;
+    /* background: #74a402; */
     font-size: 12px;
     width: 75px;
     height: 25px;
     line-height: 25px;
     display: inline-block;
-  }
-
-  .mywithdraw-wrap .record-group .group-item:nth-child(2n) {
-    /* background: #fff; */
-  }
-
-  .mywithdraw-wrap .record-group .group-item:nth-child(2n + 1) {
-    /* background: #f7f7f7; */
   }
 
   .mywithdraw-wrap .record-group .record-bottom {
@@ -583,8 +584,6 @@
   }
 
   .mywithdraw-wrap .record-group .record-bottom .group-item {
-    /* height: 34px; */
-    /* line-height: 34px; */
     background: inherit;
     font-size: 12px;
     font-family: MicrosoftYaHei;

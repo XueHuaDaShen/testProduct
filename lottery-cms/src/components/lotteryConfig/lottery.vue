@@ -97,7 +97,7 @@
           <div class="form-row">
             <span class="exp">开奖号码</span>
             <span class="exp-after">：</span>
-            <el-input type="text" v-model="form.awardNo" placeholder="开奖号码需以 , 号隔开"></el-input>
+            <el-input type="text" v-model.trim="form.awardNo" placeholder="开奖号码需以 , 号隔开"></el-input>
           </div>
         </div>
       </div>
@@ -136,7 +136,7 @@
                 :value="item.issue_no">
               </el-option>
             </el-select>
-            <el-input v-model="formS.lotteryNo.value"></el-input>
+            <el-input v-model.trim="formS.lotteryNo.value"></el-input>
           </div>
         </div>
       </div>

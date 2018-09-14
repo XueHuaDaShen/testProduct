@@ -83,7 +83,7 @@ export default {
     border-radius: .08rem;
     margin:.3rem;
     position: relative;
-    background:url('/static/img/zjgl_bj_icon.png') no-repeat;
+    background:url('../../assets/h5-img/zjgl_bj_icon.png') no-repeat;
     background-size:100% 100%;
     .blance-text{
       position: absolute;
@@ -143,14 +143,14 @@ export default {
         width:.46rem;
         height:.46rem;
         margin-right:.3rem;
-        background:url('/static/img/tixian_icon.png') no-repeat;
+        background:url('../../assets/h5-img/tixian_icon.png') no-repeat;
         background-size:100% 100%;
       }
       .edu{
         width:.46rem;
         height:.46rem;
         margin-right:.3rem;
-        background:url('/static/img/edu_icon.png') no-repeat;
+        background:url('../../assets/h5-img/edu_icon.png') no-repeat;
         background-size:100% 100%;
       }
       .zhuanzhang{
@@ -158,7 +158,7 @@ export default {
         height:.46rem;
         // margin-left:.02rem;
         margin-right:.3rem;
-        background:url('/static/img/zhuanzhang_icon.png') no-repeat;
+        background:url('../../assets/h5-img/zhuanzhang_icon.png') no-repeat;
         background-size:100% 100%;
       }
       .jilu{

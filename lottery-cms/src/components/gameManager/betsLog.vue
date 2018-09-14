@@ -12,7 +12,7 @@
         <div class="search-content">
           <div class="search-inner-wrap">
             <label>用户名：</label>
-            <el-input clearable v-model="username" placeholder="姓名" style="width:114px;"></el-input>
+            <el-input clearable v-model.trim="username" placeholder="姓名" style="width:114px;"></el-input>
           </div>
           <div class="search-inner-wrap">
             <label>彩种：</label>
@@ -32,7 +32,7 @@
           </div>
           <div class="search-inner-wrap">
             <label>期号：</label>
-            <el-input clearable v-model="issue" placeholder="期号" style="width:114px;"></el-input>
+            <el-input clearable v-model.trim="issue" placeholder="期号" style="width:114px;"></el-input>
           </div>
           <div class="search-inner-wrap">
             <label>状态：</label>
@@ -43,9 +43,9 @@
           </div>
           <div class="search-inner-wrap">
             <label>投注金额：</label>
-            <el-input clearable v-model="betsMin" placeholder="投注最小值" style="width:114px;"></el-input>
+            <el-input clearable v-model.trim="betsMin" placeholder="投注最小值" style="width:114px;"></el-input>
             <span>--</span>
-            <el-input clearable v-model="betsMax" placeholder="投注最大值" style="width:114px;"></el-input>
+            <el-input clearable v-model.trim="betsMax" placeholder="投注最大值" style="width:114px;"></el-input>
           </div>
           <div class="search-inner-wrap">
             <label>查找时间：</label>
@@ -55,7 +55,7 @@
           </div>
           <div class="search-inner-wrap">
             <label>投注内容：</label>
-            <el-input clearable v-model="betsNum" placeholder="投注内容" style="width:114px;"></el-input>
+            <el-input clearable v-model.trim="betsNum" placeholder="投注内容" style="width:114px;"></el-input>
           </div>
           <div class="search-inner-wrap">
             <label>测试账号：</label>
@@ -170,7 +170,7 @@
             checked: false
           },
           {
-            title: "棋牌游戏",
+            title: "游戏记录",
             name: "thirdpart",
             checked: false
           }

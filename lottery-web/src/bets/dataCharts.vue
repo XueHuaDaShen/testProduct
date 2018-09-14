@@ -983,10 +983,12 @@
                   // console.log(vm.tableList)
                   // vm.randerHtml();
                 } else {
-                  vm.$alert('没有符合条件的记录', '系统提醒', {
+                  vm.$alert('<div class="lottery-title">没有符合条件的记录</div>', '系统提醒', {
                     confirmButtonText: '确定',
                     center: true,
-                  });
+                    dangerouslyUseHTMLString: true,
+                    customClass: "syxw-wrap-inner"
+                  })
                 }
               }
             }
@@ -1207,12 +1209,12 @@
         this.gameid = this.$route.query.gameid;
         // 渲染 select 并尝试赋值selected项
       } else {
-        this.$alert("参数错误", "系统提示", {
+        this.$alert('<div class="lottery-title">参数错误</div>', '系统提示', {
           confirmButtonText: '确定',
-          callback: action => {
-
-          }
-        });
+          center: true,
+          dangerouslyUseHTMLString: true,
+          customClass: "syxw-wrap-inner"
+        })
       }
       this.getGameList();
       this.param = {

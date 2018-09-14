@@ -6,8 +6,8 @@
           <span>AG视讯</span>
         </dt>
         <dd>真人视讯现场，美女荷官</dd>
-        <button class="beginBtn noActive">即将上线</button>
-        <!-- <button class="beginBtn" :disabled="isClick" @click="getLoginForm">立即开始</button> -->
+        <!-- <button class="beginBtn noActive">即将上线</button> -->
+        <button class="beginBtn" :disabled="isClick" @click="getLoginForm">立即开始</button>
       </dl>
       <div class="split-bar"></div>
     </div>
@@ -55,26 +55,32 @@ export default {
   computed: {},
   methods: {
     getLoginForm() {
-      const vm = this;
-      vm.isClick = true;
-      let url = "/ag/user/login";
-      request.http(
-        "post",
-        url, {gameType: 18},
-        success => {
-          vm.isClick = false;
-          let code = success.returncode;
-          console.log('form----', success)
-          if (code == 200) {
-            vm.formData = success.data;
-          } else if(code == 101 || code == 103 || code == 106) {
-            request.loginAgain(vm)
-          }
-        },
-        error => {
-          vm.isClick = false;
+      this.$router.push({
+        name: 'agGame',
+        query: {
+          gameType: 'A00234'
         }
-      );
+      })
+      // const vm = this;
+      // vm.isClick = true;
+      // let url = "/ag/user/login";
+      // request.http(
+      //   "post",
+      //   url, {gameType: 'A00234'},
+      //   success => {
+      //     vm.isClick = false;
+      //     let code = success.returncode;
+      //     console.log('form----', success)
+      //     if (code == 200) {
+      //       // vm.formData = success.data;
+      //     } else if(code == 101 || code == 103 || code == 106) {
+      //       request.loginAgain(vm)
+      //     }
+      //   },
+      //   error => {
+      //     vm.isClick = false;
+      //   }
+      // );
     }
   },
 }
@@ -111,15 +117,15 @@ export default {
         }
       }
       dt.agsx-dt{
-        background:url('/static/img/sort1.png') no-repeat;
+        background:url('../../assets/h5-img/sort1.png') no-repeat;
         background-size:100% 100%;
       }
       dt.bbinyxg-dt{
-        background:url('/static/img/bbinyxg.png') no-repeat;
+        background:url('../../assets/h5-img/bbinyxg.png') no-repeat;
         background-size:100% 100%;
       }
       dt.igyxg-dt{
-        background:url('/static/img/igyxg.png') no-repeat;
+        background:url('../../assets/h5-img/igyxg.png') no-repeat;
         background-size:100% 100%;
       }
       dd{

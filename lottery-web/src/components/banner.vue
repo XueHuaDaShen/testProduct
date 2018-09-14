@@ -37,21 +37,32 @@
       </div>
     </div>
     <div class="tips" v-if="!noresult" v-cloak>
-      <div class="swiper-container" id="noticeSwiper">
+      <!-- <div class="swiper-container" id="noticeSwiper">
         <div class="swiper-wrapper">
           <router-link class="swiper-slide" v-for="(item,index) in items" :key="index" :to="{ name: 'noticeDetail', query: { id: item._id }}" style="text-decoration:none">
             <span class="scroll-item-text">{{item.title}}</span>
           </router-link>
         </div>
-      </div>
+      </div> -->
+      <vue-seamless-scroll :data="items" :class-option="optionLeft" class="seamless-warp2" :style="{'width':seamless_width}">
+        <ul class="item" :style="{'width':seamless_width}">
+          <li v-for="(item,index) in items" :key="index">
+            <router-link :to="{ name: 'noticeDetail', query: { id: item._id }}">{{item.title}}</router-link>
+          </li>
+        </ul>
+      </vue-seamless-scroll>
     </div>
   </div>
 </template>
 <script>
-  import Swiper from 'swiper';
-  import 'swiper/dist/css/swiper.css';
-  import request from '../axios/axios.js';
+  import Swiper from "swiper";
+  import "swiper/dist/css/swiper.css";
+  import request from "../axios/axios.js";
+  import vueSeamlessScroll from "vue-seamless-scroll";
   export default {
+    components: {
+      vueSeamlessScroll
+    },
     data() {
       return {
         bannerlist: [],
@@ -60,18 +71,20 @@
         noresult: false,
         noticeSwiper: null,
         loading: false,
-      }
+        seamless_width: '',
+        items_width: ''
+      };
     },
     methods: {
       toNoticeDetail(id) {
-        this.$router.push({ name: 'noticeDetail', query: { id: id } });
+        this.$router.push({ name: "noticeDetail", query: { id: id } });
       },
       mousePre() {
         // console.log('mySwiper', this.mySwiper);
-        this.mySwiper.swipePrev()
+        this.mySwiper.swipePrev();
       },
       mouseNext() {
-        this.mySwiper.swipeNext()
+        this.mySwiper.swipeNext();
       },
       // 排序
       compare(property) {
@@ -84,8 +97,10 @@
       getBanner() {
         let self = this;
         self.loading = true;
-        request.http('get', '/ad/list', {},
-          (success) => {
+        request.http(
+          "get",
+          "/ad/list", {},
+          success => {
             self.loading = false;
             if (success.returncode == 200) {
               let bannerlist = success.data;
@@ -94,14 +109,18 @@
                 data.sort(self.compare("order "));
                 self.bannerlist = data;
                 self.$nextTick(function() {
-                  self.swiperInit()
-                })
+                  self.swiperInit();
+                });
               } else {
                 self.bannerlist = [];
                 self.swiperInit();
               }
-            } else if (success.returncode == 101 || success.returncode == 103 || success.returncode == 106) {
-              request.loginAgain(self)
+            } else if (
+              success.returncode == 101 ||
+              success.returncode == 103 ||
+              success.returncode == 106
+            ) {
+              request.loginAgain(self);
             } else {
               self.$message({
                 showClose: true,
@@ -110,11 +129,11 @@
               });
             }
           },
-          (error) => {
+          error => {
             self.loading = false;
-            console.log('获取用户信息失败', error)
+            console.log("获取用户信息失败", error);
           }
-        )
+        );
       },
       //获取公告列表
       getNotices() {
@@ -129,7 +148,11 @@
           },
           success => {
             if (success.returncode) {
-              if (success.returncode == 103 || success.returncode == 106 || success.returncode == 101) {
+              if (
+                success.returncode == 103 ||
+                success.returncode == 106 ||
+                success.returncode == 101
+              ) {
                 request.loginAgain(self);
               } else if (success.returncode == 200) {
                 if (success.data.total) {
@@ -143,9 +166,9 @@
                     }
                   }
                   self.items = final;
-                  self.$nextTick(function() {
-                    self.noticeSwiperInit()
-                  })
+                  // self.$nextTick(function() {
+                  //   self.noticeSwiperInit();
+                  // });
                 } else {
                   self.noresult = true;
                   self.items = [];
@@ -164,71 +187,121 @@
             self.items = [];
             console.log("数据异常", error);
           }
-        )
+        );
       },
       swiperInit() {
         let self = this;
-        this.mySwiper = new Swiper('#mySwiper', {
+        this.mySwiper = new Swiper("#mySwiper", {
           loop: true,
           speed: 1000,
           loopAdditionalSlides: 20,
           navigation: {
-            nextEl: '.arrow-right',
-            prevEl: '.arrow-left',
+            nextEl: ".arrow-right",
+            prevEl: ".arrow-left"
           },
           autoplay: {
             delay: 3000,
-            disableOnInteraction: false,
+            disableOnInteraction: false
           },
           pagination: {
-            el: '.swiper-pagination',
+            el: ".swiper-pagination",
             // type: 'custom',
             clickable: true,
-            bulletClass: 'my-bullet',
-            bulletActiveClass: 'my-bullet-active',
+            bulletClass: "my-bullet",
+            bulletActiveClass: "my-bullet-active",
             renderBullet: function(index, className) {
               // return '<span class=" ' + className + ' ">' + (index + 1) + '</span>';
               return '<span class=" ' + className + ' "></span>';
-            },
-          },
+            }
+          }
         });
         this.mySwiper.el.onmouseover = function() {
           self.mySwiper.autoplay.stop();
-        }
+        };
         this.mySwiper.el.onmouseleave = function() {
           self.mySwiper.autoplay.start();
-        }
+        };
       },
       noticeSwiperInit() {
         let self = this;
-        this.noticeSwiper = new Swiper('#noticeSwiper', {
+        this.noticeSwiper = new Swiper("#noticeSwiper", {
           loop: true,
           speed: 1000,
           loopAdditionalSlides: 20,
           autoplay: {
             delay: 3000,
-            disableOnInteraction: false,
-          },
+            disableOnInteraction: false
+          }
         });
         this.noticeSwiper.el.onmouseover = function() {
           self.noticeSwiper.autoplay.stop();
-        }
+        };
         this.noticeSwiper.el.onmouseleave = function() {
           self.noticeSwiper.autoplay.start();
+        };
+      },
+      initScroll() {
+        let width = `${document.documentElement.clientWidth}`;
+        this.seamless_width = width + "px";
+        this.items_width = parseFloat(width) + 100 + "px";
+        const vm = this;
+        window.onresize = function temp() {
+          vm.seamless_width = `${document.documentElement.clientWidth}` + "px";
+          vm.items_width = parseFloat(`${document.documentElement.clientWidth}`) + 100 + "px";
+        };
+      }
+    },
+    computed: {
+      optionLeft() {
+        return {
+          direction: 2,
+          limitMoveNum: 2
         }
       }
+    },
+    created() {
+      this.initScroll();
     },
     mounted() {
       this.getBanner();
       this.getNotices();
     }
-  }
+  };
 </script>
-<style scoped>
+<style scoped lang="scss">
+  .seamless-warp2 {
+    overflow: hidden;
+    height: 40px;
+    margin: 0 auto;
+
+    ul.item {
+      li {
+        float: left;
+        margin-right: 100px;
+        list-style: none;
+
+        &:first-child {
+          margin-left: 100px;
+        }
+
+        >a {
+          font-size: 14px;
+          font-weight: bold;
+          color: #999;
+          text-decoration: none;
+
+          &:hover {
+            text-decoration: underline;
+          }
+        }
+      }
+    }
+  }
+
   .tips {
     font-family: PingFangSC-Regular;
-    color: #FFFFFF;
-    background: #64646C;
+    color: #ffffff;
+    background: #2A2A2A;
     text-align: center;
     height: 40px;
     line-height: 40px;
@@ -260,7 +333,7 @@
 
   .scroll-item-text {
     font-size: 14px;
-    color: #FFFFFF;
+    color: #ffffff;
   }
 
   .clearfix:after {
@@ -398,7 +471,7 @@
   }
 
   .arrow-left {
-    background: url('../assets/img/arrows.png') no-repeat left top;
+    background: url("../assets/img/arrows.png") no-repeat left top;
     position: absolute;
     left: -40px;
     top: 50%;
@@ -410,7 +483,7 @@
   }
 
   .arrow-right {
-    background: url('../assets/img/arrows.png') no-repeat right top;
+    background: url("../assets/img/arrows.png") no-repeat right top;
     position: absolute;
     right: -40px;
     top: 50%;

@@ -12,11 +12,11 @@
         <div class="search-content">
           <div class="search-inner-wrap">
             <label>用户名：</label>
-            <el-input clearable v-model="username" placeholder="用户名" style="width:114px;"></el-input>
+            <el-input clearable v-model.trim="username" placeholder="用户名" style="width:114px;"></el-input>
           </div>
           <div class="search-inner-wrap">
             <label>流水号：</label>
-            <el-input clearable v-model="order_no" placeholder="流水号" style="width:114px;"></el-input>
+            <el-input clearable v-model.trim="order_no" placeholder="流水号" style="width:114px;"></el-input>
           </div>
           <div class="search-inner-wrap">
             <label>状态：</label>
@@ -27,9 +27,9 @@
           </div>
           <div class="search-inner-wrap">
             <label>申请金额：</label>
-            <el-input clearable v-model="outcomeRange.min" placeholder="最小金额" style="width:114px"></el-input>
+            <el-input clearable v-model.trim="outcomeRange.min" placeholder="最小金额" style="width:114px"></el-input>
             <span>--</span>
-            <el-input clearable v-model="outcomeRange.max" placeholder="最大金额" style="width:114px"></el-input>
+            <el-input clearable v-model.trim="outcomeRange.max" placeholder="最大金额" style="width:114px"></el-input>
           </div>
           <div class="search-inner-wrap">
             <label>提交时间：</label>
@@ -179,7 +179,7 @@
             </el-select>
           </el-form-item>
           <el-form-item label="备注：" prop="textarea" style="justify-content:flex-start">
-            <el-input placeholder="请输入备注" v-model="form.textarea.value">
+            <el-input placeholder="请输入备注" v-model.trim="form.textarea.value">
             </el-input>
           </el-form-item>
         </el-form>

@@ -85,14 +85,14 @@
         <div class="form">
           <el-form :model="form" :rules="rules" ref="form">
             <el-form-item :label="menu_type+'级菜单'" prop="menu_name">
-              <el-input v-model="form.menu_name" auto-complete="off"></el-input>
+              <el-input v-model.trim="form.menu_name" auto-complete="off"></el-input>
             </el-form-item>
             <el-form-item label="排序" prop="order">
               <el-input v-model.number="form.order" @blur="()=>{!isNaN(form.order)&&(form.order = Math.floor(form.order))}"
                 auto-complete="off"></el-input>
             </el-form-item>
             <el-form-item label="菜单路径" prop="url" v-if="menu_type === '三'">
-              <el-input v-model="form.url" auto-complete="off"></el-input>
+              <el-input v-model.trim="form.url" auto-complete="off"></el-input>
             </el-form-item>
           </el-form>
         </div>

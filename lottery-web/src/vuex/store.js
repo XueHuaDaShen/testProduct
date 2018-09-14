@@ -2,12 +2,17 @@ import Vuex from 'vuex'
 import Vue from 'vue'
 
 const state = {
+  productPath: '/web/static/logo/', // 线上，合并了h5的时候，路径
+  // productPath: '/static/logo/', // 测试，未合并h5的时候，路径
   bets: 0,
   price: 2,
   refund: 0,
   blance: 0,
   bodyBG: '',
   clearBetsNum: false,
+  voteDataList: [], // 我的投注
+  chaseDataList: [], // 我的追号
+  waitingPrize: [], // 待开奖数据
   lotteryArr: [], // 彩票列表数据源,
   isSetBankPassword: 0, // 是否设置资金密码
   userProfile: {}, // 用户信息
@@ -30,6 +35,15 @@ const mutations = {
   },
   clearBetsNum(state, clearBetsNum) {
     state.clearBetsNum = clearBetsNum
+  },
+  changeVoteDataList(state, voteDataList) {
+    state.voteDataList = voteDataList
+  },
+  changeChaseDataList(state, chaseDataList) {
+    state.chaseDataList = chaseDataList
+  },
+  changeWaitingPrize(state, waitingPrize) {
+    state.waitingPrize = waitingPrize
   },
   // 同步提交lotteryArr
   changeLotteryArr(state, lotteryArr) {
@@ -70,6 +84,15 @@ const actions = {
   },
   setclearBetsNum({commit}, clearBetsNum) {
     commit('clearBetsNum', clearBetsNum)
+  },
+  setVoteDataList({commit}, voteDataList) {
+    commit('changeVoteDataList', voteDataList)
+  },
+  setChaseDataList({commit}, chaseDataList) {
+    commit('changeChaseDataList', chaseDataList)
+  },
+  setWaitingPrize({commit}, waitingPrize) {
+    commit('changeWaitingPrize', waitingPrize)
   },
   // 异步提交lotteryArr
   setLotteryArr({ commit }, lotteryArr) {

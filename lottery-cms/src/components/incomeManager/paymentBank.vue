@@ -91,7 +91,7 @@
       <div class="body-middle">
         <el-form :model="createForm" :rules="rules" ref="createForm" class="demo-ruleForm">
           <el-form-item label="名称：" prop="name">
-            <el-input type="text" v-model="createForm.name"></el-input>
+            <el-input type="text" v-model.trim="createForm.name"></el-input>
           </el-form-item>
           <el-form-item label="银行名称：" prop="bank.value">
             <!-- <el-input type="text" v-model="updateForm.bank"></el-input> -->
@@ -102,13 +102,13 @@
             </el-select>
           </el-form-item>
           <el-form-item label="支行名称：" prop="subbranch">
-            <el-input type="text" v-model="createForm.subbranch"></el-input>
+            <el-input type="text" v-model.trim="createForm.subbranch"></el-input>
           </el-form-item>
           <el-form-item label="银行卡号：" prop="account_no">
-            <el-input type="text" v-model="createForm.account_no"></el-input>
+            <el-input type="text" v-model.trim="createForm.account_no"></el-input>
           </el-form-item>
           <el-form-item label="账户名：" prop="realname">
-            <el-input type="text" v-model="createForm.realname"></el-input>
+            <el-input type="text" v-model.trim="createForm.realname"></el-input>
           </el-form-item>
         </el-form>
       </div>
@@ -137,7 +137,7 @@
       <div class="body-middle">
         <el-form :model="updateForm" :rules="rules" ref="updateForm" class="demo-ruleForm">
           <el-form-item label="名称：" prop="name">
-            <el-input type="text" v-model="updateForm.name"></el-input>
+            <el-input type="text" v-model.trim="updateForm.name"></el-input>
           </el-form-item>
           <el-form-item label="银行名称：" prop="bank.value">
             <el-select clearable v-model="updateForm.bank.value" placeholder="选择一家银行" style="width:300px;" @focus="getbankFocus"
@@ -147,10 +147,10 @@
             </el-select>
           </el-form-item>
           <el-form-item label="银行卡号：" prop="account_no">
-            <el-input type="text" v-model="updateForm.account_no"></el-input>
+            <el-input type="text" v-model.trim="updateForm.account_no"></el-input>
           </el-form-item>
           <el-form-item label="账户名：" prop="realname">
-            <el-input type="text" v-model="updateForm.realname"></el-input>
+            <el-input type="text" v-model.trim="updateForm.realname"></el-input>
           </el-form-item>
         </el-form>
       </div>
