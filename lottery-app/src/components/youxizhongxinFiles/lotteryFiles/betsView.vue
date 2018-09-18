@@ -1116,20 +1116,37 @@ export default {
         v.lottery3id = data[vi]._id;
         v.value.filter((k, ki) => {
           k.show = false;
-          if(data[vi].children[ki]){
-            k.show = true;
+          for(let i in data[vi].children){
+            if(k.title === data[vi].children[i].name){
+              k.show = true;
+              break;
+            }
           }
           k.data.filter((m, mi) => {
             m.show = false;
-            if(data[vi].children[ki].children[mi]){
-              m.show = true;
-              m.play = data[vi].children[ki].children[mi].note1; // 玩法
-              m.plan = data[vi].children[ki].children[mi].note2; // 方案
-              m.prize = data[vi].children[ki].children[mi].prize || 0; // 奖金
-              m.extra = data[vi].children[ki].children[mi].extra||''; // 赔率数组
-              m.probability = data[vi].children[ki].children[mi].probability; // 赔率
-              m.lotteryid = data[vi].children[ki].children[mi]._id; // lotteryid
+            for(let j in data[vi].children){
+              for(let l in data[vi].children[j].children){
+                if(m.title === data[vi].children[j].children[l].name){
+                  m.show = true;
+                  m.play = data[vi].children[ki].children[mi].note1; // 玩法
+                  m.plan = data[vi].children[ki].children[mi].note2; // 方案
+                  m.prize = data[vi].children[ki].children[mi].prize || 0; // 奖金
+                  m.extra = data[vi].children[ki].children[mi].extra || ''; // 赔率数组
+                  m.probability = data[vi].children[ki].children[mi].probability; // 赔率
+                  m.lotteryid = data[vi].children[ki].children[mi]._id; // lotteryid
+                  break;
+                }
+              }
             }
+            // if(data[vi].children[ki].children[mi]){
+            //   m.show = true;
+            //   m.play = data[vi].children[ki].children[mi].note1; // 玩法
+            //   m.plan = data[vi].children[ki].children[mi].note2; // 方案
+            //   m.prize = data[vi].children[ki].children[mi].prize || 0; // 奖金
+            //   m.extra = data[vi].children[ki].children[mi].extra||''; // 赔率数组
+            //   m.probability = data[vi].children[ki].children[mi].probability; // 赔率
+            //   m.lotteryid = data[vi].children[ki].children[mi]._id; // lotteryid
+            // }
           })
         })
       })
