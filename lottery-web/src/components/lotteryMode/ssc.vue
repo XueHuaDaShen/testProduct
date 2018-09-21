@@ -1658,19 +1658,27 @@
       filterLotteryList(data, arr, item) {
         arr.filter((k, ki) => {
           k.show = false;
-          if (item.children[ki]) {
-            k.show = true;
+          for(let i in item.children){
+            if(k.title === item.children[i].name){
+              k.show = true;
+              break;
+            }
           }
           k.data.filter((m, mi) => {
             m.show = false;
-            if (item.children[ki].children[mi]) {
-              m.show = true;
-              m.play = item.children[ki].children[mi].note1; // 玩法
-              m.plan = item.children[ki].children[mi].note2; // 方案
-              m.prize = item.children[ki].children[mi].prize || 0; // 奖金
-              m.extra = item.children[ki].children[mi].extra || ''; // 赔率数组
-              m.probability = item.children[ki].children[mi].probability; // 赔率
-              m.lotteryid = item.children[ki].children[mi]._id; // lotteryid
+            for(let j in item.children){
+              for(let l in item.children[j].children){
+                if(m.title === item.children[j].children[l].name){
+                  m.show = true;
+                  m.play = item.children[ki].children[mi].note1; // 玩法
+                  m.plan = item.children[ki].children[mi].note2; // 方案
+                  m.prize = item.children[ki].children[mi].prize || 0; // 奖金
+                  m.extra = item.children[ki].children[mi].extra || ''; // 赔率数组
+                  m.probability = item.children[ki].children[mi].probability; // 赔率
+                  m.lotteryid = item.children[ki].children[mi]._id; // lotteryid
+                  break;
+                }
+              }
             }
           })
           // k.children.filter((m, mi) => {

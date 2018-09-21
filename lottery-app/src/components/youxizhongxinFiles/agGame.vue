@@ -1,6 +1,6 @@
 <template>
   <div class="chess-wrap" v-loading.fullscreen.lock="loading" element-loading-text="拼命加载中" element-loading-spinner="el-icon-loading" element-loading-background="rgba(0, 0, 0, 0.8)">
-    <iframe id='agGame' scrolling="no" frameborder="0"></iframe>
+    <!-- <iframe id='agGame' scrolling="no" frameborder="0"></iframe> -->
     <myDialog v-if="showDialog" :dialogText="dialogText" :dialogTitle="dialogTitle"></myDialog>
   </div>
 </template>
@@ -43,9 +43,10 @@
           if (success.returncode == 200) {
             let data = success.data;
             if (data && data.url) {
-              let agGame = document.getElementById('agGame');
-              agGame.src = data.url;
-              vm.changeFrameHeight();
+              // let agGame = document.getElementById('agGame');
+              // agGame.src = data.url;
+              // vm.changeFrameHeight();
+              window.location.href = data.url;
             } else {
               vm.dialogTitle = '系统提示'
               vm.dialogText = '登录失败，请重新登录';
@@ -61,16 +62,16 @@
           console.log("error", error);
         }
       );
-      window.onresize = function() {
-        vm.changeFrameHeight();
-      }
+      // window.onresize = function() {
+      //   vm.changeFrameHeight();
+      // }
     },
     methods: {
-      changeFrameHeight() {
-        var ifm = document.getElementById("agGame");
-        ifm.height = document.documentElement.clientHeight;
-        ifm.width = document.documentElement.clientWidth;
-      }
+      // changeFrameHeight() {
+      //   var ifm = document.getElementById("agGame");
+      //   ifm.height = document.documentElement.clientHeight;
+      //   ifm.width = document.documentElement.clientWidth;
+      // }
     },
   }
 </script>

@@ -651,8 +651,9 @@
       width: 114px;
       line-height: 30px;
       text-align: center;
-      font-size: 12px;
+      font-size: 14px;
       font-family: PingFangSC-Regular;
+      font-weight: bold;
     }
   }
 
@@ -674,7 +675,7 @@
       height: 30px;
       line-height: 30px;
       text-align: center;
-      font-size: 14px;
+      font-size: 12px;
       font-weight: bold;
       color: #fff;
       cursor: pointer;
@@ -683,7 +684,7 @@
       font-family: microsoft yahei;
       box-shadow: none;
       border: none;
-      background-image: linear-gradient(-180deg, #CFA072 0%, #B68E66 100%);
+      background-image: linear-gradient(-180deg, #439743 0%, #205020 100%);
     }
   }
 

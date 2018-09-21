@@ -1,5 +1,5 @@
 <template>
-  <div class="hello">
+  <div class="help">
     <header class="header">
       <div>
         <router-link class="nav-left" :to="{name: 'home'}">
@@ -119,7 +119,7 @@
   }
 
   .header>div {
-    width: 1024px;
+    width: 1244px;
     height: 100%;
     margin: 0 auto;
     display: -webkit-box;
@@ -133,19 +133,21 @@
     letter-spacing: 1px;
     text-decoration: none;
     position: relative;
-    .xiazai-icon{
-      width:16px;
-      height:18px;
+
+    .xiazai-icon {
+      width: 16px;
+      height: 18px;
       position: absolute;
-      left:-21px;
-      top:0;
+      left: -21px;
+      top: 0;
     }
-    .kefu-icon{
-      width:20px;
-      height:21px;
+
+    .kefu-icon {
+      width: 20px;
+      height: 21px;
       position: absolute;
-      left:-25px;
-      top:-2px;
+      left: -25px;
+      top: -2px;
     }
   }
 
@@ -166,10 +168,10 @@
   }
 
   .g_33 {
-    margin-left: auto;
-    margin-right: auto;
-    clear: both;
-    width: 1240px;
+    position: relative;
+    width: 1244px;
+    margin: 0 auto;
+
     &:after {
       content: " ";
       display: block;
@@ -181,16 +183,20 @@
 
   .help-sider {
     width: 200px;
-    float: left;
     background: #2C2D2F;
-    box-shadow: 0 2px 50px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 30px rgba(0, 0, 0, 0.1);
+    float: left;
+
     .help-sider-inner {
       width: 100%;
     }
+
     .ul-first {
       width: 100%;
+
       >li {
         width: 100%;
+
         &.top {
           background: url('../../assets/img/help/Head.png') no-repeat;
           background-size: 100%;
@@ -198,6 +204,7 @@
           justify-content: center;
           display: flex;
           align-items: center;
+
           .text-center {
             .cn {
               display: block;
@@ -209,6 +216,7 @@
               border-bottom: 2px solid #FFF100;
               padding-bottom: 5px;
             }
+
             .en {
               display: block;
               font-family: PingFangSC-Regular;
@@ -219,6 +227,7 @@
             }
           }
         }
+
         &.open {
           .ul-second {
             display: block;
@@ -226,6 +235,7 @@
         }
       }
     }
+
     a.a-one {
       border-bottom: 1px solid #565656;
       text-align: left;
@@ -237,6 +247,7 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
+
       span.normal {
         background: url('../../assets/img/help/icon_Enter@3x.png') no-repeat;
         background-size: 100%;
@@ -245,24 +256,30 @@
         display: inline-block;
         transition: all 0.3s;
       }
+
       span.down {
         transform: rotate(180deg)
       }
+
       span.up {
         transform: rotate(0)
       }
     }
+
     .ul-second {
       display: none;
       padding: 0 20px;
       background: #373737;
+
       li {
         padding: 20px 0;
         border-bottom: 1px solid #505050;
         text-align: left;
+
         &:last-child {
           border-bottom: none;
         }
+
         &:before {
           content: "";
           height: 8px;
@@ -272,15 +289,18 @@
           margin-right: 10px;
           border-radius: 50%;
         }
+
         &.active::before {
           background: #FFF100;
         }
+
         &.active {
           .a-two {
             color: #FFF100;
           }
         }
       }
+
       a.a-two {
         color: #C5C5C5;
         font-size: 12px;
@@ -290,16 +310,19 @@
   }
 
   .help-main {
-    width: 1020px;
+    width: 1024px;
+    background: #fff;
     float: right;
-    background: #FFF;
+
     .help-main-inner {
       padding: 20px 25px;
     }
+
     .row {
       text-align: left;
       font-size: 12px;
       color: #191919;
+
       h2 {
         font-size: 16px;
         font-weight: normal;
@@ -309,12 +332,14 @@
         border-bottom: 1px solid #191919;
       }
     }
+
     .row-text {
       line-height: 180%;
       color: #494949;
       margin: 10px 0;
       padding-bottom: 20px;
     }
+
     .row-content {
       margin-bottom: 20px;
     }
@@ -322,9 +347,10 @@
 
   .help-content {
     font-family: 'Microsoft Yahei';
-    background: #777;
     padding: 20px 0;
     min-height: 550px;
+    background: url('../../assets/img/help/help_bg.png') no-repeat;
+    background-size: cover;
   }
 
   li {

@@ -31,6 +31,7 @@
           <!-- <a class="lose">忘记密码</a> -->
         </div>
         <div class="login-tip" v-if="tip">{{tip}}</div>
+        <div class="login-tip" id="phone_info_js"></div>
         <!-- <div class="alert-tip-text" v-if="tip">{{tip}}</div> -->
         <div class="login-btn">
           <button class="to-log" @click="loginFn">立即登录</button>
@@ -45,6 +46,7 @@ import request from '@/axios/axios.js'
 import MD5 from 'MD5'
 import paramCryptFn from '@/assets/js/cryptData'
 import {regexpInput, regexpPsd} from '@/assets/js/validator.js';
+
 export default {
   name: 'login',
   data() {
@@ -70,6 +72,20 @@ export default {
     // console.log(CryptoJS.MD5('123abc').toString())
   },
   mounted() {
+    // 手机端获取 信息接口
+    try{
+      // window.JSBridge.invokePhone('phone_info')
+      // document.getElementById("phone_info_js").innerHTML = '1';
+      if (window.webkit == null) {
+        // document.getElementById("phone_info_js").innerHTML = '2';
+        window.JSBridge.invokePhone('phone_info')
+      } else {
+        // document.getElementById("phone_info_js").innerHTML = '3';
+        window.webkit.messageHandlers.JSBridge.postMessage(['invokePhone', 'phone_info']);
+        // document.getElementById("phone_info_js").innerHTML = '4';
+      }
+    }catch(e){}
+
     let islogout = localStorage.getItem('islogout');
     if(islogout === 'false'){
       this.$router.push({
@@ -218,9 +234,24 @@ export default {
               }
               // var data = { loginname: vm.loginName, password: new_password }
               var data = { loginname: vm.loginName, password: new_password, captcha: vm.loginCaptcha, id: vm.guid };
+              let PHONE_INFO = JSON.parse(localStorage.getItem('PHONE_INFO'));
+              // document.getElementById("phone_info_js").innerHTML = PHONE_INFO;
+              let arr = [];
+              if(PHONE_INFO){
+                for(let i in PHONE_INFO){
+                  arr.push( i + '=' + PHONE_INFO[i] )
+                }
+              }
+              let url;
+              if(arr.length === 0){
+                url = '/user/login'
+              }else{
+                url = '/user/login?'+arr.join('&');
+              }
+              // document.getElementById("phone_info_js").innerHTML = url;
               request.login(
                 'post',
-                '/user/login',
+                url,
                 paramCryptFn(data),
                 (success) => {
                   let protocol = window.location.protocol;
@@ -303,10 +334,10 @@ export default {
                 }
               )
             } else {
-                vm.tip = '登录失败，请联系管理员';
-                setTimeout(function() {
-                  vm.tip = '';
-                }, vm.tipTime*1000)
+              vm.tip = '登录失败，请联系管理员';
+              setTimeout(function() {
+                vm.tip = '';
+              }, vm.tipTime*1000)
               vm.$store.dispatch('setLoading', false)
             }
             // console.log('/user/random---success', success)
@@ -324,7 +355,26 @@ export default {
       }
     },
     toRegFn() {
-      let reg = 'http://m.8bw.vip/#/reg/0qug9eawf7';
+      let reg;
+      // if(PHONE_INFO === null){
+      //   reg = 'http://m.8bw.vip/h5/#/reg/0qug9eawf7';
+      // }else{
+      //   let arr = [];
+      //   for(let i in PHONE_INFO){
+      //     arr.push( i + '=' + PHONE_INFO[i] )
+      //   }
+      //   reg = 'http://m.8bw.vip/h5/#/reg/0qug9eawf7?'+arr.join('&');
+      // }
+      let PHONE_INFO = JSON.parse(localStorage.getItem('PHONE_INFO'));
+      if(!PHONE_INFO){
+        reg = 'http://123.56.6.6:8090/h5/#/reg/0qug9eawf7';
+      }else{
+        let arr = [];
+        for(let i in PHONE_INFO){
+          arr.push( i + '=' + PHONE_INFO[i] )
+        }
+        reg = 'http://123.56.6.6:8090/h5/#/reg/0qug9eawf7?'+arr.join('&');
+      }
       location.href = reg;
       // this.$router.push({
       //   name: 'reg'

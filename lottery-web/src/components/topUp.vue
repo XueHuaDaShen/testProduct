@@ -67,8 +67,7 @@
                       开户行网点
                     </span>
                     :
-                    <!-- <span class="content">温州分行苍南支行</span> -->
-                    <span class="content"></span>
+                    <span class="content">{{option.subbranch}}</span>
                   </div>
                   <div class="radio-row">
                     <span class="exp">
@@ -120,9 +119,7 @@
             <div class="top-up-container item">
               <div class="container-row">
                 <span class="exp">存入金额：</span>
-                <el-tooltip effect="dark" :content="form.cash_apply.value" placement="top">
-                  <el-input placeholder="请输入存入金额" type="number" v-model="form.cash_apply.value" class="content" clearable :disabled="!entrance.thirdLvList.allowed" @keyup.enter.native="cashApplyChange"></el-input>
-                </el-tooltip>
+                <el-input placeholder="请输入存入金额" type="number" v-model.trim="form.cash_apply.value" class="content" clearable :disabled="!entrance.thirdLvList.allowed" @keyup.enter.native="cashApplyChange"></el-input>
                 <span class="unit">元</span>
               </div>
               <div class="container-row">
@@ -134,13 +131,14 @@
               </div>
               <div class="container-row">
                 <span class="exp">存款人姓名：</span>
-                <el-input placeholder="请输入存款人姓名" type="text" v-model="form.realname.value" class="content" clearable :disabled="!entrance.thirdLvList.allowed"></el-input>
+                <el-input placeholder="请输入存款人姓名" type="text" v-model.trim="form.realname.value" class="content" clearable :disabled="!entrance.thirdLvList.allowed"></el-input>
               </div>
               <div class="container-row">
                 <span class="exp">存款人卡号：</span>
-                <el-tooltip effect="dark" :content="form.card_no.value" placement="top">
-                  <el-input placeholder="请输入存款人卡号" type="text" v-model="form.card_no.value" class="content" clearable :disabled="!entrance.thirdLvList.allowed"></el-input>
-                </el-tooltip>
+                <div class="card-input" :data-balloon="formatNo(form.card_no.value)" data-balloon-pos="up">
+                  <el-input placeholder="请输入存款人卡号" type="text" v-model.trim="form.card_no.value" class="content" clearable></el-input>
+                </div>
+                <!-- <button data-balloon="Whats up!" data-balloon-pos="up">Hover me!</button> -->
               </div>
               <div class="container-row mt-20">
                 <span class="exp"></span>
@@ -163,7 +161,7 @@
               </div>
               <div class="container-row mt-40">
                 <span class="exp">充值金额</span>
-                <el-input placeholder="请输入充值金额" type="number" v-model="form.cash_apply.value" class="content ml4" clearable :disabled="!entrance.thirdLvList.allowed"></el-input>
+                <el-input placeholder="请输入充值金额" type="number" v-model.trim="form.cash_apply.value" class="content ml4" clearable :disabled="!entrance.thirdLvList.allowed"></el-input>
                 <span class="unit">元</span>
               </div>
               <div class="container-row mt-20">
@@ -189,7 +187,7 @@
               </div>
               <div class="container-row mt-40">
                 <span class="exp">充值金额</span>
-                <el-input placeholder="请输入充值金额" type="number" v-model="form.cash_apply.value" class="content ml4" clearable :disabled="!entrance.thirdLvList.allowed"></el-input>
+                <el-input placeholder="请输入充值金额" type="number" v-model.trim="form.cash_apply.value" class="content ml4" clearable :disabled="!entrance.thirdLvList.allowed"></el-input>
                 <span class="unit">元</span>
               </div>
               <div class="container-row mt-20">
@@ -221,7 +219,7 @@
               </div>
               <div class="container-row  mt-40">
                 <span class="exp">充值金额</span>
-                <el-input placeholder="请输入充值金额" type="number" class="content ml4" v-model="form.cash_apply.value" clearable :disabled="!entrance.thirdLvList.allowed" />
+                <el-input placeholder="请输入充值金额" type="number" class="content ml4" v-model.trim="form.cash_apply.value" clearable :disabled="!entrance.thirdLvList.allowed" />
                 <span class="unit">元</span>
               </div>
               <div class="container-row  mt-20">
@@ -252,7 +250,7 @@
               </div>
               <div class="container-row mt-40">
                 <span class="exp">充值金额</span>
-                <el-input placeholder="请输入充值金额" type="number" class="content ml4" v-model="form.cash_apply.value" clearable :disabled="!entrance.thirdLvList.allowed"></el-input>
+                <el-input placeholder="请输入充值金额" type="number" class="content ml4" v-model.trim="form.cash_apply.value" clearable :disabled="!entrance.thirdLvList.allowed"></el-input>
                 <span class="unit">元</span>
               </div>
               <div class="container-row mt-20">
@@ -280,7 +278,7 @@
               </div>
               <div class="container-row  mt-40">
                 <span class="exp">充值金额</span>
-                <el-input placeholder="请输入充值金额" type="number" class="content ml4" v-model="form.cash_apply.value" clearable></el-input>
+                <el-input placeholder="请输入充值金额" type="number" class="content ml4" v-model.trim="form.cash_apply.value" clearable></el-input>
                 <span class="unit">元</span>
               </div>
               <div class="container-row  mt-20">
@@ -360,7 +358,7 @@
           unionpay: false,
           wechat_qr: false,
           alipay_qr: false,
-          unionpay_qr: false,
+          unionpay_qr: false
         },
         bankcards: {
           max_recharge_every_time: 0, // 银行卡单笔最大充值
@@ -706,6 +704,9 @@
       };
     },
     methods: {
+      cardFocus(event) {
+        // this.$refs.cardInput.setAttribute("data-balloon-visible", "");
+      },
       cashApplyChange(e) {
         // let value = this.form.cash_apply.value;
         // console.log('e', e);
@@ -804,7 +805,7 @@
       // type:充值渠道
       // 1:card 2.ebank 3.unionpay 4.wechat_qr 5.alipay_qr 6.unionpay_qr
       onSubmit(type) {
-        console.log('this')
+        console.log("this");
         let validate = true;
         let data = {};
         let cash_apply = this.form.cash_apply.value;
@@ -813,38 +814,38 @@
           case 1:
             self.submitDisable.card = true;
             setTimeout(() => {
-              self.submitDisable.card = false
-            }, 1000)
+              self.submitDisable.card = false;
+            }, 1000);
             break;
           case 2:
             self.submitDisable.ebank = true;
             setTimeout(() => {
-              self.submitDisable.ebank = false
-            }, 1000)
+              self.submitDisable.ebank = false;
+            }, 1000);
             break;
           case 3:
             self.submitDisable.unionpay = true;
             setTimeout(() => {
-              self.submitDisable.unionpay = false
-            }, 1000)
+              self.submitDisable.unionpay = false;
+            }, 1000);
             break;
           case 4:
             self.submitDisable.wechat_qr = true;
             setTimeout(() => {
-              self.submitDisable.wechat_qr = false
-            }, 1000)
+              self.submitDisable.wechat_qr = false;
+            }, 1000);
             break;
           case 5:
             self.submitDisable.alipay_qr = true;
             setTimeout(() => {
-              self.submitDisable.alipay_qr = false
-            }, 1000)
+              self.submitDisable.alipay_qr = false;
+            }, 1000);
             break;
           case 6:
             self.submitDisable.unionpay_qr = true;
             setTimeout(() => {
-              self.submitDisable.unionpay_qr = false
-            }, 1000)
+              self.submitDisable.unionpay_qr = false;
+            }, 1000);
             break;
         }
         let errorMessage = "";
@@ -911,13 +912,17 @@
           }
         }
         if (!validate) {
-          self.$alert("<div class='lottery-title'>" + errorMessage + "</div>", "系统提示", {
-            dangerouslyUseHTMLString: true,
-            confirmButtonText: '确定',
-            center: true,
-            customClass: "syxw-wrap-inner",
-            callback: action => {}
-          });
+          self.$alert(
+            "<div class='lottery-title'>" + errorMessage + "</div>",
+            "系统提示",
+            {
+              dangerouslyUseHTMLString: true,
+              confirmButtonText: "确定",
+              center: true,
+              customClass: "syxw-wrap-inner",
+              callback: action => {}
+            }
+          );
           return false;
         } else {
           self
@@ -934,7 +939,9 @@
               if (type == 2 || type == 3 || type == 6) {
                 url = "/jeepay/recharge";
                 newWindow = window.open();
-                newWindow.document.write("<p id=\"win-p\">正在跳转支付中，请勿关闭当前页面...</p>");
+                newWindow.document.write(
+                  '<p id="win-p">正在跳转支付中，请勿关闭当前页面...</p>'
+                );
               }
               self.loading = true;
               request.http(
@@ -953,18 +960,22 @@
                     } else if (success.returncode == 200) {
                       self.result = success.data;
                       if (type == 1) {
-                        self.$alert("<div class='lottery-title'>您的存款申请提交成功，我们会尽快审核！</div>", "系统提示", {
-                          dangerouslyUseHTMLString: true,
-                          confirmButtonText: '确定',
-                          center: true,
-                          customClass: "syxw-wrap-inner",
-                          callback: action => {
-                            self.form.cash_apply.value = "";
-                            self.form.banks.value = "";
-                            self.form.realname.value = "";
-                            self.form.card_no.value = "";
+                        self.$alert(
+                          "<div class='lottery-title'>您的存款申请提交成功，我们会尽快审核！</div>",
+                          "系统提示",
+                          {
+                            dangerouslyUseHTMLString: true,
+                            confirmButtonText: "确定",
+                            center: true,
+                            customClass: "syxw-wrap-inner",
+                            callback: action => {
+                              self.form.cash_apply.value = "";
+                              self.form.banks.value = "";
+                              self.form.realname.value = "";
+                              self.form.card_no.value = "";
+                            }
                           }
-                        });
+                        );
                       } else if (type == 2 || type == 3 || type == 6) {
                         self.form.cash_apply.value = "";
                         // window.open(self.result.url, "_blank");
@@ -979,39 +990,50 @@
                     } else {
                       if (type == 2 || type == 3 || type == 6) {
                         // newWindow.document.write("<p id=\"win-p\">充值失败，请联系管理员</p>");
-                        newWindow.document.getElementById("win-p").innerHTML = "充值失败，请联系管理员";
+                        newWindow.document.getElementById("win-p").innerHTML =
+                          "充值失败，请联系管理员";
                       } else {
-                        self.$alert("<div class='lottery-title'>" + success.data.msg + "</div>", "系统提示", {
-                          dangerouslyUseHTMLString: true,
-                          confirmButtonText: '确定',
-                          center: true,
-                          customClass: "syxw-wrap-inner",
-                          callback: action => {
-                            self.form.cash_apply.value = "";
+                        self.$alert(
+                          "<div class='lottery-title'>" +
+                          success.data.msg +
+                          "</div>",
+                          "系统提示",
+                          {
+                            dangerouslyUseHTMLString: true,
+                            confirmButtonText: "确定",
+                            center: true,
+                            customClass: "syxw-wrap-inner",
+                            callback: action => {
+                              self.form.cash_apply.value = "";
+                            }
                           }
-                        });
+                        );
                       }
                     }
                   }
                 },
                 error => {
                   self.loading = false;
-                  self.$alert("<div class='lottery-title'>您的存款申请提交失败，请联系客服！</div>", "系统提示", {
-                    dangerouslyUseHTMLString: true,
-                    confirmButtonText: '确定',
-                    center: true,
-                    customClass: "syxw-wrap-inner",
-                    callback: action => {
-                      if (type == 1) {
-                        self.form.cash_apply.value = "";
-                        self.form.banks.value = "";
-                        self.form.realname.value = "";
-                        self.form.card_no.value = "";
-                      } else {
-                        self.form.cash_apply.value = "";
+                  self.$alert(
+                    "<div class='lottery-title'>您的存款申请提交失败，请联系客服！</div>",
+                    "系统提示",
+                    {
+                      dangerouslyUseHTMLString: true,
+                      confirmButtonText: "确定",
+                      center: true,
+                      customClass: "syxw-wrap-inner",
+                      callback: action => {
+                        if (type == 1) {
+                          self.form.cash_apply.value = "";
+                          self.form.banks.value = "";
+                          self.form.realname.value = "";
+                          self.form.card_no.value = "";
+                        } else {
+                          self.form.cash_apply.value = "";
+                        }
                       }
                     }
-                  });
+                  );
                 }
               );
             })
@@ -1165,7 +1187,8 @@
                     let randomData = data[i].account;
                     let final = [];
                     if (randomData.length != 0) {
-                      let index = Math.floor(Math.random() * randomData.length + 1) - 1;
+                      let index =
+                        Math.floor(Math.random() * randomData.length + 1) - 1;
                       // console.log('index', index);
                       final.push(randomData[index]);
                       data[i].account = final;
@@ -1226,15 +1249,19 @@
             }
           },
           error => {
-            self.$alert("<div class='lottery-title'>获取充值通道失败,请联系管理员</div>", "系统提示", {
-              dangerouslyUseHTMLString: true,
-              confirmButtonText: '确定',
-              center: true,
-              customClass: "syxw-wrap-inner",
-              callback: action => {
-                self.loading = false;
+            self.$alert(
+              "<div class='lottery-title'>获取充值通道失败,请联系管理员</div>",
+              "系统提示",
+              {
+                dangerouslyUseHTMLString: true,
+                confirmButtonText: "确定",
+                center: true,
+                customClass: "syxw-wrap-inner",
+                callback: action => {
+                  self.loading = false;
+                }
               }
-            });
+            );
           }
         );
       },
@@ -1318,6 +1345,18 @@
             console.log("数据异常", error);
           }
         );
+      },
+      formatNo(val) {
+        if (val) {
+          return validator.trim(val).replace(/(.{4})/g, "$1-");
+        }
+        return "";
+      },
+      formatCash(val) {
+        if (val) {
+          return validator.trim(val);
+        }
+        return "";
       },
       getBankBg(uid) {
         let classText = "";
@@ -1409,8 +1448,8 @@
       this.getthirdLvList("web", 1);
     },
     created() {
-      this.$store.dispatch('setbodyBG', 'no-bg');
-      localStorage.setItem('bodyBG', 'no-bg');
+      this.$store.dispatch("setbodyBG", "no-bg");
+      localStorage.setItem("bodyBG", "no-bg");
     }
   };
 </script>
@@ -1521,6 +1560,18 @@
   }
 </style>
 <style scoped lang="scss">
+  .card-input {
+    position: relative;
+    display: inline-block;
+    font-size: 14px;
+    font-weight: bold;
+    font-family: MicrosoftYaHei;
+    color: #191919;
+    height: 40px;
+    line-height: 40px;
+    width: auto;
+  }
+
   .no-allowed {
     cursor: not-allowed !important;
   }
@@ -1679,11 +1730,11 @@
 
         &.active {
           color: #cc3447;
-          background: #FFFFFF;
-          border: 2px solid #CFA072;
+          background: #ffffff;
+          border: 2px solid #cfa072;
           border-radius: 2px;
           font-size: 14px;
-          color: #CFA072;
+          color: #cfa072;
           font-weight: bold;
           line-height: 18px;
         }
@@ -2000,8 +2051,8 @@
     font-weight: 700;
     color: #ffffff;
     margin: 0 auto;
-    background-image: linear-gradient(-180deg, #CFA072 0%, #B68E66 100%);
-    border: 1px solid #DDDDDD;
+    background-image: linear-gradient(-180deg, #cfa072 0%, #b68e66 100%);
+    border: 1px solid #dddddd;
     border-radius: 2px;
 
     &.no-allowed {
@@ -2057,7 +2108,7 @@
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
 
     .li-inner-border {
-      border: 2px solid #CFA072;
+      border: 2px solid #cfa072;
       position: absolute;
       width: 100%;
       height: 100%;
@@ -2191,7 +2242,7 @@
 
   .top-up-container .container-row .wxActive.active {
     border-color: #c83a4c;
-    border: 2px solid #CFA072;
+    border: 2px solid #cfa072;
     border-radius: 2px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
   }
@@ -2300,7 +2351,7 @@
     .kj {
       background-image: url("../assets/img/topUp/kj.png");
       height: 16px;
-      width: 22px;
+      width: 20px;
     }
 
     .sm {
@@ -2312,8 +2363,8 @@
     &.active {
       font-family: PingFangSC-Regular;
       color: #ffffff;
-      background-image: linear-gradient(-180deg, #CFA072 0%, #B68E66 100%);
-      border: 1px solid #DDDDDD;
+      background-image: linear-gradient(-180deg, #cfa072 0%, #b68e66 100%);
+      border: 1px solid #dddddd;
       border-radius: 2px;
       font-weight: bold;
       font-size: 14px;
@@ -2321,7 +2372,7 @@
       .kj {
         background-image: url("../assets/img/topUp/kj_active.png");
         height: 16px;
-        width: 22px;
+        width: 20px;
       }
 
       .sm {

@@ -61,7 +61,7 @@
       setInterval(() => {
         vm.getBetsDataList();
         vm.getChaseDataList();
-      }, 10*1000);
+      }, 10 * 1000);
       // this.getLotteryList();
       // this.getUserInfo();
       // console.log(this.getsetbodyBG)
@@ -157,35 +157,35 @@
         let waitingPrize = this.$store.state.waitingPrize;
         let arr = [];
         data.filter(v => {
-          if(!v.luck_no || v.status == 1){
+          if (!v.luck_no || v.status == 1) {
             arr.push(v);
           }
         })
         this.$store.dispatch('setWaitingPrize', arr);
-        if(waitingPrize.length !== 0){
+        if (waitingPrize.length !== 0) {
           this.prizeArr = [];
-          for(let i=0; i<waitingPrize.length; i++){
+          for (let i = 0; i < waitingPrize.length; i++) {
             let v = waitingPrize[i];
-            for(let j=0; j<data.length; j++){
+            for (let j = 0; j < data.length; j++) {
               let k = data[j];
-              if(v._id === k._id && Number(k.status) === 5){
+              if (v._id === k._id && Number(k.status) === 5) {
                 this.prizeArr.push(k);
               }
             }
           }
-          if(this.prizeArr.length > 0){
+          if (this.prizeArr.length > 0) {
             this.lotteryed = true;
             let arr = [];
             data.filter(v => {
-              if(!v.luck_no){
+              if (!v.luck_no) {
                 arr.push(v);
               }
             })
             this.$store.dispatch('setWaitingPrize', arr);
             setTimeout(() => {
               vm.lotteryed = false;
-            }, 15*1000);
-          }else{
+            }, 15 * 1000);
+          } else {
             this.lotteryed = false;
           }
         }
@@ -198,6 +198,11 @@
 <style lang="scss">
   .el-loading-spinner>svg .path {
     stroke: #777;
+  }
+
+  .el-tooltip__popper {
+    font-size: 14px;
+    font-weight: bold;
   }
 
   /* alert html弹框样式 加上.syxw-wrap-inner 即可 */
@@ -260,68 +265,77 @@
       }
     }
   }
-  #system-tip-panel{
-    width:254px;
+
+  #system-tip-panel {
+    width: 254px;
     position: fixed;
-    right:20px;
-    top:500px;
-    padding:10px;
-    z-index:9999;
-    .panel-bj{
+    right: 20px;
+    bottom: 200px;
+    padding: 10px;
+    z-index: 9999;
+
+    .panel-bj {
       position: absolute;
-      width:100%;
-      height:100%;
-      left:0;
-      top:0;
-      z-index:1;
+      width: 100%;
+      height: 100%;
+      left: 0;
+      top: 0;
+      z-index: 1;
       opacity: 0.9;
       background: #64646C;
-      box-shadow: 0 2px 10px 0 rgba(0,0,0,0.50), inset 0 1px 4px 0 rgba(255,255,255,0.50);
+      box-shadow: 0 2px 10px 0 rgba(0, 0, 0, 0.50), inset 0 1px 4px 0 rgba(255, 255, 255, 0.50);
       border-radius: 2px;
     }
-    em.panel-close{
+
+    em.panel-close {
       position: absolute;
-      z-index:2;
-      right:10px;
-      top:15px;
-      width:12px;
-      height:12px;
-      cursor:pointer;
-      img{
-        width:100%;
-        height:100%;
-        display:block;
+      z-index: 2;
+      right: 10px;
+      top: 15px;
+      width: 12px;
+      height: 12px;
+      cursor: pointer;
+
+      img {
+        width: 100%;
+        height: 100%;
+        display: block;
       }
     }
-    h2.panel-title{
-      text-align:center;
-      height:22px;
-      line-height:22px;
-      font-size:16px;
-      color:#fff;
-      margin-bottom:10px;
+
+    h2.panel-title {
+      text-align: center;
+      height: 22px;
+      line-height: 22px;
+      font-size: 16px;
+      color: #fff;
+      margin-bottom: 10px;
       position: relative;
-      z-index:2;
+      z-index: 2;
     }
-    div.panel-content{
-      padding:22px 13px;
+
+    div.panel-content {
+      padding: 22px 13px;
       background: #FFFFFF;
       border-radius: 2px;
       position: relative;
-      z-index:2;
-      min-height:76px;
-      p.panel-text{
+      z-index: 2;
+      min-height: 76px;
+
+      p.panel-text {
         font-size: 12px;
         color: #191919;
-        text-align:left;
-        margin-bottom:20px;
-        &:last-child{
-          margin-bottom:0;
+        text-align: left;
+        margin-bottom: 20px;
+
+        &:last-child {
+          margin-bottom: 0;
         }
       }
-      i.panel-money{
-        color:#c83a4c;
-        font-style:normal;
+
+      i.panel-money {
+        color: #c83a4c;
+        font-style: normal;
       }
     }
   }

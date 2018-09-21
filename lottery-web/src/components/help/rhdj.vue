@@ -8,43 +8,45 @@
           开奖号码公布后，系统会自动把奖金全部派送到用户的平台账户，用户可在"彩票记录"中 查询投注是否中奖及奖金情况。若中奖用户超过5分钟未收到奖金，请联系客服并提供购彩记录请求查询帮助。
         </p>
         <p class="mb-20 t-first">
-          平台各彩种开奖时间表如下：
+          <strong>平台各彩种开奖时间表如下：</strong>
         </p>
         <p class="mb-10 t-first">
+          <strong>
           时时彩销售及开奖时间
+          </strong>
         </p>
         <p class="mb-20">
-          <img src="../../assets/img/help/ssc_table.png" />
+          <img src="../../assets/img/help/ssc_table.png" width="675" />
         </p>
         <p class="mb-10 t-first">
-          11选5销售及开奖时间
+          <strong>11选5销售及开奖时间</strong>
         </p>
         <p class="mb-20">
-          <img src="../../assets/img/help/syxw_table.png" />
+          <img src="../../assets/img/help/syxw_table.png" width="675" />
         </p>
         <p class="mb-10 t-first">
-          快三销售及开奖时间
+          <strong>快三销售及开奖时间</strong>
         </p>
         <p class="mb-20">
-          <img src="../../assets/img/help/ks_table.png" />
+          <img src="../../assets/img/help/ks_table.png" width="675" />
         </p>
         <p class="mb-10 t-first">
-          PK10销售及开奖时间
+          <strong>PK10销售及开奖时间</strong>
         </p>
         <p class="mb-20">
-          <img src="../../assets/img/help/pks_table.png" />
+          <img src="../../assets/img/help/pks_table.png" width="675" />
         </p>
         <p class="mb-10 t-first">
-          福彩3D销售及开奖时间
+          <strong>福彩3D销售及开奖时间</strong>
         </p>
         <p class="mb-20">
-          <img src="../../assets/img/help/lhc_table.png" />
+          <img src="../../assets/img/help/lhc_table.png" width="675" />
         </p>
         <p class="mb-10 t-first">
-          体彩P3/P5销售及开奖时间
+          <strong>体彩P3/P5销售及开奖时间</strong>
         </p>
         <p class="mb-20">
-          <img src="../../assets/img/help/tc_table.png" />
+          <img src="../../assets/img/help/tc_table.png" width="675" />
         </p>
       </div>
     </div>
@@ -89,9 +91,8 @@
 <style scoped lang='scss'>
   .t-first {
     font-family: PingFangSC-Regular;
-    font-size: 14px;
+    font-size: 12px;
     color: #191919;
-    font-weight: 700;
   }
 
   .t-special {
@@ -166,6 +167,7 @@
     margin-right: auto;
     clear: both;
     width: 1240px;
+
     &:after {
       content: " ";
       display: block;
@@ -179,11 +181,15 @@
     width: 210px;
     float: left;
     background: #2C2D2F;
+
     .help-sider-inner {}
+
     .ul-first {
       li {
+
         // background: url(add.gif) no-repeat 290px 13px;
         &.open {
+
           // background-image: url(reduce.gif);
           .ul-second {
             display: block;
@@ -191,6 +197,7 @@
         }
       }
     }
+
     a {
       display: block;
       color: #e0d6c0;
@@ -201,11 +208,14 @@
       padding: 0 15px;
       text-align: left;
     }
+
     .ul-second {
       display: none;
+
       li {
         background: #404040;
       }
+
       a {
         color: #C5C5C5;
         font-size: 12px;
@@ -219,13 +229,16 @@
     float: right;
     background: #FFF;
     min-height: 469px;
+
     .help-main-inner {
       padding: 20px 25px;
     }
+
     .row {
       text-align: left;
       font-size: 12px;
       color: #191919;
+
       h2 {
         font-weight: 700;
         font-family: PingFangSC-Regular;
@@ -233,12 +246,14 @@
         color: #BD8454;
       }
     }
+
     .row-text {
       line-height: 180%;
       color: #494949;
       margin: 10px 0;
       padding-bottom: 20px;
     }
+
     .row-content {
       margin-bottom: 20px;
     }

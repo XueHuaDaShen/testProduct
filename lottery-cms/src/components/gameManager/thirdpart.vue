@@ -624,14 +624,6 @@
         request.http(
           "get",
           "/thirdpart/game/list", {
-            pageNum: vm.pageNum,
-            pageSize: vm.pageSize,
-            loginname: trim(vm.username),
-            beginTime: beginTime,
-            endTime: endTime,
-            game: vm.game,
-            platform: vm.platform,
-            is_test: vm.is_test,
             id: row._id,
             single: '1'
           },

@@ -331,7 +331,7 @@
         return parseFloat(amount).toFixed(2);
       },
       getTime(time) {
-        return moment(time).format("YYYY-MM-DD HH:MM:SS");
+        return moment(time).format("YYYY-MM-DD HH:mm:ss");
       },
       handleSearch() {
         this.pageIndex = 1;

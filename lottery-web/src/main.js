@@ -10,9 +10,12 @@ import './lib/icon-font/iconfont.css'
 import './scss/search.scss'
 import animate from 'animate.css'
 import './scss/element-variables.scss'
+/* balloon -- 工具条提示css库 */
+import balloon from "balloon-css";
 
 Vue.use(ElementUI)
 Vue.use(animate)
+Vue.use(balloon)
 Vue.config.productionTip = false
 
 /* eslint-disable no-new */

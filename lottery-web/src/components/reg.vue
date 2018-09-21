@@ -263,6 +263,12 @@
                 setTimeout(function() {
                   vm.tip = '';
                 }, 2000)
+              } else if (code == '304') {
+                vm.tip = '链接过期';
+                vm.getCaptcha();
+                setTimeout(function() {
+                  vm.tip = '';
+                }, 2000)
               } else if (code == '307') {
                 vm.tip = '验证码过期';
                 vm.getCaptcha();

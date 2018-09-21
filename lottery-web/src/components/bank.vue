@@ -317,7 +317,7 @@
             <td>{{item.card_no}}</td>
             <td>{{getBindTime(item.create_at)}}</td>
             <td>{{getBankCardStatus(item.status)}}</td>
-            <td style="width:200px;display: flex;justify-content: center;">
+            <td style="width:220px;display: flex;justify-content: center;">
               <a class="edit" @click="modifiedBankCard(item._id,item.card_no,item.status)">修改</a>
               <a class="delete" @click="deleteBankCard(item._id,item.card_no,item.status)">删除</a>
             </td>
@@ -331,7 +331,7 @@
   import request from "../axios/axios";
   import { bankCard } from "../lib/utils/validator";
   import moment from "moment";
-  import paramCryptFn from '../lib/cryptData'
+  import paramCryptFn from "../lib/cryptData";
 
   export default {
     data() {
@@ -386,7 +386,7 @@
         inputSubBranch: "",
         inputAccountName: "", //确认开户人姓名
         inputBankCard: "", //确认银行账号
-        inputCashPsd: '', // 确认资金密码
+        inputCashPsd: "", // 确认资金密码
         bankcards: {
           data: [],
           count: 0,
@@ -510,16 +510,22 @@
         if (status == 0) {
           let self = this;
           this.loading = true;
-          request.http('get', '/user/bankcard/safe/question/isSet', {},
-            (success) => {
+          request.http(
+            "get",
+            "/user/bankcard/safe/question/isSet", {},
+            success => {
               self.loading = false;
               if (success.returncode && success.returncode == 200) {
                 if (!success.data.isSet) {
                   this.$router.push({
-                    name: "userSecurityQuestions",
+                    name: "userSecurityQuestions"
                   });
-                } else if (success.returncode == 101 || success.returncode == 103 || success.returncode == 106) {
-                  request.loginAgain(self)
+                } else if (
+                  success.returncode == 101 ||
+                  success.returncode == 103 ||
+                  success.returncode == 106
+                ) {
+                  request.loginAgain(self);
                 } else {
                   this.$router.push({
                     name: "userCheckSafeQ",
@@ -528,22 +534,27 @@
                 }
               }
             },
-            (error) => {
+            error => {
               self.loading = false;
               self.$message({
                 showClose: true,
-                message: '系统出错，请联系管理员',
-                type: 'error'
+                message: "系统出错，请联系管理员",
+                type: "error"
               });
-            })
+            }
+          );
         } else if (status == 1) {
-          this.$alert('<div class="lottery-title">银行卡已锁定</div>', '系统提醒', {
-            confirmButtonText: '确定',
-            center: true,
-            dangerouslyUseHTMLString: true,
-            customClass: "syxw-wrap-inner",
-            callback: action => {}
-          })
+          this.$alert(
+            '<div class="lottery-title">银行卡已锁定</div>',
+            "系统提醒",
+            {
+              confirmButtonText: "确定",
+              center: true,
+              dangerouslyUseHTMLString: true,
+              customClass: "syxw-wrap-inner",
+              callback: action => {}
+            }
+          );
         }
       },
       //删除银行卡
@@ -554,25 +565,33 @@
             query: { id: id, banktext: banktext } //id:当前银行卡的_id，banktext:当前银行卡的文本,urlName:验证安全问题后，要跳转的组件name
           });
         } else if (status == 1) {
-          this.$alert('<div class="lottery-title">银行卡已锁定</div>', '系统提醒', {
-            confirmButtonText: '确定',
-            center: true,
-            dangerouslyUseHTMLString: true,
-            customClass: "syxw-wrap-inner",
-            callback: action => {}
-          })
+          this.$alert(
+            '<div class="lottery-title">银行卡已锁定</div>',
+            "系统提醒",
+            {
+              confirmButtonText: "确定",
+              center: true,
+              dangerouslyUseHTMLString: true,
+              customClass: "syxw-wrap-inner",
+              callback: action => {}
+            }
+          );
         }
       },
       //锁定银行卡
       lockBankCard() {
         if (this.bankcards.allStatus == 1) {
-          this.$alert('<div class="lottery-title">银行卡已锁定</div>', '系统提醒', {
-            confirmButtonText: '确定',
-            center: true,
-            dangerouslyUseHTMLString: true,
-            customClass: "syxw-wrap-inner",
-            callback: action => {}
-          })
+          this.$alert(
+            '<div class="lottery-title">银行卡已锁定</div>',
+            "系统提醒",
+            {
+              confirmButtonText: "确定",
+              center: true,
+              dangerouslyUseHTMLString: true,
+              customClass: "syxw-wrap-inner",
+              callback: action => {}
+            }
+          );
         } else {
           this.$router.push({
             name: "lockBank"
@@ -596,13 +615,17 @@
       },
       addBankCard() {
         if (this.bankcards.allStatus == 1) {
-          this.$alert('<div class="lottery-title">银行卡已锁定，不可新增银行卡</div>', '系统提醒', {
-            confirmButtonText: '确定',
-            center: true,
-            dangerouslyUseHTMLString: true,
-            customClass: "syxw-wrap-inner",
-            callback: action => {}
-          })
+          this.$alert(
+            '<div class="lottery-title">银行卡已锁定，不可新增银行卡</div>',
+            "系统提醒",
+            {
+              confirmButtonText: "确定",
+              center: true,
+              dangerouslyUseHTMLString: true,
+              customClass: "syxw-wrap-inner",
+              callback: action => {}
+            }
+          );
         } else {
           this.getIsSetSafeQ();
         }
@@ -611,16 +634,22 @@
       getIsSetSafeQ() {
         let self = this;
         this.loading = true;
-        request.http('get', '/user/bankcard/safe/question/isSet', {},
-          (success) => {
+        request.http(
+          "get",
+          "/user/bankcard/safe/question/isSet", {},
+          success => {
             self.loading = false;
             if (success.returncode && success.returncode == 200) {
               if (!success.data.isSet) {
                 this.$router.push({
-                  name: "userSecurityQuestions",
+                  name: "userSecurityQuestions"
                 });
-              } else if (success.returncode == 101 || success.returncode == 103 || success.returncode == 106) {
-                request.loginAgain(self)
+              } else if (
+                success.returncode == 101 ||
+                success.returncode == 103 ||
+                success.returncode == 106
+              ) {
+                request.loginAgain(self);
               } else {
                 this.$router.push({
                   name: "userCheckSafeQ",
@@ -629,14 +658,15 @@
               }
             }
           },
-          (error) => {
+          error => {
             self.loading = false;
             self.$message({
               showClose: true,
-              message: '系统出错，请联系管理员',
-              type: 'error'
+              message: "系统出错，请联系管理员",
+              type: "error"
             });
-          })
+          }
+        );
       },
       //验证银行卡开户信息
       validateBankInfo() {
@@ -775,8 +805,12 @@
                   self.bankMax = 0;
                 }
               }
-            } else if (success.returncode == 101 || success.returncode == 103 || success.returncode == 106) {
-              request.loginAgain(self)
+            } else if (
+              success.returncode == 101 ||
+              success.returncode == 103 ||
+              success.returncode == 106
+            ) {
+              request.loginAgain(self);
             } else {
               self.$message({
                 showClose: true,
@@ -806,7 +840,11 @@
           success => {
             self.banks.loading = false;
             if (success.returncode) {
-              if (success.returncode == 103 || success.returncode == 106 || success.returncode == 101) {
+              if (
+                success.returncode == 103 ||
+                success.returncode == 106 ||
+                success.returncode == 101
+              ) {
                 request.loginAgain(self);
               } else if (success.returncode == 200) {
                 self.banks.options = success.data.banks;
@@ -836,7 +874,11 @@
           success => {
             self.provinces.loading = false;
             if (success.returncode) {
-              if (success.returncode == 103 || success.returncode == 106 || success.returncode == 101) {
+              if (
+                success.returncode == 103 ||
+                success.returncode == 106 ||
+                success.returncode == 101
+              ) {
                 request.loginAgain(self);
               } else if (success.returncode == 200) {
                 self.provinces.options = success.data.provinces;
@@ -907,7 +949,11 @@
           success => {
             self.loading = false;
             if (success.returncode) {
-              if (success.returncode == 103 || success.returncode == 106 || success.returncode == 101) {
+              if (
+                success.returncode == 103 ||
+                success.returncode == 106 ||
+                success.returncode == 101
+              ) {
                 request.loginAgain(self);
               } else if (success.returncode == 200) {
                 self.cities.options = success.data.cities;
@@ -946,7 +992,11 @@
           success => {
             self.subbranchs.loading = false;
             if (success.returncode) {
-              if (success.returncode == 103 || success.returncode == 106 || success.returncode == 101) {
+              if (
+                success.returncode == 103 ||
+                success.returncode == 106 ||
+                success.returncode == 101
+              ) {
                 request.loginAgain(self);
               } else if (success.returncode == 200) {
                 self.subbranchs.options = success.data.subbranchs;
@@ -982,8 +1032,12 @@
                 self.bindActive = 0;
                 self.$router.push({ name: "resetPsd" });
               }
-            } else if (success.returncode == 101 || success.returncode == 103 || success.returncode == 106) {
-              request.loginAgain(self)
+            } else if (
+              success.returncode == 101 ||
+              success.returncode == 103 ||
+              success.returncode == 106
+            ) {
+              request.loginAgain(self);
             } else {
               self.$message({
                 showClose: true,
@@ -1031,7 +1085,7 @@
                 realname: self.accountName,
                 card_no: self.bankCard,
                 cash_password: cash_password
-              }
+              };
               request.http(
                 "post",
                 url,
@@ -1040,28 +1094,40 @@
                   self.loading = false;
                   if (success.returncode) {
                     if (success.returncode == 301 || success.returncode == 303) {
-                      self.$alert('<div class="lottery-title">绑定失败，请重新绑定</div>', '系统提醒', {
-                        confirmButtonText: '确定',
-                        center: true,
-                        dangerouslyUseHTMLString: true,
-                        customClass: "syxw-wrap-inner",
-                        callback: action => {
-                          self.bindActive = 1;
+                      self.$alert(
+                        '<div class="lottery-title">绑定失败，请重新绑定</div>',
+                        "系统提醒",
+                        {
+                          confirmButtonText: "确定",
+                          center: true,
+                          dangerouslyUseHTMLString: true,
+                          customClass: "syxw-wrap-inner",
+                          callback: action => {
+                            self.bindActive = 1;
+                          }
                         }
-                      })
+                      );
                     } else if (success.returncode == 200) {
                       self.bindActive = 3;
                       self.bindSuccess = success.data;
                     } else if (success.returncode == 305) {
-                      self.$alert('<div class="lottery-title">资金密码不正确</div>', '系统提醒', {
-                        confirmButtonText: '确定',
-                        center: true,
-                        dangerouslyUseHTMLString: true,
-                        customClass: "syxw-wrap-inner",
-                        callback: action => {}
-                      })
-                    } else if (success.returncode == 101 || success.returncode == 103 || success.returncode == 106) {
-                      request.loginAgain(self)
+                      self.$alert(
+                        '<div class="lottery-title">资金密码不正确</div>',
+                        "系统提醒",
+                        {
+                          confirmButtonText: "确定",
+                          center: true,
+                          dangerouslyUseHTMLString: true,
+                          customClass: "syxw-wrap-inner",
+                          callback: action => {}
+                        }
+                      );
+                    } else if (
+                      success.returncode == 101 ||
+                      success.returncode == 103 ||
+                      success.returncode == 106
+                    ) {
+                      request.loginAgain(self);
                     } else {
                       self.$message({
                         showClose: true,
@@ -1074,15 +1140,19 @@
                 error => {
                   self.loading = false;
                   console.log("数据异常", error);
-                  self.$alert('<div class="lottery-title">绑定失败，请重新绑定</div>', '系统提醒', {
-                    confirmButtonText: '确定',
-                    center: true,
-                    dangerouslyUseHTMLString: true,
-                    customClass: "syxw-wrap-inner",
-                    callback: action => {
-                      self.$router.push({ name: "bank" });
+                  self.$alert(
+                    '<div class="lottery-title">绑定失败，请重新绑定</div>',
+                    "系统提醒",
+                    {
+                      confirmButtonText: "确定",
+                      center: true,
+                      dangerouslyUseHTMLString: true,
+                      customClass: "syxw-wrap-inner",
+                      callback: action => {
+                        self.$router.push({ name: "bank" });
+                      }
                     }
-                  })
+                  );
                 }
               );
             } else {
@@ -1114,16 +1184,17 @@
     filters: {
       filterName(str) {
         if (str) {
-          let strLength = str.split('').length;
+          let strLength = str.split("").length;
           let starStr = "***********";
-          let final = str.substr(0, 4) + starStr + str.substr(strLength - 4, strLength);
+          let final =
+            str.substr(0, 4) + starStr + str.substr(strLength - 4, strLength);
           return final;
         }
         return;
       },
       filterEnd(str) {
         if (str) {
-          let strLength = str.split('').length;
+          let strLength = str.split("").length;
           let final = str.substr(strLength - 4, strLength);
           return final;
         }
@@ -1131,8 +1202,8 @@
       }
     },
     created() {
-      this.$store.dispatch('setbodyBG', 'no-bg');
-      localStorage.setItem('bodyBG', 'no-bg');
+      this.$store.dispatch("setbodyBG", "no-bg");
+      localStorage.setItem("bodyBG", "no-bg");
     }
   };
 </script>
@@ -1159,7 +1230,7 @@
       display: block;
       margin: 0 auto;
       top: 90px;
-      color: #FFFFFF;
+      color: #ffffff;
       font-family: PingFangSC-Regular;
       font-weight: 700;
       font-size: 20px;
@@ -1315,14 +1386,14 @@
   .bank-list table {
     width: 100%;
     border-collapse: collapse;
-    border: 1px solid #DDDDDD;
+    border: 1px solid #dddddd;
     background: #fff;
   }
 
   .bank-list th {
     /* height: 34px; */
-    background: #F6F6F6;
-    border-bottom: 1px solid #DDDDDD;
+    background: #f6f6f6;
+    border-bottom: 1px solid #dddddd;
     color: #191919;
     font-size: 14px;
     padding: 15px 0;
@@ -1338,7 +1409,7 @@
     height: 30px;
     line-height: 30px;
     text-align: center;
-    font-size: 14px;
+    font-size: 12px;
     font-weight: bold;
     color: #fff;
     cursor: pointer;
@@ -1347,7 +1418,7 @@
     font-family: microsoft yahei;
     box-shadow: none;
     border: none;
-    background-image: linear-gradient(-180deg, #CFA072 0%, #B68E66 100%);
+    // background-image: linear-gradient(-180deg, #cfa072 0%, #b68e66 100%);
   }
 
   .no-binding {
@@ -1375,8 +1446,8 @@
     font-size: 16px;
     font-weight: 700;
     color: #ffffff;
-    background-image: linear-gradient(-180deg, #CFA072 0%, #B68E66 100%);
-    border: 1px solid #DDDDDD;
+    background-image: linear-gradient(-180deg, #cfa072 0%, #b68e66 100%);
+    border: 1px solid #dddddd;
     border-radius: 2px;
   }
 
@@ -1386,12 +1457,11 @@
 
   .edit {
     color: #fff;
-    background: #CC3447;
+    background-image: linear-gradient(-180deg, #bd5454 0%, #5b2929 100%);
   }
 
   .delete {
-    // background: #777;
-    /* color: #e00000; */
+    background-image: linear-gradient(-180deg, #4e4339 0%, #281d12 100%);
     margin-left: 20px;
   }
 
@@ -1431,7 +1501,7 @@
     height: 30px;
     line-height: 30px;
     text-align: center;
-    font-size: 14px;
+    font-size: 12px;
     font-weight: bold;
     color: #fff;
     cursor: pointer;
@@ -1440,7 +1510,7 @@
     font-family: microsoft yahei;
     box-shadow: none;
     border: none;
-    background-image: linear-gradient(-180deg, #CFA072 0%, #B68E66 100%);
+    background-image: linear-gradient(-180deg, #cfa072 0%, #b68e66 100%);
   }
 
   .btn-option+.btn-option {
@@ -1449,10 +1519,12 @@
 
   .options .add {
     // background: #2D996E;
+    background-image: linear-gradient(-180deg, #439743 0%, #205020 100%);
   }
 
   .options .clock {
     // background: #CC3447;
+    background-image: linear-gradient(-180deg, #bd5454 0%, #5b2929 100%);
   }
 
   .tule-title {
@@ -1471,8 +1543,8 @@
   .tips {
     width: 474px;
     padding: 20px;
-    background: #FFFFE1;
-    border: 1px solid #DDDDDD;
+    background: #ffffe1;
+    border: 1px solid #dddddd;
     font-size: 12px;
     color: #191919;
     margin-bottom: 30px;
@@ -1549,8 +1621,8 @@
     font-size: 16px;
     font-weight: 700;
     color: #ffffff;
-    background-image: linear-gradient(-180deg, #CFA072 0%, #B68E66 100%);
-    border: 1px solid #DDDDDD;
+    background-image: linear-gradient(-180deg, #cfa072 0%, #b68e66 100%);
+    border: 1px solid #dddddd;
     border-radius: 2px;
   }
 

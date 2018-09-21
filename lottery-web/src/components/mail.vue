@@ -15,8 +15,9 @@
         </thead>
         <tbody>
           <tr v-for="(item,index) in msg" class="group-item" v-cloak :key="index">
-            <td>
-              <router-link :to="{name:'mailDetail',query:{id:item._id}}">{{item.topic}}
+            <td style="font-size:14px;font-weight:bold;padding:0 20px;">
+              <router-link :to="{name:'mailDetail',query:{id:item._id}}">
+                <span class="title">{{item.topic}}</span>
                 <span class="status-tip non" v-if="item.status && item.status === 1">未读</span>
                 <span class="status-tip" v-if="item.status && item.status === 2">已读</span>
               </router-link>
@@ -212,6 +213,18 @@
     text-decoration: none;
     color: #333333;
     cursor: pointer;
+    display: table;
+  }
+
+  span.title {
+    font-weight: bold;
+    max-width: 350px;
+    display: inline-block;
+    white-space: nowrap;
+    overflow-x: hidden;
+    text-overflow: ellipsis;
+    display: table-cell;
+    vertical-align: middle;
   }
 
   .mail-wrap {
@@ -248,19 +261,20 @@
   }
 
   .mail-group .group-item {
-    height: 50px;
-    line-height: 50px;
+    height: 54px;
+    line-height: 54px;
     border-bottom: 1px solid #DDDDDD;
     font-size: 12px;
+    color: #777;
   }
 
   .mail-group .group-item a.action {
-    width: 69px;
-    height: 32px;
-    background: #C83A4C;
+    width: 80px;
+    height: 30px;
+    background-image: linear-gradient(-180deg, #4e4339 0%, #281d12 100%);
     color: #fff;
     display: block;
-    line-height: 32px;
+    line-height: 30px;
     font-size: 12px;
     font-family: MicrosoftYaHei;
     overflow-x: hidden;
@@ -268,14 +282,6 @@
     padding: 0 5px;
     margin: 0 auto;
   }
-
-  /* .mail-group .group-item:nth-child(2n) {
-    background: #FFF7EF;
-  }
-
-  .mail-group .group-item:nth-child(2n+1) {
-    background: #fff;
-  } */
 
   .success {
     color: #099F4C;

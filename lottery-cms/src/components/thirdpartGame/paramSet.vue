@@ -40,8 +40,6 @@
             </p>
           </template>
         </el-table-column>
-        <!-- <el-table-column prop="is_test" :formatter="formatTestUser" align="center" width="80" label="测试用户">
-        </el-table-column> -->
         <el-table-column align="center" label="操作">
           <template slot-scope="scope">
             <el-button @click="getContractDetail(scope.row)" class="small edit">详情</el-button>
@@ -122,746 +120,743 @@
   </div>
 </template>
 <script>
-  import request from "../../axios/axios";
-  import tableBtn from "../littleStyle/tableBtn";
-  import moment from "moment";
-  import cmsDialog from "../cmsDialog/cmsDialog";
-  import {
-    trim,
-    regexpPsd,
-    regexpInput
-  } from "../../lib/utils/validator";
+import request from "../../axios/axios";
+import tableBtn from "../littleStyle/tableBtn";
+import moment from "moment";
+import cmsDialog from "../cmsDialog/cmsDialog";
+import { trim, regexpPsd, regexpInput1 } from "../../lib/utils/validator";
 
-  export default {
-    name: "contractManage",
-    components: {
-      tableBtn,
-      cmsDialog
-    },
-    data() {
-      return {
-        index1: 0,
-        index2: 0,
-        createLoading: false,
-        editLoading: false,
-        forbidLoading: false,
-        titleName: "参数配置",
-        routerArr: [{
+export default {
+  name: "contractManage",
+  components: {
+    tableBtn,
+    cmsDialog
+  },
+  data() {
+    return {
+      index1: 0,
+      index2: 0,
+      createLoading: false,
+      editLoading: false,
+      forbidLoading: false,
+      titleName: "参数配置",
+      routerArr: [
+        {
           title: "参数配置",
           name: "paramSet",
           checked: false
-        }],
-        loading: false,
-        list: [],
-        contractFrom: {
-          platform: "", // 平台代号
-          name: "", // 平台名称
-          disabled: "", // 是否开启
-          id: "",
-          gameType: ""
-        },
-        gameOptions: [
-          // PVP： 棋牌， FISH： 捕鱼， LIVE： 真人， RNG： 电子， SPORTS： 体育 
-          {
-            value: 'PVP',
-            text: '棋牌'
-          },
-          {
-            value: 'FISH',
-            text: '捕鱼'
-          },
-          {
-            value: 'LIVE',
-            text: '真人'
-          },
-          {
-            value: 'RNG',
-            text: '电子'
-          },
-          {
-            value: 'SPORTS',
-            text: '体育'
-          },
-        ],
-        contractItems: [],
-        noResult: true,
-        totalPageNum: 0, //总页数
-        total: 0, //总条数
-        pageIndex: 1, //当前页
-        pageSize: 40, //单页条数
-        contractDialogAdd: {
-          visible: false,
-          title: "平台参数设置",
-          dialogNew: true,
-          salaryItemVisible: false,
-          loading: false,
-          dialogContentexp1: "金额", //对话框工资流水exp
-          dialogContentexp2: "比例" //对话框工资金额exp
-        },
-      };
-    },
-    created() {
-      this.routerArr = [];
-      let query = this.$route.query;
-      this.index1 = Number(query.index1);
-      this.index2 = Number(query.index2);
-      const menus = JSON.parse(localStorage.getItem('menus'));
-      menus[this.index1].child[this.index2].child.filter((v, vi) => {
-        let o = new Object();
-        if (v.url === 'contractManage') {
-          this.titleName = v.menu_name;
         }
-        o.title = v.menu_name;
-        o.name = v.url;
-        o.checked = false;
-        this.routerArr.push(o);
-      })
-      this.routerArr.filter(v => {
-        if (this.titleName === v.title) {
-          v.checked = true;
-        } else {
-          v.checked = false;
+      ],
+      loading: false,
+      list: [],
+      contractFrom: {
+        platform: "", // 平台代号
+        name: "", // 平台名称
+        disabled: "", // 是否开启
+        id: "",
+        gameType: ""
+      },
+      gameOptions: [
+        // PVP： 棋牌， FISH： 捕鱼， LIVE： 真人， RNG： 电子， SPORTS： 体育
+        {
+          value: "PVP",
+          text: "棋牌"
+        },
+        {
+          value: "FISH",
+          text: "捕鱼"
+        },
+        {
+          value: "LIVE",
+          text: "真人"
+        },
+        {
+          value: "RNG",
+          text: "电子"
+        },
+        {
+          value: "SPORTS",
+          text: "体育"
+        }
+      ],
+      contractItems: [],
+      noResult: true,
+      totalPageNum: 0, //总页数
+      total: 0, //总条数
+      pageIndex: 1, //当前页
+      pageSize: 40, //单页条数
+      contractDialogAdd: {
+        visible: false,
+        title: "平台参数设置",
+        dialogNew: true,
+        salaryItemVisible: false,
+        loading: false,
+        dialogContentexp1: "金额", //对话框工资流水exp
+        dialogContentexp2: "比例" //对话框工资金额exp
+      }
+    };
+  },
+  created() {
+    this.routerArr = [];
+    let query = this.$route.query;
+    this.index1 = Number(query.index1);
+    this.index2 = Number(query.index2);
+    const menus = JSON.parse(localStorage.getItem("menus"));
+    menus[this.index1].child[this.index2].child.filter((v, vi) => {
+      let o = new Object();
+      if (v.url === "contractManage") {
+        this.titleName = v.menu_name;
+      }
+      o.title = v.menu_name;
+      o.name = v.url;
+      o.checked = false;
+      this.routerArr.push(o);
+    });
+    this.routerArr.filter(v => {
+      if (this.titleName === v.title) {
+        v.checked = true;
+      } else {
+        v.checked = false;
+      }
+    });
+  },
+  methods: {
+    handleChangeRouter(name) {
+      this.$router.push({
+        name: name,
+        query: {
+          index1: this.index1,
+          index2: this.index2
         }
       });
+      // console.log(name)
     },
-    methods: {
-      handleChangeRouter(name) {
-        this.$router.push({
-          name: name,
-          query: {
-            index1: this.index1,
-            index2: this.index2
-          }
+    onSubmit() {
+      let self = this;
+      let platform = self.contractFrom.platform;
+      let name = self.contractFrom.name;
+      let game_type = self.contractFrom.gameType;
+      let disabled = self.contractFrom.disabled;
+      let exp1 = self.contractDialogAdd.dialogContentexp1;
+      let exp2 = self.contractDialogAdd.dialogContentexp2;
+      if (!platform) {
+        this.$message({
+          showClose: true,
+          message: "平台代号不能为空",
+          type: "error",
+          center: true
         });
-        // console.log(name)
-      },
-      onSubmit() {
-        let self = this;
-        let platform = self.contractFrom.platform;
-        let name = self.contractFrom.name;
-        let game_type = self.contractFrom.gameType;
-        let disabled = self.contractFrom.disabled;
-        let exp1 = self.contractDialogAdd.dialogContentexp1;
-        let exp2 = self.contractDialogAdd.dialogContentexp2;
-        if (!platform) {
+        return;
+      }
+      if (!regexpInput1(platform)) {
+        this.$message({
+          showClose: true,
+          message: "平台代号要求1-20位字母或者数字",
+          type: "error",
+          center: true
+        });
+        return;
+      }
+      if (!name) {
+        this.$message({
+          showClose: true,
+          message: "平台名称不能为空",
+          type: "error",
+          center: true
+        });
+        return;
+      }
+      if (!game_type) {
+        this.$message({
+          showClose: true,
+          message: "游戏类型不能为空",
+          type: "error",
+          center: true
+        });
+        return;
+      }
+      if (self.contractItems.length == 0) {
+        this.$message({
+          showClose: true,
+          message: "请点击加号新增一条返点设置",
+          type: "error",
+          center: true
+        });
+        return;
+      }
+      for (let i = 0; i < self.contractItems.length; i++) {
+        let item = self.contractItems[i];
+        if (!item.range || !item.rate) {
           this.$message({
             showClose: true,
-            message: "平台代号不能为空",
+            message: exp1 + "或者" + exp2 + "不能为空",
             type: "error",
             center: true
           });
           return;
         }
-        if (!regexpInput(platform)) {
-          this.$message({
-            showClose: true,
-            message: "平台代号要求3-20位字母或者数字",
-            type: "error",
-            center: true
-          });
-          return;
-        }
-        if (!name) {
-          this.$message({
-            showClose: true,
-            message: "平台名称不能为空",
-            type: "error",
-            center: true
-          });
-          return;
-        }
-        if (!game_type) {
-          this.$message({
-            showClose: true,
-            message: "游戏类型不能为空",
-            type: "error",
-            center: true
-          });
-          return;
-        }
-        if (self.contractItems.length == 0) {
-          this.$message({
-            showClose: true,
-            message: "请点击加号新增一条返点设置",
-            type: "error",
-            center: true
-          });
-          return;
-        }
-        for (let i = 0; i < self.contractItems.length; i++) {
-          let item = self.contractItems[i];
-          if (!item.range || !item.rate) {
-            this.$message({
-              showClose: true,
-              message: exp1 + "或者" + exp2 + "不能为空",
-              type: "error",
-              center: true
-            });
-            return;
+      }
+      let data = {
+        platform: platform,
+        refund: self.contractItems,
+        disabled: disabled,
+        name: name,
+        game_type: game_type
+      };
+      console.log("data", data);
+      let url = "/gameSetting/create";
+      self.createLoading = true;
+      request.http(
+        "post",
+        url,
+        data,
+        success => {
+          self.createLoading = false;
+          if (success.returncode) {
+            if (
+              success.returncode == 103 ||
+              success.returncode == 106 ||
+              success.returncode == 101
+            ) {
+              request.loginAgain(self);
+            } else if (success.returncode == 200) {
+              self.$message({
+                showClose: true,
+                message: "平台新增成功",
+                type: "success",
+                center: true
+              });
+              setTimeout(function() {
+                self.contractDialogAdd.visible = false;
+                self.getList();
+              }, 1000);
+            } else if (success.returncode == 301) {
+              self.$message({
+                showClose: true,
+                message: "301",
+                type: "error",
+                center: true
+              });
+            }
           }
+        },
+        error => {
+          self.createLoading = false;
+          self.$message({
+            showClose: true,
+            message: "平台新增失败",
+            type: "error",
+            center: true
+          });
         }
-        let data = {
-          platform: platform,
-          refund: self.contractItems,
-          disabled: disabled,
-          name: name,
-          game_type: game_type
-        };
-        console.log('data', data);
-        let url = "/gameSetting/create";
-        self.createLoading = true;
-        request.http(
-          "post",
-          url,
-          data,
-          success => {
-            self.createLoading = false;
-            if (success.returncode) {
-              if (
-                success.returncode == 103 ||
-                success.returncode == 106 ||
-                success.returncode == 101
-              ) {
-                request.loginAgain(self);
-              } else if (success.returncode == 200) {
-                self.$message({
-                  showClose: true,
-                  message: "平台新增成功",
-                  type: "success",
-                  center: true
-                });
-                setTimeout(function () {
-                  self.contractDialogAdd.visible = false;
-                  self.getList();
-                }, 1000);
-              } else if (success.returncode == 301) {
-                self.$message({
-                  showClose: true,
-                  message: "301",
-                  type: "error",
+      );
+      return true;
+    },
+    closeContractItem(item) {
+      this.contractItems.splice(this.contractItems.indexOf(item), 1);
+    },
+    addContractItem() {
+      let contractItem = {
+        range: "",
+        rate: ""
+      };
+      this.contractItems.push(contractItem);
+    },
+    openContractDialog() {
+      this.resetContractForm();
+      this.contractDialogAdd.dialogNew = true;
+      this.contractDialogAdd.visible = true;
+    },
+    //重置 contractDialog的表单内容
+    resetContractForm() {
+      this.contractFrom.platform = "";
+      this.contractFrom.name = "";
+      this.contractFrom.disabled = 1;
+      this.contractFrom.id = "";
+      this.contractItems = [];
+    },
+    closeContractForm() {
+      this.contractDialogAdd.visible = false;
+      this.resetContractForm();
+    },
+    getList() {
+      let self = this;
+      this.loading = true;
+      let url = "/gameSetting/list";
+      self.loading = true;
+      request.http(
+        "get",
+        url,
+        {
+          // pageSize: self.pageSize,
+          // pageNum: self.pageIndex
+        },
+        success => {
+          self.loading = false;
+          if (success.returncode) {
+            if (
+              success.returncode === 103 ||
+              success.returncode === 106 ||
+              success.returncode === 101
+            ) {
+              request.loginAgain(self);
+            } else if (success.returncode === 200) {
+              self.total = success.count;
+              if (self.total) {
+                self.noResult = false;
+                self.totalPageNum = success.totalPage;
+                self.list = success.data;
+              } else {
+                self.noResult = true;
+                self.list = [];
+                self.$alert("没有符合条件的记录", "系统提醒", {
+                  confirmButtonText: "确定",
                   center: true
                 });
               }
             }
-          },
-          error => {
-            self.createLoading = false;
-            self.$message({
-              showClose: true,
-              message: "平台新增失败",
-              type: "error",
-              center: true
-            });
           }
-        );
-        return true;
-      },
-      closeContractItem(item) {
-        this.contractItems.splice(this.contractItems.indexOf(item), 1);
-      },
-      addContractItem() {
-        let contractItem = {
-          range: "",
-          rate: ""
-        };
-        this.contractItems.push(contractItem);
-      },
-      openContractDialog() {
-        this.resetContractForm();
-        this.contractDialogAdd.dialogNew = true;
-        this.contractDialogAdd.visible = true;
-      },
-      //重置 contractDialog的表单内容
-      resetContractForm() {
-        this.contractFrom.platform = "";
-        this.contractFrom.name = "";
-        this.contractFrom.disabled = 1;
-        this.contractFrom.id = "";
-        this.contractItems = [];
-      },
-      closeContractForm() {
-        this.contractDialogAdd.visible = false;
-        this.resetContractForm();
-      },
-      getList() {
-        let self = this;
-        this.loading = true;
-        let url = "/gameSetting/list";
-        self.loading = true;
-        request.http(
-          "get",
-          url, {
-            // pageSize: self.pageSize,
-            // pageNum: self.pageIndex
-          },
-          success => {
-            self.loading = false;
-            if (success.returncode) {
-              if (
-                success.returncode === 103 ||
-                success.returncode === 106 ||
-                success.returncode === 101
-              ) {
-                request.loginAgain(self);
-              } else if (success.returncode === 200) {
-                self.total = success.count;
-                if (self.total) {
-                  self.noResult = false;
-                  self.totalPageNum = success.totalPage;
-                  self.list = success.data;
-                } else {
-                  self.noResult = true;
-                  self.list = [];
-                  self.$alert("没有符合条件的记录", "系统提醒", {
-                    confirmButtonText: "确定",
-                    center: true
-                  });
-                }
-              }
-            }
-          },
-          error => {
-            self.loading = false;
-            self.noResult = true;
-            self.list = [];
-          }
-        );
-        return true;
-      },
-      getTime(time) {
-        return moment(time).format("YYYY/MM/DD HH:mm:ss");
-      },
-      getStatus(status) {
-        let text = "";
-        switch (status) {
-          case 1:
-            text = "停用";
-            break;
-          case 0:
-            text = "启用";
-            break;
+        },
+        error => {
+          self.loading = false;
+          self.noResult = true;
+          self.list = [];
         }
-        return text;
-      },
-      handleSizeChange(val) {
-        // console.log(`每页 ${val} 条`);
-        this.pageSize = val;
-        this.getList();
-      },
-      handleCurrentChange(val) {
-        this.pageIndex = val;
-        this.getList();
-      },
-      //合同详情
-      getContractDetail(row) {
-        let self = this;
-        self.resetContractForm();
-        self.contractDialogAdd.visible = true;
-        self.contractDialogAdd.dialogNew = false;
-        for (let i in row.refund) {
-          let arr = {};
-          arr['range'] = row.refund[i].range;
-          arr['rate'] = row.refund[i].rate;
-          self.contractItems.push(arr);
-        }
-        self.contractFrom.platform = row.platform;
-        self.contractFrom.name = row.name;
-        self.contractFrom.disabled = row.disabled.toString();
-        self.contractFrom.id = row._id;
-        self.contractFrom.gameType = row.game_type;
-      },
-      // 合同更新
-      /* status: 1,
+      );
+      return true;
+    },
+    getTime(time) {
+      return moment(time).format("YYYY/MM/DD HH:mm:ss");
+    },
+    getStatus(status) {
+      let text = "";
+      switch (status) {
+        case 1:
+          text = "停用";
+          break;
+        case 0:
+          text = "启用";
+          break;
+      }
+      return text;
+    },
+    handleSizeChange(val) {
+      // console.log(`每页 ${val} 条`);
+      this.pageSize = val;
+      this.getList();
+    },
+    handleCurrentChange(val) {
+      this.pageIndex = val;
+      this.getList();
+    },
+    //合同详情
+    getContractDetail(row) {
+      let self = this;
+      self.resetContractForm();
+      self.contractDialogAdd.visible = true;
+      self.contractDialogAdd.dialogNew = false;
+      for (let i in row.refund) {
+        let arr = {};
+        arr["range"] = row.refund[i].range;
+        arr["rate"] = row.refund[i].rate;
+        self.contractItems.push(arr);
+      }
+      self.contractFrom.platform = row.platform;
+      self.contractFrom.name = row.name;
+      self.contractFrom.disabled = row.disabled.toString();
+      self.contractFrom.id = row._id;
+      self.contractFrom.gameType = row.game_type;
+    },
+    // 合同更新
+    /* status: 1,
        _id: '5b0fbaa28eb6f45c09325b66',
        content: [{range: 100, profit: 1},{ range:1000, profit:10}] } */
-      /* type： 2 更新;3 删除 */
-      updateContract(type) {
-        let self = this;
-        let platform = self.contractFrom.platform;
-        let name = self.contractFrom.name;
-        let disabled = self.contractFrom.disabled;
-        let refund = self.contractItems;
-        let id = self.contractFrom.id;
-        let game_type = self.contractFrom.gameType;
-        let data = {};
-        let message = "";
-        if (!platform) {
+    /* type： 2 更新;3 删除 */
+    updateContract(type) {
+      let self = this;
+      let platform = self.contractFrom.platform;
+      let name = self.contractFrom.name;
+      let disabled = self.contractFrom.disabled;
+      let refund = self.contractItems;
+      let id = self.contractFrom.id;
+      let game_type = self.contractFrom.gameType;
+      let data = {};
+      let message = "";
+      if (!platform) {
+        this.$message({
+          showClose: true,
+          message: "平台代号不能为空",
+          type: "error",
+          center: true
+        });
+        return;
+      }
+      if (!regexpInput1(platform)) {
+        this.$message({
+          showClose: true,
+          message: "平台代号要求1-20位字母或者数字",
+          type: "error",
+          center: true
+        });
+        return;
+      }
+      if (!name) {
+        this.$message({
+          showClose: true,
+          message: "平台名称不能为空",
+          type: "error",
+          center: true
+        });
+        return;
+      }
+      if (!game_type) {
+        this.$message({
+          showClose: true,
+          message: "游戏类型不能为空",
+          type: "error",
+          center: true
+        });
+        return;
+      }
+      if (self.contractItems.length == 0) {
+        this.$message({
+          showClose: true,
+          message: "请点击加号新增一条返点设置",
+          type: "error",
+          center: true
+        });
+        return;
+      }
+      for (let i = 0; i < self.contractItems.length; i++) {
+        let item = self.contractItems[i];
+        if (!item.range || !item.rate) {
           this.$message({
             showClose: true,
-            message: "平台代号不能为空",
+            message: "资金或者工资比例不能为空",
             type: "error",
             center: true
           });
           return;
         }
-        if (!regexpInput(platform)) {
-          this.$message({
-            showClose: true,
-            message: "平台代号要求3-20位字母或者数字",
-            type: "error",
-            center: true
-          });
-          return;
-        }
-        if (!name) {
-          this.$message({
-            showClose: true,
-            message: "平台名称不能为空",
-            type: "error",
-            center: true
-          });
-          return;
-        }
-        if (!game_type) {
-          this.$message({
-            showClose: true,
-            message: "游戏类型不能为空",
-            type: "error",
-            center: true
-          });
-          return;
-        }
-        if (self.contractItems.length == 0) {
-          this.$message({
-            showClose: true,
-            message: "请点击加号新增一条返点设置",
-            type: "error",
-            center: true
-          });
-          return;
-        }
-        for (let i = 0; i < self.contractItems.length; i++) {
-          let item = self.contractItems[i];
-          if (!item.range || !item.rate) {
-            this.$message({
-              showClose: true,
-              message: "资金或者工资比例不能为空",
-              type: "error",
-              center: true
-            });
-            return;
-          }
-        }
-        if (type == 2) {
-          data = {
-            platform: platform,
-            name: name,
-            disabled: disabled,
-            refund: refund,
-            id: id
-          };
-          message = "更新";
-          self.editLoading = true;
-        } else if (type == 3) {
-          data = {
-            id: id,
-            disabled: 1
-          };
-          message = "删除";
-          self.forbidLoading = true;
-        }
-        let url = "/gameSetting/update";
-        request.http(
-          "post",
-          url,
-          data,
-          success => {
-            if (success.returncode) {
-              if (type == 2) {
-                self.editLoading = false;
-              } else if (type == 3) {
-                self.forbidLoading = false;
-              }
-              if (
-                success.returncode == 103 ||
-                success.returncode == 106 ||
-                success.returncode == 101
-              ) {
-                request.loginAgain(self);
-              } else if (success.returncode == 200) {
-                self.$message({
-                  showClose: true,
-                  message: "平台" + message + "成功",
-                  type: "success",
-                  center: true
-                });
-                self.contractDialogAdd.visible = false;
-                self.resetContractForm();
-                self.getList();
-              }
-            }
-          },
-          error => {
+      }
+      if (type == 2) {
+        data = {
+          platform: platform,
+          name: name,
+          disabled: disabled,
+          refund: refund,
+          id: id
+        };
+        message = "更新";
+        self.editLoading = true;
+      } else if (type == 3) {
+        data = {
+          id: id,
+          disabled: 1
+        };
+        message = "删除";
+        self.forbidLoading = true;
+      }
+      let url = "/gameSetting/update";
+      request.http(
+        "post",
+        url,
+        data,
+        success => {
+          if (success.returncode) {
             if (type == 2) {
               self.editLoading = false;
             } else if (type == 3) {
               self.forbidLoading = false;
             }
-            self.$message({
-              showClose: true,
-              message: "平台" + message + "失败",
-              type: "error",
-              center: true
-            });
+            if (
+              success.returncode == 103 ||
+              success.returncode == 106 ||
+              success.returncode == 101
+            ) {
+              request.loginAgain(self);
+            } else if (success.returncode == 200) {
+              self.$message({
+                showClose: true,
+                message: "平台" + message + "成功",
+                type: "success",
+                center: true
+              });
+              self.contractDialogAdd.visible = false;
+              self.resetContractForm();
+              self.getList();
+            }
           }
-        );
-        return true;
-      },
-      formatGameType(row, column, cellValue) {
-        if (cellValue) {
-          switch (cellValue) {
-            case 'PVP':
-              return '棋牌';
-            case 'FISH':
-              return '捕鱼';
-            case 'LIVE':
-              return '真人';
-            case 'RNG':
-              return '电子';
-            case 'SPORTS':
-              return '体育';
+        },
+        error => {
+          if (type == 2) {
+            self.editLoading = false;
+          } else if (type == 3) {
+            self.forbidLoading = false;
           }
+          self.$message({
+            showClose: true,
+            message: "平台" + message + "失败",
+            type: "error",
+            center: true
+          });
         }
-        return "--";
-      },
+      );
+      return true;
     },
-    mounted() {
-      this.getList();
-    },
-    watch: {
-      "contractDialogAdd.dialogNew"() {
-        if (this.contractDialogAdd.dialogNew) {
-          this.contractDialogAdd.title = "平台参数设置";
-        } else {
-          this.contractDialogAdd.title = "平台参数修改";
+    formatGameType(row, column, cellValue) {
+      if (cellValue) {
+        switch (cellValue) {
+          case "PVP":
+            return "棋牌";
+          case "FISH":
+            return "捕鱼";
+          case "LIVE":
+            return "真人";
+          case "RNG":
+            return "电子";
+          case "SPORTS":
+            return "体育";
         }
       }
+      return "--";
     }
-  };
-
+  },
+  mounted() {
+    this.getList();
+  },
+  watch: {
+    "contractDialogAdd.dialogNew"() {
+      if (this.contractDialogAdd.dialogNew) {
+        this.contractDialogAdd.title = "平台参数设置";
+      } else {
+        this.contractDialogAdd.title = "平台参数修改";
+      }
+    }
+  }
+};
 </script>
 <style scoped>
-  /* @import "../../publicCss/header.css"; */
+/* @import "../../publicCss/header.css"; */
 
-  .top-row {
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-  }
+.top-row {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
 
-  .w-217 {
-    width: 300px;
-  }
+.w-217 {
+  width: 300px;
+}
 
-  .tip {
-    height: 40px;
-    font-size: 12px;
-    font-family: MicrosoftYaHei;
-    color: rgba(153, 153, 153, 1);
-    line-height: 40px;
-    width: 200px;
-    display: inline-block;
-  }
+.tip {
+  height: 40px;
+  font-size: 12px;
+  font-family: MicrosoftYaHei;
+  color: rgba(153, 153, 153, 1);
+  line-height: 40px;
+  width: 200px;
+  display: inline-block;
+}
 
-  input.type2 {
-    width: 112px;
-    height: 30px;
-    line-height: 30px;
-    padding: 0 8px;
-    display: inline-block;
-    margin: 0 10px;
-    border-radius: 4px;
-    border: 1px solid #e8e8e8;
-    margin-left: 5px;
-  }
+input.type2 {
+  width: 112px;
+  height: 30px;
+  line-height: 30px;
+  padding: 0 8px;
+  display: inline-block;
+  margin: 0 10px;
+  border-radius: 4px;
+  border: 1px solid #e8e8e8;
+  margin-left: 5px;
+}
 
-  input.type2:focus {
-    outline: none;
-  }
+input.type2:focus {
+  outline: none;
+}
 
-  input.type1 {
-    width: 112px;
-    height: 30px;
-    line-height: 30px;
-    padding: 0 8px;
-    display: inline-block;
-    border-radius: 4px;
-    border: 1px solid #e8e8e8;
-  }
+input.type1 {
+  width: 112px;
+  height: 30px;
+  line-height: 30px;
+  padding: 0 8px;
+  display: inline-block;
+  border-radius: 4px;
+  border: 1px solid #e8e8e8;
+}
 
-  input.type1:focus {
-    outline: none;
-  }
+input.type1:focus {
+  outline: none;
+}
 
-  .contract-dialog-add {
-    cursor: pointer;
-    text-decoration: none;
-    display: inline-block;
-  }
+.contract-dialog-add {
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-block;
+}
 
-  .contract-dialog-add>i {
-    background: url("../../assets/icon_Add@3x.png") no-repeat;
-    background-size: cover;
-    height: 14px;
-    width: 14px;
-    display: inline-block;
-    vertical-align: middle;
-    margin-right: 5px;
-  }
+.contract-dialog-add > i {
+  background: url("../../assets/icon_Add@3x.png") no-repeat;
+  background-size: cover;
+  height: 14px;
+  width: 14px;
+  display: inline-block;
+  vertical-align: middle;
+  margin-right: 5px;
+}
 
-  .contract-dialog-add>span {
-    display: inline-block;
-    vertical-align: middle;
-  }
+.contract-dialog-add > span {
+  display: inline-block;
+  vertical-align: middle;
+}
 
-  .contract-dialog-delete {
-    background: url("../../assets/icon_Delete@3x.png") no-repeat;
-    background-size: cover;
-    height: 14px;
-    width: 14px;
-    display: inline-block;
-    cursor: pointer;
-    vertical-align: middle;
-  }
+.contract-dialog-delete {
+  background: url("../../assets/icon_Delete@3x.png") no-repeat;
+  background-size: cover;
+  height: 14px;
+  width: 14px;
+  display: inline-block;
+  cursor: pointer;
+  vertical-align: middle;
+}
 
-  .contract-link-commit {
-    background: #b35555;
-    border-radius: 4px;
-    width: 120px;
-    height: 50px;
-    line-height: 50px;
-    cursor: pointer;
-    text-decoration: none;
-    font-size: 16px;
-    color: #ffffff;
-    line-height: 50px;
-    margin: 35px 0;
-    display: inline-block;
-  }
+.contract-link-commit {
+  background: #b35555;
+  border-radius: 4px;
+  width: 120px;
+  height: 50px;
+  line-height: 50px;
+  cursor: pointer;
+  text-decoration: none;
+  font-size: 16px;
+  color: #ffffff;
+  line-height: 50px;
+  margin: 35px 0;
+  display: inline-block;
+}
 
-  .contract-link-commit.delete {
-    background: #777;
-  }
+.contract-link-commit.delete {
+  background: #777;
+}
 
-  .dialog-table {
-    width: 100%;
-    border-collapse: collapse;
-    border-bottom: 1px solid #e6e6e6;
-  }
+.dialog-table {
+  width: 100%;
+  border-collapse: collapse;
+  border-bottom: 1px solid #e6e6e6;
+}
 
-  .dialog-table td {
-    font-size: 12px;
-    line-height: 38px;
-    height: 40px;
-    text-align: center;
-    color: #191919;
-    border-left: 1px solid #e6e6e6;
-    border-bottom: 1px solid #e6e6e6;
-  }
+.dialog-table td {
+  font-size: 12px;
+  line-height: 38px;
+  height: 40px;
+  text-align: center;
+  color: #191919;
+  border-left: 1px solid #e6e6e6;
+  border-bottom: 1px solid #e6e6e6;
+}
 
+.dialog-table tfoot td {
+  border: none;
+}
 
-  .dialog-table tfoot td {
-    border: none;
-  }
+.dialog-table td.title {
+  border: none;
+  line-height: 38px;
+  height: 40px;
+  background: #f0f0f0;
+  text-align: center;
+  font-size: 12px;
+  color: #191919;
+}
 
-  .dialog-table td.title {
-    border: none;
-    line-height: 38px;
-    height: 40px;
-    background: #f0f0f0;
-    text-align: center;
-    font-size: 12px;
-    color: #191919;
-  }
+.dialog-table .td-left {
+  background: #f2f2f2;
+}
 
-  .dialog-table .td-left {
-    background: #f2f2f2;
-  }
+.dialog-table .td-right {
+  padding-left: 20px;
+  text-align: left;
+}
 
-  .dialog-table .td-right {
-    padding-left: 20px;
-    text-align: left;
-  }
+.mt-20 {
+  margin-top: 20px;
+}
 
-  .mt-20 {
-    margin-top: 20px;
-  }
+.mt-30 {
+  margin-top: 30px;
+}
 
-  .mt-30 {
-    margin-top: 30px;
-  }
+.contract-manage .contract-link {
+  text-decoration: none;
+  cursor: pointer;
+  display: inline-block;
+}
 
-  .contract-manage .contract-link {
-    text-decoration: none;
-    cursor: pointer;
-    display: inline-block;
-  }
+.contract-manage .table-row {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+}
 
-  .contract-manage .table-row {
-    border-bottom: 1px solid rgba(0, 0, 0, 0.12);
-  }
+.contract-manage .contract-table {
+}
 
-  .contract-manage .contract-table {}
+.contract-manage .contract-table .table-row .exp {
+  font-weight: 500;
+  width: 120px;
+  max-width: 120px;
+  text-align: right;
+  font-size: 14px;
+}
 
-  .contract-manage .contract-table .table-row .exp {
-    font-weight: 500;
-    width: 120px;
-    max-width: 120px;
-    text-align: right;
-    font-size: 14px;
-  }
+.contract-manage .contract-table .table-row .content {
+  text-align: left;
+  padding: 16px 8px;
+}
 
-  .contract-manage .contract-table .table-row .content {
-    text-align: left;
-    padding: 16px 8px;
-  }
+.contract-manage li {
+  list-style: none;
+}
 
-  .contract-manage li {
-    list-style: none;
-  }
+.contract-manage .quota {
+  color: #dd514c;
+}
 
-  .contract-manage .quota {
-    color: #dd514c;
-  }
+.contract-manage .profit {
+  color: #5eb95e;
+}
 
-  .contract-manage .profit {
-    color: #5eb95e;
-  }
+.dialog-table .td-left {
+  background: #f2f2f2;
+}
 
-  .dialog-table .td-left {
-    background: #f2f2f2;
-  }
+.dialog-table .td-right {
+  padding-left: 20px;
+}
 
-  .dialog-table .td-right {
-    padding-left: 20px;
-  }
+.dialog-table {
+  width: 100%;
+  /* border: 1px solid #e8e8e8; */
+}
 
-  .dialog-table {
-    width: 100%;
-    /* border: 1px solid #e8e8e8; */
-  }
+.dialog-table2 td {
+  font-size: 12px;
+  line-height: 38px;
+  height: 40px;
+  text-align: center;
+  color: #191919;
+}
 
-  .dialog-table2 td {
-    font-size: 12px;
-    line-height: 38px;
-    height: 40px;
-    text-align: center;
-    color: #191919;
-  }
+.dialog-table2 td.title {
+  border: 1px solid #e8e8e8;
+  line-height: 38px;
+  height: 40px;
+  background: #f0f0f0;
+  text-align: center;
+  font-size: 12px;
+  color: #191919;
+}
 
-  .dialog-table2 td.title {
-    border: 1px solid #e8e8e8;
-    line-height: 38px;
-    height: 40px;
-    background: #f0f0f0;
-    text-align: center;
-    font-size: 12px;
-    color: #191919;
-  }
-
-  .dialog-table2 .td-right {
-    padding-left: 5px;
-    text-align: left;
-  }
-
+.dialog-table2 .td-right {
+  padding-left: 5px;
+  text-align: left;
+}
 </style>

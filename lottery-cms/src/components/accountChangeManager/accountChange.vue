@@ -588,7 +588,7 @@
         return true;
       },
       // 获取帐变类型list
-      getTypeList(event) {
+      getTypeList() {
         let vm = this;
         if (vm.form.type.options.length != 0) {
           return;
@@ -640,127 +640,22 @@
         });
       },
       getType(type) {
-        let text = "";
-        switch (type) {
-          case 1001:
-            text = "充值";
+        let options = this.form.type.options;
+        let name = "--";
+        for (let i = 0; i < options.length; i++) {
+          let child = options[i].child;
+          for (let j = 0; j < child.length; j++) {
+            let c_ = child[j];
+            if (c_.type === type) {
+              name = c_.name;
+              break;
+            }
+          }
+          if (name != "--") {
             break;
-          case 1:
-            text = "在线充值";
-            break;
-          case 20:
-            text = "人工充值-充值";
-            break;
-          case 12:
-            text = "人工充值-返点";
-            break;
-          case 21:
-            text = "人工充值-理赔";
-            break;
-          case 1002:
-            text = "提现";
-            break;
-          case 17:
-            text = "提取现金";
-            break;
-          case 2:
-            text = "提现冻结";
-            break;
-          case 3:
-            text = "提现解冻";
-            break;
-          case 63:
-            text = "手动申请出款";
-            break;
-          case 1003:
-            text = "撤销";
-            break;
-          case 11:
-            text = "人工撤销-派奖";
-            break;
-          case 13:
-            text = "人工撤销-返点";
-            break;
-          case 30:
-            text = "人工撤销-分红";
-            break;
-          case 64:
-            text = "人工撤销-其他";
-            break;
-          case 1004:
-            text = "转账";
-            break;
-          case 5:
-            text = "转账转出";
-            break;
-          case 1005:
-            text = "日工资";
-            break;
-          case 40:
-            text = "日工资转入";
-            break;
-          case 1006:
-            text = "分红";
-            break;
-          case 41:
-            text = "分红转入";
-            break;
-          case 1007:
-            text = "活动";
-            break;
-          case 42:
-            text = "促销派奖-充值";
-            break;
-          case 43:
-            text = "促销派奖-注册";
-            break;
-          case 1008:
-            text = "投注";
-            break;
-          case 6:
-            text = "彩票投注";
-            break;
-          case 7:
-            text = "撤单返款";
-            break;
-          case 10:
-            text = "派发奖金";
-            break;
-          case 14:
-            text = "投注返点";
-            break;
-          case 15:
-            text = "下级投注返点";
-            break;
-          case 60:
-            text = "退回投注";
-            break;
-          case 1009:
-            text = "追号";
-            break;
-          case 8:
-            text = "追号冻结";
-            break;
-          case 9:
-            text = "投注解冻";
-            break;
-          case 16:
-            text = "追号返款";
-            break;
-          case 1010:
-            text = "第三方";
-            break;
-          case 61:
-            text = "额度转入";
-            break;
-          case 62:
-            text = "额度转出";
-            break;
-          case 66:
-            text = "撤销出款";
-            break;
+          }
         }
-        return text;
+        return name;
       },
       getTime(time) {
         return moment(time).format("YYYY-MM-DD HH:mm:ss");
@@ -796,6 +691,7 @@
       }
     },
     mounted() {
+      this.getTypeList();
       this.handleSearch();
     }
   };

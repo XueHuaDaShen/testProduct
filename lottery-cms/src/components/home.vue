@@ -14,15 +14,16 @@
         <el-aside width="248px">
           <el-row class="tac">
             <el-col>
-              <el-menu :default-active="activeIndex" class="el-menu-vertical-demo" background-color="#1e1e28" text-color="#8989A1" :unique-opened="onlyOneMenuOpen"
-                @select="handleSelect" active-text-color="#ffd04b">
+              <el-menu :default-active="activeIndex" class="el-menu-vertical-demo" background-color="#1e1e28"
+                text-color="#8989A1" :unique-opened="onlyOneMenuOpen" @select="handleSelect" active-text-color="#ffd04b">
                 <el-submenu v-if="item.child.length>0" v-for="(item, index) in menuData" :key="index" :index="index.toString()">
                   <template slot="title">
                     <span class="check-box" :style="{'border': '2px solid '+colors[index]}"></span>
                     <span style="margin-right:10px;">{{item.menu_name}}</span>
                   </template>
                   <el-menu-item-group>
-                    <el-menu-item v-if="o.child.length>0" v-for="(o, oi) in item.child" :key="oi" :index="o.child[0].url+'-'+oi" style="color:#777;">
+                    <el-menu-item v-if="o.child.length>0" v-for="(o, oi) in item.child" :key="oi" :index="o.child[0].url+'-'+oi"
+                      style="color:#777;">
                       <span>{{o.menu_name}}</span>
                       <i class="nav-jiantou"></i>
                     </el-menu-item>
@@ -61,7 +62,7 @@
           </div>
         </el-header>
         <el-main style="min-width:912px;-webkit-box-flex:1;background:#f4f8f9;overflow-y:auto;">
-          <router-view/>
+          <router-view />
         </el-main>
       </div>
     </div>
@@ -99,7 +100,6 @@
       this.timeInterval();
       this.userName = localStorage.getItem('cms-loginname');
       this.menuData = JSON.parse(localStorage.getItem('menus'));
-      console.log(this.menuData)
       // this.userMenu = localStorage.getItem('cms-user-menu').split(',');
       // let menu = [];
       // for (let i in routerUrl.menu) {
@@ -178,7 +178,6 @@
       },
       handleSelect(index, indexPath) {
         // let arr = index.split('/');
-        // console.log(index, indexPath)
         let arr = index.split('-');
         let name = arr[0];
         // console.log(name)
@@ -260,6 +259,7 @@
 </script>
 <style>
   @import '../publicCss/header.css';
+
   .hello .el-aside .el-menu .el-submenu .el-submenu__title {
     display: -webkit-box !important;
   }
@@ -345,6 +345,7 @@
     overflow-y: auto;
     overflow-x: hidden;
     background: #1E1E28;
+
     .check-box {
       width: 14px;
       height: 14px; // border: 2px solid #FF9291;
@@ -352,6 +353,7 @@
       display: inline-block;
       margin-right: 30px;
     }
+
     .nav-jiantou {
       position: absolute;
       width: 8px;
@@ -372,6 +374,7 @@
       /* Safari 和 Chrome */
       -o-transform: rotate(45deg);
     }
+
     .aside-logo {
       min-width: 248px;
       max-width: 249px;
@@ -381,11 +384,13 @@
       -webkit-box-align: center;
       -webkit-box-pack: center;
       border-bottom: 1px solid #333;
+
       img {
         width: 198px;
         height: 40px;
       }
     }
+
     .user-info {
       min-width: 248px;
       max-width: 249px;
@@ -396,16 +401,19 @@
       -webkit-box-align: center;
       -webkit-box-pack: center;
       border-bottom: 1px solid #333;
+
       .avatar {
         width: 76px;
         height: 76px;
         border-radius: 50%;
         overflow: hidden;
+
         img {
           width: 100%;
           height: 100%;
         }
       }
+
       .username {
         width: 100%;
         text-align: center;
@@ -434,12 +442,14 @@
     right: 10px;
     display: -webkit-box;
     -webkit-box-orient: vertical;
+
     em {
       display: block;
       font-style: normal;
       font-size: 12px;
       color: #777777;
     }
+
     strong {
       display: block;
       font-style: normal;
@@ -457,6 +467,7 @@
     max-width: 249px;
     margin-top: 15px;
     text-align: center;
+
     span {
       display: inline-block;
       padding: 10px 20px;
@@ -468,6 +479,7 @@
       display: flex;
       justify-content: center;
       align-items: center;
+
       >i {
         width: 15px;
         height: 16px;
@@ -491,10 +503,12 @@
     top: 10px;
     left: 10px;
     cursor: pointer;
+
     span {
       display: inline-block;
       width: 100%;
       height: 100%;
+
       img {
         width: 100%;
         height: 100%;

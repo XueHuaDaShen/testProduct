@@ -138,9 +138,22 @@ export default {
           captcha: vm.loginCaptcha,
           id: vm.guid
         }
+        let PHONE_INFO = this.$route.query;
+        let arr = [];
+        if(PHONE_INFO){
+          for(let i in PHONE_INFO){
+            arr.push( i + '=' + PHONE_INFO[i] )
+          }
+        }
+        let url;
+        if(arr.length === 0){
+          url = '/user/register'
+        }else{
+          url = '/user/register?'+arr.join('&');
+        }
         request.login(
           'post',
-          '/user/register',
+          url,
           paramCryptFn(data),
           (success) => {
             let code = success.returncode;
@@ -263,7 +276,7 @@ export default {
         text-align:center;
         color:#C83C4A;
         left:0;
-        bottom:3.3rem;
+        bottom:2.5rem;
         padding:0 .75rem;
       }
     .user-wrap, .captcha-wrap{

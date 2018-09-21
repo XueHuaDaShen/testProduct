@@ -234,6 +234,15 @@ export function regexpInput(input) {
   return false;
 }
 
+// 匹配1-20位字母或者数字
+export function regexpInput1(input) {
+  let exp = new RegExp("^[a-zA-Z0-9]{1,20}$");
+  if (exp.test(input)) {
+    return true;
+  }
+  return false;
+}
+
 //匹配6-16位数字和字母组合
 export function regexpPsd(psd) {
   let exp = new RegExp("^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{3,16}$");
@@ -241,4 +250,18 @@ export function regexpPsd(psd) {
     return true;
   }
   return false;
+}
+
+export function formatCash(val) {
+  //金额转换 保留2位小数 并每隔3位用逗号分开 1,234.56
+  var str = '';
+  if (isString(val)) {
+    str = parseFloat(val).toFixed(2) + '';
+  } else {
+    str = val.toFixed(2) + '';
+  }
+  var intSum = str.substring(0, str.indexOf(".")).replace(/\B(?=(?:\d{3})+$)/g, ','); //取到整数部分
+  var dot = str.substring(str.length, str.indexOf(".")) //取到小数部分搜索
+  var ret = intSum + dot;
+  return ret;
 }

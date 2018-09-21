@@ -11,6 +11,14 @@
 </script>
 
 <style>
+  /* ballon.css 样式复写 */
+  [data-balloon]:after {
+    font-weight: bold !important;
+    font-size: 16px !important;
+    padding: .1em 1em;
+    min-height: 1.5em;
+  }
+
   #app {
     font-family: 'Avenir', Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
@@ -19,10 +27,10 @@
     color: #2c3e50;
     width: 100%;
     height: 100%;
-    -webkit-user-select:auto;
-    -moz-user-select:auto;
-    -ms-user-select:auto;
-    user-select:auto;
+    -webkit-user-select: auto;
+    -moz-user-select: auto;
+    -ms-user-select: auto;
+    user-select: auto;
   }
 
   /* .order-detail-wrap{

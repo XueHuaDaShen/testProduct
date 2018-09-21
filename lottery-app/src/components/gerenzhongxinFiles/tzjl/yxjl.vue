@@ -137,7 +137,13 @@ export default {
         (success) => {
           // console.log(success)
           if(success.returncode === 200){
-            vm.platformList = success.data
+            // vm.platformList = success.data
+            for(let i in success.data){
+              vm.platformList.push({
+                _id: i,
+                platform: success.data[i]
+              })
+            }
             vm.showSelect = true;
           }
         },

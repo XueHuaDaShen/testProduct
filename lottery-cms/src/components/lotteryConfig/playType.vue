@@ -34,8 +34,7 @@
       </div>
     </div>
     <div class="data-table" v-loading="loading">
-      <el-table :data="getModifiedLotList" header-row-class-name="table-header" @cell-mouse-enter="mouseOver" stripe
-        border style="width: 100%;font-size:12px;">
+      <el-table :data="getModifiedLotList" header-row-class-name="table-header" stripe border style="width: 100%;font-size:12px;">
         <!-- <el-table-column prop="code" align="center" label="代码">
         </el-table-column> -->
         <el-table-column prop="l2" align="center" label="彩种">
@@ -46,8 +45,8 @@
         </el-table-column>
         <el-table-column align="center" label="玩法名称">
           <template slot-scope="scope">
-            <el-input v-model.trim="scope.row.name" @blur="gameNameBlur" :data-code="scope.row.code+'name'" @focus="gameNameFocus"
-              @keyup.enter.native="gameNameEnter" :ref="scope.row.code+'name'">
+            <el-input v-model.trim="scope.row.name" @blur="gameNameBlur(scope.row)" :data-code="scope.row.code+'name'"
+              @focus="gameNameFocus" @keyup.enter.native="gameNameEnter" :ref="scope.row.code+'name'">
             </el-input>
           </template>
         </el-table-column>
@@ -55,15 +54,15 @@
         </el-table-column>
         <el-table-column align="center" label="最多投注">
           <template slot-scope="scope">
-            <el-input v-model.trim="scope.row.max_votes" @blur="gameVoteBlur" :data-code="scope.row.code+'vote'" @focus="gameVoteFocus"
-              @keyup.enter.native="gameVoteEnter" :ref="scope.row.code+'vote'">
+            <el-input v-model.trim="scope.row.max_votes" @blur="gameVoteBlur(scope.row)" :data-code="scope.row.code+'vote'"
+              @focus="gameVoteFocus" @keyup.enter.native="gameVoteEnter" :ref="scope.row.code+'vote'">
             </el-input>
           </template>
         </el-table-column>
         <el-table-column align="center" label="排序值">
           <template slot-scope="scope">
-            <el-input v-model.trim="scope.row.order" @blur="gameOrderBlur" :data-code="scope.row.code+'order'" @focus="gameOrderFocus"
-              @keyup.enter.native="gameOrderEnter" :ref="scope.row.code+'order'">
+            <el-input v-model.trim="scope.row.order" @blur="gameOrderBlur(scope.row)" :data-code="scope.row.code+'order'"
+              @focus="gameOrderFocus" @keyup.enter.native="gameOrderEnter" :ref="scope.row.code+'order'">
             </el-input>
           </template>
         </el-table-column>
@@ -71,7 +70,7 @@
         </el-table-column> -->
         <el-table-column label="开启玩法" align="center">
           <template slot-scope="scope">
-            <el-switch v-model="scope.row.enabled" @change="gameEnableChange">
+            <el-switch v-model="scope.row.enabled" @change="gameEnableChange(scope.row)">
             </el-switch>
           </template>
         </el-table-column>
@@ -199,7 +198,6 @@
         focusMaxVote: '', //获取焦点的最大投注
         blurOrder: '', //失去焦点的排序
         focusOrder: '', //获取焦点的排序
-        rowKey: ''
       }
     },
     created() {
@@ -237,29 +235,26 @@
         })
         // console.log(name)
       },
-      mouseOver(row, column, cell, event) {
-        this.rowKey = row._id;
-      },
       //玩法名称监听enter事件
       gameNameEnter(event) {
         let ref_id = event.target.dataset.code;
         this.$refs[ref_id].blur();
       },
       //玩法名称失去焦点
-      gameNameBlur(event) {
-        this.blurGameName = event.target.value;
+      gameNameBlur(row) {
+        this.blurGameName = row.name;
         if (!this.blurGameName) {
           //提示用户需要输入修改的文字
           this.$alert('请输入玩法名称', '系统提示', {
             confirmButtonText: '确定',
             callback: action => {
-              event.target.value = this.focusGameName;
+              row.name = this.focusGameName;
             }
           });
         } else {
           if (this.blurGameName != this.focusGameName) {
             //发起请求，修改该单元格的内容
-            this.modifiedGameType('name', this.blurGameName, this.rowKey)
+            this.modifiedGameType('name', this.blurGameName, row._id)
           } else {
             //不做任何改变
             // console.log('失去焦点', '值未变化')
@@ -435,18 +430,18 @@
         this.$refs[ref_id].blur();
       },
       //最多投注失去焦点
-      gameVoteBlur(event) {
-        this.blurMaxVote = event.target.value;
+      gameVoteBlur(row) {
+        this.blurMaxVote = row.max_votes;
         if (!this.blurMaxVote) {
           this.$alert('请输入一个正确的最大投注值', '系统提示', {
             confirmButtonText: '确定',
             callback: action => {
-              event.target.value = this.focusMaxVote;
+              row.max_votes = this.focusMaxVote;
             }
           });
         } else {
           if (this.blurMaxVote != this.focusMaxVote) {
-            this.modifiedGameType('max_votes', this.blurMaxVote, this.rowKey)
+            this.modifiedGameType('max_votes', this.blurMaxVote, row._id)
           }
         }
       },
@@ -460,19 +455,19 @@
         this.$refs[ref_id].blur();
       },
       //排序失去焦点
-      gameOrderBlur(event) {
-        this.blurOrder = event.target.value;
+      gameOrderBlur(row) {
+        this.blurOrder = row.order;
         if (!this.blurOrder) {
           this.$alert('请输入一个正确的排序值', '系统提示', {
             confirmButtonText: '确定',
             callback: action => {
-              event.target.value = this.focusOrder;
+              row.order = this.focusOrder;
             }
           });
         } else {
           if (this.blurOrder != this.focusOrder) {
             //发起请求，修改该单元格的内容
-            this.modifiedGameType('order', this.blurOrder, this.rowKey)
+            this.modifiedGameType('order', this.blurOrder, row._id)
           }
         }
       },
@@ -480,15 +475,15 @@
       gameOrderFocus(event) {
         this.focusOrder = event.target.value;
       },
-      gameEnableChange(value) {
+      gameEnableChange(row) {
         // console.log('value', value);
         let enabled = '';
-        if (value) {
+        if (row.enabled) {
           enabled = '1';
         } else {
           enabled = '0'
         }
-        this.modifiedGameType('enabled', enabled, this.rowKey)
+        this.modifiedGameType('enabled', enabled, row._id)
       }
     },
     computed: {
@@ -500,9 +495,6 @@
         }
         return data;
       }
-    },
-    mounted() {
-
     }
   }
 

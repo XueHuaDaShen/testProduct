@@ -116,10 +116,18 @@
 
   .left {
     float: left;
+    font-weight: bold;
+    max-width: 800px;
+    display: inline-block;
+    white-space: nowrap;
+    overflow-x: hidden;
+    text-overflow: ellipsis;
   }
 
   .right {
     float: right;
+    font-size: 12px;
+    color: #777;
   }
 
   a {
@@ -141,7 +149,7 @@
     min-height: 731px;
     color: #333333;
     width: 100%;
-    padding: 30px 20px;
+    padding: 0 20px;
   }
 
   .main {

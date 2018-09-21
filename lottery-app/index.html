@@ -12,11 +12,31 @@
   <body>
     <div id="app"></div>
     <!-- built files will be auto injected -->
-    <script type="text/javascript" src="/static/md5/hmac-md5.js"></script>
+    <!-- <script type="text/javascript" src="/static/md5/hmac-md5.js"></script>
     <script type="text/javascript" src="/static/md5/md5.js"></script>
-    <script type="text/javascript" src="/static/md5/spark-md5.min.js"></script>
+    <script type="text/javascript" src="/static/md5/spark-md5.min.js"></script> -->
+
+    <script type="text/javascript" src="/h5/static/md5/hmac-md5.js"></script>
+    <script type="text/javascript" src="/h5/static/md5/md5.js"></script>
+    <script type="text/javascript" src="/h5/static/md5/spark-md5.min.js"></script>
+
     <script>
       document.documentElement.style.fontSize = document.documentElement.clientWidth/7.5 + "px";
+      function callbackJs(action, param) {
+        if(action === 'phone_info'){
+          localStorage.setItem('PHONE_INFO', param)
+          // document.getElementById("phone_info_js").innerHTML = param;
+        }
+        // var query_data = {
+        //   channel: phone_info.channel,
+        //   udid: phone_info.udid,
+        //   os: phone_info.os,
+        //   dm: phone_info.dm,
+        //   mac: phone_info.mac,
+        //   mpb: phone_info.mpb
+        // };
+      }
+      // callbackJs('phone_info', JSON.stringify({channel: 'channel', udid: 'udid', os: 'os', dm: 'dm', mac: 'mac', mpb: 'mpb'}))
     </script>
     <!-- <script language="javascript" src="https://ytpfx.livechatvalue.com/chat/chatClient/monitor.js?jid=8295678173&companyID=1027559&configID=43462&codeType=custom&ss=1"></script> -->
   </body>

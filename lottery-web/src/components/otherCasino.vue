@@ -8,10 +8,12 @@
     </div>
     <div class="main">
       <el-row type="flex" justify="space-between">
-        <router-link class="item" :to="{path:'/liveCasino'}" target='_blank'>
-          <div class="m1">
-            <div class="media">
-              <a class="recent-link">立即参加</a>
+        <div class="item" :to="{path:'/liveCasino'}" target='_blank'>
+          <div class="m-body">
+            <div class="media m1">
+            </div>
+            <div class="special">
+              <router-link class="recent-link" :to="{path:'/liveCasino'}" target='_blank'>AG娱乐</router-link>
             </div>
           </div>
           <div class="footer clearfix">
@@ -21,11 +23,14 @@
               <span>Live Casino</span>
             </div>
           </div>
-        </router-link>
-        <router-link class="item" :to="{path:'/slots'}" target='_blank'>
-          <div class="m2">
-            <div class="media">
-              <a class="recent-link">立即参加</a>
+        </div>
+        <div class="item">
+          <div class="m-body">
+            <div class="media m2">
+            </div>
+            <div class="special">
+              <router-link class="recent-link" :to="{path:'/slots'}" target='_blank'>AG电子</router-link>
+              <router-link class="recent-link" :to="{path:'/fishGame'}" target='_blank'>AG捕鱼达人</router-link>
             </div>
           </div>
           <div class="footer clearfix">
@@ -35,7 +40,7 @@
               <span>Slots</span>
             </div>
           </div>
-        </router-link>
+        </div>
         <!-- <div class="item">
           <div class="m1">
             <div class="media">
@@ -65,9 +70,11 @@
           </div>
         </div> -->
         <div class="item">
-          <div class="m3">
-            <div class="media">
-              <a class="recent-link">近期上线</a>
+          <div class="m-body">
+            <div class="media m3">
+            </div>
+            <div class="special">
+              <a class="recent-link">沙巴体育</a>
             </div>
           </div>
           <div class="footer clearfix">
@@ -78,10 +85,12 @@
             </div>
           </div>
         </div>
-        <router-link class="item" :to="{path:'/chessBoard'}" target='_blank'>
-          <div class="m4">
-            <div class="media">
-              <a class="recent-link">立即参加</a>
+        <div class="item">
+          <div class="m-body">
+            <div class="media m4">
+            </div>
+            <div class="special">
+              <router-link class="recent-link" :to="{path:'/chessBoard'}" target='_blank'>开元棋牌</router-link>
             </div>
           </div>
           <div class="footer clearfix ">
@@ -91,7 +100,7 @@
               <span>Chess Game</span>
             </div>
           </div>
-        </router-link>
+        </div>
       </el-row>
     </div>
     <!-- <scoll :data="tip " :class-option="classOption " class="scroll-wrap tips ">
@@ -127,16 +136,25 @@
 </script>
 <style scoped lang="scss">
   .recent-link {
-    border: 1px solid #777777;
-    width: 208px;
+    width: 140px;
     height: 34px;
-    display: inline-block;
+    display: none;
     text-decoration: none;
     font-family: PingFangSC-Regular;
-    font-weight: 700;
-    font-size: 14px;
-    color: #777777;
+    font-weight: bold;
     line-height: 34px;
+    border: 1px solid #BD8454;
+    border-radius: 4px;
+    font-size: 14px;
+    color: #BD8454;
+
+    &:hover {
+      background: rgba(0, 0, 0, 0.5);
+    }
+
+    &+& {
+      margin-top: 20px;
+    }
   }
 
   .item-vline {
@@ -261,23 +279,50 @@
 
   .item .media {
     height: 230px;
-    border-radius: 4px;
     text-align: center;
     display: flex;
     justify-content: center;
     align-items: center;
   }
 
-  .item .media .recent-link {
-    display: none;
+  .item .special {
+    height: 230px;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    z-index: 2;
+
+    &:hover {
+      background: rgba(0, 0, 0, 0.5);
+    }
   }
 
-  .item .media:hover {
-    opacity: 0.8;
-    background: #000000;
 
-    .recent-link {
-      display: inline-block;
+  .item .m-body {
+    width: 100%;
+    overflow: hidden;
+    position: relative;
+
+    &:hover {
+      background: rgba(0, 0, 0, 0.8) !important;
+    }
+
+    &:hover .media {
+      filter: blur(20px);
+      z-index: 2;
+    }
+
+    &:hover .special {
+      .recent-link {
+        display: inline-block;
+      }
     }
   }
 

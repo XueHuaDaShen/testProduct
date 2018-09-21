@@ -2,8 +2,8 @@ import Vuex from 'vuex'
 import Vue from 'vue'
 
 const state = {
-  // productPath: '/h5/static/img/', // 线上，合并了h5的时候，路径
-  productPath: '/static/img/', // 测试，未合并h5的时候，路径
+  productPath: '/h5/static/img/', // 线上，合并了h5的时候，路径
+  // productPath: '/static/img/', // 测试，未合并h5的时候，路径
   showLoading: false, // 加载动画
   showHeader: true, // 设置header的z-index值
   bets: 0, // 注数

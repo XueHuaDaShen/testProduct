@@ -26,7 +26,7 @@
             <td>{{item.effect_time+'天'}}</td>
             <td>{{item.user_num||0}}</td>
             <td class="oprate-td">
-              <span class="look-span" @click="lookLinkUrl(item.url)">查看</span>
+              <span class="look-span" @click="lookLinkUrl(item.url, item.code)">查看</span>
               <span class="delete-span" @click="deleteLink(item._id)">删除</span>
             </td>
           </tr>
@@ -90,12 +90,14 @@ export default {
   },
   methods: {
     // 查看链接并复制
-    lookLinkUrl(url) {
+    lookLinkUrl(url, code) {
       const vm = this;
-      this.tipText = url;
+      let link = url.split('#')[0]+'reg.html?code='+code;
+      this.tipText = link;
+      // console.log(link)
       //
       var input = document.getElementById("tglj-copy-url-input");
-      input.value = url; // 修改文本框的内容
+      input.value = link; // 修改文本框的内容
       input.select(); // 选中文本
       document.execCommand("copy"); // 执行浏览器复制命令
       this.isCopyUrl = '链接已复制';

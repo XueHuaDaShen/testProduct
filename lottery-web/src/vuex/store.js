@@ -2,8 +2,8 @@ import Vuex from 'vuex'
 import Vue from 'vue'
 
 const state = {
-  productPath: '/web/static/logo/', // 线上，合并了h5的时候，路径
-  // productPath: '/static/logo/', // 测试，未合并h5的时候，路径
+  // productPath: '/web/static/logo/', // 线上，合并了h5的时候，路径
+  productPath: '/static/logo/', // 测试，未合并h5的时候，路径
   bets: 0,
   price: 2,
   refund: 0,

@@ -324,7 +324,7 @@
         }
       },
       toReg() {
-        let reg = 'http://www.8bw.vip/#/reg/0qug9eawf7';
+        let reg = 'http://www.8bw.vip/web/#/reg/0qug9eawf7';
         location.href = reg;
         // this.$router.push({
         //   name: 'reg'

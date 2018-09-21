@@ -38,6 +38,8 @@
         </el-table-column>
         <el-table-column align="center" prop="bank" label="银行名称">
         </el-table-column>
+        <el-table-column align="center" prop="subbranch" label="支行名称" :formatter="formatBranch">
+        </el-table-column>
         <el-table-column align="center" prop="realname" label="账户名">
         </el-table-column>
         <el-table-column align="center" prop="account_no" label="银行卡号">
@@ -145,6 +147,9 @@
               <el-option v-for="(item,index) in updateForm.bank.options" :key="index" :label="item.bank_name" :value="item.bank_name">
               </el-option>
             </el-select>
+          </el-form-item>
+          <el-form-item label="支行名称：" prop="subbranch">
+            <el-input type="text" v-model.trim="updateForm.subbranch"></el-input>
           </el-form-item>
           <el-form-item label="银行卡号：" prop="account_no">
             <el-input type="text" v-model.trim="updateForm.account_no"></el-input>
@@ -356,6 +361,12 @@
       this.getGroupList()
     },
     methods: {
+      formatBranch(row, column, cellValue) {
+        if (cellValue) {
+          return cellValue;
+        }
+        return '--';
+      },
       getCheckedGroup(row) {
         let finalGroup = [];
         if (row.group && row.group.length != 0) {
@@ -707,7 +718,7 @@
         data["account_no"] = vm.updateForm.account_no;
         data["realname"] = vm.updateForm.realname;
         data["channel"] = 3;
-        data["subbranch"] = vm.createForm.subbranch;
+        data["subbranch"] = vm.updateForm.subbranch;
         vm.updateLoading = true;
         request.http(
           "post",

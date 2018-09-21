@@ -46,7 +46,7 @@
           <th>注册人数</th>
           <th>生成时间</th>
           <th>复制链接</th>
-          <th>状态</th>
+          <th width="220">操作</th>
         </tr>
         <tr class="group-item" v-for="(item,index) in list" v-if="!noResult" :key="index">
           <td>{{item.code}}</td>
@@ -56,11 +56,10 @@
           <td>{{getTime(item.create_at)}}</td>
           <td>
             <input v-model="item.url" class="url" :id="'cli'+index" />
-            <a class="delete ml-20" data-clipboard-action="copy" :data-clipboard-target="'#cli'+index" @click="copylink(item.url,index)">复制</a>
           </td>
-          <td>
-            <!--<router-link class="normal" :to="{name:'linkDetail',query:{id:item._id}}">详情</router-link>-->
-            <a class="delete ml-8" @click="makeSureDelete(item._id)">删除</a>
+          <td style="display:flex;align-items:center;height:50px;justify-content:center;">
+            <a class="normal" data-clipboard-action="copy" :data-clipboard-target="'#cli'+index" @click="copylink(item.url,index)" style="margin-right:20px;">复制</a>
+            <a class="delete" @click="makeSureDelete(item._id)">删除</a>
           </td>
         </tr>
         <tr v-if="noResult" class="no-result">
@@ -357,27 +356,12 @@
                 if (self.total) {
                   self.noResult = false;
                   self.totalPageNum = success.data.total_page_num;
-                  self.list = success.data.data;
-                  // let clipboard = new ClipboardJS('.normal');
-                  // clipboard.on('success', function(e) {
-                  //   // console.info('Action:', e.action);
-                  //   // console.info('Text:', e.text);
-                  //   // console.info('Trigger:', e.trigger);
-                  //   self.$message({
-                  //     type: 'success',
-                  //     message: '复制成功！'
-                  //   });
-                  //   e.clearSelection();
-                  // });
-
-                  // clipboard.on('error', function(e) {
-                  //   // console.error('Action:', e.action);
-                  //   // console.error('Trigger:', e.trigger);
-                  //   self.$message({
-                  //     type: 'error',
-                  //     message: '复制失败，请手动复制文本内容'
-                  //   });
-                  // });
+                  let initData = success.data.data;
+                  for (let i = 0; i < initData.length; i++) {
+                    let obj = initData[i];
+                    initData[i].url = `${window.location.origin}/reg.html?code=${initData[i].code}`;
+                  }
+                  self.list = initData;
                 } else {
                   self.noResult = true;
                 }
@@ -487,7 +471,8 @@
     border: 1px solid #CCCCCC;
     border-radius: 2px;
     font-family: PingFangSC-Regular;
-    font-size: 12px;
+    font-size: 14px;
+    font-weight: bold;
     color: #191919;
   }
 
@@ -523,7 +508,8 @@
     background: #FFFFFF;
     border: 1px solid #CCCCCC;
     border-radius: 2px;
-    font-size: 12px;
+    font-weight: bold;
+    font-size: 14px;
     color: #191919;
     font-family: PingFangSC-Regular;
   }
@@ -722,23 +708,12 @@
   }
 
   .record-group .group-item a.normal {
-    color: #fff;
-    display: inline-block;
-    line-height: 25px;
-    font-size: 12px;
-    width: 49px;
-    height: 25px;
-    background: #CC3447;
-    border-radius: 6px;
-  }
-
-  .record-group .group-item a.delete {
     display: inline-block;
     width: 80px;
     height: 30px;
     line-height: 30px;
     text-align: center;
-    font-size: 14px;
+    font-size: 12px;
     font-weight: bold;
     color: #fff;
     cursor: pointer;
@@ -748,6 +723,24 @@
     box-shadow: none;
     border: none;
     background-image: linear-gradient(-180deg, #CFA072 0%, #B68E66 100%);
+  }
+
+  .record-group .group-item a.delete {
+    display: inline-block;
+    width: 80px;
+    height: 30px;
+    line-height: 30px;
+    text-align: center;
+    font-size: 12px;
+    font-weight: bold;
+    color: #fff;
+    cursor: pointer;
+    border-radius: 2px;
+    outline: none;
+    font-family: microsoft yahei;
+    box-shadow: none;
+    border: none;
+    background-image: linear-gradient(-180deg, #4e4339 0%, #281d12 100%);
   }
 
   .record-options .option-row>a.time {

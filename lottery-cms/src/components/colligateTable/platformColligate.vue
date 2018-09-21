@@ -200,6 +200,10 @@
         index2: 0,
         titleName: "综合报表",
         routerArr: [{
+          title: "第三方平台",
+          name: "thirdpartPlatform",
+          checked: false
+        }, {
           title: "综合报表",
           name: "platformColligate",
           checked: false

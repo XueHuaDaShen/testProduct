@@ -33,6 +33,10 @@
 </script>
 
 <style scoped>
+  .help .footer .container {
+    width: 1244px;
+  }
+
   .footer {
     width: 100%;
     background: #191919;

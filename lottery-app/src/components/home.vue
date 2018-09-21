@@ -60,7 +60,7 @@
       <p class="more" @click="toMore('liveVideo')">更多<i class="right-sanjiao"></i></p>
     </div>
     <ul class="yuleList">
-      <router-link class="agdz-li" tag="li" :to="{name: 'chessBoard'}">
+      <router-link class="agdz-li" tag="li" :to="{name: 'chess'}">
         <div class="li-bj"></div>
         <span>立即进入</span>
         <span class="span-bj"></span>

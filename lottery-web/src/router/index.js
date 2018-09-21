@@ -54,7 +54,6 @@ const lotteryDetail = r => require.ensure([], () => r(require('@/components/lott
 const trackDetail = r => require.ensure([], () => r(require('@/components/trackDetail')), 'chunkname6-2')
 const topUp = r => require.ensure([], () => r(require('@/components/topUp')), 'chunkname7-1')
 const withdraw = r => require.ensure([], () => r(require('@/components/withdraw')), 'chunkname7-2')
-const topUpResult = r => require.ensure([], () => r(require('@/components/topUpResult')), 'chunkname7-3')
 const transfer = r => require.ensure([], () => r(require('@/components/transfer')), 'chunkname7-4')
 const transform = r => require.ensure([], () => r(require('@/components/transform')), 'chunkname7-5')
 
@@ -1062,15 +1061,6 @@ const router = new Router({
         component: transform,
         meta: {
           title: '额度转换'
-        }
-      },
-      {
-        // 充值结果
-        path: 'topUpResult',
-        name: 'topUpResult',
-        component: topUpResult,
-        meta: {
-          title: '充值结果'
         }
       },
       /* {
